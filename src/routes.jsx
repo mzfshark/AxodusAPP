@@ -16,6 +16,8 @@ import PortfolioPage from "./pages/trading/PortfolioPage";
 import TradingPanel from "./pages/trading/TradingPanel";
 import MarketDataPage from "./pages/trading/MarketDataPage";
 import SwapPanel from "./pages/trading/SwapPanel";
+import BacktestingPage from "./pages/backtesting/BacktestingPage";
+import ControllerManagementPage from "./pages/controllers/ControllerManagementPage";
 
 const router = createBrowserRouter([
   {
@@ -93,6 +95,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <SwapPanel />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "backtesting",
+        element: (
+          <ProtectedRoute>
+            <BacktestingPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "controllers",
+        element: (
+          <ProtectedRoute>
+            <ControllerManagementPage />
           </ProtectedRoute>
         ),
       },
