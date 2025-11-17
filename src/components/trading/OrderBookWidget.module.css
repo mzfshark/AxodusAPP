@@ -1,0 +1,126 @@
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.header {
+  margin-bottom: 1rem;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.asks,
+.bids {
+  margin-bottom: 0.5rem;
+}
+
+.sectionLabel {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.bidLabel {
+  color: #4caf50;
+}
+
+.askLabel {
+  color: #f44336;
+}
+
+.orderRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.orderRow:hover {
+  background: #f5f5f5;
+}
+
+.barBackground {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 0;
+}
+
+.orderData {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+}
+
+.bidPrice {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.askPrice {
+  color: #f44336;
+  font-weight: 600;
+}
+
+.amount,
+.total {
+  color: #666;
+}
+
+.spread {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: #f0f9ff;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.spreadLabel {
+  color: #666;
+  font-weight: 600;
+}
+
+.spreadValue {
+  color: #4ecdc4;
+  font-weight: 700;
+}
+
+.loading,
+.error,
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+}
+
+.error {
+  color: #f44336;
+}

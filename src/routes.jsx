@@ -12,6 +12,10 @@ import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BotManagement from "./pages/trading/BotManagement";
+import PortfolioPage from "./pages/trading/PortfolioPage";
+import TradingPanel from "./pages/trading/TradingPanel";
+import MarketDataPage from "./pages/trading/MarketDataPage";
+import SwapPanel from "./pages/trading/SwapPanel";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +61,38 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <BotManagement />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "trading/portfolio",
+        element: (
+          <ProtectedRoute>
+            <PortfolioPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "trading/trade",
+        element: (
+          <ProtectedRoute>
+            <TradingPanel />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "trading/market",
+        element: (
+          <ProtectedRoute>
+            <MarketDataPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "trading/swap",
+        element: (
+          <ProtectedRoute>
+            <SwapPanel />
           </ProtectedRoute>
         ),
       },
