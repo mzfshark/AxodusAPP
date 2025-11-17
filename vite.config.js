@@ -28,7 +28,14 @@ export default defineConfig({
     strictPort: true,
     open: true,
     host: true, // permite acesso externo
-    allowedHosts: ['app.axodus.finance'] // libera o domínio customizado
+    allowedHosts: ['app.axodus.finance'], // libera o domínio customizado
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   metadata: {
     name: "Axodus",

@@ -11,6 +11,7 @@ import TransactionHistoryPage from "./pages/TransactionHistoryPage";
 import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import BotManagement from "./pages/trading/BotManagement";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <TransactionHistoryPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "trading/bots",
+        element: (
+          <ProtectedRoute>
+            <BotManagement />
           </ProtectedRoute>
         ),
       },
