@@ -1,0 +1,13 @@
+onlyBuiltDependencies:
+  - '@reown/appkit'
+  - bigint-buffer
+  - blake-hash
+  - bufferutil
+  - esbuild
+  - keccak
+  - protobufjs
+  - secp256k1
+  - tiny-secp256k1
+  - unrs-resolver
+  - usb
+  - utf-8-validate

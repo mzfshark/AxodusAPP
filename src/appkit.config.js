@@ -25,25 +25,31 @@ export const tron = {
 export const networks = {mainnet, bsc, arbitrum, harmonyOne, avalanche,
   polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin};
 
+// Lazy initialization - será chamado pelo AppKitProvider
+let appKitInstance = null;
 
-// Registra os adapters com AppKit
-createAppKit({
-  adapters: [wagmiAdapter, solanaAdapter, bitcoinAdapter],
-  networks: [mainnet, bsc, arbitrum, harmonyOne, avalanche,
-    polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin],
-  projectId,
-  metadata: metadata,
-  features: {
-    analytics: true,
-    enableWalletConnect: true,
-    enableNetworkSwitch: true,
-
+export const initializeAppKit = () => {
+  if (!appKitInstance) {
+    appKitInstance = createAppKit({
+      adapters: [wagmiAdapter, solanaAdapter, bitcoinAdapter],
+      networks: [mainnet, bsc, arbitrum, harmonyOne, avalanche,
+        polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin],
+      projectId,
+      metadata: metadata,
+      features: {
+        analytics: true,
+        enableWalletConnect: true,
+        enableNetworkSwitch: true,
+      }
+    });
   }
-});
+  return appKitInstance;
+};
 
 export default {
   projectId,
   metadata,
   networks,
-  tron
+  tron,
+  initializeAppKit
 };
