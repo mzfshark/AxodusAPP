@@ -14,8 +14,10 @@ import {
   calculateMetrics,
   formatPortfolioForChart,
 } from '@services/api/portfolioService';
+import { useRealtime } from '@context/RealtimeContext';
 import LivePnLChart from '@components/trading/LivePnLChart';
 import PortfolioDistribution from '@components/trading/PortfolioDistribution';
+import ConnectionStatus from '@components/realtime/ConnectionStatus';
 import styles from './PortfolioPage.module.css';
 
 const PortfolioPage = () => {
@@ -23,10 +25,24 @@ const PortfolioPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const { subscribeToPortfolio, portfolioUpdate } = useRealtime();
 
   useEffect(() => {
     fetchPortfolio();
+
+    // Subscribe to real-time portfolio updates
+    const unsubscribe = subscribeToPortfolio();
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
   }, [refreshKey]);
+
+  // Update portfolio when real-time data arrives
+  useEffect(() => {
+    if (portfolioUpdate?.data) {
+      setPortfolioState(portfolioUpdate.data);
+    }
+  }, [portfolioUpdate]);
 
   const fetchPortfolio = async () => {
     setLoading(true);
@@ -57,9 +73,12 @@ const PortfolioPage = () => {
           <h1>Portfolio Dashboard</h1>
           <p className={styles.subtitle}>Track your assets across all exchanges</p>
         </div>
-        <button onClick={handleRefresh} className={styles.refreshButton} disabled={loading}>
-          {loading ? '⏳' : '🔄'} Refresh
-        </button>
+        <div className={styles.headerActions}>
+          <ConnectionStatus />
+          <button onClick={handleRefresh} className={styles.refreshButton} disabled={loading}>
+            {loading ? '⏳' : '🔄'} Refresh
+          </button>
+        </div>
       </div>
 
       {/* Error State */}

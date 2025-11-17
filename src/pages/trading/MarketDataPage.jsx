@@ -14,7 +14,7 @@ import {
   getMarketSummary,
 } from '@services/api/marketDataService';
 import CandleChart from '@components/trading/CandleChart';
-import OrderBookWidget from '@components/trading/OrderBookWidget';
+import OrderBookWidgetRealtime from '@components/trading/OrderBookWidgetRealtime';
 import styles from './MarketDataPage.module.css';
 
 const MarketDataPage = () => {
@@ -162,7 +162,13 @@ const MarketDataPage = () => {
         </div>
 
         <div className={styles.chartSide}>
-          <OrderBookWidget orderBook={orderBook} loading={loading} error={error} />
+          <OrderBookWidgetRealtime 
+            connector={connector}
+            tradingPair={tradingPair}
+            orderBook={orderBook} 
+            loading={loading} 
+            error={error} 
+          />
         </div>
       </div>
     </div>

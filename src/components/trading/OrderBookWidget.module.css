@@ -7,6 +7,9 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
 }
 
@@ -15,6 +18,16 @@
   font-size: 1.1rem;
   color: #1a1a1a;
   font-weight: 600;
+}
+
+.liveBadge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f44336;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: #fff3f3;
+  border: 1px solid #f44336;
 }
 
 .columns {
