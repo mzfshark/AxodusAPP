@@ -35,6 +35,7 @@ export const RealtimeProvider = ({ children }) => {
     return () => {
       clearInterval(checkConnection);
       if (unsubNotifications) unsubNotifications();
+      // Release MQTT client reference (reference-counted)
       mqttClient.disconnect();
     };
   }, []);

@@ -17,12 +17,25 @@ class MQTTClient {
     this.subscriptions = new Map();
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 10;
+    this._refCount = 0;
+    this._disconnectTimer = null;
   }
 
   /**
    * Connect to EMQX broker
    */
   connect(options = {}) {
+    // Reference-counted connect to tolerate React StrictMode double-mount
+    this._refCount = Math.max(this._refCount, 0) + 1;
+    // If there is a pending delayed disconnect, cancel it
+    if (this._disconnectTimer) {
+      clearTimeout(this._disconnectTimer);
+      this._disconnectTimer = null;
+    }
+    if (this.client) {
+      // Already initialized; avoid creating a second connection
+      return this;
+    }
     const {
       host = import.meta.env.VITE_MQTT_HOST || 'localhost',
       port = import.meta.env.VITE_MQTT_PORT || 1883,
@@ -137,9 +150,8 @@ class MQTTClient {
       return null;
     }
 
-    console.log('[MQTT] Subscribing to:', topic);
-
     if (!this.subscriptions.has(topic)) {
+      console.log('[MQTT] Subscribing to:', topic);
       this.subscriptions.set(topic, new Set());
       
       if (this.connected) {
@@ -202,12 +214,21 @@ class MQTTClient {
    * Disconnect from broker
    */
   disconnect() {
-    if (this.client) {
-      console.log('[MQTT] Disconnecting...');
-      this.subscriptions.clear();
-      this.client.end(true);
-      this.client = null;
-      this.connected = false;
+    // Decrease reference; only actually disconnect when no more users
+    this._refCount = Math.max(0, this._refCount - 1);
+    if (this.client && this._refCount === 0) {
+      // Delay actual disconnect slightly to avoid StrictMode double-unmount churn
+      if (this._disconnectTimer) clearTimeout(this._disconnectTimer);
+      this._disconnectTimer = setTimeout(() => {
+        // If no one reconnected in the meantime
+        if (this._refCount === 0 && this.client) {
+          console.log('[MQTT] Disconnecting...');
+          this.client.end(true);
+          this.client = null;
+          this.connected = false;
+        }
+        this._disconnectTimer = null;
+      }, 1500);
     }
   }
 

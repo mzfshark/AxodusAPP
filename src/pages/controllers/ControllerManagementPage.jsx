@@ -95,7 +95,7 @@ const ControllerManagementPage = () => {
     setLoading(true);
 
     try {
-      const details = await getControllerConfig(controller.name);
+      const details = await getControllerConfig(controller.type, controller.name);
       setSelectedController({ ...controller, ...details });
     } catch (err) {
       console.error('Get controller details error:', err);

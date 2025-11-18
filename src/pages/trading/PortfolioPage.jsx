@@ -8,7 +8,7 @@
  * - Total portfolio metrics
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   getPortfolioState,
   calculateMetrics,
@@ -26,6 +26,7 @@ const PortfolioPage = () => {
   const [error, setError] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const { subscribeToPortfolio, portfolioUpdate } = useRealtime();
+  const inFlightRef = useRef(false);
 
   useEffect(() => {
     fetchPortfolio();
@@ -45,6 +46,8 @@ const PortfolioPage = () => {
   }, [portfolioUpdate]);
 
   const fetchPortfolio = async () => {
+    if (inFlightRef.current) return;
+    inFlightRef.current = true;
     setLoading(true);
     setError(null);
 
@@ -55,6 +58,7 @@ const PortfolioPage = () => {
       setError(err.message);
     } finally {
       setLoading(false);
+      inFlightRef.current = false;
     }
   };
 

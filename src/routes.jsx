@@ -10,6 +10,7 @@ import Settings from "./pages/Settings";
 import TransactionHistoryPage from "./pages/TransactionHistoryPage";
 import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
+import AccountPage from "./pages/AccountPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BotManagement from "./pages/trading/BotManagement";
 import PortfolioPage from "./pages/trading/PortfolioPage";
@@ -26,6 +27,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Overview /> },
       { path: "connect", element: <ConnectWalletPage /> },
+      {
+        path: "account",
+        element: (
+          <ProtectedRoute requiredRoles={["user"]}>
+            <AccountPage />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "dashboard",
         element: (

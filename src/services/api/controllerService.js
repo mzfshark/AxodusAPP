@@ -1,3 +1,4 @@
+/* global console */
 /**
  * Controller Service
  * 
@@ -11,8 +12,16 @@ import hummingbotClient from './hummingbotClient';
  */
 export const listControllers = async () => {
   try {
-    const response = await hummingbotClient.get('/controllers/list');
-    return response.data;
+    // Backend returns a mapping of type -> [names]
+    const resp = await hummingbotClient.get('/controllers');
+    const data = resp.data || {};
+    const arr = [];
+    Object.entries(data).forEach(([type, names]) => {
+      (names || []).forEach((name) => {
+        arr.push({ name, type });
+      });
+    });
+    return arr;
   } catch (error) {
     console.error('List controllers error:', error);
     throw error;
@@ -22,10 +31,15 @@ export const listControllers = async () => {
 /**
  * Get controller configuration
  */
-export const getControllerConfig = async (controllerName) => {
+export const getControllerConfig = async (controllerType, controllerName) => {
   try {
-    const response = await hummingbotClient.get(`/controllers/${controllerName}`);
-    return response.data;
+    // Retrieve template to infer default parameters
+    const response = await hummingbotClient.get(`/controllers/${controllerType}/${controllerName}/config/template`);
+    const template = response.data || {};
+    const parameters = Object.fromEntries(
+      Object.entries(template).map(([k, v]) => [k, v?.default])
+    );
+    return { name: controllerName, type: controllerType, parameters };
   } catch (error) {
     console.error('Get controller config error:', error);
     throw error;
@@ -37,7 +51,8 @@ export const getControllerConfig = async (controllerName) => {
  */
 export const createController = async (config) => {
   try {
-    const response = await hummingbotClient.post('/controllers/create', config);
+    // Persist as a controller configuration (YAML) with the given name
+    const response = await hummingbotClient.post(`/controllers/configs/${encodeURIComponent(config.name)}`, config);
     return response.data;
   } catch (error) {
     console.error('Create controller error:', error);
@@ -50,7 +65,7 @@ export const createController = async (config) => {
  */
 export const updateController = async (controllerName, config) => {
   try {
-    const response = await hummingbotClient.put(`/controllers/${controllerName}`, config);
+    const response = await hummingbotClient.post(`/controllers/configs/${encodeURIComponent(controllerName)}`, config);
     return response.data;
   } catch (error) {
     console.error('Update controller error:', error);
@@ -63,7 +78,7 @@ export const updateController = async (controllerName, config) => {
  */
 export const deleteController = async (controllerName) => {
   try {
-    const response = await hummingbotClient.delete(`/controllers/${controllerName}`);
+    const response = await hummingbotClient.delete(`/controllers/configs/${encodeURIComponent(controllerName)}`);
     return response.data;
   } catch (error) {
     console.error('Delete controller error:', error);

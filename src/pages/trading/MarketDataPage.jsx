@@ -5,7 +5,7 @@
  * Candlestick charts, order book, price ticker
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   getCandles,
   getOrderBook,
@@ -25,31 +25,39 @@ const MarketDataPage = () => {
   const [orderBook, setOrderBook] = useState({ bids: [], asks: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const inFlightRef = useRef(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     fetchData();
-    
     // Auto-refresh every 30 seconds
-    const intervalId = window.setInterval(fetchData, 30000);
-    return () => window.clearInterval(intervalId);
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+    }
+    intervalRef.current = window.setInterval(fetchData, 30000);
+    return () => {
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
+    };
   }, [connector, tradingPair, timeframe]);
 
   const fetchData = async () => {
+    if (inFlightRef.current) return; // prevent overlapping fetches (StrictMode/dev or slow network)
+    inFlightRef.current = true;
     setLoading(true);
     setError(null);
 
     try {
-      // Fetch candles
-      const candlesData = await getCandles(connector, tradingPair, timeframe);
+      const [candlesData, orderBookData] = await Promise.all([
+        getCandles(connector, tradingPair, timeframe),
+        getOrderBook(connector, tradingPair, 20),
+      ]);
       setCandles(candlesData);
-
-      // Fetch order book
-      const orderBookData = await getOrderBook(connector, tradingPair, 20);
       setOrderBook(formatOrderBook(orderBookData));
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+      inFlightRef.current = false;
     }
   };
 

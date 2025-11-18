@@ -1,3 +1,4 @@
+/* global console */
 /**
  * Hummingbot API Client
  * 
@@ -28,9 +29,30 @@ const hummingbotClient = axios.create({
 // Interceptor para requests (logging e modificações)
 hummingbotClient.interceptors.request.use(
   (config) => {
-    // Log da requisição em desenvolvimento
+    // Log da requisição em desenvolvimento com redação de segredos
     if (import.meta.env.DEV) {
-      console.log(`[Hummingbot API] ${config.method?.toUpperCase()} ${config.url}`, config.data);
+      let dataToLog = config.data;
+      try {
+        if (dataToLog && typeof dataToLog === 'object') {
+          const clone = Array.isArray(dataToLog) ? [...dataToLog] : { ...dataToLog };
+          const redactKeys = ['api_key', 'api_secret', 'private_key', 'secret', 'password'];
+          const redactDeep = (obj) => {
+            if (!obj || typeof obj !== 'object') return obj;
+            Object.keys(obj).forEach((k) => {
+              if (redactKeys.includes(k)) {
+                obj[k] = '***';
+              } else if (typeof obj[k] === 'object') {
+                obj[k] = redactDeep(Array.isArray(obj[k]) ? [...obj[k]] : { ...obj[k] });
+              }
+            });
+            return obj;
+          };
+          dataToLog = redactDeep(clone);
+        }
+      } catch {
+        // ignore redaction errors
+      }
+      console.log(`[Hummingbot API] ${config.method?.toUpperCase()} ${config.url}`, dataToLog);
     }
     return config;
   },
@@ -196,8 +218,11 @@ export const listAccounts = async () => {
   return response.data;
 };
 
-export const addCredential = async (credentialData) => {
-  const response = await hummingbotClient.post('/accounts/add-credential', credentialData);
+export const addCredential = async ({ account_name, connector_name, credentials }) => {
+  const response = await hummingbotClient.post(
+    `/accounts/add-credential/${encodeURIComponent(account_name)}/${encodeURIComponent(connector_name)}`,
+    credentials
+  );
   return response.data;
 };
 

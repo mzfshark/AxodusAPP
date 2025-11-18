@@ -16,6 +16,7 @@ import {
   Instagram,
   Twitter,
   PlugZap,
+  User,
   Bot,
   Briefcase,
   LineChart,
@@ -39,7 +40,7 @@ export default function Sidebar({ collapsed, onToggle }) {
       title: "Axodus Core",
       items: [
         { type: "route", path: "/", icon: TableOfContents, label: "Overview" },
-        { type: "route", path: "/connect", icon: PlugZap, label: "Connect" },
+        { type: "route", path: "/account", icon: User, label: "Account" },
         { type: "route", path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
         { type: "route", path: "/portfolio", icon: GalleryHorizontalEnd, label: "Portfolio" },
         { type: "route", path: "/transactions", icon: ArrowLeftRight, label: "Transactions" },

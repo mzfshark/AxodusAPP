@@ -175,7 +175,7 @@ const TradingPanel = () => {
                 onChange={(e) => setSelectedAccount(e.target.value)}
                 required
               >
-                <option value="">Select Account</option>
+                <option key="__placeholder__" value="">Select Account</option>
                 {accounts.map((acc) => (
                   <option key={acc.name || acc.id} value={acc.name || acc.id}>
                     {acc.name || acc.id}
