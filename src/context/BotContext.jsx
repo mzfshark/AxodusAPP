@@ -43,7 +43,24 @@ export const BotProvider = ({ children }) => {
 
     try {
       const data = await getBotStatus();
-      setBots(data);
+      // Normalizar diferentes formatos de resposta em uma lista de bots
+      let botsList = [];
+      if (Array.isArray(data)) {
+        botsList = data;
+      } else if (Array.isArray(data?.data)) {
+        botsList = data.data;
+      } else if (Array.isArray(data?.data?.bots)) {
+        botsList = data.data.bots;
+      } else if (Array.isArray(data?.bots)) {
+        botsList = data.bots;
+      } else if (data && typeof data === 'object') {
+        // Se vier um objeto indexado por nome/id, converte para array
+        botsList = Object.values(data);
+      } else {
+        botsList = [];
+      }
+
+      setBots(botsList);
       setLastUpdate(new Date());
       return data;
     } catch (err) {

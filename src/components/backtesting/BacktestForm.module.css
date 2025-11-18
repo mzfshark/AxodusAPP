@@ -1,5 +1,5 @@
 .form {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -9,7 +9,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 2rem 0;
-  color: #1a1a1a;
+  color: var(--text);
 }
 
 .section {
@@ -20,8 +20,8 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
-  color: #1a1a1a;
-  border-bottom: 2px solid #e0e0e0;
+  color: var(--text);
+  border-bottom: 2px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
@@ -34,14 +34,14 @@
 
 .field label {
   font-weight: 600;
-  color: #666;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 .field input,
 .field select {
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s;
@@ -50,7 +50,7 @@
 .field input:focus,
 .field select:focus {
   outline: none;
-  border-color: #4ecdc4;
+  border-color: var(--primary);
 }
 
 .fieldGroup {
@@ -62,21 +62,21 @@
 .submitButton {
   width: 100%;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-  color: white;
+  background: var(--primary);
+  color: var(--bg);
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin-top: 1rem;
 }
 
 .submitButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(78, 205, 196, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .submitButton:disabled {

@@ -1,5 +1,5 @@
 .container {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -16,18 +16,18 @@
 .header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #1a1a1a;
+  color: var(--text);
   font-weight: 600;
 }
 
 .liveBadge {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #f44336;
+  color: var(--error);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  background: #fff3f3;
-  border: 1px solid #f44336;
+  background: var(--bg-alt);
+  border: 1px solid var(--error);
 }
 
 .columns {
@@ -36,8 +36,8 @@
   padding: 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #666;
-  border-bottom: 1px solid #e0e0e0;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
   margin-bottom: 0.5rem;
 }
 
@@ -54,11 +54,11 @@
 }
 
 .bidLabel {
-  color: #4caf50;
+  color: var(--success);
 }
 
 .askLabel {
-  color: #f44336;
+  color: var(--error);
 }
 
 .orderRow {
@@ -72,7 +72,7 @@
 }
 
 .orderRow:hover {
-  background: #f5f5f5;
+  background: var(--bg-alt);
 }
 
 .barBackground {
@@ -92,18 +92,18 @@
 }
 
 .bidPrice {
-  color: #4caf50;
+  color: var(--success);
   font-weight: 600;
 }
 
 .askPrice {
-  color: #f44336;
+  color: var(--error);
   font-weight: 600;
 }
 
 .amount,
 .total {
-  color: #666;
+  color: var(--text-muted);
 }
 
 .spread {
@@ -111,18 +111,18 @@
   justify-content: space-between;
   padding: 0.75rem;
   margin: 0.5rem 0;
-  background: #f0f9ff;
+  background: var(--bg-alt);
   border-radius: 8px;
   font-size: 0.9rem;
 }
 
 .spreadLabel {
-  color: #666;
+  color: var(--text-muted);
   font-weight: 600;
 }
 
 .spreadValue {
-  color: #4ecdc4;
+  color: var(--info);
   font-weight: 700;
 }
 
@@ -131,9 +131,9 @@
 .empty {
   text-align: center;
   padding: 2rem;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .error {
-  color: #f44336;
+  color: var(--error);
 }

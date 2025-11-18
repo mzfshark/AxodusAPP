@@ -20,7 +20,7 @@ import styles from './MarketDataPage.module.css';
 const MarketDataPage = () => {
   const [connector, setConnector] = useState('binance');
   const [tradingPair, setTradingPair] = useState('BTC-USDT');
-  const [interval, setInterval] = useState('1h');
+  const [timeframe, setTimeframe] = useState('1h');
   const [candles, setCandles] = useState([]);
   const [orderBook, setOrderBook] = useState({ bids: [], asks: [] });
   const [loading, setLoading] = useState(false);
@@ -30,9 +30,9 @@ const MarketDataPage = () => {
     fetchData();
     
     // Auto-refresh every 30 seconds
-    const intervalId = setInterval(fetchData, 30000);
-    return () => clearInterval(intervalId);
-  }, [connector, tradingPair, interval]);
+    const intervalId = window.setInterval(fetchData, 30000);
+    return () => window.clearInterval(intervalId);
+  }, [connector, tradingPair, timeframe]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -40,7 +40,7 @@ const MarketDataPage = () => {
 
     try {
       // Fetch candles
-      const candlesData = await getCandles(connector, tradingPair, interval);
+      const candlesData = await getCandles(connector, tradingPair, timeframe);
       setCandles(candlesData);
 
       // Fetch order book
@@ -87,7 +87,7 @@ const MarketDataPage = () => {
 
         <div className={styles.controlGroup}>
           <label>Interval</label>
-          <select value={interval} onChange={(e) => setInterval(e.target.value)}>
+          <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)}>
             <option value="1m">1 Minute</option>
             <option value="5m">5 Minutes</option>
             <option value="15m">15 Minutes</option>

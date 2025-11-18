@@ -1,5 +1,5 @@
 .container {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -15,7 +15,7 @@
 .header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #1a1a1a;
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -29,7 +29,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .dot {
@@ -43,9 +43,9 @@
 .empty {
   text-align: center;
   padding: 3rem;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .error {
-  color: #f44336;
+  color: var(--error);
 }

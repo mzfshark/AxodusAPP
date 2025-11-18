@@ -55,9 +55,10 @@ const BacktestingPage = () => {
   const fetchBacktests = async () => {
     try {
       const data = await listBacktests();
-      setBacktests(data);
+      setBacktests(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Fetch backtests error:', err);
+      // Evita spam de console quando endpoint não existe
+      setBacktests([]);
     }
   };
 

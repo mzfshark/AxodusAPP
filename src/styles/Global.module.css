@@ -8,6 +8,11 @@
   --text: #222222;
   --text-muted: #555;
   --primary: #00bcd4;
+  --success: #4caf50;
+  --error: #f44336;
+  --warning: #ff9f43;
+  --info: #4ecdc4;
+  --border: #e0e0e0;
 
   /* layout */
   --header-h: 60px;
@@ -29,6 +34,11 @@
   --text: #5cc6ce;
   --text-muted: #c3c3c3;
   --primary: #00bcd4;
+  --success: #43a047;
+  --error: #e53935;
+  --warning: #fb8c00;
+  --info: #4ecdc4;
+  --border: #213335;
 
   --header-bg: #222222;
   --sidebar-bg: #222222;

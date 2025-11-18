@@ -27,6 +27,10 @@ export const getBacktestResults = async (backtestId) => {
     const response = await hummingbotClient.get(`/backtesting/results/${backtestId}`);
     return response.data;
   } catch (error) {
+    if (error?.response?.status === 404) {
+      // Sem resultados disponíveis
+      return null;
+    }
     console.error('Get backtest results error:', error);
     throw error;
   }
@@ -37,11 +41,39 @@ export const getBacktestResults = async (backtestId) => {
  */
 export const listBacktests = async (filters = {}) => {
   try {
-    const response = await hummingbotClient.post('/backtesting/list', filters);
-    return response.data;
+    // Tenta POST /backtesting/list
+    try {
+      const response = await hummingbotClient.post('/backtesting/list', filters);
+      return response.data;
+    } catch (err1) {
+      // Se não existir, tenta GET /backtesting/list
+      if (err1?.response?.status === 404) {
+        try {
+          const response = await hummingbotClient.get('/backtesting/list');
+          return response.data;
+        } catch (err2) {
+          // Tenta GET /backtesting
+          if (err2?.response?.status === 404) {
+            try {
+              const response = await hummingbotClient.get('/backtesting');
+              return response.data;
+            } catch (err3) {
+              if (err3?.response?.status === 404) {
+                // Endpoint inexistente: retorna lista vazia silenciosamente
+                return [];
+              }
+              throw err3;
+            }
+          }
+          throw err2;
+        }
+      }
+      throw err1;
+    }
   } catch (error) {
     console.error('List backtests error:', error);
-    throw error;
+    // Em caso de falha inesperada, evita quebrar a UI
+    return [];
   }
 };
 
