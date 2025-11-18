@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <Dashboard />
           </ProtectedRoute>
         ),
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
       {
         path: "portfolio",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <Portfolio />
           </ProtectedRoute>
         ),
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
       {
         path: "settings",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <Settings />
           </ProtectedRoute>
         ),
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       {
         path: "transactions",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <TransactionHistoryPage />
           </ProtectedRoute>
         ),
@@ -61,7 +61,7 @@ const router = createBrowserRouter([
       {
         path: "trading/bots",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <BotManagement />
           </ProtectedRoute>
         ),
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       {
         path: "trading/portfolio",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <PortfolioPage />
           </ProtectedRoute>
         ),
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
       {
         path: "trading/trade",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <TradingPanel />
           </ProtectedRoute>
         ),
@@ -85,7 +85,7 @@ const router = createBrowserRouter([
       {
         path: "trading/market",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <MarketDataPage />
           </ProtectedRoute>
         ),
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
       {
         path: "trading/swap",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <SwapPanel />
           </ProtectedRoute>
         ),
@@ -101,7 +101,7 @@ const router = createBrowserRouter([
       {
         path: "backtesting",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <BacktestingPage />
           </ProtectedRoute>
         ),
@@ -109,7 +109,7 @@ const router = createBrowserRouter([
       {
         path: "controllers",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute requiredRoles={["user"]}>
             <ControllerManagementPage />
           </ProtectedRoute>
         ),
