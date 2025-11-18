@@ -1,9 +1,21 @@
 // src/appkit.config.js
 import { createAppKit } from '@reown/appkit/react';
-import { wagmiAdapter } from '@adapters/wagmiAdapter';
-import { solanaAdapter } from '@adapters/solanaAdapter';
-import { bitcoinAdapter } from '@adapters/bitcoinAdapter';
-import { mainnet, bsc, harmonyOne, arbitrum, polygon, solana, bitcoin, avalanche, base, celo, optimism, opBNB, cronos } from '@reown/appkit/networks';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import { SolanaAdapter } from '@reown/appkit-adapter-solana';
+import { 
+  mainnet, 
+  bsc, 
+  harmonyOne, 
+  arbitrum, 
+  polygon, 
+  solana, 
+  avalanche, 
+  base, 
+  celo, 
+  optimism, 
+  opBNB, 
+  cronos 
+} from '@reown/appkit/networks';
 
 export const projectId = import.meta.env.VITE_PROJECT_ID || '5e64f2b59a17e7bce18c075ae0fb40a8';
 
@@ -14,42 +26,48 @@ export const metadata = {
   icons: ['https://app.axodus.finance/icon.png']
 };
 
-export const tron = {
-  id: 'tron',
-  name: 'Tron',
-  symbol: 'TRX',
-  rpcUrl: 'https://api.trongrid.io',
-  note: 'Adapter not implemented'
-};
+// EVM Networks
+export const evmNetworks = [
+  mainnet, 
+  bsc, 
+  arbitrum, 
+  harmonyOne, 
+  avalanche,
+  polygon, 
+  celo, 
+  optimism, 
+  opBNB, 
+  base, 
+  cronos
+];
 
-export const networks = {mainnet, bsc, arbitrum, harmonyOne, avalanche,
-  polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin};
+// Wagmi Adapter for EVM chains
+export const wagmiAdapter = new WagmiAdapter({
+  projectId,
+  networks: evmNetworks
+});
 
-// Lazy initialization - será chamado pelo AppKitProvider
-let appKitInstance = null;
+// Solana Adapter
+export const solanaAdapter = new SolanaAdapter({
+  wallets: []
+});
 
-export const initializeAppKit = () => {
-  if (!appKitInstance) {
-    appKitInstance = createAppKit({
-      adapters: [wagmiAdapter, solanaAdapter, bitcoinAdapter],
-      networks: [mainnet, bsc, arbitrum, harmonyOne, avalanche,
-        polygon, celo, optimism, opBNB, base, cronos, solana, bitcoin],
-      projectId,
-      metadata: metadata,
-      features: {
-        analytics: true,
-        enableWalletConnect: true,
-        enableNetworkSwitch: true,
-      }
-    });
-  }
-  return appKitInstance;
-};
-
-export default {
+// AppKit instance
+export const appKit = createAppKit({
+  adapters: [wagmiAdapter, solanaAdapter],
+  networks: [...evmNetworks, solana],
   projectId,
   metadata,
-  networks,
-  tron,
-  initializeAppKit
-};
+  features: {
+    analytics: true,
+    email: false,
+    socials: false,
+    emailShowWallets: true
+  },
+  themeMode: 'dark',
+  themeVariables: {
+    '--w3m-accent': '#3b82f6'
+  }
+});
+
+export default appKit;

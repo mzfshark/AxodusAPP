@@ -20,8 +20,7 @@ export default defineConfig({
       '@config': path.resolve(__dirname, './src/appkit.config.js' ),
       '@adapters': path.resolve(__dirname, './src/adapters'),
       '@solana/wallet-adapter-wallets': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-wallets'),
-      '@solana/wallet-adapter-base': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-base'),
-      'viem/experimental/erc7821': path.resolve(__dirname, 'node_modules/viem/_esm/experimental/erc7821/index.js'),
+      '@solana/wallet-adapter-base': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-base')
     }
   },
   server: {
@@ -53,8 +52,7 @@ export default defineConfig({
       '@reown/appkit-adapter-bitcoin',
       '@solana/wallet-adapter-wallets',
       '@solana/wallet-adapter-base'
-    ],
-    exclude: ['porto']
+    ]
   },
   build: {
     sourcemap: true,
