@@ -2,10 +2,28 @@
 
 import { NavLink } from "react-router-dom";
 import {
-  Moon,  Sun,
-  LayoutDashboard, GalleryHorizontalEnd, ArrowLeftRight, TableOfContents,
-  Settings2, Mail, Bug, 
-  Github, Send, Instagram, Twitter
+  Moon,
+  Sun,
+  LayoutDashboard,
+  GalleryHorizontalEnd,
+  ArrowLeftRight,
+  TableOfContents,
+  Settings2,
+  Mail,
+  Bug,
+  Github,
+  Send,
+  Instagram,
+  Twitter,
+  PlugZap,
+  Bot,
+  Briefcase,
+  LineChart,
+  BarChart3,
+  ChartCandlestick,
+  Network,
+  ServerCog,
+  FlaskConical
 } from "lucide-react";
 
 import useDarkMode from "../hooks/useDarkMode";
@@ -15,13 +33,53 @@ export default function Sidebar({ collapsed, onToggle }) {
   /* dark‑mode hook: isDark = bool, toggleTheme = fn */
   const [isDark, toggleTheme] = useDarkMode();
 
-  /* links da navegação */
-  const links = [
-    { path: "/", icon: TableOfContents, label: "Overview"},
-    { path: "/dashboard",            icon: LayoutDashboard,     label: "Dashboard" },
-    { path: "/portfolio",   icon: GalleryHorizontalEnd, label: "Portfolio" },
-    { path: "/transactions",icon: ArrowLeftRight,      label: "Transactions" },
-    { path: "/settings",    icon: Settings2,           label: "Settings" },
+  /* navegação agrupada para expor todos os recursos */
+  const navSections = [
+    {
+      title: "Axodus Core",
+      items: [
+        { type: "route", path: "/", icon: TableOfContents, label: "Overview" },
+        { type: "route", path: "/connect", icon: PlugZap, label: "Connect" },
+        { type: "route", path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+        { type: "route", path: "/portfolio", icon: GalleryHorizontalEnd, label: "Portfolio" },
+        { type: "route", path: "/transactions", icon: ArrowLeftRight, label: "Transactions" },
+        { type: "route", path: "/settings", icon: Settings2, label: "Settings" }
+      ]
+    },
+    {
+      title: "Trading Suite",
+      items: [
+        { type: "route", path: "/trading/bots", icon: Bot, label: "Bots" },
+        { type: "route", path: "/trading/portfolio", icon: Briefcase, label: "Positions" },
+        { type: "route", path: "/trading/trade", icon: ChartCandlestick, label: "Trading" },
+        { type: "route", path: "/trading/market", icon: LineChart, label: "Market Data" },
+        { type: "route", path: "/trading/swap", icon: ArrowLeftRight, label: "Swap" }
+      ]
+    },
+    {
+      title: "Quant & Ops",
+      items: [
+        { type: "route", path: "/backtesting", icon: BarChart3, label: "Backtesting" },
+        { type: "route", path: "/controllers", icon: FlaskConical, label: "Controllers" }
+      ]
+    },
+    {
+      title: "Integrations",
+      items: [
+        {
+          type: "external",
+          href: "http://localhost:8000/docs",
+          icon: ServerCog,
+          label: "Hummingbot API"
+        },
+        {
+          type: "external",
+          href: "http://localhost:15888",
+          icon: Network,
+          label: "Gateway Console"
+        }
+      ]
+    }
   ];
 
   const sidebarWidth = collapsed
@@ -41,19 +99,41 @@ export default function Sidebar({ collapsed, onToggle }) {
 
       {/* navegação */}
       <nav style={{ flex: 1 }}>
-        <ul>
-          {links.map(({ path, icon: Icon, label }) => (
-            <li key={path}>
-              <NavLink
-                to={path}
-                className={({ isActive }) => (isActive ? "active" : "")}
-              >
-                <Icon size={16} style={{ marginRight: collapsed ? 0 : 8 }} />
-                {!collapsed && label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        {navSections.map(({ title, items }) => (
+          <div key={title} className={styles["app-sidebar-section"]}>
+            {!collapsed && (
+              <p className={styles["app-sidebar-section-title"]}>{title}</p>
+            )}
+            <ul>
+              {items.map((item) => {
+                const Icon = item.icon;
+
+                if (item.type === "external") {
+                  return (
+                    <li key={item.label}>
+                      <a href={item.href} target="_blank" rel="noreferrer">
+                        <Icon size={16} style={{ marginRight: collapsed ? 0 : 8 }} />
+                        {!collapsed && item.label}
+                      </a>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={item.path}>
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) => (isActive ? "active" : "")}
+                    >
+                      <Icon size={16} style={{ marginRight: collapsed ? 0 : 8 }} />
+                      {!collapsed && item.label}
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
 
       {/* rodapé */}

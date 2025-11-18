@@ -29,6 +29,9 @@ export default defineConfig({
     open: true,
     host: true, // permite acesso externo
     allowedHosts: ['app.axodus.finance'], // libera o domínio customizado
+    headers: {
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https:; font-src 'self' data: https:;"
+    },
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:8000',

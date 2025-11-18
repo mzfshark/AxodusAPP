@@ -19,11 +19,13 @@ import {
 
 export const projectId = import.meta.env.VITE_PROJECT_ID || '5e64f2b59a17e7bce18c075ae0fb40a8';
 
+const resolvedAppUrl = import.meta.env.VITE_PUBLIC_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5174');
+
 export const metadata = {
   name: 'Axodus Dashboard',
   description: 'Multi-chain portfolio and performance dashboard',
-  url: 'https://app.axodus.finance',
-  icons: ['https://app.axodus.finance/icon.png']
+  url: resolvedAppUrl,
+  icons: [`${resolvedAppUrl}/icon.png`]
 };
 
 // EVM Networks
@@ -47,15 +49,18 @@ export const wagmiAdapter = new WagmiAdapter({
   networks: evmNetworks
 });
 
-// Solana Adapter
+// Solana Adapter - simplified to avoid build issues
 export const solanaAdapter = new SolanaAdapter({
   wallets: []
 });
 
+// All networks for export
+export const networks = [...evmNetworks, solana];
+
 // AppKit instance
 export const appKit = createAppKit({
   adapters: [wagmiAdapter, solanaAdapter],
-  networks: [...evmNetworks, solana],
+  networks,
   projectId,
   metadata,
   features: {
