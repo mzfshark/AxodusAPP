@@ -1,0 +1,27 @@
+name: Axodus MCP Servers
+version: 1.0.0
+schema: v1
+mcpServers:
+  - name: axodus_trading
+    transport: stdio
+    command: python
+    args:
+      - -m
+      - servers.trading.server
+    env: {}
+
+  - name: morpheus
+    transport: stdio
+    command: python
+    args:
+      - -m
+      - servers.morpheus.server
+    env: {}
+
+  - name: redhat
+    transport: stdio
+    command: python
+    args:
+      - -m
+      - servers.redhat.server
+    env: {}

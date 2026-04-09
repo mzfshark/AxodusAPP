@@ -29,3 +29,7 @@ build
 .env
 .env.production
 .env.development
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
+axodus_mcps

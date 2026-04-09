@@ -1,0 +1,47 @@
+# This is an example configuration file
+# To learn more, see the full config.yaml reference: https://docs.continue.dev/reference
+
+name: Axodus Config
+version: 1.0.0
+schema: v1
+models:
+  - name: Llama 3.2 1B
+    provider: ollama
+    model: llama3.2:1b
+    roles:
+      - chat
+      - edit
+      - apply
+  
+  - name: LFM2 Thinking 1.2B
+    provider: ollama
+    model: lfm2.5-thinking:1.2b
+    roles:
+      - autocomplete
+  
+  - name: Nomic Embed
+    provider: ollama
+    model: nomic-embed-text:latest
+    roles:
+      - embed
+  
+  - name: Autodetect
+    provider: ollama
+    model: AUTODETECT
+  
+  - name: "Google: Gemma 4 26B A4B "
+    provider: openrouter
+    model: google/gemma-4-26b-a4b-it
+    apiKey: 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
+
+  - name: "DeepSeek: DeepSeek Coder"
+    provider: ollama
+    model: ollama/deepseek-coder
+    apiKey: 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
+  
+  - name: Free Models Router
+    provider: openrouter
+    model: openrouter/free
+    apiKey: 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
+    roles:
+      - autocomplete

@@ -92,5 +92,28 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a"
+  "packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a",
+  "pythonDependencies": {
+    "fastmcp": ">=3.0",
+    "uvicorn": "[standard]",
+    "fastapi": "*",
+    "pydantic": "*",
+    "python-dotenv": "*",
+    "sqlalchemy": "*",
+    "psycopg2-binary": "*",
+    "redis": "*",
+    "ccxt": "*",
+    "binance-connector": "*",
+    "hummingbot": "*",
+    "gmx-py": "*",
+    "dydx-v4": "*",
+    "ansible-runner": "*",
+    "aider": "*",
+    "openpyxl": "*",
+    "pandas": "*",
+    "opentelemetry-api": "*",
+    "opentelemetry-sdk": "*",
+    "opentelemetry-exporter-otlp": "*",
+    "jaeger-client": "*"
+  }
 }
