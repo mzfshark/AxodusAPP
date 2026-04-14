@@ -1,7 +1,7 @@
 // src/components/InvestmentCard.jsx
 import React from 'react';
 import { formatCurrency } from '../utils/formatCurrency';
-import '@styles/Global.module.css';
+import '@styles/Global.css';
 
 const InvestmentCard = ({ name, value, change, icon }) => {
   return (

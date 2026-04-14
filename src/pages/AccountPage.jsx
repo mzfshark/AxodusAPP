@@ -1,6 +1,6 @@
 // src/pages/AccountPage.jsx
 import React from "react";
-import "@styles/Global.module.css";
+import "@styles/Global.css";
 
 export default function AccountPage() {
   return (

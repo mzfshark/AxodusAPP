@@ -4,7 +4,7 @@ import router from './routes';
 import { BotProvider } from '@context/BotContext';
 import { RealtimeProvider } from '@context/RealtimeContext';
 import NotificationCenter from '@components/notifications/NotificationCenter';
-import '@styles/Global.module.css';
+import '@styles/Global.css';
 
 function App() {
   return (

@@ -4,7 +4,7 @@ import path from "path";
 
 // diretório onde estão os arquivos CSS
 const cssDir = path.resolve("src/styles");
-const outFile = path.join(cssDir, "Global.module.css");
+const outFile = path.join(cssDir, "Global.css");
 
 // lista todos os *.css no diretório, menos o arquivo de saída
 const cssFiles = fs
@@ -12,7 +12,7 @@ const cssFiles = fs
   .filter(
     (f) =>
       f.endsWith(".css") &&
-      f.toLowerCase() !== "global.module.css" &&
+      f.toLowerCase() !== "Global.css" &&
       f.toLowerCase() !== "global.css"
   )
   .sort(); // opcional: ordem alfabética
