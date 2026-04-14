@@ -1,6 +1,6 @@
 // src/components/account/ApiKeysManager.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import "@/styles/Global.module.css";
+import "@styles/Global.module.css";
 import { addCredential, listAccounts, listConnectors } from "../../services/api/hummingbotClient";
 
 export default function ApiKeysManager() {
