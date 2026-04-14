@@ -1,40 +1,31 @@
 // src/components/Header.jsx
-import { Link } from "react-router-dom";
-import WalletConnectButton from "./WalletConnectButton";
-import { useAppKitAccount, useAppKitNetwork, useDisconnect } from "@reown/appkit/react";
-import "../styles/Global.css";
-import logo from '../assets/logo.png';
+import React from 'react';
 
 export default function Header() {
-  const { address: account } = useAppKitAccount();
-  const { disconnect } = useDisconnect();
-  const { network } = useAppKitNetwork();
-
   return (
-    <header className="appHeader">
-      <div className="appHeaderLeft">
-        <Link to="/">
-          <img src={logo} alt="Axodus" style={{ height: "32px" }} />
-        </Link>
+    <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-opacity-60 bg-[#0b1326] flex justify-between items-center px-6 py-3 border-b border-white/5 font-['Inter'] tracking-tight text-sm font-semibold">
+      <div className="flex items-center gap-8">
+        <span className="text-xl font-bold tracking-tighter text-indigo-300">Axodus</span>
+        {/* Search Bar Center */}
+        <div className="hidden md:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 min-w-[320px]">
+          <span className="material-symbols-outlined text-slate-500 text-sm">search</span>
+          <input className="bg-transparent border-none focus:ring-0 text-xs text-on-surface-variant w-full placeholder-slate-500" placeholder="Search ecosystem..." type="text"/>
+        </div>
       </div>
-
-      <div className="appHeaderRight">
-        {!account ? (
-          <WalletConnectButton />
-        ) : (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0 35px" }}>
-            {network?.logoUrl && (
-              <img src={network.logoUrl} alt={network.name} style={{ height: "20px" }} />
-            )}
-            <span className="walletAddress">
-              {account.slice(0, 6)}…{account.slice(-4)}
-            </span>
-            <button onClick={disconnect} className="disconnectButton">
-              Disconnect
-            </button>
-          </div>
-        )}
+      <div className="flex items-center gap-6">
+        <span className="text-indigo-400 font-bold">$NEURONS: $0.42</span>
+        <div className="flex items-center gap-4 text-slate-400">
+          <button className="hover:text-indigo-200 transition-colors duration-200 active:scale-95 transition-transform">
+            <span className="material-symbols-outlined">notifications</span>
+          </button>
+          <button className="hover:text-indigo-200 transition-colors duration-200 active:scale-95 transition-transform">
+            <span className="material-symbols-outlined">settings</span>
+          </button>
+        </div>
+        <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-5 py-2 rounded-lg font-bold text-xs hover:shadow-[0_0_20px_rgba(128,131,255,0.3)] transition-all active:scale-95">
+          Connect Wallet
+        </button>
       </div>
-    </header>
+    </nav>
   );
 }

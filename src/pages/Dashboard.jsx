@@ -6,7 +6,7 @@ import PerformanceGraph from '../components/PerformanceGraph';
 import TokenBalance from '../components/TokenBalance';
 import { InfoList } from '../components/InfoList';
 import { useWallet } from '../hooks/useWallet';
-import "../styles/Global.css";
+import "../styles/Global.module.css";
 
 const Dashboard = () => {
   const { address, isConnected } = useWallet();

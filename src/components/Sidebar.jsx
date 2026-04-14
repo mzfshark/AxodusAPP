@@ -1,200 +1,53 @@
 // src/components/Sidebar.jsx
 
+import React from 'react';
 import { NavLink } from "react-router-dom";
-import {
-  Moon,
-  Sun,
-  LayoutDashboard,
-  GalleryHorizontalEnd,
-  ArrowLeftRight,
-  TableOfContents,
-  Settings2,
-  Mail,
-  Bug,
-  Github,
-  Send,
-  Instagram,
-  Twitter,
-  PlugZap,
-  User,
-  Bot,
-  Briefcase,
-  LineChart,
-  BarChart3,
-  ChartCandlestick,
-  Network,
-  ServerCog,
-  FlaskConical
-} from "lucide-react";
 
-import useDarkMode from "../hooks/useDarkMode";
-import "../styles/Global.css";
-
-export default function Sidebar({ collapsed, onToggle }) {
-  /* dark‑mode hook: isDark = bool, toggleTheme = fn */
-  const [isDark, toggleTheme] = useDarkMode();
-
-  /* navegação agrupada para expor todos os recursos */
-  const navSections = [
-    {
-      title: "Axodus Core",
-      items: [
-        { type: "route", path: "/", icon: TableOfContents, label: "Overview" },
-        { type: "route", path: "/account", icon: User, label: "Account" },
-        { type: "route", path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-        { type: "route", path: "/portfolio", icon: GalleryHorizontalEnd, label: "Portfolio" },
-        { type: "route", path: "/transactions", icon: ArrowLeftRight, label: "Transactions" },
-        { type: "route", path: "/settings", icon: Settings2, label: "Settings" }
-      ]
-    },
-    {
-      title: "Trading Suite",
-      items: [
-        { type: "route", path: "/trading/bots", icon: Bot, label: "Bots" },
-        { type: "route", path: "/trading/portfolio", icon: Briefcase, label: "Positions" },
-        { type: "route", path: "/trading/trade", icon: ChartCandlestick, label: "Trading" },
-        { type: "route", path: "/trading/market", icon: LineChart, label: "Market Data" },
-        { type: "route", path: "/trading/swap", icon: ArrowLeftRight, label: "Swap" }
-      ]
-    },
-    {
-      title: "Quant & Ops",
-      items: [
-        { type: "route", path: "/backtesting", icon: BarChart3, label: "Backtesting" },
-        { type: "route", path: "/controllers", icon: FlaskConical, label: "Controllers" }
-      ]
-    },
-    {
-      title: "Integrations",
-      items: [
-        {
-          type: "external",
-          href: "http://localhost:8000/docs",
-          icon: ServerCog,
-          label: "Hummingbot API"
-        },
-        {
-          type: "external",
-          href: "http://localhost:15888",
-          icon: Network,
-          label: "Gateway Console"
-        }
-      ]
-    }
-  ];
-
-  const sidebarWidth = collapsed
-    ? "var(--sidebar-w-collapsed)"
-    : "var(--sidebar-w)";
-
+export default function Sidebar() {
   return (
-    <aside className="appSidebar" style={{ width: sidebarWidth }}>
-      {/* botão de colapsar */}
-      <button
-        onClick={onToggle}
-        className="appSidebarToggle"
-        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-      >
-        {collapsed ? "»" : "«"}
-      </button>
-
-      {/* navegação */}
-      <nav style={{ flex: 1 }}>
-        {navSections.map(({ title, items }) => (
-          <div key={title} className="appSidebarSection">
-            {!collapsed && (
-              <p className="appSidebarSectionTitle">{title}</p>
-            )}
-            <ul>
-              {items.map((item) => {
-                const Icon = item.icon;
-
-                if (item.type === "external") {
-                  return (
-                    <li key={item.label}>
-                      <a href={item.href} target="_blank" rel="noreferrer">
-                        <Icon size={16} style={{ marginRight: collapsed ? 0 : 8 }} />
-                        {!collapsed && item.label}
-                      </a>
-                    </li>
-                  );
-                }
-
-                return (
-                  <li key={item.path}>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                      <Icon size={16} style={{ marginRight: collapsed ? 0 : 8 }} />
-                      {!collapsed && item.label}
-                    </NavLink>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </nav>
-
-      {/* rodapé */}
-      <nav style={{marginBottom: "20px"}}>
-        <ul>
-          <li>
-            <a
-              href="https://github.com/Axodus"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Github size={16} /> {!collapsed && "GitHub"}
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/mzfshark/axodus/issues"
-            target="_blank"
-            rel="noreferrer">
-              <Bug size={16} /> {!collapsed && "Support"}
-            </a>
-          </li>
-          <li>
-            <a href="https://instagram.com/axodus.finance"
-            target="_blank"
-            rel="noreferrer">
-              <Instagram size={16}/> {!collapsed && "Instagram"}
-            </a>
-          </li>
-          <li>
-            <a href="https://t.me/axodusfinance"
-            target="_blank"
-            rel="noreferrer">
-              <Send size={16}/> {!collapsed && "Telegram"}
-            </a>
-          </li>
-          <li>
-            <a href="https://x.com/axodus.finance"
-            target="_blank"
-            rel="noreferrer">
-              <Twitter size={16}/> {!collapsed && "X / Twitter"}
-            </a>
-          </li>
-          <li>
-            <a href="mailto:axodus.finance@gmail.com">
-              <Mail size={16}/> {!collapsed && "Contact"}
-            </a>
-          </li>
-        
-          <li>
-            <button
-              onClick={toggleTheme}
-              className="themeToggle"
-              title="Toggle theme"
-              
-            >
-              {isDark ? <Sun size={16} /> : <Moon size={16} />}
-              {!collapsed && ""}
-            </button>
-          </li>
-        </ul>
+    <aside className="hidden md:flex flex-col h-full w-64 bg-[#0b1326] py-6 px-4 gap-y-1 overflow-y-auto border-r border-white/5 font-['Inter'] font-medium text-sm">
+      <div className="px-2 mb-6">
+        <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
+        <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
+      </div>
+      <nav className="flex flex-col gap-1">
+        <NavLink to="/dashboard" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>dashboard</span>
+          <span>Overview</span>
+        </NavLink>
+        <NavLink to="/static/mining" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">bolt</span>
+          <span>Mining</span>
+        </NavLink>
+        <NavLink to="/static/trading" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">swap_horiz</span>
+          <span>Trading</span>
+        </NavLink>
+        <NavLink to="/static/staking" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">layers</span>
+          <span>Staking</span>
+        </NavLink>
+        <NavLink to="/static/dao" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">account_balance</span>
+          <span>DAOs</span>
+        </NavLink>
+        <NavLink to="/static/business" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">business_center</span>
+          <span>Business</span>
+        </NavLink>
+        <NavLink to="/static/marketplace" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">shopping_cart</span>
+          <span>Marketplace</span>
+        </NavLink>
+        <NavLink to="/static/academy" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">school</span>
+          <span>Academy</span>
+        </NavLink>
+        <div className="h-px bg-white/5 my-4"></div>
+        <NavLink to="/static/mcps" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">dns</span>
+          <span>MCP Servers</span>
+        </NavLink>
       </nav>
     </aside>
   );
