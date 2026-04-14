@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import WalletConnectButton from "./WalletConnectButton";
 import { useAppKitAccount, useAppKitNetwork, useDisconnect } from "@reown/appkit/react";
-import "../styles/Global.module.css";
+import "../styles/Global.css";
 import logo from '../assets/logo.png';
 
 export default function Header() {

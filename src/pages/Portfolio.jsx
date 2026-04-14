@@ -2,7 +2,7 @@
 import React from 'react';
 import TokenBalance from '../components/TokenBalance';
 import InvestmentCard from '../components/InvestmentCard';
-import "../styles/Global.module.css";
+import "../styles/Global.css";
 
 const mockInvestments = [
   { name: 'Avalanche', value: 12200, change: 1.8, icon: '/assets/icons/avax.svg' },

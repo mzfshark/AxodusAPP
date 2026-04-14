@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 
 import useDarkMode from "../hooks/useDarkMode";
-import "../styles/Global.module.css";
+import "../styles/Global.css";
 
 export default function Sidebar({ collapsed, onToggle }) {
   /* dark‑mode hook: isDark = bool, toggleTheme = fn */

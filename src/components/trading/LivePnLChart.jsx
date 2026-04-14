@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { getPortfolioState, calculateTotalValue } from '@services/api/portfolioService';
-import styles from './LivePnLChart.module.css';
+import './LivePnLChart.module.css';
 
 const LivePnLChart = ({ updateInterval = 5000 }) => {
   const [pnlData, setPnlData] = useState([]);
@@ -78,38 +78,38 @@ const LivePnLChart = ({ updateInterval = 5000 }) => {
 
   if (loading && pnlData.length === 0) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading PnL data...</div>
+      <div className="container">
+        <div className="loading">Loading PnL data...</div>
       </div>
     );
   }
 
   if (error && pnlData.length === 0) {
     return (
-      <div className={styles.container}>
-        <div className={styles.error}>Error: {error}</div>
+      <div className="container">
+        <div className="error">Error: {error}</div>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <div>
           <h3>Live Portfolio Value</h3>
-          <div className={styles.currentValue}>
+          <div className="currentValue">
             ${currentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className={`${styles.change} ${parseFloat(change.value) >= 0 ? styles.positive : styles.negative}`}>
+          <div className={`change ${parseFloat(change.value) >= 0 ? "positive" : "negative"}`}>
             {parseFloat(change.value) >= 0 ? '+' : ''}
             ${change.value} ({change.percentage}%)
           </div>
         </div>
-        <div className={styles.info}>
-          <div className={styles.dataPoints}>
+        <div className="info">
+          <div className="dataPoints">
             {pnlData.length} data points
           </div>
-          <div className={styles.updateTime}>
+          <div className="updateTime">
             Last update: {pnlData.length > 0 ? pnlData[pnlData.length - 1].time : 'N/A'}
           </div>
         </div>

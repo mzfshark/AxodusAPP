@@ -10,7 +10,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-import '../styles/Global.module.css';
+import '../styles/Global.css';
 
 const PerformanceGraph = ({ data, title }) => {
   return (

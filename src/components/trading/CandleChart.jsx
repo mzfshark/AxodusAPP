@@ -15,29 +15,29 @@ import {
   CartesianGrid,
   Line,
 } from 'recharts';
-import styles from './CandleChart.module.css';
+import './CandleChart.module.css';
 
 const CandleChart = ({ data, loading, error }) => {
   if (loading && data.length === 0) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading chart data...</div>
+      <div className="container">
+        <div className="loading">Loading chart data...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className={styles.container}>
-        <div className={styles.error}>Error: {error}</div>
+      <div className="container">
+        <div className="error">Error: {error}</div>
       </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <div className={styles.container}>
-        <div className={styles.empty}>No data available</div>
+      <div className="container">
+        <div className="empty">No data available</div>
       </div>
     );
   }
@@ -82,16 +82,16 @@ const CandleChart = ({ data, loading, error }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <h3>Price Chart</h3>
-        <div className={styles.legend}>
-          <span className={styles.legendItem}>
-            <span className={styles.dot} style={{ backgroundColor: '#4caf50' }}></span>
+        <div className="legend">
+          <span className="legendItem">
+            <span className="dot" style={{ backgroundColor: '#4caf50' }}></span>
             Up
           </span>
-          <span className={styles.legendItem}>
-            <span className={styles.dot} style={{ backgroundColor: '#f44336' }}></span>
+          <span className="legendItem">
+            <span className="dot" style={{ backgroundColor: '#f44336' }}></span>
             Down
           </span>
         </div>

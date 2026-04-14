@@ -1,6 +1,6 @@
 // src/pages/AccountPage.jsx
 import React, { useState } from "react";
-import "../styles/Global.module.css";
+import "../styles/Global.css";
 import ProfileForm from "../components/account/ProfileForm";
 import ApiKeysManager from "../components/account/ApiKeysManager";
 
