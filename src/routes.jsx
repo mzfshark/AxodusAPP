@@ -20,6 +20,19 @@ import SwapPanel from "./pages/trading/SwapPanel";
 import BacktestingPage from "./pages/backtesting/BacktestingPage";
 import ControllerManagementPage from "./pages/controllers/ControllerManagementPage";
 
+// Importações dos novos componentes estáticos
+import Academy from "./pages/static/Academy";
+import Business from "./pages/static/Business";
+import Dao from "./pages/static/Dao";
+import Defi from "./pages/static/Defi";
+import Dex from "./pages/static/Dex";
+import OverviewStatic from "./pages/static/OverviewStatic";
+import Lottery from "./pages/static/Lottery";
+import Marketplace from "./pages/static/Marketplace";
+import Mcps from "./pages/static/Mcps";
+import Mining from "./pages/static/Mining";
+import TradingBots from "./pages/static/TradingBots";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -123,6 +136,23 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+    ],
+  },
+  // Rotas Estáticas (Preview) - Sem o Layout original
+  {
+    path: "/static",
+    children: [
+      { path: "overview", element: <OverviewStatic /> },
+      { path: "academy", element: <Academy /> },
+      { path: "business", element: <Business /> },
+      { path: "dao", element: <Dao /> },
+      { path: "defi", element: <Defi /> },
+      { path: "dex", element: <Dex /> },
+      { path: "lottery", element: <Lottery /> },
+      { path: "marketplace", element: <Marketplace /> },
+      { path: "mcps", element: <Mcps /> },
+      { path: "mining", element: <Mining /> },
+      { path: "trading-bots", element: <TradingBots /> },
     ],
   },
 ]);
