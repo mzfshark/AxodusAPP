@@ -1,5 +1,5 @@
 import React from "react";
-import "@styles/Global.css";
+import "@/styles/Global.css";
 
 const Overview = () => {
   return (
