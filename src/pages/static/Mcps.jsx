@@ -142,7 +142,7 @@ const Mcps = () => {
                     <div className="w-1 bg-secondary/20 h-2"></div>
                     <div className="w-1 bg-secondary/40 h-4"></div>
                     <div className="w-1 bg-secondary/30 h-3"></div>
-                    <div className="w-1 bg-secondary h-6 style={{boxShadow: '0 0 8px #41e4b8'}}"></div>
+                    <div className="w-1 bg-secondary h-6" style={{boxShadow: '0 0 8px #41e4b8'}}></div>
                     <div className="w-1 bg-secondary/60 h-4"></div>
                     <div className="w-1 bg-secondary/80 h-5"></div>
                   </div>
@@ -235,7 +235,7 @@ const Mcps = () => {
                   <div className="h-8 w-20 flex items-end gap-0.5">
                     <div className="w-1 bg-tertiary/60 h-4"></div>
                     <div className="w-1 bg-tertiary/80 h-6"></div>
-                    <div className="w-1 bg-tertiary h-8 style={{boxShadow: '0 0 8px #ffb783'}}"></div>
+                    <div className="w-1 bg-tertiary h-8" style={{boxShadow: '0 0 8px #ffb783'}}></div>
                     <div className="w-1 bg-tertiary/90 h-7"></div>
                     <div className="w-1 bg-tertiary/70 h-5"></div>
                     <div className="w-1 bg-tertiary/80 h-6"></div>

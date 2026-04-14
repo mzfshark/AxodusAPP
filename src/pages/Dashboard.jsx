@@ -6,7 +6,7 @@ import PerformanceGraph from '../components/PerformanceGraph';
 import TokenBalance from '../components/TokenBalance';
 import { InfoList } from '../components/InfoList';
 import { useWallet } from '../hooks/useWallet';
-import styles from '../styles/Global.module.css';
+import "../styles/Global.module.css";
 
 const Dashboard = () => {
   const { address, isConnected } = useWallet();
@@ -38,30 +38,30 @@ const Dashboard = () => {
   }, [address, isConnected]);
 
   if (loading) {
-    return <div className={styles["dashboard-container"]}>Loading dashboard data...</div>;
+    return <div className="appMain">Loading dashboard data...</div>;
   }
 
   return (
-    <div className={styles["dashboard-container"]}>
+    <div className="appMain">
       {/* Cards de Investimentos */}
-      <div className={styles["dashboard-summary"]}>
+      <div className="stats-grid">
         {investments.map((inv) => (
           <InvestmentCard key={inv.productId} {...inv} />
         ))}
       </div>
 
       {/* Gráfico de performance */}
-      <div className={styles["dashboard-section"]}>
+      <div className="chart-block">
         <PerformanceGraph data={performance} title="Portfolio Performance" />
       </div>
 
       {/* Saldo de Tokens */}
-      <div className={styles["dashboard-section"]}>
+      <div className="chart-block">
         <TokenBalance />
       </div>
 
       {/* Lista de informações adicionais */}
-      <div className={styles["dashboard-section"]}>
+      <div className="chart-block">
         <InfoList />
       </div>
     </div>

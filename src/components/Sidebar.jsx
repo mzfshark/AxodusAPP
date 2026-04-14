@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 
 import useDarkMode from "../hooks/useDarkMode";
-import styles from "../styles/Global.module.css";
+import "../styles/Global.module.css";
 
 export default function Sidebar({ collapsed, onToggle }) {
   /* dark‑mode hook: isDark = bool, toggleTheme = fn */
@@ -88,11 +88,11 @@ export default function Sidebar({ collapsed, onToggle }) {
     : "var(--sidebar-w)";
 
   return (
-    <aside className={styles["app-sidebar"]} style={{ width: sidebarWidth }}>
+    <aside className="appSidebar" style={{ width: sidebarWidth }}>
       {/* botão de colapsar */}
       <button
         onClick={onToggle}
-        className={styles['app-sidebar-toggle']}
+        className="appSidebarToggle"
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? "»" : "«"}
@@ -101,9 +101,9 @@ export default function Sidebar({ collapsed, onToggle }) {
       {/* navegação */}
       <nav style={{ flex: 1 }}>
         {navSections.map(({ title, items }) => (
-          <div key={title} className={styles["app-sidebar-section"]}>
+          <div key={title} className="appSidebarSection">
             {!collapsed && (
-              <p className={styles["app-sidebar-section-title"]}>{title}</p>
+              <p className="appSidebarSectionTitle">{title}</p>
             )}
             <ul>
               {items.map((item) => {

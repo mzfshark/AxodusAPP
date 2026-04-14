@@ -178,7 +178,7 @@ const Lottery = () => {
                   <img alt="Winner Avatar" className="w-10 h-10 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmQZC8PeFF9PEw4O2ILFu1YdLNfbx8DDOFfeiIS2x1bz7IYDdKWMMe9YNrIUnYzQrJwUN0hRucn_pwJRftKPJ895k0QXMjz3uPE8UvpBYcGB9QyIFTkgLUzgOznwUfrDjhNFDQSGBxOSFYYJfzHZ45vEOUxzOLJKFQKRWiiswj-eun5brcQAVxsN4FQ3jpH5Lz5cDm5IpjnPwYz69YI-LOubV6WuW-mS6PkUN9TIQdbOIXodRBCu4L_N4mW0aNuiqLPSVz8HXAIdc"/>
                   <div className="flex-1">
                     <p className="text-xs font-mono text-[#908fa0]">0x99...a104</p>
-                    <p class="text-sm font-bold text-white">Won 250,000 $NEURONS</p>
+                    <p className="text-sm font-bold text-white">Won 250,000 $NEURONS</p>
                   </div>
                   <span className="text-[10px] text-outline">1h ago</span>
                 </div>

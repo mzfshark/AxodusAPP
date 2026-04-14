@@ -1,20 +1,24 @@
 // src/hooks/useWallet.jsx
-import { useAppKit } from "@reown/appkit/react";
+import { useAppKit, useAppKitAccount, useDisconnect } from "@reown/appkit/react";
 import { useAccount } from 'wagmi';
 
 export function useWallet() {
   // Preferir wagmi para EVM
   const { address: wagmiAddress, isConnected: wagmiConnected, chainId } = useAccount();
-  // Fallback appkit
-  const { account, connected, disconnect } = useAppKit();
+  
+  // AppKit v1 hooks
+  const { address: akAddress, isConnected: akConnected } = useAppKitAccount();
+  const { disconnect } = useDisconnect();
+  const { open } = useAppKit();
 
-  const address = wagmiAddress || account?.address || null;
-  const isConnected = Boolean(wagmiConnected || connected) && Boolean(address);
+  const address = wagmiAddress || akAddress || null;
+  const isConnected = Boolean(wagmiConnected || akConnected) && Boolean(address);
 
   return {
     address,
     isConnected,
     chain: chainId,
     disconnect,
+    openAppKit: open
   };
 }

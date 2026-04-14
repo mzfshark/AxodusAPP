@@ -4,23 +4,23 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
-import styles from "../styles/Global.module.css";
+import "../styles/Global.module.css";
 
 export default function Layout() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className={styles["app-layout"]}>
+    <div className="appLayout">
       <Header />
 
-      <div className={styles["app-main"]}>
+      <div className="appMain">
         <Sidebar
           collapsed={collapsed}
           onToggle={() => setCollapsed(!collapsed)}
         />
 
         <main
-          className={styles["app-content"]}
+          className="appContent"
           /* ⇩ marginLeft ajustado com token de tema */
           style={{
             marginLeft: collapsed
