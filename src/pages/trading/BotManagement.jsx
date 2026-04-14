@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import { useBots } from '@context/BotContext';
-import styles from './BotManagement.module.css';
+import './BotManagement.css';
 
 const BotManagement = () => {
   const { bots, loading, error, lastUpdate, fetchBots, startBot, stopBot } = useBots();
@@ -56,9 +56,9 @@ const BotManagement = () => {
    */
   if (loading && bots.length === 0) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
+      <div className="container">
+        <div className="loading">
+          <div className="spinner"></div>
           <p>Carregando bots...</p>
         </div>
       </div>
@@ -70,11 +70,11 @@ const BotManagement = () => {
    */
   if (error) {
     return (
-      <div className={styles.container}>
-        <div className={styles.error}>
+      <div className="container">
+        <div className="error">
           <h2>❌ Erro ao conectar com a API</h2>
           <p>{error}</p>
-          <button onClick={fetchBots} className={styles.retryButton}>
+          <button onClick={fetchBots} className="retryButton">
             Tentar Novamente
           </button>
         </div>
@@ -83,49 +83,49 @@ const BotManagement = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {/* Header */}
-      <div className={styles.header}>
+      <div className="header">
         <div>
           <h1>Gerenciamento de Bots</h1>
-          <p className={styles.subtitle}>
+          <p className="subtitle">
             {bots.length} bot{bots.length !== 1 ? 's' : ''} encontrado{bots.length !== 1 ? 's' : ''}
             {lastUpdate && (
-              <span className={styles.lastUpdate}>
+              <span className="lastUpdate">
                 {' • Última atualização: '}
                 {lastUpdate.toLocaleTimeString('pt-BR')}
               </span>
             )}
           </p>
         </div>
-        <button onClick={fetchBots} className={styles.refreshButton} disabled={loading}>
+        <button onClick={fetchBots} className="refreshButton" disabled={loading}>
           {loading ? '⏳' : '🔄'} Atualizar
         </button>
       </div>
 
       {/* Bot List */}
       {bots.length === 0 ? (
-        <div className={styles.emptyState}>
+        <div className="emptyState">
           <p>📭 Nenhum bot encontrado</p>
-          <p className={styles.emptyHint}>
+          <p className="emptyHint">
             Crie um novo bot usando o Dashboard ou API
           </p>
         </div>
       ) : (
-        <div className={styles.botGrid}>
+        <div className="botGrid">
           {bots.map((bot) => (
             <div
               key={bot.name || bot.id}
-              className={`${styles.botCard} ${
-                selectedBot?.name === bot.name ? styles.selected : ''
+              className={`botCard ${
+                selectedBot?.name === bot.name ? 'selected' : ''
               }`}
               onClick={() => setSelectedBot(bot)}
             >
               {/* Bot Header */}
-              <div className={styles.botHeader}>
+              <div className="botHeader">
                 <h3>{bot.name || bot.id}</h3>
                 <span
-                  className={styles.statusBadge}
+                  className="statusBadge"
                   style={{ backgroundColor: getStatusColor(bot.status) }}
                 >
                   {bot.status || 'unknown'}
@@ -133,42 +133,42 @@ const BotManagement = () => {
               </div>
 
               {/* Bot Info */}
-              <div className={styles.botInfo}>
+              <div className="botInfo">
                 {bot.script && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Script:</span>
-                    <span className={styles.value}>{bot.script}</span>
+                  <div className="infoRow">
+                    <span className="label">Script:</span>
+                    <span className="value">{bot.script}</span>
                   </div>
                 )}
                 {bot.connector && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Connector:</span>
-                    <span className={styles.value}>{bot.connector}</span>
+                  <div className="infoRow">
+                    <span className="label">Connector:</span>
+                    <span className="value">{bot.connector}</span>
                   </div>
                 )}
                 {bot.trading_pair && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Par:</span>
-                    <span className={styles.value}>{bot.trading_pair}</span>
+                  <div className="infoRow">
+                    <span className="label">Par:</span>
+                    <span className="value">{bot.trading_pair}</span>
                   </div>
                 )}
                 {bot.uptime && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Uptime:</span>
-                    <span className={styles.value}>{bot.uptime}</span>
+                  <div className="infoRow">
+                    <span className="label">Uptime:</span>
+                    <span className="value">{bot.uptime}</span>
                   </div>
                 )}
               </div>
 
               {/* Bot Actions */}
-              <div className={styles.botActions}>
+              <div className="botActions">
                 {bot.status?.toLowerCase() !== 'running' ? (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleBotAction(bot.name, 'start');
                     }}
-                    className={styles.startButton}
+                    className="startButton"
                     disabled={actionLoading === bot.name}
                   >
                     {actionLoading === bot.name ? '⏳' : '▶️'} Iniciar
@@ -179,7 +179,7 @@ const BotManagement = () => {
                       e.stopPropagation();
                       handleBotAction(bot.name, 'stop');
                     }}
-                    className={styles.stopButton}
+                    className="stopButton"
                     disabled={actionLoading === bot.name}
                   >
                     {actionLoading === bot.name ? '⏳' : '⏸️'} Parar
@@ -193,7 +193,7 @@ const BotManagement = () => {
 
       {/* Selected Bot Details (optional) */}
       {selectedBot && (
-        <div className={styles.detailsPanel}>
+        <div className="detailsPanel">
           <h2>Detalhes: {selectedBot.name}</h2>
           <pre>{JSON.stringify(selectedBot, null, 2)}</pre>
           <button onClick={() => setSelectedBot(null)}>Fechar</button>

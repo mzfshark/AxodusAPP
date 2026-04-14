@@ -186,7 +186,7 @@ export default function Sidebar({ collapsed, onToggle }) {
           <li>
             <button
               onClick={toggleTheme}
-              className={styles["theme-toggle"]}
+              className="themeToggle"
               title="Toggle theme"
               
             >

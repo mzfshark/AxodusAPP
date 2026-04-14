@@ -1,6 +1,6 @@
 // src/components/account/ApiKeysManager.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import styles from "../../styles/Global.module.css";
+import "../../styles/Global.module.css";
 import { addCredential, listAccounts, listConnectors } from "../../services/api/hummingbotClient";
 
 export default function ApiKeysManager() {
@@ -83,7 +83,7 @@ export default function ApiKeysManager() {
   };
 
   return (
-    <div className={styles.card}>
+    <div className="card">
       <h2 style={{ marginTop: 0 }}>Integrações (API Keys)</h2>
       <p style={{ color: "var(--text-muted)", marginTop: 0 }}>
         Adicione/edite credenciais para CEX/DEX/Gateway. O formato das credenciais depende do conector.
@@ -113,7 +113,7 @@ export default function ApiKeysManager() {
           </label>
         </div>
 
-        <div className={styles.formRow}>
+        <div className="formRow">
           <label>Account name</label>
           <select name="account_name" value={form.account_name} onChange={onChange}>
             {accounts.length === 0 && <option value="master_account">master_account</option>}
@@ -123,7 +123,7 @@ export default function ApiKeysManager() {
           </select>
         </div>
 
-        <div className={styles.formRow}>
+        <div className="formRow">
           <label>Connector</label>
           <select name="connector_name" value={form.connector_name} onChange={onChange}>
             <option value="">Selecione...</option>
@@ -135,7 +135,7 @@ export default function ApiKeysManager() {
 
         {mode === "simple" ? (
           <>
-            <div className={styles.formRow}>
+            <div className="formRow">
               <label>API Key</label>
               <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                 <input
@@ -145,12 +145,12 @@ export default function ApiKeysManager() {
                   placeholder="Insira sua API Key"
                   autoComplete="off"
                 />
-                <button type="button" className={styles.secondaryButton} onClick={() => setShowKey((v) => !v)}>
+                <button type="button" className="secondaryButton" onClick={() => setShowKey((v) => !v)}>
                   {showKey ? "Ocultar" : "Mostrar"}
                 </button>
               </div>
             </div>
-            <div className={styles.formRow}>
+            <div className="formRow">
               <label>API Secret</label>
               <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                 <input
@@ -160,14 +160,14 @@ export default function ApiKeysManager() {
                   placeholder="Insira seu API Secret"
                   autoComplete="off"
                 />
-                <button type="button" className={styles.secondaryButton} onClick={() => setShowSecret((v) => !v)}>
+                <button type="button" className="secondaryButton" onClick={() => setShowSecret((v) => !v)}>
                   {showSecret ? "Ocultar" : "Mostrar"}
                 </button>
               </div>
             </div>
           </>
         ) : (
-          <div className={styles.formRow}>
+          <div className="formRow">
             <label>Credentials (JSON)</label>
             <textarea
               name="credentials_json"
@@ -180,7 +180,7 @@ export default function ApiKeysManager() {
         )}
 
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <button type="submit" className={styles.primaryButton} disabled={loading}>Salvar</button>
+          <button type="submit" className="primaryButton" disabled={loading}>Salvar</button>
           {error && <span style={{ color: "var(--error)" }}>{error}</span>}
           {!error && mode === "json" && parsedCredentials == null && (
             <span style={{ color: "var(--warning)" }}>JSON inválido</span>
@@ -195,8 +195,8 @@ export default function ApiKeysManager() {
           <p style={{ color: "var(--text-muted)" }}>Nenhuma conta encontrada.</p>
         )}
         {!loading && accounts.length > 0 && (
-          <div className={styles.tableResponsive}>
-            <table className={styles.table}>
+          <div className="tableResponsive">
+            <table className="table">
               <thead>
                 <tr>
                   <th>Account</th>

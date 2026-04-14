@@ -5,30 +5,30 @@
  */
 
 import React from 'react';
-import styles from './ControllerDetails.module.css';
+import './ControllerDetails.css';
 
 const ControllerDetails = ({ controller, onEdit, onDelete, loading }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <div>
           <h2>{controller.name}</h2>
           {controller.description && (
-            <p className={styles.description}>{controller.description}</p>
+            <p className="description">{controller.description}</p>
           )}
         </div>
-        <span className={styles.typeBadge}>{controller.type.toUpperCase()}</span>
+        <span className="typeBadge">{controller.type.toUpperCase()}</span>
       </div>
 
-      <div className={styles.section}>
+      <div className="section">
         <h3>Configuration</h3>
-        <div className={styles.configGrid}>
+        <div className="configGrid">
           {controller.parameters && Object.entries(controller.parameters).map(([key, value]) => (
-            <div key={key} className={styles.configItem}>
-              <span className={styles.configLabel}>
+            <div key={key} className="configItem">
+              <span className="configLabel">
                 {key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}:
               </span>
-              <span className={styles.configValue}>
+              <span className="configValue">
                 {typeof value === 'boolean' ? (value ? 'Enabled' : 'Disabled') : value}
               </span>
             </div>
@@ -36,11 +36,11 @@ const ControllerDetails = ({ controller, onEdit, onDelete, loading }) => {
         </div>
       </div>
 
-      <div className={styles.actions}>
-        <button onClick={onEdit} className={styles.editButton} disabled={loading}>
+      <div className="actions">
+        <button onClick={onEdit} className="editButton" disabled={loading}>
           ✏️ Edit Configuration
         </button>
-        <button onClick={onDelete} className={styles.deleteButton} disabled={loading}>
+        <button onClick={onDelete} className="deleteButton" disabled={loading}>
           🗑️ Delete Controller
         </button>
       </div>

@@ -1,10 +1,10 @@
 // src/pages/Settings.jsx
 import React from 'react';
-import styles from '../styles/Global.module.css';
+import "../styles/Global.module.css";
 
 const Settings = () => {
   return (
-    <div className={styles["dashboard-container"]}>
+    <div className="dashboard-container">
       <h1>Settings</h1>
 
       <p>Configure your preferences, notifications and wallet connections.</p>

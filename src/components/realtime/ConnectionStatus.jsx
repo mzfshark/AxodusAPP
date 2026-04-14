@@ -6,16 +6,16 @@
 
 import React from 'react';
 import { useRealtime } from '@context/RealtimeContext';
-import styles from './ConnectionStatus.module.css';
+import './ConnectionStatus.css';
 
 const ConnectionStatus = () => {
   const { connected } = useRealtime();
 
   return (
-    <div className={styles.container}>
-      <div className={`${styles.indicator} ${connected ? styles.connected : styles.disconnected}`}>
-        <span className={styles.dot}></span>
-        <span className={styles.label}>{connected ? 'Live' : 'Offline'}</span>
+    <div className="container">
+      <div className={`indicator ${connected ? 'connected' : 'disconnected'}`}>
+        <span className="dot"></span>
+        <span className="label">{connected ? 'Live' : 'Offline'}</span>
       </div>
     </div>
   );

@@ -6,8 +6,6 @@
 
 import React from 'react';
 import {
-  LineChart,
-  Line,
   AreaChart,
   Area,
   XAxis,
@@ -16,31 +14,31 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
-import styles from './BacktestResults.module.css';
+import './BacktestResults.css';
 
 const BacktestResults = ({ results, metrics, chartData }) => {
   if (!results || !metrics) {
     return (
-      <div className={styles.container}>
-        <div className={styles.empty}>No results available</div>
+      <div className="container">
+        <div className="empty">No results available</div>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <h2>Backtest Results</h2>
-        <span className={styles.strategyBadge}>{results.strategy}</span>
+        <span className="strategyBadge">{results.strategy}</span>
       </div>
 
       {/* Metrics Grid */}
-      <div className={styles.metricsGrid}>
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Total Return</div>
+      <div className="metricsGrid">
+        <div className="metricCard">
+          <div className="metricLabel">Total Return</div>
           <div
-            className={`${styles.metricValue} ${
-              parseFloat(metrics.returnPercentage) >= 0 ? styles.positive : styles.negative
+            className={`metricValue ${
+              parseFloat(metrics.returnPercentage) >= 0 ? 'positive' : 'negative'
             }`}
           >
             {parseFloat(metrics.returnPercentage) >= 0 ? '+' : ''}
@@ -48,52 +46,52 @@ const BacktestResults = ({ results, metrics, chartData }) => {
           </div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Total PnL</div>
+        <div className="metricCard">
+          <div className="metricLabel">Total PnL</div>
           <div
-            className={`${styles.metricValue} ${
-              parseFloat(metrics.totalPnL) >= 0 ? styles.positive : styles.negative
+            className={`metricValue ${
+              parseFloat(metrics.totalPnL) >= 0 ? 'positive' : 'negative'
             }`}
           >
             ${metrics.totalPnL}
           </div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Win Rate</div>
-          <div className={styles.metricValue}>{metrics.winRate}%</div>
+        <div className="metricCard">
+          <div className="metricLabel">Win Rate</div>
+          <div className="metricValue">{metrics.winRate}%</div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Total Trades</div>
-          <div className={styles.metricValue}>{metrics.totalTrades}</div>
+        <div className="metricCard">
+          <div className="metricLabel">Total Trades</div>
+          <div className="metricValue">{metrics.totalTrades}</div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Sharpe Ratio</div>
-          <div className={styles.metricValue}>{metrics.sharpeRatio}</div>
+        <div className="metricCard">
+          <div className="metricLabel">Sharpe Ratio</div>
+          <div className="metricValue">{metrics.sharpeRatio}</div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Max Drawdown</div>
-          <div className={`${styles.metricValue} ${styles.negative}`}>
+        <div className="metricCard">
+          <div className="metricLabel">Max Drawdown</div>
+          <div className="metricValue negative">
             -{metrics.maxDrawdown}%
           </div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Profit Factor</div>
-          <div className={styles.metricValue}>{metrics.profitFactor}</div>
+        <div className="metricCard">
+          <div className="metricLabel">Profit Factor</div>
+          <div className="metricValue">{metrics.profitFactor}</div>
         </div>
 
-        <div className={styles.metricCard}>
-          <div className={styles.metricLabel}>Final Capital</div>
-          <div className={styles.metricValue}>${metrics.finalCapital}</div>
+        <div className="metricCard">
+          <div className="metricLabel">Final Capital</div>
+          <div className="metricValue">${metrics.finalCapital}</div>
         </div>
       </div>
 
       {/* Capital Curve Chart */}
-      <div className={styles.chartSection}>
+      <div className="chartSection">
         <h3>Capital Curve</h3>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={chartData}>
@@ -128,26 +126,26 @@ const BacktestResults = ({ results, metrics, chartData }) => {
       </div>
 
       {/* Trade Analysis */}
-      <div className={styles.tradeAnalysis}>
+      <div className="tradeAnalysis">
         <h3>Trade Analysis</h3>
-        <div className={styles.analysisGrid}>
-          <div className={styles.analysisItem}>
-            <span className={styles.analysisLabel}>Winning Trades:</span>
-            <span className={styles.analysisValue}>{metrics.winningTrades}</span>
+        <div className="analysisGrid">
+          <div className="analysisItem">
+            <span className="analysisLabel">Winning Trades:</span>
+            <span className="analysisValue">{metrics.winningTrades}</span>
           </div>
-          <div className={styles.analysisItem}>
-            <span className={styles.analysisLabel}>Losing Trades:</span>
-            <span className={styles.analysisValue}>{metrics.losingTrades}</span>
+          <div className="analysisItem">
+            <span className="analysisLabel">Losing Trades:</span>
+            <span className="analysisValue">{metrics.losingTrades}</span>
           </div>
-          <div className={styles.analysisItem}>
-            <span className={styles.analysisLabel}>Average Win:</span>
-            <span className={`${styles.analysisValue} ${styles.positive}`}>
+          <div className="analysisItem">
+            <span className="analysisLabel">Average Win:</span>
+            <span className={`analysisValue positive`}>
               ${metrics.avgWin}
             </span>
           </div>
-          <div className={styles.analysisItem}>
-            <span className={styles.analysisLabel}>Average Loss:</span>
-            <span className={`${styles.analysisValue} ${styles.negative}`}>
+          <div className="analysisItem">
+            <span className="analysisLabel">Average Loss:</span>
+            <span className={`analysisValue negative`}>
               ${metrics.avgLoss}
             </span>
           </div>
@@ -156,10 +154,10 @@ const BacktestResults = ({ results, metrics, chartData }) => {
 
       {/* Recent Trades */}
       {results.trades && results.trades.length > 0 && (
-        <div className={styles.tradesSection}>
+        <div className="tradesSection">
           <h3>Recent Trades (Last 10)</h3>
-          <div className={styles.tradesTable}>
-            <div className={styles.tradesHeader}>
+          <div className="tradesTable">
+            <div className="tradesHeader">
               <span>Date</span>
               <span>Side</span>
               <span>Price</span>
@@ -167,16 +165,16 @@ const BacktestResults = ({ results, metrics, chartData }) => {
               <span>PnL</span>
             </div>
             {results.trades.slice(-10).reverse().map((trade, index) => (
-              <div key={index} className={styles.tradeRow}>
+              <div key={index} className="tradeRow">
                 <span>{new Date(trade.timestamp).toLocaleString()}</span>
-                <span className={trade.side === 'buy' ? styles.buyBadge : styles.sellBadge}>
+                <span className={trade.side === 'buy' ? 'buyBadge' : 'sellBadge'}>
                   {trade.side}
                 </span>
                 <span>${trade.price.toLocaleString()}</span>
                 <span>{trade.amount}</span>
                 <span
-                  className={`${styles.pnlValue} ${
-                    trade.pnl >= 0 ? styles.positive : styles.negative
+                  className={`pnlValue ${
+                    trade.pnl >= 0 ? 'positive' : 'negative'
                   }`}
                 >
                   {trade.pnl >= 0 ? '+' : ''}${trade.pnl.toFixed(2)}

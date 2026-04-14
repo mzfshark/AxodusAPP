@@ -17,7 +17,7 @@ import ControllerForm from '@components/controllers/ControllerForm';
 import ControllerList from '@components/controllers/ControllerList';
 import ControllerDetails from '@components/controllers/ControllerDetails';
 import ConnectionStatus from '@components/realtime/ConnectionStatus';
-import styles from './ControllerManagementPage.module.css';
+import './ControllerManagementPage.css';
 
 const ControllerManagementPage = () => {
   const [controllers, setControllers] = useState([]);
@@ -117,18 +117,18 @@ const ControllerManagementPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {/* Header */}
-      <div className={styles.header}>
+      <div className="header">
         <div>
           <h1>Controller Management</h1>
-          <p className={styles.subtitle}>
+          <p className="subtitle">
             Create and manage trading controllers
           </p>
         </div>
-        <div className={styles.headerActions}>
+        <div className="headerActions">
           <ConnectionStatus />
-          <button onClick={handleNewController} className={styles.newButton}>
+          <button onClick={handleNewController} className="newButton">
             ➕ New Controller
           </button>
         </div>
@@ -136,16 +136,16 @@ const ControllerManagementPage = () => {
 
       {/* Error Banner */}
       {error && (
-        <div className={styles.errorBanner}>
+        <div className="errorBanner">
           <strong>Error:</strong> {error}
           <button onClick={() => setError(null)}>Dismiss</button>
         </div>
       )}
 
       {/* Layout */}
-      <div className={styles.layout}>
+      <div className="layout">
         {/* Sidebar - Controller List */}
-        <div className={styles.sidebar}>
+        <div className="sidebar">
           <ControllerList
             controllers={controllers}
             selectedController={selectedController}
@@ -155,7 +155,7 @@ const ControllerManagementPage = () => {
         </div>
 
         {/* Main Content */}
-        <div className={styles.main}>
+        <div className="main">
           {showForm ? (
             <ControllerForm
               templates={templates}
@@ -179,8 +179,8 @@ const ControllerManagementPage = () => {
               loading={loading}
             />
           ) : (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>🎮</div>
+            <div className="emptyState">
+              <div className="emptyIcon">🎮</div>
               <p>Select a controller or create a new one</p>
             </div>
           )}

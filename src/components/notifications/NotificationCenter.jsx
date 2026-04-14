@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { useRealtime } from '@context/RealtimeContext';
-import styles from './NotificationCenter.module.css';
+import './NotificationCenter.css';
 
 const NotificationCenter = () => {
   const { notifications, dismissNotification } = useRealtime();
@@ -36,39 +36,39 @@ const NotificationCenter = () => {
   const getClassName = (type) => {
     switch (type) {
       case 'success':
-        return styles.success;
+        return 'success';
       case 'error':
-        return styles.error;
+        return 'error';
       case 'warning':
-        return styles.warning;
+        return 'warning';
       case 'info':
-        return styles.info;
+        return 'info';
       default:
-        return styles.default;
+        return 'default';
     }
   };
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className={`${styles.notification} ${getClassName(notification.type)}`}
+          className={`notification ${getClassName(notification.type)}`}
         >
-          <div className={styles.icon}>{getIcon(notification.type)}</div>
+          <div className="icon">{getIcon(notification.type)}</div>
 
-          <div className={styles.content}>
+          <div className="content">
             {notification.title && (
-              <div className={styles.title}>{notification.title}</div>
+              <div className="title">{notification.title}</div>
             )}
-            <div className={styles.message}>{notification.message}</div>
+            <div className="message">{notification.message}</div>
             {notification.details && (
-              <div className={styles.details}>{notification.details}</div>
+              <div className="details">{notification.details}</div>
             )}
           </div>
 
           <button
-            className={styles.closeButton}
+            className="closeButton"
             onClick={() => dismissNotification(notification.id)}
             aria-label="Dismiss"
           >

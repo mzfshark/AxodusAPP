@@ -5,19 +5,19 @@
  */
 
 import React from 'react';
-import styles from './BacktestList.module.css';
+import './BacktestList.css';
 
 const BacktestList = ({ backtests, selectedBacktest, onSelect, onRefresh }) => {
   const getStatusBadge = (status) => {
     const statusMap = {
-      completed: { label: 'Completed', className: styles.statusCompleted },
-      running: { label: 'Running', className: styles.statusRunning },
-      failed: { label: 'Failed', className: styles.statusFailed },
-      pending: { label: 'Pending', className: styles.statusPending },
+      completed: { label: 'Completed', className: 'statusCompleted' },
+      running: { label: 'Running', className: 'statusRunning' },
+      failed: { label: 'Failed', className: 'statusFailed' },
+      pending: { label: 'Pending', className: 'statusPending' },
     };
 
     const config = statusMap[status] || { label: status, className: '' };
-    return <span className={`${styles.statusBadge} ${config.className}`}>{config.label}</span>;
+    return <span className={`statusBadge ${config.className}`}>{config.label}</span>;
   };
 
   const formatDate = (dateString) => {
@@ -29,52 +29,52 @@ const BacktestList = ({ backtests, selectedBacktest, onSelect, onRefresh }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <h3>Backtest History</h3>
-        <button onClick={onRefresh} className={styles.refreshButton}>
+        <button onClick={onRefresh} className="refreshButton">
           🔄
         </button>
       </div>
 
       {backtests.length === 0 ? (
-        <div className={styles.empty}>No backtests yet</div>
+        <div className="empty">No backtests yet</div>
       ) : (
-        <div className={styles.list}>
+        <div className="list">
           {backtests.map((backtest) => (
             <div
               key={backtest.id}
-              className={`${styles.item} ${
-                selectedBacktest?.id === backtest.id ? styles.itemSelected : ''
+              className={`item ${
+                selectedBacktest?.id === backtest.id ? 'itemSelected' : ''
               }`}
               onClick={() => onSelect(backtest.id)}
             >
-              <div className={styles.itemHeader}>
-                <span className={styles.itemTitle}>
+              <div className="itemHeader">
+                <span className="itemTitle">
                   {backtest.strategy || 'Unknown'}
                 </span>
                 {getStatusBadge(backtest.status)}
               </div>
 
-              <div className={styles.itemDetails}>
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Pair:</span>
-                  <span className={styles.detailValue}>{backtest.trading_pair}</span>
+              <div className="itemDetails">
+                <div className="detailRow">
+                  <span className="detailLabel">Pair:</span>
+                  <span className="detailValue">{backtest.trading_pair}</span>
                 </div>
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Date:</span>
-                  <span className={styles.detailValue}>
+                <div className="detailRow">
+                  <span className="detailLabel">Date:</span>
+                  <span className="detailValue">
                     {formatDate(backtest.created_at)}
                   </span>
                 </div>
                 {backtest.return_percentage && (
-                  <div className={styles.detailRow}>
-                    <span className={styles.detailLabel}>Return:</span>
+                  <div className="detailRow">
+                    <span className="detailLabel">Return:</span>
                     <span
-                      className={`${styles.detailValue} ${
+                      className={`detailValue ${
                         parseFloat(backtest.return_percentage) >= 0
-                          ? styles.positive
-                          : styles.negative
+                          ? 'positive'
+                          : 'negative'
                       }`}
                     >
                       {parseFloat(backtest.return_percentage) >= 0 ? '+' : ''}
@@ -85,9 +85,9 @@ const BacktestList = ({ backtests, selectedBacktest, onSelect, onRefresh }) => {
               </div>
 
               {backtest.status === 'running' && backtest.progress && (
-                <div className={styles.progressBar}>
+                <div className="progressBar">
                   <div
-                    className={styles.progressFill}
+                    className="progressFill"
                     style={{ width: `${backtest.progress}%` }}
                   />
                 </div>

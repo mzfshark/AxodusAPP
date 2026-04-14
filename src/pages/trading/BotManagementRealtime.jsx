@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { useBots } from '@context/BotContext';
 import { useRealtime } from '@context/RealtimeContext';
 import ConnectionStatus from '@components/realtime/ConnectionStatus';
-import styles from './BotManagement.module.css';
+import './BotManagement.css';
 
 const BotManagement = () => {
   const { bots, loading, error, startBot, stopBot, fetchBots, fetchBotDetails } = useBots();
@@ -77,14 +77,14 @@ const BotManagement = () => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      running: { label: 'Running', className: styles.statusRunning },
-      stopped: { label: 'Stopped', className: styles.statusStopped },
-      error: { label: 'Error', className: styles.statusError },
-      starting: { label: 'Starting', className: styles.statusStarting },
+      running: { label: 'Running', className: 'statusRunning' },
+      stopped: { label: 'Stopped', className: 'statusStopped' },
+      error: { label: 'Error', className: 'statusError' },
+      starting: { label: 'Starting', className: 'statusStarting' },
     };
 
     const config = statusMap[status] || { label: status, className: '' };
-    return <span className={`${styles.statusBadge} ${config.className}`}>{config.label}</span>;
+    return <span className={`statusBadge ${config.className}`}>{config.label}</span>;
   };
 
   // Merge real-time updates with bot data
@@ -109,17 +109,17 @@ const BotManagement = () => {
 
   if (loading && enhancedBots.length === 0) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loading}>Loading bots...</div>
+      <div className="container">
+        <div className="loading">Loading bots...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className={styles.container}>
-        <div className={styles.error}>Error: {error}</div>
-        <button onClick={fetchBots} className={styles.retryButton}>
+      <div className="container">
+        <div className="error">Error: {error}</div>
+        <button onClick={fetchBots} className="retryButton">
           Retry
         </button>
       </div>
@@ -127,54 +127,54 @@ const BotManagement = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <div>
           <h1>Bot Management</h1>
-          <p className={styles.subtitle}>Monitor and control your trading bots</p>
+          <p className="subtitle">Monitor and control your trading bots</p>
         </div>
         <ConnectionStatus />
       </div>
 
-      <div className={styles.layout}>
+      <div className="layout">
         {/* Bot Grid */}
-        <div className={styles.botGrid}>
+        <div className="botGrid">
           {enhancedBots.length === 0 ? (
-            <div className={styles.emptyState}>
+            <div className="emptyState">
               <p>No bots configured</p>
-              <p className={styles.emptySubtext}>Deploy your first bot to get started</p>
+              <p className="emptySubtext">Deploy your first bot to get started</p>
             </div>
           ) : (
             enhancedBots.map((bot) => (
               <div
                 key={bot.id}
-                className={`${styles.botCard} ${
-                  selectedBot?.id === bot.id ? styles.botCardSelected : ''
+                className={`botCard ${
+                  selectedBot?.id === bot.id ? 'botCardSelected' : ''
                 }`}
                 onClick={() => handleBotClick(bot)}
               >
-                <div className={styles.botHeader}>
+                <div className="botHeader">
                   <h3>{bot.name || bot.id}</h3>
                   {getStatusBadge(bot.status)}
                 </div>
 
-                <div className={styles.botInfo}>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Strategy:</span>
-                    <span className={styles.infoValue}>{bot.strategy || 'N/A'}</span>
+                <div className="botInfo">
+                  <div className="infoRow">
+                    <span className="infoLabel">Strategy:</span>
+                    <span className="infoValue">{bot.strategy || 'N/A'}</span>
                   </div>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Exchange:</span>
-                    <span className={styles.infoValue}>{bot.exchange || 'N/A'}</span>
+                  <div className="infoRow">
+                    <span className="infoLabel">Exchange:</span>
+                    <span className="infoValue">{bot.exchange || 'N/A'}</span>
                   </div>
                   {bot.performance && (
-                    <div className={styles.infoRow}>
-                      <span className={styles.infoLabel}>PnL:</span>
+                    <div className="infoRow">
+                      <span className="infoLabel">PnL:</span>
                       <span
-                        className={`${styles.infoValue} ${
+                        className={`infoValue ${
                           parseFloat(bot.performance.pnl) >= 0
-                            ? styles.positive
-                            : styles.negative
+                            ? 'positive'
+                            : 'negative'
                         }`}
                       >
                         {parseFloat(bot.performance.pnl) >= 0 ? '+' : ''}
@@ -183,16 +183,16 @@ const BotManagement = () => {
                     </div>
                   )}
                   {bot.lastUpdate && (
-                    <div className={styles.infoRow}>
-                      <span className={styles.infoLabel}>Last Update:</span>
-                      <span className={styles.infoValue}>
+                    <div className="infoRow">
+                      <span className="infoLabel">Last Update:</span>
+                      <span className="infoValue">
                         {new Date(bot.lastUpdate).toLocaleTimeString()}
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className={styles.botActions}>
+                <div className="botActions">
                   {bot.status === 'running' ? (
                     <button
                       onClick={(e) => {
@@ -200,7 +200,7 @@ const BotManagement = () => {
                         handleStop(bot.id);
                       }}
                       disabled={actionLoading === bot.id}
-                      className={styles.stopButton}
+                      className="stopButton"
                     >
                       {actionLoading === bot.id ? '⏳' : '⏹'} Stop
                     </button>
@@ -211,7 +211,7 @@ const BotManagement = () => {
                         handleStart(bot.id);
                       }}
                       disabled={actionLoading === bot.id}
-                      className={styles.startButton}
+                      className="startButton"
                     >
                       {actionLoading === bot.id ? '⏳' : '▶'} Start
                     </button>
@@ -224,35 +224,35 @@ const BotManagement = () => {
 
         {/* Bot Details Panel */}
         {selectedBot && (
-          <div className={styles.detailsPanel}>
+          <div className="detailsPanel">
             <h2>Bot Details</h2>
-            <div className={styles.detailsContent}>
-              <div className={styles.detailSection}>
+            <div className="detailsContent">
+              <div className="detailSection">
                 <h3>Configuration</h3>
-                <div className={styles.detailGrid}>
-                  <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>ID:</span>
-                    <span className={styles.detailValue}>{selectedBot.id}</span>
+                <div className="detailGrid">
+                  <div className="detailItem">
+                    <span className="detailLabel">ID:</span>
+                    <span className="detailValue">{selectedBot.id}</span>
                   </div>
-                  <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Name:</span>
-                    <span className={styles.detailValue}>{selectedBot.name}</span>
+                  <div className="detailItem">
+                    <span className="detailLabel">Name:</span>
+                    <span className="detailValue">{selectedBot.name}</span>
                   </div>
-                  <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Strategy:</span>
-                    <span className={styles.detailValue}>{selectedBot.strategy}</span>
+                  <div className="detailItem">
+                    <span className="detailLabel">Strategy:</span>
+                    <span className="detailValue">{selectedBot.strategy}</span>
                   </div>
-                  <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Exchange:</span>
-                    <span className={styles.detailValue}>{selectedBot.exchange}</span>
+                  <div className="detailItem">
+                    <span className="detailLabel">Exchange:</span>
+                    <span className="detailValue">{selectedBot.exchange}</span>
                   </div>
                 </div>
               </div>
 
               {selectedBot.config && (
-                <div className={styles.detailSection}>
+                <div className="detailSection">
                   <h3>Parameters</h3>
-                  <pre className={styles.configCode}>
+                  <pre className="configCode">
                     {JSON.stringify(selectedBot.config, null, 2)}
                   </pre>
                 </div>

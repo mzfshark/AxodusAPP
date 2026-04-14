@@ -1,7 +1,7 @@
 // src/pages/Overview.jsx
 import React, { useEffect, useState } from "react";
 import { getOverviewStats } from "../api/protocolData";
-import styles from "../styles/Global.module.css";
+import "../styles/Global.module.css";
 import "../styles/overview.css";
 import "../styles/charts.css";
 import OverviewCharts from "../components/Charts"

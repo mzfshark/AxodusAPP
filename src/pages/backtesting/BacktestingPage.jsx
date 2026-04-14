@@ -17,7 +17,7 @@ import BacktestForm from '@components/backtesting/BacktestForm';
 import BacktestResults from '@components/backtesting/BacktestResults';
 import BacktestList from '@components/backtesting/BacktestList';
 import ConnectionStatus from '@components/realtime/ConnectionStatus';
-import styles from './BacktestingPage.module.css';
+import './BacktestingPage.css';
 
 const BacktestingPage = () => {
   const [backtests, setBacktests] = useState([]);
@@ -102,12 +102,12 @@ const BacktestingPage = () => {
   const chartData = results ? formatBacktestForChart(results) : [];
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {/* Header */}
-      <div className={styles.header}>
+      <div className="header">
         <div>
           <h1>Backtesting</h1>
-          <p className={styles.subtitle}>
+          <p className="subtitle">
             Test your strategies with historical data
           </p>
         </div>
@@ -115,15 +115,15 @@ const BacktestingPage = () => {
       </div>
 
       {/* Tabs */}
-      <div className={styles.tabs}>
+      <div className="tabs">
         <button
-          className={`${styles.tab} ${activeTab === 'new' ? styles.tabActive : ''}`}
+          className={`tab ${activeTab === 'new' ? 'tabActive' : ''}`}
           onClick={() => setActiveTab('new')}
         >
           🆕 New Backtest
         </button>
         <button
-          className={`${styles.tab} ${activeTab === 'history' ? styles.tabActive : ''}`}
+          className={`tab ${activeTab === 'history' ? 'tabActive' : ''}`}
           onClick={() => setActiveTab('history')}
         >
           📊 History ({backtests.length})
@@ -132,22 +132,22 @@ const BacktestingPage = () => {
 
       {/* Error Banner */}
       {error && (
-        <div className={styles.errorBanner}>
+        <div className="errorBanner">
           <strong>Error:</strong> {error}
           <button onClick={() => setError(null)}>Dismiss</button>
         </div>
       )}
 
       {/* Content */}
-      <div className={styles.content}>
+      <div className="content">
         {activeTab === 'new' ? (
-          <div className={styles.formSection}>
+          <div className="formSection">
             <BacktestForm onSubmit={handleRunBacktest} loading={loading} />
           </div>
         ) : (
-          <div className={styles.historySection}>
-            <div className={styles.historyLayout}>
-              <div className={styles.listPanel}>
+          <div className="historySection">
+            <div className="historyLayout">
+              <div className="listPanel">
                 <BacktestList
                   backtests={backtests}
                   selectedBacktest={selectedBacktest}
@@ -156,9 +156,9 @@ const BacktestingPage = () => {
                 />
               </div>
 
-              <div className={styles.resultsPanel}>
+              <div className="resultsPanel">
                 {loading && !results ? (
-                  <div className={styles.loading}>Loading results...</div>
+                  <div className="loading">Loading results...</div>
                 ) : results ? (
                   <BacktestResults
                     results={results}
@@ -166,7 +166,7 @@ const BacktestingPage = () => {
                     chartData={chartData}
                   />
                 ) : (
-                  <div className={styles.emptyState}>
+                  <div className="emptyState">
                     <p>Select a backtest to view results</p>
                   </div>
                 )}

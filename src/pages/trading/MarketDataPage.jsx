@@ -15,7 +15,7 @@ import {
 } from '@services/api/marketDataService';
 import CandleChart from '@components/trading/CandleChart';
 import OrderBookWidgetRealtime from '@components/trading/OrderBookWidgetRealtime';
-import styles from './MarketDataPage.module.css';
+import './MarketDataPage.css';
 
 const MarketDataPage = () => {
   const [connector, setConnector] = useState('binance');
@@ -65,15 +65,15 @@ const MarketDataPage = () => {
   const formattedCandles = formatCandlesForChart(candles);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <h1>Market Data</h1>
-        <p className={styles.subtitle}>Real-time price and orderbook data</p>
+        <p className="subtitle">Real-time price and orderbook data</p>
       </div>
 
       {/* Controls */}
-      <div className={styles.controls}>
-        <div className={styles.controlGroup}>
+      <div className="controls">
+        <div className="controlGroup">
           <label>Exchange</label>
           <select value={connector} onChange={(e) => setConnector(e.target.value)}>
             <option value="binance">Binance</option>
@@ -83,7 +83,7 @@ const MarketDataPage = () => {
           </select>
         </div>
 
-        <div className={styles.controlGroup}>
+        <div className="controlGroup">
           <label>Trading Pair</label>
           <input
             type="text"
@@ -93,7 +93,7 @@ const MarketDataPage = () => {
           />
         </div>
 
-        <div className={styles.controlGroup}>
+        <div className="controlGroup">
           <label>Interval</label>
           <select value={timeframe} onChange={(e) => setTimeframe(e.target.value)}>
             <option value="1m">1 Minute</option>
@@ -105,14 +105,14 @@ const MarketDataPage = () => {
           </select>
         </div>
 
-        <button onClick={fetchData} className={styles.refreshButton} disabled={loading}>
+        <button onClick={fetchData} className="refreshButton" disabled={loading}>
           {loading ? '⏳' : '🔄'} Refresh
         </button>
       </div>
 
       {/* Error */}
       {error && (
-        <div className={styles.errorBanner}>
+        <div className="errorBanner">
           Error: {error}
           <button onClick={fetchData}>Retry</button>
         </div>
@@ -120,19 +120,19 @@ const MarketDataPage = () => {
 
       {/* Market Summary */}
       {summary && (
-        <div className={styles.summaryGrid}>
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryLabel}>Last Price</div>
-            <div className={styles.summaryValue}>
+        <div className="summaryGrid">
+          <div className="summaryCard">
+            <div className="summaryLabel">Last Price</div>
+            <div className="summaryValue">
               ${parseFloat(summary.lastPrice).toLocaleString()}
             </div>
           </div>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryLabel}>24h Change</div>
+          <div className="summaryCard">
+            <div className="summaryLabel">24h Change</div>
             <div
-              className={`${styles.summaryValue} ${
-                parseFloat(summary.priceChange) >= 0 ? styles.positive : styles.negative
+              className={`summaryValue ${
+                parseFloat(summary.priceChange) >= 0 ? 'positive' : 'negative'
               }`}
             >
               {parseFloat(summary.priceChange) >= 0 ? '+' : ''}
@@ -140,23 +140,23 @@ const MarketDataPage = () => {
             </div>
           </div>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryLabel}>24h High</div>
-            <div className={styles.summaryValue}>
+          <div className="summaryCard">
+            <div className="summaryLabel">24h High</div>
+            <div className="summaryValue">
               ${parseFloat(summary.high24h).toLocaleString()}
             </div>
           </div>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryLabel}>24h Low</div>
-            <div className={styles.summaryValue}>
+          <div className="summaryCard">
+            <div className="summaryLabel">24h Low</div>
+            <div className="summaryValue">
               ${parseFloat(summary.low24h).toLocaleString()}
             </div>
           </div>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.summaryLabel}>24h Volume</div>
-            <div className={styles.summaryValue}>
+          <div className="summaryCard">
+            <div className="summaryLabel">24h Volume</div>
+            <div className="summaryValue">
               {parseFloat(summary.volume24h).toLocaleString()}
             </div>
           </div>
@@ -164,12 +164,12 @@ const MarketDataPage = () => {
       )}
 
       {/* Charts Layout */}
-      <div className={styles.chartsLayout}>
-        <div className={styles.chartMain}>
+      <div className="chartsLayout">
+        <div className="chartMain">
           <CandleChart data={formattedCandles} loading={loading} error={error} />
         </div>
 
-        <div className={styles.chartSide}>
+        <div className="chartSide">
           <OrderBookWidgetRealtime 
             connector={connector}
             tradingPair={tradingPair}

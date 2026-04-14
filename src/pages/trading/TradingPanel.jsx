@@ -16,7 +16,7 @@ import {
 } from '@services/api/tradingService';
 import { listAccounts } from '@services/api/hummingbotClient';
 import { getPrices } from '@services/api/marketDataService';
-import styles from './TradingPanel.module.css';
+import './TradingPanel.css';
 
 const TradingPanel = () => {
   // Form state
@@ -148,27 +148,27 @@ const TradingPanel = () => {
   const total = calculateOrderTotal(price || currentPrice || 0, amount || 0);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div className="container">
+      <div className="header">
         <h1>Trading Panel</h1>
-        <p className={styles.subtitle}>Execute market and limit orders</p>
+        <p className="subtitle">Execute market and limit orders</p>
       </div>
 
-      <div className={styles.layout}>
+      <div className="layout">
         {/* Order Form */}
-        <div className={styles.formSection}>
+        <div className="formSection">
           <h2>Place Order</h2>
 
           {/* Current Price */}
           {currentPrice && (
-            <div className={styles.currentPrice}>
+            <div className="currentPrice">
               Current Price: <strong>${parseFloat(currentPrice).toLocaleString()}</strong>
             </div>
           )}
 
           <form onSubmit={handleSubmit}>
             {/* Account Selection */}
-            <div className={styles.formGroup}>
+            <div className="formGroup">
               <label>Account</label>
               <select
                 value={selectedAccount}
@@ -185,7 +185,7 @@ const TradingPanel = () => {
             </div>
 
             {/* Connector */}
-            <div className={styles.formGroup}>
+            <div className="formGroup">
               <label>Exchange</label>
               <select value={connector} onChange={(e) => setConnector(e.target.value)}>
                 <option value="binance">Binance</option>
@@ -196,7 +196,7 @@ const TradingPanel = () => {
             </div>
 
             {/* Trading Pair */}
-            <div className={styles.formGroup}>
+            <div className="formGroup">
               <label>Trading Pair</label>
               <input
                 type="text"
@@ -208,17 +208,17 @@ const TradingPanel = () => {
             </div>
 
             {/* Order Type Tabs */}
-            <div className={styles.tabs}>
+            <div className="tabs">
               <button
                 type="button"
-                className={`${styles.tab} ${orderType === 'limit' ? styles.active : ''}`}
+                className={`tab ${orderType === 'limit' ? 'active' : ''}`}
                 onClick={() => setOrderType('limit')}
               >
                 Limit
               </button>
               <button
                 type="button"
-                className={`${styles.tab} ${orderType === 'market' ? styles.active : ''}`}
+                className={`tab ${orderType === 'market' ? 'active' : ''}`}
                 onClick={() => setOrderType('market')}
               >
                 Market
@@ -226,17 +226,17 @@ const TradingPanel = () => {
             </div>
 
             {/* Trade Type Tabs */}
-            <div className={styles.tabs}>
+            <div className="tabs">
               <button
                 type="button"
-                className={`${styles.tab} ${styles.buyTab} ${tradeType === 'buy' ? styles.active : ''}`}
+                className={`tab buyTab ${tradeType === 'buy' ? 'active' : ''}`}
                 onClick={() => setTradeType('buy')}
               >
                 Buy
               </button>
               <button
                 type="button"
-                className={`${styles.tab} ${styles.sellTab} ${tradeType === 'sell' ? styles.active : ''}`}
+                className={`tab sellTab ${tradeType === 'sell' ? 'active' : ''}`}
                 onClick={() => setTradeType('sell')}
               >
                 Sell
@@ -245,7 +245,7 @@ const TradingPanel = () => {
 
             {/* Price (for limit orders) */}
             {orderType === 'limit' && (
-              <div className={styles.formGroup}>
+              <div className="formGroup">
                 <label>Price</label>
                 <input
                   type="number"
@@ -259,7 +259,7 @@ const TradingPanel = () => {
             )}
 
             {/* Amount */}
-            <div className={styles.formGroup}>
+            <div className="formGroup">
               <label>Amount</label>
               <input
                 type="number"
@@ -272,7 +272,7 @@ const TradingPanel = () => {
             </div>
 
             {/* Total */}
-            <div className={styles.total}>
+            <div className="total">
               <span>Total:</span>
               <strong>${total}</strong>
             </div>
@@ -280,7 +280,7 @@ const TradingPanel = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className={`${styles.submitButton} ${tradeType === 'buy' ? styles.buyButton : styles.sellButton}`}
+              className={`submitButton ${tradeType === 'buy' ? 'buyButton' : 'sellButton'}`}
               disabled={loading}
             >
               {loading ? 'Placing Order...' : `${tradeType === 'buy' ? 'Buy' : 'Sell'} ${tradingPair.split('-')[0]}`}
@@ -288,41 +288,41 @@ const TradingPanel = () => {
           </form>
 
           {/* Messages */}
-          {error && <div className={styles.errorMessage}>{error}</div>}
-          {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+          {error && <div className="errorMessage">{error}</div>}
+          {successMessage && <div className="successMessage">{successMessage}</div>}
         </div>
 
         {/* Active Orders */}
-        <div className={styles.ordersSection}>
-          <div className={styles.ordersHeader}>
+        <div className="ordersSection">
+          <div className="ordersHeader">
             <h2>Active Orders</h2>
-            <button onClick={fetchActiveOrders} className={styles.refreshButton}>
+            <button onClick={fetchActiveOrders} className="refreshButton">
               🔄
             </button>
           </div>
 
           {activeOrders.length === 0 ? (
-            <div className={styles.emptyOrders}>No active orders</div>
+            <div className="emptyOrders">No active orders</div>
           ) : (
-            <div className={styles.ordersList}>
+            <div className="ordersList">
               {activeOrders.map((order) => (
-                <div key={order.orderId} className={styles.orderCard}>
-                  <div className={styles.orderHeader}>
-                    <span className={styles.orderSymbol}>{order.symbol}</span>
-                    <span className={`${styles.orderSide} ${order.side === 'buy' ? styles.buy : styles.sell}`}>
+                <div key={order.orderId} className="orderCard">
+                  <div className="orderHeader">
+                    <span className="orderSymbol">{order.symbol}</span>
+                    <span className={`orderSide ${order.side === 'buy' ? 'buy' : 'sell'}`}>
                       {order.side.toUpperCase()}
                     </span>
                   </div>
-                  <div className={styles.orderDetails}>
+                  <div className="orderDetails">
                     <div>Type: {order.type}</div>
                     <div>Price: ${parseFloat(order.price).toLocaleString()}</div>
                     <div>Amount: {parseFloat(order.amount).toFixed(6)}</div>
                     <div>Filled: {parseFloat(order.filled).toFixed(6)}</div>
-                    <div>Status: <span className={styles.status}>{order.status}</span></div>
+                    <div>Status: <span className="status">{order.status}</span></div>
                   </div>
                   <button
                     onClick={() => handleCancelOrder(order.orderId)}
-                    className={styles.cancelButton}
+                    className="cancelButton"
                   >
                     Cancel
                   </button>

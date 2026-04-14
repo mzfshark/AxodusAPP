@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { validateControllerConfig } from '@services/api/controllerService';
-import styles from './ControllerForm.module.css';
+import './ControllerForm.css';
 
 const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) => {
   const [selectedType, setSelectedType] = useState(controller?.type || 'pmm');
@@ -98,7 +98,7 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
 
       case 'boolean':
         return (
-          <label className={styles.checkboxLabel}>
+          <label className="checkboxLabel">
             <input
               type="checkbox"
               checked={value || false}
@@ -122,14 +122,14 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <div className={styles.formHeader}>
+    <form onSubmit={handleSubmit} className="form">
+      <div className="formHeader">
         <h2>{controller ? 'Edit Controller' : 'New Controller'}</h2>
       </div>
 
       {/* Errors */}
       {errors.length > 0 && (
-        <div className={styles.errorBox}>
+        <div className="errorBox">
           <strong>Validation Errors:</strong>
           <ul>
             {errors.map((error, index) => (
@@ -140,10 +140,10 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
       )}
 
       {/* Basic Info */}
-      <div className={styles.section}>
+      <div className="section">
         <h3>Basic Information</h3>
         
-        <div className={styles.field}>
+        <div className="field">
           <label>Controller Name *</label>
           <input
             type="text"
@@ -155,7 +155,7 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
           />
         </div>
 
-        <div className={styles.field}>
+        <div className="field">
           <label>Description</label>
           <textarea
             value={description}
@@ -168,19 +168,19 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
 
       {/* Controller Type */}
       {!controller && (
-        <div className={styles.section}>
+        <div className="section">
           <h3>Controller Type</h3>
-          <div className={styles.templateGrid}>
+          <div className="templateGrid">
             {Object.entries(templates).map(([key, tmpl]) => (
               <div
                 key={key}
-                className={`${styles.templateCard} ${
-                  selectedType === key ? styles.templateCardSelected : ''
+                className={`templateCard ${
+                  selectedType === key ? 'templateCardSelected' : ''
                 }`}
                 onClick={() => handleTypeChange(key)}
               >
-                <div className={styles.templateName}>{tmpl.name}</div>
-                <div className={styles.templateDescription}>{tmpl.description}</div>
+                <div className="templateName">{tmpl.name}</div>
+                <div className="templateDescription">{tmpl.description}</div>
               </div>
             ))}
           </div>
@@ -188,17 +188,17 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
       )}
 
       {/* Parameters */}
-      <div className={styles.section}>
+      <div className="section">
         <h3>Parameters</h3>
-        <div className={styles.parametersGrid}>
+        <div className="parametersGrid">
           {Object.entries(template.parameters).map(([key, param]) => (
-            <div key={key} className={styles.field}>
+            <div key={key} className="field">
               <label>
                 {key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </label>
               {renderParameter(key, param)}
               {param.min !== undefined && param.max !== undefined && (
-                <span className={styles.hint}>
+                <span className="hint">
                   Range: {param.min} - {param.max}
                 </span>
               )}
@@ -208,11 +208,11 @@ const ControllerForm = ({ templates, controller, onSubmit, onCancel, loading }) 
       </div>
 
       {/* Actions */}
-      <div className={styles.actions}>
-        <button type="button" onClick={onCancel} className={styles.cancelButton}>
+      <div className="actions">
+        <button type="button" onClick={onCancel} className="cancelButton">
           Cancel
         </button>
-        <button type="submit" className={styles.submitButton} disabled={loading}>
+        <button type="submit" className="submitButton" disabled={loading}>
           {loading ? '⏳ Saving...' : controller ? '💾 Update' : '✨ Create'}
         </button>
       </div>

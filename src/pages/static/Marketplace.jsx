@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/Global.module.css';
+import '../../styles/Global.module.css';
 
 const Marketplace = () => {
   return (

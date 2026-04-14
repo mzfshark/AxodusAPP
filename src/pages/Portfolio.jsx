@@ -2,7 +2,7 @@
 import React from 'react';
 import TokenBalance from '../components/TokenBalance';
 import InvestmentCard from '../components/InvestmentCard';
-import styles from '../styles/Global.module.css';
+import "../styles/Global.module.css";
 
 const mockInvestments = [
   { name: 'Avalanche', value: 12200, change: 1.8, icon: '/assets/icons/avax.svg' },
@@ -11,16 +11,16 @@ const mockInvestments = [
 
 const Portfolio = () => {
   return (
-    <div className={styles["dashboard-container"]}>
+    <div className="dashboard-container">
       <h1>My Portfolio</h1>
 
-      <div className={styles["dashboard-summary"]}>
+      <div className="dashboard-summary">
         {mockInvestments.map((inv) => (
           <InvestmentCard key={inv.name} {...inv} />
         ))}
       </div>
 
-      <div className={styles["dashboard-section"]}>
+      <div className="dashboard-section">
         <TokenBalance />
       </div>
     </div>

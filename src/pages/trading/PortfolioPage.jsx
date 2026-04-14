@@ -18,7 +18,7 @@ import { useRealtime } from '@context/RealtimeContext';
 import LivePnLChart from '@components/trading/LivePnLChart';
 import PortfolioDistribution from '@components/trading/PortfolioDistribution';
 import ConnectionStatus from '@components/realtime/ConnectionStatus';
-import styles from './PortfolioPage.module.css';
+import './PortfolioPage.css';
 
 const PortfolioPage = () => {
   const [portfolioState, setPortfolioState] = useState(null);
@@ -70,16 +70,16 @@ const PortfolioPage = () => {
   const chartData = portfolioState ? formatPortfolioForChart(portfolioState) : [];
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       {/* Header */}
-      <div className={styles.header}>
+      <div className="header">
         <div>
           <h1>Portfolio Dashboard</h1>
-          <p className={styles.subtitle}>Track your assets across all exchanges</p>
+          <p className="subtitle">Track your assets across all exchanges</p>
         </div>
-        <div className={styles.headerActions}>
+        <div className="headerActions">
           <ConnectionStatus />
-          <button onClick={handleRefresh} className={styles.refreshButton} disabled={loading}>
+          <button onClick={handleRefresh} className="refreshButton" disabled={loading}>
             {loading ? '⏳' : '🔄'} Refresh
           </button>
         </div>
@@ -87,7 +87,7 @@ const PortfolioPage = () => {
 
       {/* Error State */}
       {error && (
-        <div className={styles.errorBanner}>
+        <div className="errorBanner">
           <strong>Error:</strong> {error}
           <button onClick={handleRefresh}>Retry</button>
         </div>
@@ -95,67 +95,67 @@ const PortfolioPage = () => {
 
       {/* Metrics Cards */}
       {metrics && (
-        <div className={styles.metricsGrid}>
-          <div className={styles.metricCard}>
-            <div className={styles.metricLabel}>Total Portfolio Value</div>
-            <div className={styles.metricValue}>
+        <div className="metricsGrid">
+          <div className="metricCard">
+            <div className="metricLabel">Total Portfolio Value</div>
+            <div className="metricValue">
               ${metrics.totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
 
-          <div className={styles.metricCard}>
-            <div className={styles.metricLabel}>Total Assets</div>
-            <div className={styles.metricValue}>{metrics.totalAssets}</div>
+          <div className="metricCard">
+            <div className="metricLabel">Total Assets</div>
+            <div className="metricValue">{metrics.totalAssets}</div>
           </div>
 
-          <div className={styles.metricCard}>
-            <div className={styles.metricLabel}>Top Asset</div>
-            <div className={styles.metricValue}>{metrics.topAsset}</div>
-            <div className={styles.metricSubvalue}>
+          <div className="metricCard">
+            <div className="metricLabel">Top Asset</div>
+            <div className="metricValue">{metrics.topAsset}</div>
+            <div className="metricSubvalue">
               ${metrics.topAssetValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
           </div>
 
-          <div className={styles.metricCard}>
-            <div className={styles.metricLabel}>Connected Exchanges</div>
-            <div className={styles.metricValue}>{metrics.exchanges}</div>
+          <div className="metricCard">
+            <div className="metricLabel">Connected Exchanges</div>
+            <div className="metricValue">{metrics.exchanges}</div>
           </div>
         </div>
       )}
 
       {/* Charts Grid */}
-      <div className={styles.chartsGrid}>
-        <div className={styles.chartFull}>
+      <div className="chartsGrid">
+        <div className="chartFull">
           <LivePnLChart updateInterval={5000} />
         </div>
 
-        <div className={styles.chartHalf}>
+        <div className="chartHalf">
           <PortfolioDistribution data={chartData} loading={loading} error={error} />
         </div>
       </div>
 
       {/* Balances by Exchange */}
       {portfolioState && portfolioState.balances && (
-        <div className={styles.balancesSection}>
+        <div className="balancesSection">
           <h2>Balances by Exchange</h2>
-          <div className={styles.exchangesGrid}>
+          <div className="exchangesGrid">
             {Object.entries(portfolioState.balances).map(([exchange, tokens]) => (
-              <div key={exchange} className={styles.exchangeCard}>
+              <div key={exchange} className="exchangeCard">
                 <h3>{exchange}</h3>
-                <div className={styles.tokenList}>
+                <div className="tokenList">
                   {Object.entries(tokens).map(([token, data]) => (
-                    <div key={token} className={styles.tokenItem}>
-                      <div className={styles.tokenHeader}>
-                        <span className={styles.tokenName}>{token}</span>
-                        <span className={styles.tokenValue}>
+                    <div key={token} className="tokenItem">
+                      <div className="tokenHeader">
+                        <span className="tokenName">{token}</span>
+                        <span className="tokenValue">
                           ${parseFloat(data.total_usd || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
-                      <div className={styles.tokenDetails}>
+                      <div className="tokenDetails">
                         <span>Total: {parseFloat(data.total || 0).toFixed(6)}</span>
                         <span>Available: {parseFloat(data.available || 0).toFixed(6)}</span>
                         {data.locked && parseFloat(data.locked) > 0 && (
-                          <span className={styles.locked}>Locked: {parseFloat(data.locked).toFixed(6)}</span>
+                          <span className="locked">Locked: {parseFloat(data.locked).toFixed(6)}</span>
                         )}
                       </div>
                     </div>
@@ -169,17 +169,17 @@ const PortfolioPage = () => {
 
       {/* Loading State */}
       {loading && !portfolioState && (
-        <div className={styles.loadingState}>
-          <div className={styles.spinner}></div>
+        <div className="loadingState">
+          <div className="spinner"></div>
           <p>Loading portfolio data...</p>
         </div>
       )}
 
       {/* Empty State */}
       {!loading && !error && (!portfolioState || Object.keys(portfolioState.balances || {}).length === 0) && (
-        <div className={styles.emptyState}>
+        <div className="emptyState">
           <p>📭 No balances found</p>
-          <p className={styles.emptyHint}>
+          <p className="emptyHint">
             Add exchange credentials in Settings to see your portfolio
           </p>
         </div>

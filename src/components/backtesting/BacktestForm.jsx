@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import styles from './BacktestForm.module.css';
+import './BacktestForm.css';
 
 const BacktestForm = ({ onSubmit, loading }) => {
   const [config, setConfig] = useState({
@@ -32,13 +32,13 @@ const BacktestForm = ({ onSubmit, loading }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className="form">
       <h2>Configure Backtest</h2>
 
       {/* Strategy Selection */}
-      <div className={styles.section}>
+      <div className="section">
         <h3>Strategy</h3>
-        <div className={styles.field}>
+        <div className="field">
           <label>Strategy Type</label>
           <select
             value={config.strategy}
@@ -54,10 +54,10 @@ const BacktestForm = ({ onSubmit, loading }) => {
       </div>
 
       {/* Market Configuration */}
-      <div className={styles.section}>
+      <div className="section">
         <h3>Market</h3>
-        <div className={styles.fieldGroup}>
-          <div className={styles.field}>
+        <div className="fieldGroup">
+          <div className="field">
             <label>Exchange</label>
             <select
               value={config.exchange}
@@ -71,7 +71,7 @@ const BacktestForm = ({ onSubmit, loading }) => {
             </select>
           </div>
 
-          <div className={styles.field}>
+          <div className="field">
             <label>Trading Pair</label>
             <input
               type="text"
@@ -85,10 +85,10 @@ const BacktestForm = ({ onSubmit, loading }) => {
       </div>
 
       {/* Time Range */}
-      <div className={styles.section}>
+      <div className="section">
         <h3>Time Range</h3>
-        <div className={styles.fieldGroup}>
-          <div className={styles.field}>
+        <div className="fieldGroup">
+          <div className="field">
             <label>Start Date</label>
             <input
               type="date"
@@ -98,7 +98,7 @@ const BacktestForm = ({ onSubmit, loading }) => {
             />
           </div>
 
-          <div className={styles.field}>
+          <div className="field">
             <label>End Date</label>
             <input
               type="date"
@@ -111,9 +111,9 @@ const BacktestForm = ({ onSubmit, loading }) => {
       </div>
 
       {/* Capital */}
-      <div className={styles.section}>
+      <div className="section">
         <h3>Capital</h3>
-        <div className={styles.field}>
+        <div className="field">
           <label>Initial Capital (USDT)</label>
           <input
             type="number"
@@ -128,10 +128,10 @@ const BacktestForm = ({ onSubmit, loading }) => {
 
       {/* Strategy Parameters */}
       {config.strategy === 'pmm' && (
-        <div className={styles.section}>
+        <div className="section">
           <h3>PMM Parameters</h3>
-          <div className={styles.fieldGroup}>
-            <div className={styles.field}>
+          <div className="fieldGroup">
+            <div className="field">
               <label>Bid Spread (%)</label>
               <input
                 type="number"
@@ -144,7 +144,7 @@ const BacktestForm = ({ onSubmit, loading }) => {
               />
             </div>
 
-            <div className={styles.field}>
+            <div className="field">
               <label>Ask Spread (%)</label>
               <input
                 type="number"
@@ -158,8 +158,8 @@ const BacktestForm = ({ onSubmit, loading }) => {
             </div>
           </div>
 
-          <div className={styles.fieldGroup}>
-            <div className={styles.field}>
+          <div className="fieldGroup">
+            <div className="field">
               <label>Order Amount (USDT)</label>
               <input
                 type="number"
@@ -171,7 +171,7 @@ const BacktestForm = ({ onSubmit, loading }) => {
               />
             </div>
 
-            <div className={styles.field}>
+            <div className="field">
               <label>Order Refresh Time (s)</label>
               <input
                 type="number"
@@ -187,7 +187,7 @@ const BacktestForm = ({ onSubmit, loading }) => {
       )}
 
       {/* Submit Button */}
-      <button type="submit" className={styles.submitButton} disabled={loading}>
+      <button type="submit" className="submitButton" disabled={loading}>
         {loading ? '⏳ Running Backtest...' : '🚀 Start Backtest'}
       </button>
     </form>
