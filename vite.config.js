@@ -17,6 +17,7 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@services': path.resolve(__dirname, './src/services'),
+      '@styles': path.resolve(__dirname, './src/styles'),
       '@config': path.resolve(__dirname, './src/appkit.config.js' ),
       '@adapters': path.resolve(__dirname, './src/adapters'),
       '@solana/wallet-adapter-wallets': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-wallets'),
