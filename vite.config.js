@@ -14,7 +14,6 @@ export default defineConfig({
       '@context': path.resolve(__dirname, './src/context'),
       '@pages': path.resolve(__dirname, './src/pages'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@styles': path.resolve(__dirname, './src/styles'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@services': path.resolve(__dirname, './src/services'),
       '@config': path.resolve(__dirname, './src/appkit.config.js' ),
@@ -68,11 +67,13 @@ export default defineConfig({
     }
   },
   css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "@/styles/variables.scss";`
-      }
-    }
+    postcss: {
+      plugins: [
+        require('tailwindcss'),
+        require('autoprefixer'),
+      ],
+    },
+
   },
   envPrefix: ['VITE_', 'REACT_APP_']
 });
