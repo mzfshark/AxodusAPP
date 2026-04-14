@@ -1,6 +1,6 @@
 // src/pages/Settings.jsx
 import React from 'react';
-import "@/src/styles/Global.module.css";
+import "@/styles/Global.module.css";
 
 const Settings = () => {
   return (

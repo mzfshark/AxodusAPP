@@ -1,7 +1,7 @@
 // src/pages/TransactionHistoryPage.jsx
 import React from 'react';
 import TransactionHistory from '../components/TransactionHistory';
-import "@/src/styles/Global.module.css";
+import "@/styles/Global.module.css";
 
 const TransactionHistoryPage = () => {
   return (

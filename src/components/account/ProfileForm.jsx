@@ -1,6 +1,6 @@
 // src/components/account/ProfileForm.jsx
 import React, { useEffect, useState } from "react";
-import "@/src/styles/Global.module.css";
+import "@/styles/Global.module.css";
 import { useAppKitAccount } from "@reown/appkit/react";
 
 const LS_KEY = "axodus.profile";

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import WalletConnectButton from "../components/WalletConnectButton";
 import { useWallet } from "../hooks/useWallet";
-import "@/src/styles/Global.module.css";
+import "@/styles/Global.module.css";
 
 export default function ConnectWalletPage() {
   const { isConnected } = useWallet();
