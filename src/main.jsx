@@ -9,7 +9,7 @@ import { RealtimeProvider } from './context/RealtimeContext';
 import { BotProvider } from './context/BotContext';
 import NotificationCenter from './components/notifications/NotificationCenter';
 import ErrorBoundary from './ErrorBoundary';
-import './styles/Global.css';
+import './styles/Global.module.css';
 
 // Diagnóstico global para produção
 window.addEventListener('error', (event) => {
