@@ -13,7 +13,12 @@
   --warning: #ff9f43;
   --info: #4ecdc4;
   --border: #e0e0e0;
-
+  --axodus-bg: #0b1326;
+  --axodus-text: #dae2fd;
+  --axodus-gradient: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%);
+  --axodus-glass-bg: rgba(45, 52, 73, 0.4);
+  --axodus-glass-bg-alt: rgba(34, 42, 61, 0.6);
+  --axodus-border-ghost: rgba(70, 69, 84, 0.15);
   /* layout */
   --header-h: 60px;
   --footer-h: 50px;
@@ -25,9 +30,69 @@
   --sidebar-bg: #5cc6d0;
   --card-bg: #e6e6e6;
   --footer-bg: #5cc6d0;
+
+  /* Axodus Tokens (Extracted & Unified) */
+
+
+  /* Material Design 3 / Tailwind Tokens (Extracted from public HTMLs) */
+  --md-sys-color-primary: #c0c1ff;
+  --md-sys-color-on-primary: #1000a9;
+  --md-sys-color-primary-container: #8083ff;
+  --md-sys-color-on-primary-container: #0d0096;
+  --md-sys-color-secondary: #41e4b8;
+  --md-sys-color-on-secondary: #00382a;
+  --md-sys-color-secondary-container: #00c89e;
+  --md-sys-color-on-secondary-container: #004d3b;
+  --md-sys-color-tertiary: #ffb783;
+  --md-sys-color-on-tertiary: #4f2500;
+  --md-sys-color-tertiary-container: #d97721;
+  --md-sys-color-on-tertiary-container: #452000;
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+  --md-sys-color-background: #0b1326;
+  --md-sys-color-on-background: #dae2fd;
+  --md-sys-color-surface: #0b1326;
+  --md-sys-color-on-surface: #dae2fd;
+  --md-sys-color-surface-variant: #2d3449;
+  --md-sys-color-on-surface-variant: #c7c4d7;
+  --md-sys-color-outline: #908fa0;
+  --md-sys-color-outline-variant: #464554;
+  --md-sys-color-inverse-surface: #dae2fd;
+  --md-sys-color-inverse-on-surface: #283044;
+  --md-sys-color-inverse-primary: #494bd6;
+  --md-sys-color-surface-dim: #0b1326;
+  --md-sys-color-surface-bright: #31394d;
+  --md-sys-color-surface-container-lowest: #060e20;
+  --md-sys-color-surface-container-low: #131b2e;
+  --md-sys-color-surface-container: #171f33;
+  --md-sys-color-surface-container-high: #222a3d;
+  --md-sys-color-surface-container-highest: #2d3449;
+
+  /* Fixed Tokens */
+  --md-sys-color-primary-fixed: #e1e0ff;
+  --md-sys-color-primary-fixed-dim: #c0c1ff;
+  --md-sys-color-on-primary-fixed: #07006c;
+  --md-sys-color-on-primary-fixed-variant: #2f2ebe;
+  --md-sys-color-secondary-fixed: #5ffcce;
+  --md-sys-color-secondary-fixed-dim: #38dfb3;
+  --md-sys-color-on-secondary-fixed: #002117;
+  --md-sys-color-on-secondary-fixed-variant: #00513e;
+  --md-sys-color-tertiary-fixed: #ffdcc5;
+  --md-sys-color-tertiary-fixed-dim: #ffb783;
+  --md-sys-color-on-tertiary-fixed: #301400;
+  --md-sys-color-on-tertiary-fixed-variant: #703700;
+  --md-sys-color-surface-tint: #c0c1ff;
+
+  /* Shape Tokens */
+  --md-sys-shape-corner-default: 0.125rem;
+  --md-sys-shape-corner-lg: 0.25rem;
+  --md-sys-shape-corner-xl: 0.5rem;
+  --md-sys-shape-corner-full: 0.75rem;
 }
 
-/* Dark theme */
+/* Dark theme override */
 :global(.dark) {
   --bg: #04191b;
   --bg-alt: #081718;
@@ -46,55 +111,154 @@
   --footer-bg: #222222;
 }
 
-/* === GLOBAL RESET ================================================ */
+/* === GLOBAL RESET & BASE ========================================== */
 
-body {
+:global(html),
+:global(body) {
   margin: 0;
-  font-family: -apple-system, Ubuntu, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
-    'Oxygen', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  background-color: var(--bg);
-  color: var(--text);
+  letter-spacing: -0.01em;
+  background-color: var(--axodus-bg) !important;
+  color: var(--axodus-text);
   overflow-x: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+:global(.bg-background) {
+  background-color: var(--axodus-bg) !important;
 }
 
-/* === LAYOUT ======================================================= */
+:global(code) {
+  font-family: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
 
-.app-layout {
+/* === SHARED UTILITIES (:global) =================================== */
+
+:global(.material-symbols-outlined) {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Custom Scrollbars */
+:global(::-webkit-scrollbar) {
+  width: 6px;
+}
+:global(::-webkit-scrollbar-track) {
+  background: var(--axodus-bg);
+}
+:global(::-webkit-scrollbar-thumb) {
+  background: #2d3449;
+  border-radius: 10px;
+}
+
+/* === CSS MODULE CLASSES (Converted to :global for static HTML compatibility) === */
+
+/* Glass Effects */
+:global(.glassPanel) {
+  background: var(--axodus-glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+:global(.glassCard) {
+  background: var(--axodus-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(192, 193, 255, 0.05);
+}
+
+:global(.glassEffect) {
+  background: var(--axodus-glass-bg-alt);
+  backdrop-filter: blur(20px);
+}
+
+/* Borders & Gradients */
+:global(.ghostBorder) {
+  border: 1px solid var(--axodus-border-ghost);
+}
+
+:global(.kineticGradient) {
+  background: var(--axodus-gradient);
+}
+
+:global(.gradientText) {
+  background: var(--axodus-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+:global(.gradientBg) {
+  background: var(--axodus-gradient);
+}
+
+/* Glow Effects */
+:global(.glowSecondary) {
+  filter: drop-shadow(0 0 4px #41e4b866);
+}
+
+:global(.glowError) {
+  filter: drop-shadow(0 0 4px #ffb4ab66);
+}
+
+/* Scrollbar Utilities */
+:global(.scrollbarHide) {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+:global(.scrollbarHide)::-webkit-scrollbar {
+  display: none;
+}
+
+:global(.customScrollbar)::-webkit-scrollbar {
+  width: 4px;
+}
+:global(.customScrollbar)::-webkit-scrollbar-track {
+  background: #060e20;
+}
+:global(.customScrollbar)::-webkit-scrollbar-thumb {
+  background: #464554;
+  border-radius: 2px;
+}
+
+/* Typography */
+:global(.mono) {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* === ORIGINAL APP LAYOUT (Preserved) ============================== */
+
+:global(.appLayout) {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.app-main {
+:global(.appMain) {
   display: flex;
   flex: 1;
   overflow: hidden;
+  background: var(--axodus-bg);
 }
 
-.app-content {
+:global(.appContent) {
   display: flex;
   flex-direction: column;
   flex: 1;
   overflow-y: auto;
-  background: var(--bg);
+  background: var(--axodus-bg);
   margin-left: var(--sidebar-w);
   margin-top: var(--header-h);
   margin-bottom: var(--footer-h);
   padding: 5px 5px 5px 2%;
 }
-.collapsed .app-content {
+
+:global(.collapsed) .appContent {
   margin-left: var(--sidebar-w-collapsed);
 }
 
-footer {
+:global(footer) {
   width: 100%;
   text-align: center;
   background-color: var(--footer-bg);
@@ -102,23 +266,14 @@ footer {
   color: var(--text-muted);
   position: fixed;
   bottom: 0;
-
 }
 
-
-/* === TYPOGRAPHY =================================================== */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+:global(h1), :global(h2), :global(h3), :global(h4), :global(h5), :global(h6) {
   margin: 0 0 1rem 0;
-  color: var(--text);
+  color: var(--axodus-text);
 }
 
-pre {
+:global(pre) {
   background-color: var(--bg-alt);
   color: var(--text);
   padding: 1rem;
@@ -126,9 +281,7 @@ pre {
   overflow-x: auto;
 }
 
-/* === HEADER ======================================================= */
-
-.app-header {
+:global(.appHeader) {
   height: var(--header-h);
   background-color: var(--header-bg);
   color: var(--text);
@@ -144,19 +297,20 @@ pre {
   z-index: 1000;
 }
 
-.app-header-left h1 {
+:global(.appHeaderLeft) h1 {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0;
 }
 
-.app-header-right {
+:global(.appHeaderRight) {
   display: flex;
   align-items: center;
   gap: 2rem;
   width: fit-content;
 }
-.wallet-address {
+
+:global(.walletAddress) {
   font-size: 0.875rem;
   padding: 0.4rem 0.75rem;
   border-radius: 4px;
@@ -165,9 +319,7 @@ pre {
   font-weight: bold;
 }
 
-/* === SIDEBAR ====================================================== */
-
-.app-sidebar {
+:global(.appSidebar) {
   width: var(--sidebar-w);
   background-color: var(--sidebar-bg);
   color: var(--text);
@@ -182,16 +334,16 @@ pre {
   justify-content: space-between;
 }
 
-.app-sidebar nav ul {
+:global(.appSidebar) nav ul {
   list-style: none;
   padding: 0;
 }
 
-.app-sidebar nav ul li {
+:global(.appSidebar) nav ul li {
   margin-bottom: 1rem;
 }
 
-.app-sidebar nav ul li a {
+:global(.appSidebar) nav ul li a {
   color: var(--text);
   text-decoration: none;
   font-weight: 500;
@@ -201,46 +353,46 @@ pre {
   border-radius: 5px;
 }
 
-.app-sidebar nav ul li a:hover,
-.app-sidebar nav ul li a.active {
+:global(.appSidebar) nav ul li a:hover,
+:global(.appSidebar) nav ul li a.active {
   background-color: var(--bg-alt);
   color: var(--primary);
 }
 
-nav ul li a.active {
+:global(.appSidebar) nav ul li a.active {
   font-weight: 600;
 }
 
-.app-sidebar-toggle {
+:global(.appSidebarToggle) {
   background: none;
   border: none;
   color: var(--text);
   cursor: pointer;
-  align-self:flex-end;
-  
+  align-self: flex-end;
 }
 
-.sd-footer  {
+:global(.sdFooter) {
   margin-bottom: 20px;
 }
-.theme-toggle {
+
+:global(.themeToggle) {
   background: none;
   border: none;
   color: var(--text);
   cursor: pointer;
-  align-self:flex-end;
-}
-.theme-toggle li{
-  display: grid;
-}
-.disconnectButton{
-  border: none;
-    background: var(--text);
-    cursor: pointer;
-    padding: 4% 10%;
-    border-radius: 50px;
-    color: var(--bg);
-    font-weight: 400;
+  align-self: flex-end;
 }
 
-/* collapsed sidebar handled inline in Layout.jsx via width/margin */
+:global(.themeToggle) li {
+  display: grid;
+}
+
+:global(.disconnectButton) {
+  border: none;
+  background: var(--text);
+  cursor: pointer;
+  padding: 4% 10%;
+  border-radius: 50px;
+  color: var(--bg);
+  font-weight: 400;
+}

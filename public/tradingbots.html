@@ -8,82 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-background": "#dae2fd",
-                        "tertiary-fixed-dim": "#ffb783",
-                        "on-tertiary-fixed": "#301400",
-                        "secondary": "#41e4b8",
-                        "outline": "#908fa0",
-                        "on-tertiary-container": "#452000",
-                        "surface-variant": "#2d3449",
-                        "on-primary-fixed": "#07006c",
-                        "on-error-container": "#ffdad6",
-                        "surface": "#0b1326",
-                        "error-container": "#93000a",
-                        "on-tertiary-fixed-variant": "#703700",
-                        "error": "#ffb4ab",
-                        "primary": "#c0c1ff",
-                        "primary-container": "#8083ff",
-                        "inverse-surface": "#dae2fd",
-                        "primary-fixed": "#e1e0ff",
-                        "on-secondary-fixed": "#002117",
-                        "background": "#0b1326",
-                        "inverse-primary": "#494bd6",
-                        "on-surface-variant": "#c7c4d7",
-                        "on-surface": "#dae2fd",
-                        "surface-container-high": "#222a3d",
-                        "on-error": "#690005",
-                        "on-tertiary": "#4f2500",
-                        "tertiary": "#ffb783",
-                        "on-secondary-container": "#004d3b",
-                        "surface-container": "#171f33",
-                        "secondary-fixed-dim": "#38dfb3",
-                        "surface-container-low": "#131b2e",
-                        "surface-container-highest": "#2d3449",
-                        "secondary-container": "#00c89e",
-                        "surface-container-lowest": "#060e20",
-                        "inverse-on-surface": "#283044",
-                        "tertiary-container": "#d97721",
-                        "on-secondary": "#00382a",
-                        "secondary-fixed": "#5ffcce",
-                        "on-secondary-fixed-variant": "#00513e",
-                        "tertiary-fixed": "#ffdcc5",
-                        "surface-tint": "#c0c1ff",
-                        "surface-dim": "#0b1326",
-                        "on-primary-container": "#0d0096",
-                        "primary-fixed-dim": "#c0c1ff",
-                        "on-primary": "#1000a9",
-                        "outline-variant": "#464554",
-                        "surface-bright": "#31394d",
-                        "on-primary-fixed-variant": "#2f2ebe"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "fontFamily": {
-                        "headline": ["Inter"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                },
-            },
-        }
-    </script>
-<style>
-        body { font-family: 'Inter', sans-serif; background-color: #0b1326; color: #dae2fd; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-panel { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-        .glow-secondary { filter: drop-shadow(0 0 4px #41e4b866); }
-        .glow-error { filter: drop-shadow(0 0 4px #ffb4ab66); }
-    </style>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
 <body class="bg-background text-on-surface">
 <nav class="fixed top-0 w-full z-50 bg-[#0b1326] backdrop-blur-xl bg-opacity-60 bg-gradient-to-b from-[#131b2e] to-transparent flex justify-between items-center px-8 h-16 w-full font-['Inter'] tracking-tight">
@@ -178,7 +103,7 @@
 </div>
 </div>
 </aside>
-<main class="lg:ml-64 pt-24 px-8 pb-12 min-h-screen">
+<main class="lg:ml-64 pt-24 px-8 pb-12 min-h-screen bg-background">
 <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
 <div>
 <p class="text-label-md uppercase tracking-[0.2em] text-primary/70 font-semibold mb-2">Portfolio Overview</p>

@@ -7,104 +7,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b1326;
-            color: #dae2fd;
-        }
-        .mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        .glass-panel {
-            background: rgba(45, 52, 73, 0.6);
-            backdrop-filter: blur(20px);
-        }
-        /* Custom scrollbar for terminal */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #060e20;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #464554;
-            border-radius: 2px;
-        }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "inverse-on-surface": "#283044",
-                        "on-primary": "#1000a9",
-                        "surface-container": "#171f33",
-                        "surface-container-low": "#131b2e",
-                        "tertiary": "#ffb783",
-                        "secondary": "#41e4b8",
-                        "surface-dim": "#0b1326",
-                        "on-tertiary-container": "#452000",
-                        "on-tertiary": "#4f2500",
-                        "on-secondary-fixed": "#002117",
-                        "on-tertiary-fixed": "#301400",
-                        "inverse-surface": "#dae2fd",
-                        "background": "#0b1326",
-                        "on-background": "#dae2fd",
-                        "surface-container-lowest": "#060e20",
-                        "secondary-fixed": "#5ffcce",
-                        "on-error": "#690005",
-                        "tertiary-fixed-dim": "#ffb783",
-                        "primary-fixed-dim": "#c0c1ff",
-                        "tertiary-fixed": "#ffdcc5",
-                        "on-secondary-container": "#004d3b",
-                        "secondary-container": "#00c89e",
-                        "on-primary-fixed-variant": "#2f2ebe",
-                        "surface-container-high": "#222a3d",
-                        "primary-fixed": "#e1e0ff",
-                        "outline": "#908fa0",
-                        "error": "#ffb4ab",
-                        "secondary-fixed-dim": "#38dfb3",
-                        "surface-tint": "#c0c1ff",
-                        "on-primary-container": "#0d0096",
-                        "on-secondary": "#00382a",
-                        "surface-variant": "#2d3449",
-                        "surface-container-highest": "#2d3449",
-                        "on-error-container": "#ffdad6",
-                        "primary": "#c0c1ff",
-                        "surface-bright": "#31394d",
-                        "primary-container": "#8083ff",
-                        "tertiary-container": "#d97721",
-                        "error-container": "#93000a",
-                        "on-surface": "#dae2fd",
-                        "on-tertiary-fixed-variant": "#703700",
-                        "on-secondary-fixed-variant": "#00513e",
-                        "inverse-primary": "#494bd6",
-                        "surface": "#0b1326",
-                        "on-primary-fixed": "#07006c",
-                        "on-surface-variant": "#c7c4d7",
-                        "outline-variant": "#464554"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "fontFamily": {
-                        "headline": ["Inter"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                },
-            }
-        }
-    </script>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
 <body class="bg-background text-on-surface overflow-hidden">
 <!-- SideNavBar -->
@@ -196,7 +99,7 @@
 </div>
 </header>
 <!-- Content Canvas -->
-<main class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+<main class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar bg-background">
 <!-- Page Header -->
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
 <div>

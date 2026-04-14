@@ -5,52 +5,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-    body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; letter-spacing: -0.01em; }
-    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    .glass-effect { backdrop-filter: blur(20px); background: rgba(34, 42, 61, 0.6); }
-    .kinetic-gradient { background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%); }
-    .ghost-border { outline: 1px solid rgba(144, 143, 160, 0.15); }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0b1326; }
-    ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 10px; }
-  </style>
-<script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          "colors": {
-            "surface-container-highest": "#2d3449",
-            "surface-container-high": "#222a3d",
-            "primary": "#c0c1ff",
-            "error": "#ffb4ab",
-            "on-surface-variant": "#c7c4d7",
-            "background": "#0b1326",
-            "on-background": "#dae2fd",
-            "outline": "#908fa0",
-            "on-surface": "#dae2fd",
-            "secondary": "#41e4b8",
-            "surface-container-lowest": "#060e20",
-            "surface-bright": "#31394d",
-            "surface": "#0b1326",
-            "surface-container-low": "#131b2e",
-            "surface-container": "#171f33",
-            "primary-container": "#8083ff",
-            "on-primary-container": "#0d0096",
-            "on-primary": "#1000a9",
-            "tertiary": "#ffb783"
-          },
-          "borderRadius": {
-            "DEFAULT": "0.125rem",
-            "lg": "0.25rem",
-            "xl": "0.5rem",
-            "full": "0.75rem"
-          }
-        }
-      }
-    }
-  </script>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
 <body class="bg-background text-on-background min-h-screen">
 <!-- TopNavBar Implementation -->
@@ -151,7 +106,7 @@
 </div>
 </aside>
 <!-- Main Content Canvas -->
-<main class="flex-1 ml-64 min-h-screen p-8 bg-surface">
+<main class="flex-1 ml-64 min-h-screen p-8 bg-background">
 <!-- Hero Banner Section -->
 <section class="relative h-72 rounded-3xl overflow-hidden mb-10 group">
 <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="abstract digital connection network with flowing glowing lines and deep purple background in high tech futuristic style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVZT6ukL8Y1qRhKKMhU48Ko5mYrFddoSmR8c5ryNgRZHsBoJ25zITGiQC25cXbhpHl7az1xBgfwHVlHWpZSVrxWce7RIGTdxOp5-QXpj9IC2bzjrrda-Zi3oHzmRfP2N_RdOqirvBF_T4Z2exuW7oWFfIyT30dHcJhr47pM5QBdFD9acf4NGGfZX9baa5HB0dLZfonZWMKv0SPYkAwixj7wdOxavMXjIkZEcW69Sa6WfJeJPx3uqyopneaoO72F-pyyJq4sMh860Q"/>

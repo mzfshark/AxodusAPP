@@ -7,86 +7,9 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "tertiary-fixed": "#ffdcc5",
-                      "tertiary-fixed-dim": "#ffb783",
-                      "tertiary": "#ffb783",
-                      "on-secondary-fixed-variant": "#00513e",
-                      "surface-tint": "#c0c1ff",
-                      "secondary": "#41e4b8",
-                      "secondary-container": "#00c89e",
-                      "inverse-on-surface": "#283044",
-                      "surface-container-high": "#222a3d",
-                      "on-error": "#690005",
-                      "secondary-fixed": "#5ffcce",
-                      "on-secondary": "#00382a",
-                      "surface-variant": "#2d3449",
-                      "on-tertiary": "#4f2500",
-                      "on-surface": "#dae2fd",
-                      "on-secondary-fixed": "#002117",
-                      "surface-dim": "#0b1326",
-                      "surface-container-highest": "#2d3449",
-                      "on-primary-fixed-variant": "#2f2ebe",
-                      "on-primary-container": "#0d0096",
-                      "primary-container": "#8083ff",
-                      "secondary-fixed-dim": "#38dfb3",
-                      "surface-bright": "#31394d",
-                      "on-tertiary-fixed-variant": "#703700",
-                      "inverse-surface": "#dae2fd",
-                      "surface-container": "#171f33",
-                      "surface": "#0b1326",
-                      "inverse-primary": "#494bd6",
-                      "primary": "#c0c1ff",
-                      "primary-fixed-dim": "#c0c1ff",
-                      "outline": "#908fa0",
-                      "primary-fixed": "#e1e0ff",
-                      "on-primary-fixed": "#07006c",
-                      "on-error-container": "#ffdad6",
-                      "surface-container-lowest": "#060e20",
-                      "outline-variant": "#464554",
-                      "background": "#0b1326",
-                      "error-container": "#93000a",
-                      "error": "#ffb4ab",
-                      "surface-container-low": "#131b2e",
-                      "on-surface-variant": "#c7c4d7",
-                      "on-tertiary-container": "#452000",
-                      "on-background": "#dae2fd",
-                      "tertiary-container": "#d97721",
-                      "on-primary": "#1000a9",
-                      "on-secondary-container": "#004d3b",
-                      "on-tertiary-fixed": "#301400"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              },
-              "fontFamily": {
-                      "headline": ["Inter"],
-                      "body": ["Inter"],
-                      "label": ["Inter"]
-              }
-            },
-          },
-        }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-panel {
-            background: rgba(45, 52, 73, 0.4);
-            backdrop-filter: blur(20px);
-        }
-    </style>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
-<body class="bg-surface text-on-surface font-body overflow-hidden">
+<body class="bg-background bg-surface text-on-surface font-body overflow-hidden">
 <!-- TopNavBar -->
 <nav class="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-opacity-60 bg-[#0b1326] flex justify-between items-center px-6 py-3 border-b border-white/5 font-['Inter'] tracking-tight text-sm font-semibold">
 <div class="flex items-center gap-8">
@@ -160,7 +83,7 @@
 </nav>
 </aside>
 <!-- Main Content Area -->
-<main class="flex-1 overflow-y-auto bg-surface-container-low p-8">
+<main class="flex-1 overflow-y-auto bg-background p-8">
 <header class="mb-10">
 <h1 class="text-3xl font-bold tracking-tight text-white mb-2">Ecosystem Overview</h1>
 <p class="text-on-surface-variant text-sm">Real-time observatory of your Axodus digital footprint.</p>

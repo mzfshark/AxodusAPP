@@ -7,87 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        body { font-family: 'Inter', sans-serif; }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-panel {
-            background: rgba(34, 42, 61, 0.6);
-            backdrop-filter: blur(20px);
-        }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "surface-container-high": "#222a3d",
-                      "primary-fixed": "#e1e0ff",
-                      "secondary-fixed-dim": "#38dfb3",
-                      "outline": "#908fa0",
-                      "error": "#ffb4ab",
-                      "surface-tint": "#c0c1ff",
-                      "on-primary-container": "#0d0096",
-                      "on-secondary": "#00382a",
-                      "surface-variant": "#2d3449",
-                      "surface-container-highest": "#2d3449",
-                      "on-error-container": "#ffdad6",
-                      "surface-bright": "#31394d",
-                      "primary": "#c0c1ff",
-                      "tertiary-container": "#d97721",
-                      "primary-container": "#8083ff",
-                      "error-container": "#93000a",
-                      "on-tertiary-fixed-variant": "#703700",
-                      "on-surface": "#dae2fd",
-                      "on-secondary-fixed-variant": "#00513e",
-                      "inverse-primary": "#494bd6",
-                      "surface": "#0b1326",
-                      "on-primary-fixed": "#07006c",
-                      "on-surface-variant": "#c7c4d7",
-                      "outline-variant": "#464554",
-                      "inverse-on-surface": "#283044",
-                      "surface-container-low": "#131b2e",
-                      "surface-container": "#171f33",
-                      "on-primary": "#1000a9",
-                      "tertiary": "#ffb783",
-                      "secondary": "#41e4b8",
-                      "surface-dim": "#0b1326",
-                      "on-tertiary-container": "#452000",
-                      "on-tertiary": "#4f2500",
-                      "on-tertiary-fixed": "#301400",
-                      "on-secondary-fixed": "#002117",
-                      "inverse-surface": "#dae2fd",
-                      "background": "#0b1326",
-                      "on-background": "#dae2fd",
-                      "surface-container-lowest": "#060e20",
-                      "secondary-fixed": "#5ffcce",
-                      "on-error": "#690005",
-                      "tertiary-fixed-dim": "#ffb783",
-                      "primary-fixed-dim": "#c0c1ff",
-                      "tertiary-fixed": "#ffdcc5",
-                      "on-secondary-container": "#004d3b",
-                      "secondary-container": "#00c89e",
-                      "on-primary-fixed-variant": "#2f2ebe"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              },
-              "fontFamily": {
-                      "headline": ["Inter"],
-                      "body": ["Inter"],
-                      "label": ["Inter"]
-              }
-            },
-          },
-        }
-      </script>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
-<body class="bg-surface text-on-surface selection:bg-primary/30">
+<body class="bg-background bg-surface text-on-surface selection:bg-primary/30">
 <!-- Top Navigation Bar -->
 <header class="bg-[#0b1326] flex justify-between items-center px-8 h-20 w-full docked full-width top-0 sticky z-50 bg-gradient-to-b from-[#131b2e] to-transparent flat no shadows">
 <div class="flex items-center gap-8">
@@ -181,7 +103,7 @@
 </div>
 </aside>
 <!-- Main Content -->
-<main class="ml-0 md:ml-64 p-8 w-full min-h-screen bg-surface">
+<main class="ml-0 md:ml-64 p-8 w-full min-h-screen bg-background">
 <!-- Hero Featured Section -->
 <section class="relative h-[480px] rounded-3xl overflow-hidden mb-12 group">
 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract flowing liquid 3d shapes in deep purple and cyan colors with futuristic digital lighting and grainy texture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDl4DuYX9gbX4SWrpDd8sswePdo5WUWoM5rncPygLQ7DHKiOgHneFuFWS2ymu8CcQ7abVmuYGIfZGaBkXlbTf5bliKJeTNm0l_yaPbuX6R_sCNyCdC2bkT8BAYNXFXxti0XhQmiV8TyGsrdL0rAGkItpx6tk-lSfj2eYR0GLBw143S1iYdxos-z85Tpy1h5iv0RnevCywel6IBQnVCEjcdh-Zh5VLAt2h0rw3C6KQQh3k68lhS7nmjCHr5472nKge_Aer2p42C89j8')">

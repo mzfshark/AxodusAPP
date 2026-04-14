@@ -8,87 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        body { font-family: 'Inter', sans-serif; }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        .glass-panel {
-            background: rgba(23, 31, 51, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%);
-        }
-    </style>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "tertiary-container": "#d97721",
-                      "surface": "#0b1326",
-                      "on-background": "#dae2fd",
-                      "inverse-on-surface": "#283044",
-                      "primary-fixed": "#e1e0ff",
-                      "inverse-surface": "#dae2fd",
-                      "on-tertiary-fixed": "#301400",
-                      "background": "#0b1326",
-                      "secondary-container": "#00c89e",
-                      "tertiary-fixed-dim": "#ffb783",
-                      "surface-container-highest": "#2d3449",
-                      "on-tertiary-fixed-variant": "#703700",
-                      "tertiary": "#ffb783",
-                      "tertiary-fixed": "#ffdcc5",
-                      "on-surface-variant": "#c7c4d7",
-                      "on-primary-fixed": "#07006c",
-                      "on-tertiary-container": "#452000",
-                      "surface-tint": "#c0c1ff",
-                      "surface-container": "#171f33",
-                      "on-error-container": "#ffdad6",
-                      "outline-variant": "#464554",
-                      "outline": "#908fa0",
-                      "secondary-fixed-dim": "#38dfb3",
-                      "surface-bright": "#31394d",
-                      "surface-container-low": "#131b2e",
-                      "surface-container-high": "#222a3d",
-                      "surface-dim": "#0b1326",
-                      "secondary": "#41e4b8",
-                      "surface-variant": "#2d3449",
-                      "on-primary": "#1000a9",
-                      "primary-fixed-dim": "#c0c1ff",
-                      "error-container": "#93000a",
-                      "on-secondary-fixed-variant": "#00513e",
-                      "primary-container": "#8083ff",
-                      "on-surface": "#dae2fd",
-                      "error": "#ffb4ab",
-                      "on-secondary-fixed": "#002117",
-                      "on-secondary-container": "#004d3b",
-                      "on-tertiary": "#4f2500",
-                      "on-primary-fixed-variant": "#2f2ebe",
-                      "on-secondary": "#00382a",
-                      "on-primary-container": "#0d0096",
-                      "surface-container-lowest": "#060e20",
-                      "on-error": "#690005",
-                      "primary": "#c0c1ff",
-                      "secondary-fixed": "#5ffcce",
-                      "inverse-primary": "#494bd6"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              }
-            },
-          }
-        }
-      </script>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
-<body class="bg-surface text-on-surface selection:bg-primary selection:text-on-primary min-h-screen">
+<body class="bg-background bg-surface text-on-surface selection:bg-primary selection:text-on-primary min-h-screen">
 <!-- TopNavBar Implementation -->
 <header class="bg-[#0b1326] backdrop-blur-xl bg-opacity-60 font-['Inter'] tracking-tight docked full-width top-0 z-50 flex justify-between items-center w-full px-6 py-3 border-b border-white/5 sticky">
 <div class="flex items-center gap-8">
@@ -175,7 +97,7 @@
 </div>
 </aside>
 <!-- Main Content Area -->
-<main class="flex-1 bg-surface-container-low p-6 lg:p-10 space-y-10 overflow-hidden">
+<main class="flex-1 bg-background p-6 lg:p-10 space-y-10 overflow-hidden">
 <!-- Hero Section: TVL Overview -->
 <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 <div class="lg:col-span-4 flex flex-col justify-between p-8 rounded-3xl surface-container-highest relative overflow-hidden bg-gradient-to-br from-[#131b2e] to-[#2d3449]">

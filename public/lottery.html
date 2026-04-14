@@ -8,94 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                "on-primary": "#1000a9",
-                "secondary-container": "#00c89e",
-                "on-tertiary-fixed": "#301400",
-                "on-tertiary-container": "#452000",
-                "on-surface": "#dae2fd",
-                "secondary-fixed-dim": "#38dfb3",
-                "tertiary-fixed": "#ffdcc5",
-                "surface": "#0b1326",
-                "secondary-fixed": "#5ffcce",
-                "primary": "#c0c1ff",
-                "surface-bright": "#31394d",
-                "tertiary": "#ffb783",
-                "surface-container": "#171f33",
-                "on-surface-variant": "#c7c4d7",
-                "inverse-surface": "#dae2fd",
-                "outline-variant": "#464554",
-                "surface-tint": "#c0c1ff",
-                "background": "#0b1326",
-                "outline": "#908fa0",
-                "on-background": "#dae2fd",
-                "on-primary-fixed": "#07006c",
-                "surface-container-highest": "#2d3449",
-                "on-primary-fixed-variant": "#2f2ebe",
-                "on-tertiary-fixed-variant": "#703700",
-                "on-error-container": "#ffdad6",
-                "error": "#ffb4ab",
-                "surface-container-high": "#222a3d",
-                "primary-fixed": "#e1e0ff",
-                "primary-fixed-dim": "#c0c1ff",
-                "surface-variant": "#2d3449",
-                "on-tertiary": "#4f2500",
-                "tertiary-container": "#d97721",
-                "secondary": "#41e4b8",
-                "on-secondary": "#00382a",
-                "error-container": "#93000a",
-                "on-error": "#690005",
-                "surface-dim": "#0b1326",
-                "on-secondary-container": "#004d3b",
-                "on-secondary-fixed-variant": "#00513e",
-                "on-secondary-fixed": "#002117",
-                "primary-container": "#8083ff",
-                "surface-container-low": "#131b2e",
-                "tertiary-fixed-dim": "#ffb783",
-                "inverse-primary": "#494bd6",
-                "inverse-on-surface": "#283044",
-                "on-primary-container": "#0d0096",
-                "surface-container-lowest": "#060e20"
-            },
-            "borderRadius": {
-                "DEFAULT": "0.125rem",
-                "lg": "0.25rem",
-                "xl": "0.5rem",
-                "full": "0.75rem"
-            },
-            "fontFamily": {
-                "headline": ["Inter"],
-                "body": ["Inter"],
-                "label": ["Inter"]
-            }
-          }
-        }
-      }
-    </script>
-<style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass-card {
-            background: rgba(45, 52, 73, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .kinetic-gradient {
-            background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%);
-        }
-        .ghost-border {
-            outline: 1px solid rgba(70, 69, 84, 0.15);
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-    </style>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
-<body class="bg-surface text-on-surface selection:bg-primary selection:text-on-primary overflow-x-hidden">
+<body class="bg-background bg-surface text-on-surface selection:bg-primary selection:text-on-primary overflow-x-hidden">
 <!-- TopNavBar -->
 <nav class="fixed top-0 w-full h-16 flex justify-between items-center px-8 z-50 bg-[#0b1326] font-['Inter'] tracking-tight">
 <div class="flex items-center gap-8">
@@ -144,7 +59,7 @@
 </div>
 </aside>
 <!-- Main Content -->
-<main class="ml-64 pt-16 min-h-screen">
+<main class="ml-64 pt-16 min-h-screen bg-background">
 <div class="p-8 space-y-8 max-w-7xl mx-auto">
 <!-- Hero Section: Super7 Jackpot -->
 <section class="relative overflow-hidden rounded-2xl bg-surface-container-low min-h-[400px] flex items-center ghost-border">

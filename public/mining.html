@@ -7,88 +7,9 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface": "#0b1326",
-                        "surface-bright": "#31394d",
-                        "primary-container": "#8083ff",
-                        "surface-container-highest": "#2d3449",
-                        "secondary-fixed": "#5ffcce",
-                        "background": "#0b1326",
-                        "tertiary-container": "#d97721",
-                        "on-tertiary-container": "#452000",
-                        "tertiary": "#ffb783",
-                        "secondary": "#41e4b8",
-                        "error-container": "#93000a",
-                        "on-secondary": "#00382a",
-                        "on-secondary-container": "#004d3b",
-                        "on-error-container": "#ffdad6",
-                        "inverse-surface": "#dae2fd",
-                        "outline-variant": "#464554",
-                        "on-secondary-fixed": "#002117",
-                        "inverse-primary": "#494bd6",
-                        "inverse-on-surface": "#283044",
-                        "surface-container-high": "#222a3d",
-                        "on-tertiary": "#4f2500",
-                        "primary-fixed-dim": "#c0c1ff",
-                        "primary": "#c0c1ff",
-                        "surface-tint": "#c0c1ff",
-                        "on-primary-container": "#0d0096",
-                        "primary-fixed": "#e1e0ff",
-                        "on-surface-variant": "#c7c4d7",
-                        "surface-variant": "#2d3449",
-                        "surface-dim": "#0b1326",
-                        "on-primary-fixed-variant": "#2f2ebe",
-                        "error": "#ffb4ab",
-                        "on-tertiary-fixed-variant": "#703700",
-                        "secondary-container": "#00c89e",
-                        "on-tertiary-fixed": "#301400",
-                        "on-error": "#690005",
-                        "surface-container-low": "#131b2e",
-                        "on-primary-fixed": "#07006c",
-                        "surface-container-lowest": "#060e20",
-                        "on-surface": "#dae2fd",
-                        "on-secondary-fixed-variant": "#00513e",
-                        "secondary-fixed-dim": "#38dfb3",
-                        "outline": "#908fa0",
-                        "surface-container": "#171f33",
-                        "on-primary": "#1000a9",
-                        "tertiary-fixed-dim": "#ffb783",
-                        "tertiary-fixed": "#ffdcc5",
-                        "on-background": "#dae2fd"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "fontFamily": {
-                        "headline": ["Inter"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                },
-            },
-        }
-    </script>
-<style>
-        body { font-family: 'Inter', sans-serif; background-color: #0b1326; color: #dae2fd; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-panel { background: rgba(45, 52, 73, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(70, 69, 84, 0.15); }
-        .gradient-text { background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .gradient-bg { background: linear-gradient(135deg, #c0c1ff 0%, #8083ff 100%); }
-        /* Custom Scrollbar for Sidebar */
-        aside::-webkit-scrollbar { width: 4px; }
-        aside::-webkit-scrollbar-track { background: transparent; }
-        aside::-webkit-scrollbar-thumb { background: rgba(144, 143, 160, 0.2); border-radius: 10px; }
-    </style>
+<link rel="stylesheet" href="/src/styles/Global.module.css">
 </head>
-<body class="bg-surface overflow-hidden">
+<body class="bg-background bg-surface overflow-hidden">
 <!-- Header -->
 <header class="flex justify-between items-center fixed top-0 left-0 right-0 z-[60] px-6 bg-[#0b1326]/80 backdrop-blur-xl border-b border-[#464554]/15 h-16">
 <div class="flex items-center gap-3 w-64">
@@ -179,7 +100,7 @@
 </div>
 </aside>
 <!-- Main Content Area -->
-<main class="ml-64 min-h-screen relative overflow-y-auto">
+<main class="ml-64 min-h-screen relative overflow-y-auto bg-background">
 <!-- Canvas Body -->
 <div class="pt-24 px-8 pb-12 space-y-10 max-w-[1600px] mx-auto">
 <!-- 1. Header Metrics (Editorial Style) -->
