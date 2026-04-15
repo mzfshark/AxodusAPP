@@ -21,6 +21,12 @@ import BacktestingPage from "./pages/backtesting/BacktestingPage";
 import ControllerManagementPage from "./pages/controllers/ControllerManagementPage";
 
 // Importações dos novos componentes estáticos
+import Mining from "./pages/Mining";
+import Marketplace from "./pages/Marketplace";
+import Academy from "./pages/Academy";
+import Dex from "./pages/Dex";
+import Lottery from "./pages/Lottery";
+import Mcps from "./pages/Mcps";
 
 
 const router = createBrowserRouter([
@@ -126,6 +132,12 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      { path: "mining", element: <Mining /> },
+      { path: "marketplace", element: <Marketplace /> },
+      { path: "academy", element: <Academy /> },
+      { path: "dex", element: <Dex /> },
+      { path: "lottery", element: <Lottery /> },
+      { path: "mcps", element: <Mcps /> },
     ],
   },
 

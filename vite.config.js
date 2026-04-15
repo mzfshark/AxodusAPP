@@ -29,7 +29,7 @@ export default defineConfig({
     strictPort: true,
     open: true,
     host: true, // permite acesso externo
-    allowedHosts: ['app.axodus.finance'], // libera o domínio customizado
+    allowedHosts: ['app.country'], // libera o domínio customizado
     headers: {
       'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https:; font-src 'self' data: https:;"
     },

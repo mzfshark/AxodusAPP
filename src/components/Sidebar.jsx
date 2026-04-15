@@ -15,36 +15,44 @@ export default function Sidebar() {
           <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>dashboard</span>
           <span>Overview</span>
         </NavLink>
-        <NavLink to="/static/mining" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/mining" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">bolt</span>
           <span>Mining</span>
         </NavLink>
-        <NavLink to="/static/trading" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/trading/bots" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">swap_horiz</span>
           <span>Trading</span>
         </NavLink>
-        <NavLink to="/static/staking" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/portfolio" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">layers</span>
           <span>Staking</span>
         </NavLink>
-        <NavLink to="/static/dao" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/settings" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">account_balance</span>
           <span>DAOs</span>
         </NavLink>
-        <NavLink to="/static/business" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/account" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">business_center</span>
           <span>Business</span>
         </NavLink>
-        <NavLink to="/static/marketplace" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/marketplace" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">shopping_cart</span>
           <span>Marketplace</span>
         </NavLink>
-        <NavLink to="/static/academy" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/academy" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">school</span>
           <span>Academy</span>
         </NavLink>
+        <NavLink to="/dex" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">currency_exchange</span>
+          <span>DEX</span>
+        </NavLink>
+        <NavLink to="/lottery" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">casino</span>
+          <span>Lottery</span>
+        </NavLink>
         <div className="h-px bg-white/5 my-4"></div>
-        <NavLink to="/static/mcps" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/mcps" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">dns</span>
           <span>MCP Servers</span>
         </NavLink>
