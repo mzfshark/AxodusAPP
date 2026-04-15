@@ -11,7 +11,6 @@ import TransactionHistoryPage from "./pages/TransactionHistoryPage";
 import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
 import AccountPage from "./pages/AccountPage";
-import ProtectedRoute from "./components/ProtectedRoute";
 import BotManagement from "./pages/trading/BotManagement";
 import PortfolioPage from "./pages/trading/PortfolioPage";
 import TradingPanel from "./pages/trading/TradingPanel";
@@ -36,102 +35,18 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Overview /> },
       { path: "connect", element: <ConnectWalletPage /> },
-      {
-        path: "account",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <AccountPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "dashboard",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <Dashboard />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "portfolio",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <Portfolio />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "settings",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <Settings />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "transactions",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <TransactionHistoryPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "trading/bots",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <BotManagement />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "trading/portfolio",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <PortfolioPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "trading/trade",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <TradingPanel />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "trading/market",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <MarketDataPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "trading/swap",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <SwapPanel />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "backtesting",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <BacktestingPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "controllers",
-        element: (
-          <ProtectedRoute requiredRoles={["user"]}>
-            <ControllerManagementPage />
-          </ProtectedRoute>
-        ),
-      },
+      { path: "account", element: <AccountPage /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "portfolio", element: <Portfolio /> },
+      { path: "settings", element: <Settings /> },
+      { path: "transactions", element: <TransactionHistoryPage /> },
+      { path: "trading/bots", element: <BotManagement /> },
+      { path: "trading/portfolio", element: <PortfolioPage /> },
+      { path: "trading/trade", element: <TradingPanel /> },
+      { path: "trading/market", element: <MarketDataPage /> },
+      { path: "trading/swap", element: <SwapPanel /> },
+      { path: "backtesting", element: <BacktestingPage /> },
+      { path: "controllers", element: <ControllerManagementPage /> },
       { path: "mining", element: <Mining /> },
       { path: "marketplace", element: <Marketplace /> },
       { path: "academy", element: <Academy /> },
