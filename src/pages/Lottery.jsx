@@ -6,7 +6,7 @@ const Lottery = () => {
       
 <div className="p-8 space-y-8 max-w-7xl mx-auto">
 
-<section className="relative overflow-hidden rounded-2xl bg-surface-container-low min-h-[400px] flex items-center ghost-border">
+<section className="relative overflow-hidden rounded-2xl bg-surface-container-low min-h-[400px] flex items-center ghostBorder">
 <div className="absolute inset-0 z-0">
 <div className="absolute inset-0 bg-gradient-to-r from-surface-container-low via-surface-container-low/80 to-transparent z-10"></div>
 <img className="w-full h-full object-cover" data-alt="Abstract 3D rendered neural network structure with glowing nodes and purple connections on a deep space background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNrfu-NRpbAU297igRIXJDv2sQPY4I54Ida48d5dodASr5T6bo6_-i-7B8EWHUtjGvbIJFywBYXy9uTbcl40yM92Lcm2UuF71z72aBvEwzMgsg5KFg7LthXxTcECOQJZWgP9tzi0gHmulb8DU_wzvW0EeCtvZdzz2wt4Evf2D8PDbdR4r3ZNpL0wmGgFz1rUUkXBxJ5eerVj27OnFgbkfYX4sXwlHyOADbA5usG4X5_KKI5B4oUrc5v11M_nuEfou_H1aTZ2hUssA"/>
@@ -22,11 +22,11 @@ const Lottery = () => {
                         </div>
 <h1 className="text-6xl font-extrabold tracking-tighter text-white">Super7 Jackpot</h1>
 <div className="flex items-baseline gap-3">
-<span className="text-7xl font-black kinetic-gradient bg-clip-text text-transparent leading-none">8,420,000</span>
+<span className="text-7xl font-black kineticGradient bg-clip-text text-transparent leading-none">8,420,000</span>
 <span className="text-xl font-bold text-primary-fixed tracking-widest">$NEURONS</span>
 </div>
 <div className="flex gap-4 items-center pt-4">
-<button className="kinetic-gradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform shadow-xl shadow-primary/20">Buy Tickets Now</button>
+<button className="kineticGradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform shadow-xl shadow-primary/20">Buy Tickets Now</button>
 <div className="flex flex-col">
 <span className="text-[10px] text-outline uppercase tracking-widest">Starts In</span>
 <span className="text-2xl font-mono font-bold text-white tracking-tighter">04 : 12 : 55</span>
@@ -34,7 +34,7 @@ const Lottery = () => {
 </div>
 </div>
 <div className="hidden md:flex flex-col justify-center items-end text-right">
-<div className="glass-card p-6 rounded-2xl border border-white/5 max-w-sm">
+<div className="glassCard p-6 rounded-2xl border border-white/5 max-w-sm">
 <p className="text-sm text-[#908fa0] mb-4">Last Winning Combination</p>
 <div className="flex gap-2">
 <span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">07</span>
@@ -43,7 +43,7 @@ const Lottery = () => {
 <span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">31</span>
 <span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">45</span>
 <span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">52</span>
-<span className="w-10 h-10 rounded-full kinetic-gradient flex items-center justify-center text-on-primary font-bold">09</span>
+<span className="w-10 h-10 rounded-full kineticGradient flex items-center justify-center text-on-primary font-bold">09</span>
 </div>
 <p className="mt-4 text-xs text-secondary">Total Payout: 1.2M $NEURONS</p>
 </div>
@@ -158,7 +158,7 @@ const Lottery = () => {
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-<div className="p-6 rounded-2xl bg-[#060e20] border-l-4 border-primary ghost-border flex items-center justify-between">
+<div className="p-6 rounded-2xl bg-[#060e20] border-l-4 border-primary ghostBorder flex items-center justify-between">
 <div className="space-y-1">
 <p className="text-[10px] text-primary font-bold uppercase tracking-widest">Super7 Weekly</p>
 <p className="text-lg font-bold text-white">#TXN-882104</p>
@@ -169,7 +169,7 @@ const Lottery = () => {
 <span className="w-6 h-6 rounded bg-surface-container-highest text-[10px] flex items-center justify-center text-white">35</span>
 <span className="w-6 h-6 rounded bg-surface-container-highest text-[10px] flex items-center justify-center text-white">40</span>
 <span className="w-6 h-6 rounded bg-surface-container-highest text-[10px] flex items-center justify-center text-white">55</span>
-<span className="w-6 h-6 rounded kinetic-gradient text-[10px] flex items-center justify-center text-on-primary font-bold">11</span>
+<span className="w-6 h-6 rounded kineticGradient text-[10px] flex items-center justify-center text-on-primary font-bold">11</span>
 </div>
 </div>
 <div className="text-right">
@@ -178,7 +178,7 @@ const Lottery = () => {
 </div>
 </div>
 
-<div className="p-6 rounded-2xl bg-[#060e20] border-l-4 border-secondary ghost-border flex items-center justify-between">
+<div className="p-6 rounded-2xl bg-[#060e20] border-l-4 border-secondary ghostBorder flex items-center justify-between">
 <div className="space-y-1">
 <p className="text-[10px] text-secondary font-bold uppercase tracking-widest">EasyLotto Hourly</p>
 <p className="text-lg font-bold text-white">#TXN-901122</p>
@@ -186,7 +186,7 @@ const Lottery = () => {
 <span className="w-6 h-6 rounded bg-surface-container-highest text-[10px] flex items-center justify-center text-white">08</span>
 <span className="w-6 h-6 rounded bg-surface-container-highest text-[10px] flex items-center justify-center text-white">19</span>
 <span className="w-6 h-6 rounded bg-surface-container-highest text-[10px] flex items-center justify-center text-white">33</span>
-<span className="w-6 h-6 rounded kinetic-gradient text-[10px] flex items-center justify-center text-on-primary font-bold">04</span>
+<span className="w-6 h-6 rounded kineticGradient text-[10px] flex items-center justify-center text-on-primary font-bold">04</span>
 </div>
 </div>
 <div className="text-right">

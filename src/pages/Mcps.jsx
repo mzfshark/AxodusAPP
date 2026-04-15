@@ -213,7 +213,7 @@ const Mcps = () => {
 <span className="h-2 w-2 rounded-full bg-secondary/40"></span>
 </div>
 </div>
-<div className="p-4 mono text-xs leading-relaxed h-80 overflow-y-auto custom-scrollbar bg-[#060e20]">
+<div className="p-4 mono text-xs leading-relaxed h-80 overflow-y-auto customScrollbar bg-[#060e20]">
 <div className="flex gap-4 mb-2">
 <span className="text-outline/40 whitespace-nowrap">[14:02:11]</span>
 <span className="text-secondary">INFO</span>

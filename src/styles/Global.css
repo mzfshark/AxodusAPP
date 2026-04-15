@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
 @theme {
   --color-surface-container-highest: #2d3449;
@@ -266,8 +268,6 @@
   background-color: var(--footer-bg);
   font-size: 0.875rem;
   color: var(--text-muted);
-  position: fixed;
-  bottom: 0;
 }
 
 :global(h1), :global(h2), :global(h3), :global(h4), :global(h5), :global(h6) {

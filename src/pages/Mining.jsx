@@ -60,7 +60,7 @@ const Mining = () => {
 </div>
 <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
 
-<div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
+<div className="glassPanel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
 <div className="w-16 h-16 rounded-2xl bg-[#060e20] flex items-center justify-center shrink-0 border border-outline-variant/10">
 <img className="w-10 h-10 object-contain" data-alt="abstract crypto logo for minto finance with geometric lines and blue neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPBEiVUmSpZNikDiFAGnMbL2W0Qjq2wZh7iMpgvSHSiFXoN3Hqc-MI1YfieKR_NMyg7HgwmBFE4kpTyjkHDe6YzvXQXRzjgLna7Itp4DnQFX8Dug8pggKrI0G3i-Tv-7NG1rmdf2K7wk_KG_hPt8ANbMrm9trMZPmvkdiEwoNrXjccObIqp5rBY-3kb7yTeXHc8C8djE-NtLkfy_0NrJdcQvGb_9qxBGdOGWFA5mVl3wZlox_6ZHW_hg9NsaMN_nvA9QEhGasa8FI"/>
 </div>
@@ -81,14 +81,14 @@ const Mining = () => {
 <p className="text-xs text-outline">Est. $28.65</p>
 </div>
 <div className="flex items-center">
-<button className="w-full py-2 px-4 rounded-xl gradient-bg text-on-primary font-bold text-sm tracking-tight">
+<button className="w-full py-2 px-4 rounded-xl gradientBg text-on-primary font-bold text-sm tracking-tight">
                                     Buy Hashpower
                                 </button>
 </div>
 </div>
 </div>
 
-<div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
+<div className="glassPanel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
 <div className="w-16 h-16 rounded-2xl bg-[#060e20] flex items-center justify-center shrink-0 border border-outline-variant/10">
 <img className="w-10 h-10 object-contain" data-alt="vibrant 3D digital token for goming project with neon green accents and futuristic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTKe13-JaGYeLq7ZNnJqEhjI7JhWpzAqVITa9RqBkr3MEJp56WZoZyqwx5e2phs51Lo09RYtXZhdfYoopqpZSZB3IzamsBqUxvpO7AuVy3XSiu43faIqhA3R80uvEjbJubb0wH6nboFZNe5Po5azOQODD6FOwtcJbsjnBlb6_-MNKf5bhd-fi2biC0NLylROW0YZsXlIawFuOr9bPXlg6GgEAUCYBhC56-YLGIvsJ21-kDDQ__OUR5oNfjJVlMmlI3_GSlCfnnej4"/>
 </div>
@@ -116,7 +116,7 @@ const Mining = () => {
 </div>
 </div>
 
-<div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
+<div className="glassPanel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
 <div className="w-16 h-16 rounded-2xl bg-[#060e20] flex items-center justify-center shrink-0 border border-outline-variant/10">
 <img className="w-10 h-10 object-contain" data-alt="blue and white geometric logo for cloud mining service with professional fintech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEAemm2zIkJxMGhzoBEj1c4RcEX3pi-0KhZSGS5YacKAzhIHUmuZOGRLwih4esRW1Xa8tqV3Es5bWV1esEgCc5588GdbYfqhwDUVjRe5WBMac6qHJmwWo-h7QiG2yfW-MZLiXYmklDvaRTBMsQt7T9IkT2y4W3ht0eXeQVwHySgfHou7tZ8KctFQtruxSVx0wDNE9BjivoEzdS48GFiPoS64t6YMC4d8vuDrY9OaZIi_u5fTvzKAnkti1cMbWHpHZtluX5a0yZ5HU"/>
 </div>

@@ -7,13 +7,17 @@ import "@/styles/Global.css";
 
 export default function Layout() {
   return (
-    <div className="bg-surface text-on-surface font-body overflow-hidden min-h-screen">
+    <div className="bg-surface text-on-surface font-body h-screen overflow-hidden flex flex-col">
       <Header />
-      <div className="flex h-screen pt-14">
+      <div className="flex flex-1 pt-14 overflow-hidden">
         <Sidebar />
-        <Outlet />
+        <main className="flex-1 overflow-y-auto flex flex-col relative">
+          <div className="flex-1">
+            <Outlet />
+          </div>
+          <Footer />
+        </main>
       </div>
-      <Footer />
     </div>
   );
 }

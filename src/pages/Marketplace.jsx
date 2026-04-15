@@ -32,7 +32,7 @@ const Marketplace = () => {
 </div>
 </div>
 
-<div className="absolute bottom-8 right-8 glass-panel p-6 rounded-2xl border border-outline-variant/20 hidden lg:block">
+<div className="absolute bottom-8 right-8 glassPanel p-6 rounded-2xl border border-outline-variant/20 hidden lg:block">
 <div className="flex items-center gap-4 mb-4">
 <img alt="Creator" className="w-12 h-12 rounded-full border-2 border-primary" data-alt="professional portrait of a digital artist with cool blue lighting and tech accessories" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi0JXBBF9Y0Twat9Ugen55xhQFG4va-1ZGR_4HWKr-BMxfb0dpuV4kRqRwuPDNo5V4prnS6t7TkwG3oIQLG6naqDs-uPnzkgelIo5CHjURTp61oboyBsSNYkg6_hQtv9HJuq6dxBkyv-ep-2mjRjgSXU3L6dR_Pkx1475Lx4qjck3eyxQP__4O3NfQeR6kxC0fSNggoKH1pXsHvjb9R9CzbfdOzTdsGiDb1St4O7xA6RoCsBOXktcJi4qpRzOMi9rrqzWlZxO7O-I"/>
 <div>
@@ -238,23 +238,7 @@ const Marketplace = () => {
 </section>
 </div>
 
-<footer className="mt-24 pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-8 pb-12">
-<div className="flex items-center gap-4 opacity-50">
-<span className="text-xl font-bold tracking-tighter">Axodus</span>
-<span className="text-xs text-outline">© 2024 Kinetic Ecosystem Inc.</span>
-</div>
-<div className="flex gap-8 text-sm text-outline">
-<a className="hover:text-primary" href="#">Terms of Service</a>
-<a className="hover:text-primary" href="#">Privacy Policy</a>
-<a className="hover:text-primary" href="#">Documentation</a>
-<a className="hover:text-primary" href="#">API</a>
-</div>
-<div className="flex gap-4">
-<div className="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline hover:text-white cursor-pointer"><span className="material-symbols-outlined text-lg">public</span></div>
-<div className="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline hover:text-white cursor-pointer"><span className="material-symbols-outlined text-lg">forum</span></div>
-<div className="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline hover:text-white cursor-pointer"><span className="material-symbols-outlined text-lg">share</span></div>
-</div>
-</footer>
+
 
     </>
   );

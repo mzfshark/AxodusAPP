@@ -10,7 +10,7 @@ const Dex = () => {
 <div className="xl:col-span-8 flex flex-col gap-6">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-<div className="glass-card rounded-3xl p-6 flex flex-col">
+<div className="glassCard rounded-3xl p-6 flex flex-col">
 <div className="flex justify-between items-center mb-6">
 <h2 className="text-lg font-semibold tracking-tight">Swap</h2>
 <div className="flex gap-2">
@@ -46,7 +46,7 @@ const Dex = () => {
 <span className="text-xs text-slate-400">Balance: 0.42</span>
 </div>
 <div className="flex justify-between items-center">
-<input className="bg-transparent border-none focus:ring-0 text-2xl font-bold p-0 w-full text-on-surface opacity-80" placeholder="0" readonly="" type="number" value="1.24"/>
+<input className="bg-transparent border-none focus:ring-0 text-2xl font-bold p-0 w-full text-on-surface opacity-80" placeholder="0" readOnly type="number" value="1.24"/>
 <button className="flex items-center gap-2 bg-surface-container-highest px-3 py-1.5 rounded-xl hover:bg-surface-bright transition-colors">
 <img alt="ETH" className="w-6 h-6 rounded-full" data-alt="Stylized ethereum logo icon with high tech aesthetic and soft glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWEKPPCF0Qgl4Y5Pl8Tni0LT35AZhKQh5WM2bBuzAOwn7S1F-IvfgUgS6mFtwn9WAzJW4Z67s7u4U7FDZRMEn_yq74yCvzgCl0xtSGXpsUODLzflyNTWdn8Pku56_3yfbqFVNCzWwXQslcNZFs75VdJtpturU0s0iffT0NcM19AVC7hux1y3bO1pwSX49Cm4O1XB3OontZd2twDTd-vg6bbjN0qpzPrk_KONKVpXu4hw4zS6qTrRopQr4AnJZP2gsEWfMoyDSGNNo"/>
 <span className="font-bold text-sm">ETH</span>
@@ -75,7 +75,7 @@ const Dex = () => {
             </button>
 </div>
 
-<div className="glass-card rounded-3xl p-6 flex flex-col">
+<div className="glassCard rounded-3xl p-6 flex flex-col">
 <div className="flex justify-between items-start mb-4">
 <div>
 <h3 className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-1">NEURONS / ETH</h3>
@@ -129,7 +129,7 @@ const Dex = () => {
 </div>
 </div>
 
-<section className="glass-card rounded-3xl overflow-hidden">
+<section className="glassCard rounded-3xl overflow-hidden">
 <div className="p-6 flex justify-between items-end border-b border-white/5">
 <div>
 <h2 className="text-xl font-bold tracking-tight">Top Liquidity Pools</h2>
@@ -225,7 +225,7 @@ const Dex = () => {
 
 <div className="relative group rounded-3xl p-[1px] overflow-hidden">
 <div className="absolute inset-0 bg-gradient-to-br from-primary via-transparent to-secondary opacity-20"></div>
-<div className="relative glass-card rounded-[23px] p-6 h-full">
+<div className="relative glassCard rounded-[23px] p-6 h-full">
 <div className="flex items-center gap-2 mb-6">
 <span className="material-symbols-outlined text-primary" data-icon="auto_fix_high">auto_fix_high</span>
 <h2 className="text-lg font-bold tracking-tight">Active Hooks</h2>
@@ -266,7 +266,7 @@ const Dex = () => {
 </div>
 </div>
 
-<div className="glass-card rounded-3xl p-6">
+<div className="glassCard rounded-3xl p-6">
 <div className="flex justify-between items-center mb-6">
 <h2 className="text-lg font-bold tracking-tight">My Liquidity</h2>
 <button className="bg-surface-container-highest p-2 rounded-xl">

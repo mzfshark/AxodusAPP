@@ -16,8 +16,8 @@ const Academy = () => {
 <h1 className="text-4xl font-bold tracking-tight text-white mb-4">Master the Decentralized Future</h1>
 <p className="text-on-surface-variant mb-6 text-lg">A comprehensive guide to understanding blockchain architecture, smart contracts, and the new economy.</p>
 <div className="flex items-center gap-4">
-<button className="kinetic-gradient text-on-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/10">Start Learning</button>
-<button className="glass-effect text-white px-8 py-3 rounded-xl font-bold text-sm border border-white/10">View Syllabus</button>
+<button className="kineticGradient text-on-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/10">Start Learning</button>
+<button className="glassEffect text-white px-8 py-3 rounded-xl font-bold text-sm border border-white/10">View Syllabus</button>
 </div>
 </div>
 </section>
@@ -68,7 +68,7 @@ const Academy = () => {
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-<div className="bg-surface-container-low rounded-2xl overflow-hidden ghost-border hover:bg-surface-container transition-all group cursor-pointer">
+<div className="bg-surface-container-low rounded-2xl overflow-hidden ghostBorder hover:bg-surface-container transition-all group cursor-pointer">
 <div className="h-40 relative">
 <img className="w-full h-full object-cover" data-alt="glowing neon purple and blue 3d geometric shapes floating in dark space with professional studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1aiP6E_hh2er8G_z_g2qmA_-_sCSvcnBa4SVJ0lNkrro1NxHhc7d3d-fbgIFCc6GsGHFE8Bf_r8iWyGujoUCYTLudymHb9jVeQeNJStXy6Xvdyk_snuO3qA7-8zi3t5vA96dCG2u5dGtnF_euHEiNanCx13LdCFcH5zfpDfBQfwA299UWmXMdV5K-nclJsRH2WFZrheyiCY4Sfa8WSsEQaFaeZGyLCwrjkDjTO-H7O15LS3UZhF2osaea4qTtlMD3JPNo5Rr1vio"/>
 <div className="absolute top-3 left-3 px-2 py-1 bg-surface-container-highest/80 backdrop-blur-md rounded-md text-[10px] font-bold text-white uppercase">Beginner</div>
@@ -89,7 +89,7 @@ const Academy = () => {
 </div>
 </div>
 
-<div className="bg-surface-container-low rounded-2xl overflow-hidden ghost-border hover:bg-surface-container transition-all group cursor-pointer">
+<div className="bg-surface-container-low rounded-2xl overflow-hidden ghostBorder hover:bg-surface-container transition-all group cursor-pointer">
 <div className="h-40 relative">
 <img className="w-full h-full object-cover" data-alt="complex digital smart contract interface with lines of code glowing in blue and orange over dark texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdpZ2UK7FphkpBQ0ileUeNgqcY3Qsz6MjVXZC7P4P6iAkK6P6h0sKkNIx0SJ2Kl9T2IIOuaqX7Sr-91rXuarVGlty-6iZN6hxo_sFmyONUN8gScVGhLP_jQBBvNPT1IurhI7xxfg-w6bQwU66x1w1Ggx4zMYJoDH1npAZGmeLnuMCph924TmjrEmJQ1TBTETqKHQse4JnOkLzRKNu_trI8nCie4iUhAP-cVP1VMUJcjfmwNTLmqcEbr8llkzCrFt-70Jh_3VKlyfg"/>
 <div className="absolute top-3 left-3 px-2 py-1 bg-surface-container-highest/80 backdrop-blur-md rounded-md text-[10px] font-bold text-white uppercase">Advanced</div>
@@ -110,7 +110,7 @@ const Academy = () => {
 </div>
 </div>
 
-<div className="bg-surface-container-low rounded-2xl overflow-hidden ghost-border hover:bg-surface-container transition-all group cursor-pointer">
+<div className="bg-surface-container-low rounded-2xl overflow-hidden ghostBorder hover:bg-surface-container transition-all group cursor-pointer">
 <div className="h-40 relative">
 <img className="w-full h-full object-cover" data-alt="abstract visualization of liquid gold data streams flowing through a dark corridor with atmospheric light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRsuLLHbTm4lXma4TJ81Acd6e7GXcVzJO5xsu8z5HfIbfMzuwrTAyhoiMlQUPF98ge0EAL5wfQDCmQto36sdG1_4G1Kp4RnMrc7GasMShsYkshKwjiW7JSEw5Lrc7pePJb4lVBrBAXVx4F2fz6P_NmggkY21nMhLthfSnVlKFatNA8d_YvFcaCeaKaPjvP_R0M4hVti8weqt8nv0Db28zQAFAG8Qbz2KgVlAsZVcrLLEf3xYJYO5njV7aFcoN1enmkaPgAIJcnn9o"/>
 <div className="absolute top-3 left-3 px-2 py-1 bg-surface-container-highest/80 backdrop-blur-md rounded-md text-[10px] font-bold text-white uppercase">Intermediate</div>
@@ -131,7 +131,7 @@ const Academy = () => {
 </div>
 </div>
 
-<div className="bg-surface-container-low rounded-2xl overflow-hidden ghost-border hover:bg-surface-container transition-all group cursor-pointer">
+<div className="bg-surface-container-low rounded-2xl overflow-hidden ghostBorder hover:bg-surface-container transition-all group cursor-pointer">
 <div className="h-40 relative">
 <img className="w-full h-full object-cover" data-alt="high contrast digital security padlock symbol with circuit board patterns and neon green highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg80LVCZVidQ_9uasErmrdk6qIEAXeHKh8ChYK5bFYsw_h2aWozdU1-1EM9aiNnM1m9vp4iN7qvyTUPtZLL1syXWcAQhbobmy4eCvm8HKz6nESOOFbx_xW9m_7CsYEnXkG4ZM-MLZTR8il6w6N4jUyWQaDkJ-Wx9ZPPgM8ZnUCoJaXejR9A_1o8JoN7srBjtcLAgW3ImniyQE-MNxvUdZGGR1EoFQU1D056G29xkD7EQIqBnwQVMxd4H1T4lCd_T5OWmZuSVuGqe0"/>
 <div className="absolute top-3 left-3 px-2 py-1 bg-surface-container-highest/80 backdrop-blur-md rounded-md text-[10px] font-bold text-white uppercase">Pro</div>
