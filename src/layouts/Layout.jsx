@@ -1,5 +1,4 @@
-// src/components/Layout.jsx
-import { useState } from "react";
+// src/layouts/Layout.jsx
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -7,35 +6,14 @@ import Footer from "../components/Footer";
 import "@/styles/Global.css";
 
 export default function Layout() {
-  const [collapsed, setCollapsed] = useState(false);
-
   return (
-    <div className="appLayout">
+    <div className="bg-surface text-on-surface font-body overflow-hidden min-h-screen">
       <Header />
-
-      <div className="appMain">
-        <Sidebar
-          collapsed={collapsed}
-          onToggle={() => setCollapsed(!collapsed)}
-        />
-
-        <main
-          className="appContent"
-          /* ⇩ marginLeft ajustado com token de tema */
-          style={{
-            marginLeft: collapsed
-              ? "var(--sidebar-w-collapsed)"
-              : "var(--sidebar-w)",
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            <Outlet />
-          </div>
-
-          
-        </main>
-        <Footer />
+      <div className="flex h-screen pt-14">
+        <Sidebar />
+        <Outlet />
       </div>
+      <Footer />
     </div>
   );
 }
