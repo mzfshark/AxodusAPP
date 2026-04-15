@@ -107,12 +107,16 @@
   --error: #e53935;
   --warning: #fb8c00;
   --info: #4ecdc4;
-  --border: #213335;
+  --border: #505c817a;
 
   --header-bg: #222222;
   --sidebar-bg: #222222;
   --card-bg: #0c2224;
   --footer-bg: #222222;
+}
+
+:global(.dark) *, :global(.dark) ::before, :global(.dark) ::after {
+  border-color: #505c817a;
 }
 
 /* === GLOBAL RESET & BASE ========================================== */

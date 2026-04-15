@@ -2,8 +2,11 @@
 
 import React from 'react';
 import { NavLink } from "react-router-dom";
+import useDarkMode from '../hooks/useDarkMode';
 
 export default function Sidebar() {
+  const [theme, setTheme] = useDarkMode();
+
   return (
     <aside className="hidden md:flex flex-col h-full w-64 bg-[#0b1326] py-6 px-4 gap-y-1 overflow-y-auto border-r border-white/5 font-['Inter'] font-medium text-sm">
       <div className="px-2 mb-6">
@@ -57,6 +60,33 @@ export default function Sidebar() {
           <span>MCP Servers</span>
         </NavLink>
       </nav>
+      
+      {/* Theme Toggle */}
+      <div className="mt-auto pt-6 px-2">
+        <div className="flex items-center justify-between bg-[#131b2e] p-1.5 rounded-xl border border-white/5">
+          <button 
+            onClick={() => setTheme('light')}
+            className={`flex items-center justify-center w-1/3 py-1.5 rounded-lg transition-all duration-200 ${theme === 'light' ? 'bg-[#2d3449] text-indigo-300 shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
+            title="Light Theme"
+          >
+            <span className="material-symbols-outlined text-[18px]">light_mode</span>
+          </button>
+          <button 
+            onClick={() => setTheme('system')}
+            className={`flex items-center justify-center w-1/3 py-1.5 rounded-lg transition-all duration-200 ${theme === 'system' ? 'bg-[#2d3449] text-indigo-300 shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
+            title="System Theme"
+          >
+            <span className="material-symbols-outlined text-[18px]">brightness_auto</span>
+          </button>
+          <button 
+            onClick={() => setTheme('dark')}
+            className={`flex items-center justify-center w-1/3 py-1.5 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'bg-[#2d3449] text-indigo-300 shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
+            title="Dark Theme"
+          >
+            <span className="material-symbols-outlined text-[18px]">dark_mode</span>
+          </button>
+        </div>
+      </div>
     </aside>
   );
 }
