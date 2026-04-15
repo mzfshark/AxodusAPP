@@ -4,13 +4,13 @@ const Dex = () => {
   return (
     <>
       
-
+<!-- Hero Section: Trading Dashboard -->
 <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-
+<!-- Left: Swap & Chart (Editorial Centerpiece) -->
 <div className="xl:col-span-8 flex flex-col gap-6">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-<div className="glassCard rounded-3xl p-6 flex flex-col">
+<!-- Swap Card -->
+<div className="glass-card rounded-3xl p-6 flex flex-col">
 <div className="flex justify-between items-center mb-6">
 <h2 className="text-lg font-semibold tracking-tight">Swap</h2>
 <div className="flex gap-2">
@@ -18,7 +18,7 @@ const Dex = () => {
 </div>
 </div>
 <div className="space-y-2">
-
+<!-- From Token -->
 <div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
 <div className="flex justify-between mb-2">
 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">From</span>
@@ -33,20 +33,20 @@ const Dex = () => {
 </button>
 </div>
 </div>
-
+<!-- Swap Middle Icon -->
 <div className="flex justify-center -my-3 relative z-10">
 <div className="w-10 h-10 bg-surface-container-highest rounded-xl border-4 border-[#0b1326] flex items-center justify-center text-primary cursor-pointer hover:scale-110 transition-transform shadow-xl">
 <span className="material-symbols-outlined" data-icon="arrow_downward">arrow_downward</span>
 </div>
 </div>
-
+<!-- To Token -->
 <div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
 <div className="flex justify-between mb-2">
 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">To (Estimated)</span>
 <span className="text-xs text-slate-400">Balance: 0.42</span>
 </div>
 <div className="flex justify-between items-center">
-<input className="bg-transparent border-none focus:ring-0 text-2xl font-bold p-0 w-full text-on-surface opacity-80" placeholder="0" readOnly type="number" value="1.24"/>
+<input className="bg-transparent border-none focus:ring-0 text-2xl font-bold p-0 w-full text-on-surface opacity-80" placeholder="0" readonly="" type="number" value="1.24"/>
 <button className="flex items-center gap-2 bg-surface-container-highest px-3 py-1.5 rounded-xl hover:bg-surface-bright transition-colors">
 <img alt="ETH" className="w-6 h-6 rounded-full" data-alt="Stylized ethereum logo icon with high tech aesthetic and soft glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWEKPPCF0Qgl4Y5Pl8Tni0LT35AZhKQh5WM2bBuzAOwn7S1F-IvfgUgS6mFtwn9WAzJW4Z67s7u4U7FDZRMEn_yq74yCvzgCl0xtSGXpsUODLzflyNTWdn8Pku56_3yfbqFVNCzWwXQslcNZFs75VdJtpturU0s0iffT0NcM19AVC7hux1y3bO1pwSX49Cm4O1XB3OontZd2twDTd-vg6bbjN0qpzPrk_KONKVpXu4hw4zS6qTrRopQr4AnJZP2gsEWfMoyDSGNNo"/>
 <span className="font-bold text-sm">ETH</span>
@@ -55,7 +55,7 @@ const Dex = () => {
 </div>
 </div>
 </div>
-
+<!-- Price Impact & Details -->
 <div className="mt-6 space-y-3 px-1">
 <div className="flex justify-between text-xs">
 <span className="text-slate-400">Exchange Rate</span>
@@ -74,8 +74,8 @@ const Dex = () => {
               Swap Tokens
             </button>
 </div>
-
-<div className="glassCard rounded-3xl p-6 flex flex-col">
+<!-- Mini Chart -->
+<div className="glass-card rounded-3xl p-6 flex flex-col">
 <div className="flex justify-between items-start mb-4">
 <div>
 <h3 className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-1">NEURONS / ETH</h3>
@@ -91,7 +91,7 @@ const Dex = () => {
 </div>
 </div>
 <div className="flex-1 w-full relative group">
-
+<!-- Visual representation of a sparkline chart -->
 <svg className="w-full h-full min-h-[180px]" preserveAspectRatio="none" viewBox="0 0 400 200">
 <defs>
 <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
@@ -101,10 +101,10 @@ const Dex = () => {
 </defs>
 <path d="M0,150 Q40,140 80,160 T160,120 T240,80 T320,100 T400,40" fill="none" stroke="#41e4b8" strokeLinecap="round" strokeWidth="3"></path>
 <path d="M0,150 Q40,140 80,160 T160,120 T240,80 T320,100 T400,40 L400,200 L0,200 Z" fill="url(#chartGradient)"></path>
-
+<!-- Animated-like point -->
 <circle className="animate-pulse" cx="400" cy="40" fill="#41e4b8" r="4"></circle>
 </svg>
-
+<!-- Chart Overlay info -->
 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/20 pointer-events-none">
 <div className="bg-surface-bright px-3 py-1.5 rounded-lg border border-white/10 shadow-2xl">
 <p className="text-[10px] text-slate-400 font-bold uppercase">Volume 24h</p>
@@ -128,8 +128,8 @@ const Dex = () => {
 </div>
 </div>
 </div>
-
-<section className="glassCard rounded-3xl overflow-hidden">
+<!-- Top Pools Section (Asymmetric Data Table) -->
+<section className="glass-card rounded-3xl overflow-hidden">
 <div className="p-6 flex justify-between items-end border-b border-white/5">
 <div>
 <h2 className="text-xl font-bold tracking-tight">Top Liquidity Pools</h2>
@@ -220,12 +220,12 @@ const Dex = () => {
 </div>
 </section>
 </div>
-
+<!-- Right: Hooks & My Liquidity (The Precision Stack) -->
 <div className="xl:col-span-4 flex flex-col gap-6">
-
+<!-- Uniswap v4 Hooks Module -->
 <div className="relative group rounded-3xl p-[1px] overflow-hidden">
 <div className="absolute inset-0 bg-gradient-to-br from-primary via-transparent to-secondary opacity-20"></div>
-<div className="relative glassCard rounded-[23px] p-6 h-full">
+<div className="relative glass-card rounded-[23px] p-6 h-full">
 <div className="flex items-center gap-2 mb-6">
 <span className="material-symbols-outlined text-primary" data-icon="auto_fix_high">auto_fix_high</span>
 <h2 className="text-lg font-bold tracking-tight">Active Hooks</h2>
@@ -265,8 +265,8 @@ const Dex = () => {
             </button>
 </div>
 </div>
-
-<div className="glassCard rounded-3xl p-6">
+<!-- My Liquidity (Inset Style) -->
+<div className="glass-card rounded-3xl p-6">
 <div className="flex justify-between items-center mb-6">
 <h2 className="text-lg font-bold tracking-tight">My Liquidity</h2>
 <button className="bg-surface-container-highest p-2 rounded-xl">
@@ -274,7 +274,7 @@ const Dex = () => {
 </button>
 </div>
 <div className="space-y-4">
-
+<!-- Position 1 -->
 <div className="p-4 bg-surface-container-lowest rounded-2xl border border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ const Dex = () => {
 <span className="text-[10px] text-slate-400">In-range</span>
 </div>
 </div>
-
+<!-- Position 2 -->
 <div className="p-4 bg-surface-container-lowest rounded-2xl border border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">

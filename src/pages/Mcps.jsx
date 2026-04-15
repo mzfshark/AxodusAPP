@@ -4,7 +4,7 @@ const Mcps = () => {
   return (
     <>
       
-
+<!-- Page Header -->
 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
 <div>
 <h1 className="text-4xl font-extrabold tracking-tight text-white mb-1">MCP Servers</h1>
@@ -17,9 +17,9 @@ const Mcps = () => {
 </div>
 </div>
 </div>
-
+<!-- Server Grid -->
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-
+<!-- Morpheus Server -->
 <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
@@ -66,7 +66,7 @@ const Mcps = () => {
 </button>
 </div>
 </div>
-
+<!-- Agent Smith Server -->
 <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
@@ -113,7 +113,7 @@ const Mcps = () => {
 </button>
 </div>
 </div>
-
+<!-- Trading Server -->
 <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
@@ -160,7 +160,7 @@ const Mcps = () => {
 </button>
 </div>
 </div>
-
+<!-- RedHat Server -->
 <div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
@@ -198,9 +198,9 @@ const Mcps = () => {
 </div>
 </div>
 </div>
-
+<!-- Dashboard Bottom Section (Bento) -->
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
+<!-- Terminal Feed -->
 <div className="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border border-outline-variant/10">
 <div className="bg-surface-container-low px-4 py-3 flex items-center justify-between">
 <div className="flex items-center gap-2">
@@ -213,7 +213,7 @@ const Mcps = () => {
 <span className="h-2 w-2 rounded-full bg-secondary/40"></span>
 </div>
 </div>
-<div className="p-4 mono text-xs leading-relaxed h-80 overflow-y-auto customScrollbar bg-[#060e20]">
+<div className="p-4 mono text-xs leading-relaxed h-80 overflow-y-auto custom-scrollbar bg-[#060e20]">
 <div className="flex gap-4 mb-2">
 <span className="text-outline/40 whitespace-nowrap">[14:02:11]</span>
 <span className="text-secondary">INFO</span>
@@ -260,12 +260,12 @@ const Mcps = () => {
 <input className="bg-transparent border-none focus:ring-0 text-xs mono text-on-surface w-full p-1" placeholder="Enter command..." type="text"/>
 </div>
 </div>
-
+<!-- Health Trends -->
 <div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 flex flex-col justify-between">
 <div>
 <h3 className="text-lg font-bold text-white mb-6">Cluster Health</h3>
 <div className="space-y-6">
-
+<!-- CPU Usage -->
 <div>
 <div className="flex justify-between items-center mb-2">
 <span className="text-xs font-medium text-on-surface-variant">Global CPU Usage</span>
@@ -279,7 +279,7 @@ const Mcps = () => {
 <span className="text-[9px] text-outline">24h MAX: 92%</span>
 </div>
 </div>
-
+<!-- Memory Usage -->
 <div>
 <div className="flex justify-between items-center mb-2">
 <span className="text-xs font-medium text-on-surface-variant">Global RAM Allocation</span>
@@ -293,14 +293,14 @@ const Mcps = () => {
 <span className="text-[9px] text-outline">FREE: 260GB</span>
 </div>
 </div>
-
+<!-- Network IO -->
 <div>
 <div className="flex justify-between items-center mb-2">
 <span className="text-xs font-medium text-on-surface-variant">Network Throughput</span>
 <span className="text-xs mono text-primary">1.2 GB/s</span>
 </div>
 <div className="h-12 w-full flex items-end gap-1 overflow-hidden">
-
+<!-- Simple Sparkline Representation -->
 <div className="flex-1 bg-primary/20 h-4 rounded-t-sm"></div>
 <div className="flex-1 bg-primary/40 h-8 rounded-t-sm"></div>
 <div className="flex-1 bg-primary/30 h-6 rounded-t-sm"></div>

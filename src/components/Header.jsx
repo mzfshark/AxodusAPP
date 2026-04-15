@@ -1,6 +1,7 @@
 // src/components/Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import WalletConnectButton from './WalletConnectButton';
 
 export default function Header() {
   return (
@@ -23,9 +24,7 @@ export default function Header() {
             <span className="material-symbols-outlined">settings</span>
           </button>
         </div>
-        <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-5 py-2 rounded-lg font-bold text-xs hover:shadow-[0_0_20px_rgba(128,131,255,0.3)] transition-all active:scale-95">
-          Connect Wallet
-        </button>
+        <WalletConnectButton />
       </div>
     </nav>
   );
