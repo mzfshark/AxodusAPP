@@ -14,7 +14,7 @@ export default function Header() {
         </div>
       </div>
       <div className="flex items-center gap-6">
-        <span className="text-indigo-400 font-bold">$NEURONS: $0.42</span>
+        <span className="text-indigo-400 font-bold">$NEURONS: $9,857.18</span>
         <div className="flex items-center gap-4 text-slate-400">
           <button className="hover:text-indigo-200 transition-colors duration-200 active:scale-95 transition-transform">
             <span className="material-symbols-outlined">notifications</span>

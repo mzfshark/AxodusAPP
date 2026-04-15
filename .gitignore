@@ -25,6 +25,7 @@ dist-ssr
 .vercel
 .next
 build
+.pnpm-store
 
 .env
 .env.production
