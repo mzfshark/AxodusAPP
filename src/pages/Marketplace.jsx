@@ -4,7 +4,7 @@ const Marketplace = () => {
   return (
     <>
       
-<!-- Hero Featured Section -->
+
 <section className="relative h-[480px] rounded-3xl overflow-hidden mb-12 group">
 <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract flowing liquid 3d shapes in deep purple and cyan colors with futuristic digital lighting and grainy texture" style={{"backgroundImage":"url('https"}}>
 </div>
@@ -31,7 +31,7 @@ const Marketplace = () => {
 </div>
 </div>
 </div>
-<!-- Floating Data Card -->
+
 <div className="absolute bottom-8 right-8 glass-panel p-6 rounded-2xl border border-outline-variant/20 hidden lg:block">
 <div className="flex items-center gap-4 mb-4">
 <img alt="Creator" className="w-12 h-12 rounded-full border-2 border-primary" data-alt="professional portrait of a digital artist with cool blue lighting and tech accessories" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi0JXBBF9Y0Twat9Ugen55xhQFG4va-1ZGR_4HWKr-BMxfb0dpuV4kRqRwuPDNo5V4prnS6t7TkwG3oIQLG6naqDs-uPnzkgelIo5CHjURTp61oboyBsSNYkg6_hQtv9HJuq6dxBkyv-ep-2mjRjgSXU3L6dR_Pkx1475Lx4qjck3eyxQP__4O3NfQeR6kxC0fSNggoKH1pXsHvjb9R9CzbfdOzTdsGiDb1St4O7xA6RoCsBOXktcJi4qpRzOMi9rrqzWlZxO7O-I"/>
@@ -52,9 +52,9 @@ const Marketplace = () => {
 </div>
 </div>
 </section>
-<!-- Categorized Grid -->
+
 <div className="space-y-16">
-<!-- NFTs Section -->
+
 <section>
 <div className="flex items-center justify-between mb-8">
 <div>
@@ -66,7 +66,7 @@ const Marketplace = () => {
 </a>
 </div>
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-<!-- Card 1 -->
+
 <div className="bg-surface-container-low rounded-2xl overflow-hidden group border border-outline-variant/10 hover:border-primary/30 transition-all duration-300">
 <div className="relative h-64">
 <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="vibrant 3d abstract shape with chrome textures and neon orange glowing edges on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDepEUlHo7rJ9elNvDJcpUaQhUg4IHTYGRf_dWRVyFf4ok2d8LKvuzeTWhJ0hKepOQKpoiMDbvPIqMOxO5l7ExvFbVnQrb_6oQLJ1PriS5LpaNAymup-KQhnxSQFlDTknDyWKpv7d2YPXyRRfzrzmVtBLh1WOF76g5E11WMBEA0HPTVtA1c3d5i0GnWVkyp7zby9DHi1m2oGGeZ36xT7naC_TkqNnctlVeWSgeo_YSmaZ5rEK1Jzi0RCgF17GvC2I9IUogYVPQiN58"/>
@@ -86,7 +86,7 @@ const Marketplace = () => {
 </div>
 </div>
 </div>
-<!-- Card 2 -->
+
 <div className="bg-surface-container-low rounded-2xl overflow-hidden group border border-outline-variant/10 hover:border-primary/30 transition-all duration-300">
 <div className="relative h-64">
 <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="cyberpunk character portrait with neon pink light reflections and futuristic eyewear in soft focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeXybBTEotOskrSrvA3QHdJKNrN8-7EsQ4eDRoVGfjTThCDKXaDZ1h56222AJgX3zbLGuqe77-t6eVEzCtilc7_LuvAZOnTuRcdqPfYR5PZcuB_aKjUnUvfblTm-M0WRr4ovywUq7jgWvlNwlXgMz5ZLOtsHcDRiiuyK_8s2iaFKwGPuBeioAg0oIj26TpcRLmNt0dM2-JQbg8ySrVoYFEtGnvWtMTyUMHxBGHN7ZMppcGzNw-_Nc-cP9IjZ5cxRxMoRdyNHpig1g"/>
@@ -106,7 +106,7 @@ const Marketplace = () => {
 </div>
 </div>
 </div>
-<!-- Card 3 -->
+
 <div className="bg-surface-container-low rounded-2xl overflow-hidden group border border-outline-variant/10 hover:border-primary/30 transition-all duration-300">
 <div className="relative h-64">
 <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="minimalist geometric topography in deep navy and silver colors with sharp shadows and high contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-c34m81HxKuKhwHJ_SFWAmQO7RZtUYEPCwWxwX-BZ51V5SlohmkV8ScwCtDj3GhOk2YsLfVm5N2t9mSk1el4J8OMNWdLkCvdPgP1AmEDqdG6frARCY8v26k9E422tnC46tVKKf285_ukWN_-519riK6B_WO3_0ikyS22D9FMNzojUho7AGHYSmUUIeTqxk9GCOcCe8zoGFFe7-3lYf8pZjXlro2NAuG5OSaVpPsHCcy9vn4agFXDpgQ0Dhbv1w7mIWYMCUNEi5Ho"/>
@@ -126,7 +126,7 @@ const Marketplace = () => {
 </div>
 </div>
 </div>
-<!-- Card 4 -->
+
 <div className="bg-surface-container-low rounded-2xl overflow-hidden group border border-outline-variant/10 hover:border-primary/30 transition-all duration-300">
 <div className="relative h-64">
 <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="shimmering iridescent texture resembling digital oil spill with fluid motion and holographic highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAznZdq-RIv8rNm95fKBDpftqOXQ-cwUVpGNl0BuRB2askGYzPLKaPlJfIP9BpHkrDDkcb2xQVL9jYDRwtWeW5WxuFN6UvZn5k_Hay_NQ4ca8URzVZKnUlcg07vTawv9n-Gkvopm939W856hARy5kyr2dY0ePdZ-yWCRq29xWCHl72x56WMZWWkyrDgeNt7tQAofpSsHoMTy9BzZCGjQvDc9jXPZmC2utxdwzTstSCw_soEbZX4pOaBM5I5k02l69G9u-39yg0mZRs"/>
@@ -148,9 +148,9 @@ const Marketplace = () => {
 </div>
 </div>
 </section>
-<!-- Bento Grid for Courses & Games -->
+
 <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-<!-- Premium Courses (2 columns) -->
+
 <div className="lg:col-span-2">
 <div className="flex items-center justify-between mb-8">
 <h2 className="text-3xl font-black tracking-tighter">Masterclasses</h2>
@@ -190,7 +190,7 @@ const Marketplace = () => {
 </div>
 </div>
 </div>
-<!-- Games Sidebar (1 column) -->
+
 <div className="lg:col-span-1">
 <h2 className="text-3xl font-black tracking-tighter mb-8">Top Subscriptions</h2>
 <div className="space-y-4">
@@ -237,7 +237,7 @@ const Marketplace = () => {
 </div>
 </section>
 </div>
-<!-- Footer Meta -->
+
 <footer className="mt-24 pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-8 pb-12">
 <div className="flex items-center gap-4 opacity-50">
 <span className="text-xl font-bold tracking-tighter">Axodus</span>

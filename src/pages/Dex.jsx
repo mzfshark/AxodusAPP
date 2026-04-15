@@ -4,12 +4,12 @@ const Dex = () => {
   return (
     <>
       
-<!-- Hero Section: Trading Dashboard -->
+
 <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-<!-- Left: Swap & Chart (Editorial Centerpiece) -->
+
 <div className="xl:col-span-8 flex flex-col gap-6">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-<!-- Swap Card -->
+
 <div className="glass-card rounded-3xl p-6 flex flex-col">
 <div className="flex justify-between items-center mb-6">
 <h2 className="text-lg font-semibold tracking-tight">Swap</h2>
@@ -18,7 +18,7 @@ const Dex = () => {
 </div>
 </div>
 <div className="space-y-2">
-<!-- From Token -->
+
 <div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
 <div className="flex justify-between mb-2">
 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">From</span>
@@ -33,13 +33,13 @@ const Dex = () => {
 </button>
 </div>
 </div>
-<!-- Swap Middle Icon -->
+
 <div className="flex justify-center -my-3 relative z-10">
 <div className="w-10 h-10 bg-surface-container-highest rounded-xl border-4 border-[#0b1326] flex items-center justify-center text-primary cursor-pointer hover:scale-110 transition-transform shadow-xl">
 <span className="material-symbols-outlined" data-icon="arrow_downward">arrow_downward</span>
 </div>
 </div>
-<!-- To Token -->
+
 <div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
 <div className="flex justify-between mb-2">
 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">To (Estimated)</span>
@@ -55,7 +55,7 @@ const Dex = () => {
 </div>
 </div>
 </div>
-<!-- Price Impact & Details -->
+
 <div className="mt-6 space-y-3 px-1">
 <div className="flex justify-between text-xs">
 <span className="text-slate-400">Exchange Rate</span>
@@ -74,7 +74,7 @@ const Dex = () => {
               Swap Tokens
             </button>
 </div>
-<!-- Mini Chart -->
+
 <div className="glass-card rounded-3xl p-6 flex flex-col">
 <div className="flex justify-between items-start mb-4">
 <div>
@@ -91,7 +91,7 @@ const Dex = () => {
 </div>
 </div>
 <div className="flex-1 w-full relative group">
-<!-- Visual representation of a sparkline chart -->
+
 <svg className="w-full h-full min-h-[180px]" preserveAspectRatio="none" viewBox="0 0 400 200">
 <defs>
 <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
@@ -101,10 +101,10 @@ const Dex = () => {
 </defs>
 <path d="M0,150 Q40,140 80,160 T160,120 T240,80 T320,100 T400,40" fill="none" stroke="#41e4b8" strokeLinecap="round" strokeWidth="3"></path>
 <path d="M0,150 Q40,140 80,160 T160,120 T240,80 T320,100 T400,40 L400,200 L0,200 Z" fill="url(#chartGradient)"></path>
-<!-- Animated-like point -->
+
 <circle className="animate-pulse" cx="400" cy="40" fill="#41e4b8" r="4"></circle>
 </svg>
-<!-- Chart Overlay info -->
+
 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/20 pointer-events-none">
 <div className="bg-surface-bright px-3 py-1.5 rounded-lg border border-white/10 shadow-2xl">
 <p className="text-[10px] text-slate-400 font-bold uppercase">Volume 24h</p>
@@ -128,7 +128,7 @@ const Dex = () => {
 </div>
 </div>
 </div>
-<!-- Top Pools Section (Asymmetric Data Table) -->
+
 <section className="glass-card rounded-3xl overflow-hidden">
 <div className="p-6 flex justify-between items-end border-b border-white/5">
 <div>
@@ -220,9 +220,9 @@ const Dex = () => {
 </div>
 </section>
 </div>
-<!-- Right: Hooks & My Liquidity (The Precision Stack) -->
+
 <div className="xl:col-span-4 flex flex-col gap-6">
-<!-- Uniswap v4 Hooks Module -->
+
 <div className="relative group rounded-3xl p-[1px] overflow-hidden">
 <div className="absolute inset-0 bg-gradient-to-br from-primary via-transparent to-secondary opacity-20"></div>
 <div className="relative glass-card rounded-[23px] p-6 h-full">
@@ -265,7 +265,7 @@ const Dex = () => {
             </button>
 </div>
 </div>
-<!-- My Liquidity (Inset Style) -->
+
 <div className="glass-card rounded-3xl p-6">
 <div className="flex justify-between items-center mb-6">
 <h2 className="text-lg font-bold tracking-tight">My Liquidity</h2>
@@ -274,7 +274,7 @@ const Dex = () => {
 </button>
 </div>
 <div className="space-y-4">
-<!-- Position 1 -->
+
 <div className="p-4 bg-surface-container-lowest rounded-2xl border border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">
@@ -298,7 +298,7 @@ const Dex = () => {
 <span className="text-[10px] text-slate-400">In-range</span>
 </div>
 </div>
-<!-- Position 2 -->
+
 <div className="p-4 bg-surface-container-lowest rounded-2xl border border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">

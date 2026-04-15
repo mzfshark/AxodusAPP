@@ -4,9 +4,9 @@ const Mining = () => {
   return (
     <>
       
-<!-- Canvas Body -->
+
 <div className="pt-24 px-8 pb-12 space-y-10 max-w-[1600px] mx-auto">
-<!-- 1. Header Metrics (Editorial Style) -->
+
 <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
 <div className="surface-container-low p-6 rounded-2xl flex flex-col justify-between min-h-[140px]">
 <span className="text-[10px] font-bold tracking-widest text-outline uppercase">Global Hashrate</span>
@@ -50,16 +50,16 @@ const Mining = () => {
                 </div>
 </div>
 </section>
-<!-- 2. Mining Products & 3. Your Yield (Asymmetric Grid) -->
+
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-<!-- Mining Products Section -->
+
 <section className="lg:col-span-2 space-y-6">
 <div className="flex items-center justify-between">
 <h2 className="text-2xl font-semibold tracking-tight text-white">Mining Products</h2>
 <span className="text-sm font-medium text-primary cursor-pointer hover:underline">View All Protocols</span>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-<!-- Card 1: Minto Finance -->
+
 <div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
 <div className="w-16 h-16 rounded-2xl bg-[#060e20] flex items-center justify-center shrink-0 border border-outline-variant/10">
 <img className="w-10 h-10 object-contain" data-alt="abstract crypto logo for minto finance with geometric lines and blue neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPBEiVUmSpZNikDiFAGnMbL2W0Qjq2wZh7iMpgvSHSiFXoN3Hqc-MI1YfieKR_NMyg7HgwmBFE4kpTyjkHDe6YzvXQXRzjgLna7Itp4DnQFX8Dug8pggKrI0G3i-Tv-7NG1rmdf2K7wk_KG_hPt8ANbMrm9trMZPmvkdiEwoNrXjccObIqp5rBY-3kb7yTeXHc8C8djE-NtLkfy_0NrJdcQvGb_9qxBGdOGWFA5mVl3wZlox_6ZHW_hg9NsaMN_nvA9QEhGasa8FI"/>
@@ -87,7 +87,7 @@ const Mining = () => {
 </div>
 </div>
 </div>
-<!-- Card 2: GoMining -->
+
 <div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
 <div className="w-16 h-16 rounded-2xl bg-[#060e20] flex items-center justify-center shrink-0 border border-outline-variant/10">
 <img className="w-10 h-10 object-contain" data-alt="vibrant 3D digital token for goming project with neon green accents and futuristic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTKe13-JaGYeLq7ZNnJqEhjI7JhWpzAqVITa9RqBkr3MEJp56WZoZyqwx5e2phs51Lo09RYtXZhdfYoopqpZSZB3IzamsBqUxvpO7AuVy3XSiu43faIqhA3R80uvEjbJubb0wH6nboFZNe5Po5azOQODD6FOwtcJbsjnBlb6_-MNKf5bhd-fi2biC0NLylROW0YZsXlIawFuOr9bPXlg6GgEAUCYBhC56-YLGIvsJ21-kDDQ__OUR5oNfjJVlMmlI3_GSlCfnnej4"/>
@@ -115,7 +115,7 @@ const Mining = () => {
 </div>
 </div>
 </div>
-<!-- Card 3: BitFuFu -->
+
 <div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row gap-8 items-center group hover:bg-[#2d3449]/60 transition-all duration-300">
 <div className="w-16 h-16 rounded-2xl bg-[#060e20] flex items-center justify-center shrink-0 border border-outline-variant/10">
 <img className="w-10 h-10 object-contain" data-alt="blue and white geometric logo for cloud mining service with professional fintech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEAemm2zIkJxMGhzoBEj1c4RcEX3pi-0KhZSGS5YacKAzhIHUmuZOGRLwih4esRW1Xa8tqV3Es5bWV1esEgCc5588GdbYfqhwDUVjRe5WBMac6qHJmwWo-h7QiG2yfW-MZLiXYmklDvaRTBMsQt7T9IkT2y4W3ht0eXeQVwHySgfHou7tZ8KctFQtruxSVx0wDNE9BjivoEzdS48GFiPoS64t6YMC4d8vuDrY9OaZIi_u5fTvzKAnkti1cMbWHpHZtluX5a0yZ5HU"/>
@@ -145,7 +145,7 @@ const Mining = () => {
 </div>
 </div>
 </section>
-<!-- 3. Your Yield Section (Column 3) -->
+
 <section className="space-y-6">
 <div className="flex items-center justify-between">
 <h2 className="text-2xl font-semibold tracking-tight text-white">Your Yield</h2>
@@ -158,9 +158,9 @@ const Mining = () => {
 </div>
 <span className="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded">+12.4%</span>
 </div>
-<!-- Visual Mock of Chart -->
+
 <div className="flex-1 relative flex items-end gap-1 px-2">
-<!-- SVG Curve Overlay -->
+
 <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
 <path d="M0,150 Q50,130 100,140 T200,100 T300,120 T400,60 T500,80" fill="none" stroke="#c0c1ff" strokeLinecap="round" strokeWidth="3"></path>
 <path d="M0,150 Q50,130 100,140 T200,100 T300,120 T400,60 T500,80 L500,200 L0,200 Z" fill="url(#grad)" opacity="0.1"></path>
@@ -171,7 +171,7 @@ const Mining = () => {
 </linearGradient>
 </defs>
 </svg>
-<!-- Data Columns (Hidden/Ghost) -->
+
 <div className="flex-1 h-32 bg-outline-variant/5 rounded-t-sm"></div>
 <div className="flex-1 h-24 bg-outline-variant/5 rounded-t-sm"></div>
 <div className="flex-1 h-36 bg-outline-variant/5 rounded-t-sm"></div>
@@ -193,7 +193,7 @@ const Mining = () => {
 </div>
 </section>
 </div>
-<!-- 4. Live Hashpower Section (Full Width Data Viz) -->
+
 <section className="space-y-6">
 <div className="flex items-center justify-between">
 <h2 className="text-2xl font-semibold tracking-tight text-white">Live Hashpower Distribution</h2>
@@ -204,7 +204,7 @@ const Mining = () => {
 </div>
 <div className="surface-container-low rounded-2xl p-8 relative overflow-hidden">
 <div className="flex flex-col md:flex-row gap-12 items-center">
-<!-- Progress Circle / Radial Viz -->
+
 <div className="relative w-48 h-48 shrink-0">
 <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
 <circle className="text-outline-variant/10" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" strokeWidth="8"></circle>
@@ -216,7 +216,7 @@ const Mining = () => {
 <span className="text-[10px] font-bold text-outline uppercase">Total TH/s</span>
 </div>
 </div>
-<!-- Legend and Details -->
+
 <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
 <div className="space-y-4">
 <div className="flex items-center gap-3">
@@ -250,7 +250,7 @@ const Mining = () => {
 </div>
 </div>
 </div>
-<!-- Ambient Background Decoration -->
+
 <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/5 blur-[120px] rounded-full"></div>
 </div>
 </section>

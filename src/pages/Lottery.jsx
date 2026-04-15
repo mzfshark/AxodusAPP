@@ -5,7 +5,7 @@ const Lottery = () => {
     <>
       
 <div className="p-8 space-y-8 max-w-7xl mx-auto">
-<!-- Hero Section: Super7 Jackpot -->
+
 <section className="relative overflow-hidden rounded-2xl bg-surface-container-low min-h-[400px] flex items-center ghost-border">
 <div className="absolute inset-0 z-0">
 <div className="absolute inset-0 bg-gradient-to-r from-surface-container-low via-surface-container-low/80 to-transparent z-10"></div>
@@ -50,10 +50,10 @@ const Lottery = () => {
 </div>
 </div>
 </section>
-<!-- Game Cards Grid -->
+
 <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
 <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-<!-- Super7 Card -->
+
 <div className="bg-surface-container-high rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden group">
 <div className="absolute -right-16 -top-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
 <div className="flex justify-between items-start">
@@ -74,7 +74,7 @@ const Lottery = () => {
 <button className="w-full bg-surface-container-highest hover:bg-surface-bright text-white py-3 rounded-xl font-bold transition-colors">Select Numbers</button>
 </div>
 </div>
-<!-- EasyLotto Card -->
+
 <div className="bg-surface-container-high rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden group">
 <div className="absolute -right-16 -top-16 w-48 h-48 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all"></div>
 <div className="flex justify-between items-start">
@@ -96,7 +96,7 @@ const Lottery = () => {
 </div>
 </div>
 </div>
-<!-- Recent Winners Ticker -->
+
 <div className="bg-surface-container-low rounded-2xl border border-outline-variant/5 flex flex-col">
 <div className="p-6 border-b border-outline-variant/10 flex justify-between items-center">
 <h4 className="font-bold text-white flex items-center gap-2">
@@ -106,7 +106,7 @@ const Lottery = () => {
 <span className="text-xs text-primary font-semibold">View All</span>
 </div>
 <div className="p-2 overflow-y-auto max-h-[340px] space-y-1">
-<!-- Winner 1 -->
+
 <div className="flex items-center gap-4 p-4 hover:bg-surface-container-highest/30 rounded-xl transition-colors">
 <img alt="Winner Avatar" className="w-10 h-10 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYjVMalRtquaeCrHIAFxoTWlL35EWn7I2FSuoceq_ZnnaSIe2dQTV_-7ETPJRKuLHEXSy7589zHxUwzv_DTWcdNZPgSmWmH1PaiGVSYMRKI23JSzQor-WLnZuNmpKpx7NPb6ecuwnsGrkFlz42DD94XDYwaEpGullTw-Uqm1vUs288OLxcLt9rIsVgOD7N-DX_4Z-Fvx-T-h_7WXLZ2z7qyCsmq5xd8mi7d5TOlbCW9HHBGbXUQsM06M0ht9uCraWjSYwZKI9zHcY"/>
 <div className="flex-1">
@@ -115,7 +115,7 @@ const Lottery = () => {
 </div>
 <span className="text-[10px] text-outline">2m ago</span>
 </div>
-<!-- Winner 2 -->
+
 <div className="flex items-center gap-4 p-4 hover:bg-surface-container-highest/30 rounded-xl transition-colors">
 <img alt="Winner Avatar" className="w-10 h-10 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAocXx3fo_qBZwV5y1s1wKN0CpOnwrlNrEtlA_grggDM9vGsjFR_gleHW0O_oVdk5Bypp0L0ATJF3onk7irePxrRZfyoh3nFS8q_V7LgUzC8W6Q5Cu4mgp_n8ClDZMv12Ulx9Pb02E_g5UMBE86JByuwT2fxI1go-BteM_UpslqDYuCKJEB8JPnDPAfacQ5935qecq3j2GocWkVQopPAjOJxhTjsQ2BRpVvcXRCtVMTH0ZFOOaO-JQChFf5ggj4sBkNNwb6fUShd2Y"/>
 <div className="flex-1">
@@ -124,7 +124,7 @@ const Lottery = () => {
 </div>
 <span className="text-[10px] text-outline">15m ago</span>
 </div>
-<!-- Winner 3 -->
+
 <div className="flex items-center gap-4 p-4 hover:bg-surface-container-highest/30 rounded-xl transition-colors">
 <img alt="Winner Avatar" className="w-10 h-10 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmQZC8PeFF9PEw4O2ILFu1YdLNfbx8DDOFfeiIS2x1bz7IYDdKWMMe9YNrIUnYzQrJwUN0hRucn_pwJRftKPJ895k0QXMjz3uPE8UvpBYcGB9QyIFTkgLUzgOznwUfrDjhNFDQSGBxOSFYYJfzHZ45vEOUxzOLJKFQKRWiiswj-eun5brcQAVxsN4FQ3jpH5Lz5cDm5IpjnPwYz69YI-LOubV6WuW-mS6PkUN9TIQdbOIXodRBCu4L_N4mW0aNuiqLPSVz8HXAIdc"/>
 <div className="flex-1">
@@ -133,7 +133,7 @@ const Lottery = () => {
 </div>
 <span className="text-[10px] text-outline">1h ago</span>
 </div>
-<!-- Winner 4 -->
+
 <div className="flex items-center gap-4 p-4 hover:bg-surface-container-highest/30 rounded-xl transition-colors">
 <img alt="Winner Avatar" className="w-10 h-10 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbBOOpKA3X4QLoefNEzaFUv9ApiLxF96V4IH6aBXo1n5hkFwBWR1oIS0vqjNk0vew3hUNYNGL9m4W_YxX-PJKWlUoSyF4xgcCK6Lg4hkrV6DkgcRH32nB095uvhTCTM2W4cNeOvtY3i4zy-ODlExqUPkIylMU8s0DAfIvxRDoRnTUTH8WyQpr2B6-7lgxvJ-trF2xbCEvL2SkM-A84ZX7czqO4PKPEuBCvTTml_HwO141sOmDdohmWt90YwD3MSuoihrlCqEy_2dg"/>
 <div className="flex-1">
@@ -145,9 +145,9 @@ const Lottery = () => {
 </div>
 </div>
 </section>
-<!-- Ticket Management & Transparency -->
+
 <section className="grid grid-cols-1 md:grid-cols-4 gap-8">
-<!-- User Tickets -->
+
 <div className="md:col-span-3 space-y-6">
 <div className="flex justify-between items-end">
 <h2 className="text-3xl font-bold tracking-tight text-white">Your Active Tickets</h2>
@@ -157,7 +157,7 @@ const Lottery = () => {
 </div>
 </div>
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-<!-- Active Ticket Card -->
+
 <div className="p-6 rounded-2xl bg-[#060e20] border-l-4 border-primary ghost-border flex items-center justify-between">
 <div className="space-y-1">
 <p className="text-[10px] text-primary font-bold uppercase tracking-widest">Super7 Weekly</p>
@@ -177,7 +177,7 @@ const Lottery = () => {
 <p className="text-lg font-bold text-white font-mono">14:02:11</p>
 </div>
 </div>
-<!-- EasyLotto Ticket -->
+
 <div className="p-6 rounded-2xl bg-[#060e20] border-l-4 border-secondary ghost-border flex items-center justify-between">
 <div className="space-y-1">
 <p className="text-[10px] text-secondary font-bold uppercase tracking-widest">EasyLotto Hourly</p>
@@ -196,7 +196,7 @@ const Lottery = () => {
 </div>
 </div>
 </div>
-<!-- How it Works -->
+
 <div className="bg-surface-container-high rounded-2xl p-6 space-y-6">
 <h4 className="text-lg font-bold text-white">Transparency</h4>
 <div className="space-y-4">
