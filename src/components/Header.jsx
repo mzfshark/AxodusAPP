@@ -2,12 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import WalletConnectButton from './WalletConnectButton';
+import logo from '../assets/logo.png';
 
 export default function Header() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-opacity-60 bg-[#0b1326] flex justify-between items-center px-6 py-3 border-b border-white/5 font-['Inter'] tracking-tight text-sm font-semibold">
       <div className="flex items-center gap-8">
-        <Link to="/dashboard" className="text-xl font-bold tracking-tighter text-indigo-300">Axodus</Link>
+        <Link to="/dashboard" className="flex items-center">
+          <img src={logo} alt="Axodus" className="h-8 w-auto" />
+        </Link>
         {/* Search Bar Center */}
         <div className="hidden md:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 min-w-[320px]">
           <span className="material-symbols-outlined text-slate-500 text-sm">search</span>
