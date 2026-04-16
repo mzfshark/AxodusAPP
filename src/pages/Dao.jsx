@@ -1,267 +1,317 @@
 import React from "react";
 import "@/styles/Global.css";
 
-const Overview = () => {
+const Dao = () => {
   return (
     <main className="flex-1 overflow-y-auto bg-background p-8">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Ecosystem Overview</h1>
-        <p className="text-on-surface-variant text-sm">Real-time observatory of your Axodus digital footprint.</p>
-      </header>
-      {/* 1. Financial Summary Bento Section */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-2 bg-surface-container-highest p-8 rounded-xl relative overflow-hidden flex items-center">
-          <div className="relative z-10 w-1/2">
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 block">Total Net Worth</span>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-5xl font-extrabold tracking-tighter text-white">$142,850.32</span>
-              <span className="text-secondary text-sm font-bold flex items-center">
-                <span className="material-symbols-outlined text-sm">trending_up</span> +5.24%
-              </span>
-            </div>
-            <div className="flex gap-4 mt-8">
-              <button className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-transform">Deposit</button>
-              <button className="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm border border-outline-variant/10 hover:bg-surface-bright transition-colors">Withdraw</button>
-            </div>
-          </div>
-          <div className="w-1/2 h-full flex items-end">
-            <div className="w-full h-40 flex items-end gap-1 px-4 opacity-60">
-              {/* Simple custom CSS sparkline visualization */}
-              <div className="bg-secondary/40 w-full h-[30%] rounded-t-sm"></div>
-              <div className="bg-secondary/50 w-full h-[45%] rounded-t-sm"></div>
-              <div className="bg-secondary/60 w-full h-[40%] rounded-t-sm"></div>
-              <div className="bg-secondary/70 w-full h-[60%] rounded-t-sm"></div>
-              <div className="bg-secondary/80 w-full h-[55%] rounded-t-sm"></div>
-              <div className="bg-secondary/90 w-full h-[75%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[90%] rounded-t-sm shadow-[0_0_15px_#41e4b8]"></div>
-            </div>
-          </div>
-          {/* Decorative Radial Gradient */}
-          <div className="absolute -right-20 -top-20 w-80 h-80 bg-primary/5 rounded-full blur-[80px]"></div>
+      {/* Page Header with Action */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Governance</span>
+          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Kinetic Proposals</h1>
         </div>
-        <div className="bg-surface-container-highest p-8 rounded-xl flex flex-col justify-between">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6 block">Current APY Focus</span>
-            <div className="flex items-center justify-center py-4">
-              <div className="relative w-32 h-32 flex items-center justify-center">
-                <svg className="absolute inset-0 w-full h-full -rotate-90">
-                  <circle className="text-surface-container-high" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" strokeWidth="8"></circle>
-                  <circle className="text-indigo-400" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" strokeDasharray="364.4" strokeDashoffset="100" strokeWidth="8"></circle>
-                </svg>
-                <span className="text-2xl font-bold text-white">18.4%</span>
-              </div>
-            </div>
+        <button className="primary-gradient flex items-center gap-2 px-6 py-3 text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95 transition-all">
+          <span className="material-symbols-outlined" data-icon="add_circle" style={{fontVariationSettings: "'FILL' 1"}}>add_circle</span>
+          Create Proposal
+        </button>
+      </div>
+
+      {/* Bento Grid Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+        {/* Voting Power */}
+        <div className="md:col-span-1 bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="material-symbols-outlined text-6xl" data-icon="electric_bolt">electric_bolt</span>
           </div>
-          <div className="text-center text-xs text-on-surface-variant font-medium">
-            Projected monthly yield: <span className="text-indigo-300">+$2,189.20</span>
+          <div className="text-xs font-medium text-outline mb-4">Voting Power</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-black text-on-surface">1,420</span>
+            <span className="text-sm font-bold text-secondary">VP</span>
+          </div>
+          <div className="mt-4 flex items-center gap-1 text-[10px] text-secondary">
+            <span className="material-symbols-outlined text-xs">trending_up</span>
+            +12% from last epoch
           </div>
         </div>
-      </section>
-      {/* 2. Portfolio Distribution & Yields */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-        {/* Distribution Visual */}
-        <div className="lg:col-span-5 glass-panel p-8 rounded-xl border border-white/5">
-          <h3 className="text-lg font-bold text-white mb-8">Portfolio Distribution</h3>
-          <div className="relative flex flex-col items-center justify-center">
-            {/* Radar Chart SVG */}
-            <div className="w-full aspect-square max-w-[320px] relative flex items-center justify-center">
-              <svg className="w-full h-full" viewBox="0 0 200 200">
-                <defs>
-                  <linearGradient id="radarGradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                    <stop offset="0%" stopColor="#818cf8"></stop>
-                    <stop offset="100%" stopColor="#41e4b8"></stop>
-                  </linearGradient>
-                  <filter height="140%" id="glow" width="140%" x="-20%" y="-20%">
-                    <feGaussianBlur result="blur" stdDeviation="3"></feGaussianBlur>
-                    <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
-                  </filter>
-                </defs>
-                {/* Grid Lines (Pentagons) */}
-                <polygon fill="none" points="100,20 176,75 147,165 53,165 24,75" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                <polygon fill="none" points="100,40 157,81 135,149 65,149 43,81" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                <polygon fill="none" points="100,60 138,88 123,133 77,133 62,88" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                <polygon fill="none" points="100,80 119,94 111,117 89,117 81,94" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                {/* Axis Lines */}
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="100" y1="100" y2="20"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="176" y1="100" y2="75"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="147" y1="100" y2="165"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="53" y1="100" y2="165"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="24" y1="100" y2="75"></line>
-                {/* Data Shape (Mining: 85%, Bot: 70%, DeFi: 60%, Gov: 40%, Bus: 55%) */}
-                <polygon fill="url(#radarGradient)" fillOpacity="0.2" filter="url(#glow)" points="100,32 153,83 128,139 81,126 58,86" stroke="url(#radarGradient)" strokeWidth="2"></polygon>
-                {/* Vertices Data Points */}
-                <circle cx="100" cy="32" fill="#818cf8" r="2"></circle>
-                <circle cx="153" cy="83" fill="#61b8da" r="2"></circle>
-                <circle cx="128" cy="139" fill="#41e4b8" r="2"></circle>
-                <circle cx="81" cy="126" fill="#41e4b8" r="2"></circle>
-                <circle cx="58" cy="86" fill="#818cf8" r="2"></circle>
-              </svg>
-              {/* Labels Overlay */}
-              <div className="absolute -top-4 text-[10px] font-bold text-indigo-300 uppercase tracking-tighter">Mining</div>
-              <div className="absolute right-0 top-1/3 translate-x-4 text-[10px] font-bold text-slate-300 uppercase tracking-tighter">Bot Trading</div>
-              <div className="absolute right-8 bottom-0 text-[10px] font-bold text-secondary uppercase tracking-tighter">DeFi</div>
-              <div className="absolute left-8 bottom-0 text-[10px] font-bold text-secondary uppercase tracking-tighter">Governance</div>
-              <div className="absolute left-0 top-1/3 -translate-x-4 text-[10px] font-bold text-indigo-300 uppercase tracking-tighter">Business</div>
-            </div>
-            {/* Data Legend */}
-            <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-3 w-full max-w-xs mx-auto">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">Mining: 42%</span>
+
+        {/* Total Staked */}
+        <div className="md:col-span-1 bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <span className="material-symbols-outlined text-6xl" data-icon="account_balance_wallet">account_balance_wallet</span>
+          </div>
+          <div className="text-xs font-medium text-outline mb-4">Total Staked</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-black text-on-surface">12.4M</span>
+            <span className="text-sm font-bold text-primary">AXO</span>
+          </div>
+          <div className="mt-4 flex items-center gap-1 text-[10px] text-primary">
+            <span className="material-symbols-outlined text-xs">lock</span>
+            84% of circulating supply
+          </div>
+        </div>
+
+        {/* Treasury Balance */}
+        <div className="md:col-span-2 bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group border border-outline-variant/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"></div>
+          <div className="relative z-10">
+            <div className="text-xs font-medium text-outline mb-4">Treasury Balance</div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+              <div>
+                <span className="text-3xl font-black text-on-surface">$42,910,204</span>
+                <div className="text-[10px] text-outline mt-1 uppercase tracking-widest font-bold">Consolidated Net Worth</div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-secondary"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">Bots: 35%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">DeFi: 23%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-slate-500"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">Other: 10%</span>
+              <div className="h-10 w-px bg-outline-variant/20 hidden sm:block"></div>
+              <div className="flex gap-4">
+                <div>
+                  <div className="text-[10px] text-outline">USDC</div>
+                  <div className="text-sm font-bold">24.1M</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-outline">ETH</div>
+                  <div className="text-sm font-bold">4.2K</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-outline">SOL</div>
+                  <div className="text-sm font-bold">18.9K</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        {/* Yield Products Table */}
-        <div className="lg:col-span-7 bg-surface-container-highest p-8 rounded-xl">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold text-white">Active Yield Streams</h3>
-            <button className="text-indigo-400 text-xs font-bold hover:underline">View All</button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-[10px] uppercase tracking-widest text-slate-500 border-b border-white/5">
-                  <th className="pb-4 font-semibold">Product</th>
-                  <th className="pb-4 font-semibold">Allocation</th>
-                  <th className="pb-4 font-semibold">Current Yield</th>
-                  <th className="pb-4 font-semibold">Risk</th>
-                  <th className="pb-4 font-semibold text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                <tr className="border-b border-white/5 hover:bg-surface-bright/20 transition-colors">
-                  <td className="py-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-indigo-500/20 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">bolt</span>
-                    </div>
-                    <span className="font-semibold">Antminer S21 Pool</span>
-                  </td>
-                  <td className="py-4 text-slate-300">$60,000</td>
-                  <td className="py-4 font-bold text-secondary">22.4% APY</td>
-                  <td className="py-4"><span className="px-2 py-0.5 rounded text-[10px] bg-slate-500/10 text-slate-400 font-bold uppercase">Med</span></td>
-                  <td className="py-4 text-right"><span className="w-2 h-2 rounded-full bg-secondary inline-block"></span></td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-surface-bright/20 transition-colors">
-                  <td className="py-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-secondary/20 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-secondary text-lg">smart_toy</span>
-                    </div>
-                    <span className="font-semibold">High-Freq ETH Bot</span>
-                  </td>
-                  <td className="py-4 text-slate-300">$49,500</td>
-                  <td className="py-4 font-bold text-secondary">31.2% ROI</td>
-                  <td className="py-4"><span className="px-2 py-0.5 rounded text-[10px] bg-error/10 text-error font-bold uppercase">High</span></td>
-                  <td className="py-4 text-right"><span className="w-2 h-2 rounded-full bg-secondary inline-block"></span></td>
-                </tr>
-                <tr className="hover:bg-surface-bright/20 transition-colors">
-                  <td className="py-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-tertiary/20 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-tertiary text-lg">account_balance</span>
-                    </div>
-                    <span className="font-semibold">USDC/ETH LP Vault</span>
-                  </td>
-                  <td className="py-4 text-slate-300">$32,850</td>
-                  <td className="py-4 font-bold text-secondary">11.8% APY</td>
-                  <td className="py-4"><span className="px-2 py-0.5 rounded text-[10px] bg-green-500/10 text-green-400 font-bold uppercase">Low</span></td>
-                  <td className="py-4 text-right"><span className="w-2 h-2 rounded-full bg-secondary inline-block"></span></td>
-                </tr>
-              </tbody>
-            </table>
+      </div>
+
+      {/* Active Proposals Section */}
+      <div className="space-y-6 mt-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-on-surface flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary" data-icon="ballot" style={{fontVariationSettings: "'FILL' 1"}}>ballot</span>
+            Active Proposals
+          </h2>
+          <div className="flex gap-2">
+            <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border border-primary/20">All</button>
+            <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Core</button>
+            <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Grants</button>
           </div>
         </div>
-      </section>
-      {/* 3. Governance & Business Status */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Governance Proposals */}
-        <div className="bg-surface-container-highest p-8 rounded-xl border border-white/5">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <span className="material-symbols-outlined text-indigo-400">gavel</span> Active Governance
-            </h3>
-          </div>
-          <div className="space-y-6">
-            <div className="p-4 bg-surface-container rounded-lg border border-outline-variant/10">
-              <div className="flex justify-between items-start mb-3">
-                <h4 className="text-sm font-bold text-on-surface">AX-104: Expand Mining in Norway</h4>
-                <span className="px-2 py-1 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">CORE</span>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {/* Proposal Card 1 */}
+          <div className="glass-panel rounded-2xl p-6 border border-outline-variant/5 hover:border-primary/20 transition-all group">
+            <div className="flex justify-between items-start mb-6">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black bg-secondary/10 text-secondary px-2 py-0.5 rounded border border-secondary/20 uppercase tracking-tighter">Active</span>
+                  <span className="text-[10px] text-outline font-bold uppercase tracking-wider">Proposal #084</span>
+                </div>
+                <h3 className="text-lg font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">
+                  Liquidity Mining Rewards Optimization for Q3
+                </h3>
               </div>
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-slate-500">72% Support (6.2M Neurons)</span>
-                <span className="text-slate-500">4 days left</span>
-              </div>
-              <div className="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                <div className="h-full bg-indigo-400 w-[72%]"></div>
+              <div className="text-right">
+                <div className="text-[10px] text-outline uppercase font-bold">Ends In</div>
+                <div className="text-sm font-bold text-on-surface tabular-nums">2d 14h 22m</div>
               </div>
             </div>
-            <div className="p-4 bg-surface-container rounded-lg border border-outline-variant/10">
-              <div className="flex justify-between items-start mb-3">
-                <h4 className="text-sm font-bold text-on-surface">AX-105: Dynamic Burn Rate Adjust</h4>
-                <span className="px-2 py-1 rounded text-[10px] font-bold bg-secondary/20 text-secondary">ECON</span>
+            <p className="text-sm text-on-surface-variant mb-8 line-clamp-2">
+              Adjusting the distribution of $NEURONS rewards across main DEX pools to prioritize deep liquidity in stable pairs and sustainable growth in MCP Server nodes.
+            </p>
+
+            {/* Voting Bars */}
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-secondary flex items-center gap-1">
+                    <span className="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> For
+                  </span>
+                  <span className="text-on-surface">8.2M AXO (72%)</span>
+                </div>
+                <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+                  <div className="h-full bg-secondary rounded-full" style={{width: "72%"}}></div>
+                </div>
               </div>
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-slate-500">48% Support (4.1M Neurons)</span>
-                <span className="text-slate-500">22 hours left</span>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-error flex items-center gap-1">
+                    <span className="material-symbols-outlined text-sm" data-icon="cancel">cancel</span> Against
+                  </span>
+                  <span className="text-on-surface">3.1M AXO (28%)</span>
+                </div>
+                <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+                  <div className="h-full bg-error rounded-full" style={{width: "28%"}}></div>
+                </div>
               </div>
-              <div className="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                <div className="h-full bg-tertiary w-[48%]"></div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-outline-variant/10 flex items-center justify-between">
+              <div className="flex -space-x-2">
+                <img className="w-6 h-6 rounded-full border-2 border-[#0b1326] bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnK3rg5Mh7Lp0RvY8pcZaI3mxPGmL9B2XMCGfVBon69ANV6YQl_4I8TQ6bO_WUVkvZoIVk_UmywZxlU2GxzI5Q25vM_lNFlJiT1fZdOm7Wp1CSLPPtc4O9xXwxEC6tR59kDObIrAyIDDT05x7UXky501j9F6nhd-x5M17l37KwbvHkVQYt8bFGnez6sRK-TUoKZPDWk6HpH02xRhSbboLMB2yeOc9RHXylIbYwcejB-zAM-1LWxYMeGbnZ3PLrR-orIDbB6-I6tM8" alt="User Avatar"/>
+                <img className="w-6 h-6 rounded-full border-2 border-[#0b1326] bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDitg2kczKb2NoaJFQyUBUKIuRyK9LPtq3RClcq0W01ff4HookP_cYpsoTkb0e-lRrHCUhmfCV5HOvbvABF6BF38RwEVWCl-o8f3PKLo8hGxTkFEsZMrRBhC8275zqHCTv5m-AjryF1dbMoys5BVzWKHYKo2swAHh1XVzHik_dccrKV6VMHMGM4vXENvn7xF-RXEeXoMkOsQ2vqALTVSH6od9xB8MYnQ64_eDxTelEkRlaMkSY5cU9XKNfOyQm6_6veP1HuVG_EMaI" alt="User Avatar"/>
+                <img className="w-6 h-6 rounded-full border-2 border-[#0b1326] bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApRIUGli5qOujSQNo3mdWna58QJGwUF9tLHsicIwpRjMdtDyfEnRjF1sQCYHlBQzaNHqu5u71xYiD9OWJqCmdQQQbU-YgUEeTEKVYoOy6996GSo5nDXMO204h5Hw-SYZ62316MmuefXg3NGs2OCi9vDVcpe97-mJj3uNA_bJDGKD8ydLVVs7E0_LCiJC77L_0zgJ1zqbXrjKtn1Cn3qEFrNOJH9FCPcqovoNzIidxndwSQIzvpBG5e8g53vtLJnaOL__ICyGYWYWM" alt="User Avatar"/>
+                <div className="w-6 h-6 rounded-full border-2 border-[#0b1326] bg-surface-container-highest flex items-center justify-center text-[8px] font-bold text-outline">+142</div>
+              </div>
+              <button className="px-6 py-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright text-xs font-bold text-on-surface transition-colors">
+                View Details
+              </button>
+            </div>
+          </div>
+
+          {/* Proposal Card 2 */}
+          <div className="glass-panel rounded-2xl p-6 border border-outline-variant/5 hover:border-primary/20 transition-all group">
+            <div className="flex justify-between items-start mb-6">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black bg-tertiary/10 text-tertiary px-2 py-0.5 rounded border border-tertiary/20 uppercase tracking-tighter">Quorum Pending</span>
+                  <span className="text-[10px] text-outline font-bold uppercase tracking-wider">Proposal #083</span>
+                </div>
+                <h3 className="text-lg font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">
+                  Expansion into Arweave Storage Network
+                </h3>
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] text-outline uppercase font-bold">Ends In</div>
+                <div className="text-sm font-bold text-on-surface tabular-nums">12h 45m</div>
+              </div>
+            </div>
+            <p className="text-sm text-on-surface-variant mb-8 line-clamp-2">
+              Integrating Arweave to permanently store DAO governance logs and MCP server metadata for verifiable transparency across the Kinetic Observatory.
+            </p>
+
+            {/* Voting Bars */}
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-secondary flex items-center gap-1">
+                    <span className="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> For
+                  </span>
+                  <span className="text-on-surface">1.2M AXO (94%)</span>
+                </div>
+                <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+                  <div className="h-full bg-secondary rounded-full" style={{width: "94%"}}></div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-xs font-bold">
+                  <span className="text-error flex items-center gap-1">
+                    <span className="material-symbols-outlined text-sm" data-icon="cancel">cancel</span> Against
+                  </span>
+                  <span className="text-on-surface">75K AXO (6%)</span>
+                </div>
+                <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+                  <div className="h-full bg-error rounded-full" style={{width: "6%"}}></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-outline-variant/10 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-bold text-tertiary">
+                <span className="material-symbols-outlined text-sm">info</span>
+                Quorum: 24% / 30%
+              </div>
+              <button className="px-6 py-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright text-xs font-bold text-on-surface transition-colors">
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Asymmetric Secondary Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        {/* Delegators List */}
+        <div className="lg:col-span-2 bg-surface-container-low rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-bold text-on-surface uppercase tracking-widest">Top Contributors</h2>
+            <button className="text-xs font-bold text-primary hover:underline">View Leaderboard</button>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-high transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">0x...aF2</div>
+                <div>
+                  <div className="text-sm font-bold text-on-surface">Kinetic Labs</div>
+                  <div className="text-[10px] text-outline">Delegated: 2.1M AXO</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs font-bold text-secondary">Active</div>
+                <div className="text-[10px] text-outline">12 Proposals Voted</div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-high transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary font-black text-sm">0x...3E4</div>
+                <div>
+                  <div className="text-sm font-bold text-on-surface">CyberNode Venture</div>
+                  <div className="text-[10px] text-outline">Delegated: 1.8M AXO</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs font-bold text-secondary">Active</div>
+                <div className="text-[10px] text-outline">10 Proposals Voted</div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-high transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary font-black text-sm">0x...9B1</div>
+                <div>
+                  <div className="text-sm font-bold text-on-surface">Alpha Whale</div>
+                  <div className="text-[10px] text-outline">Delegated: 840K AXO</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-xs font-bold text-outline">Inactive</div>
+                <div className="text-[10px] text-outline">0 Proposals Voted</div>
               </div>
             </div>
           </div>
         </div>
-        {/* Business Project Progress */}
-        <div className="bg-surface-container-highest p-8 rounded-xl border border-white/5">
-          <h3 className="text-lg font-bold text-white mb-8 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary">rocket_launch</span> Business Progress
-          </h3>
-          <div className="space-y-8">
+
+        {/* System Status / Activity Feed */}
+        <div className="bg-surface-container-low rounded-2xl p-6 relative overflow-hidden">
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+          <h2 className="text-sm font-bold text-on-surface uppercase tracking-widest mb-6">Recent Activity</h2>
+          <div className="space-y-6 relative z-10">
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="futuristic minimalist datacenter logo indigo glow square" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBObIrk_UpLVWKNmo9VvrJazd40p8gwhaW0pJ_gfvlWw1UPFZh9Dz1_YCHufA0mi2UEaBCegbYHG-qwv_AxYSz3oacnfTbtjTlEG2fQTefT08akVla9K6TrxojNi2VUus6IPyGZ7EQT3B-QCtX2S89UHrk756is_D8ZjXhWfIknbj9u-PoaZqZntoNKRboZ0oOhF7_21GQGQ4QMBL3KEv-RleXtg9cNj7QxR5eN7F2DBTLkIvzBJxmBAX9WQ4RTfr2jKZMsTVFeb58"/>
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+                <span className="material-symbols-outlined text-secondary text-sm" data-icon="how_to_vote">how_to_vote</span>
               </div>
-              <div className="flex-1">
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-bold">Project Helios: Data Node Cluster</span>
-                  <span className="text-xs font-bold text-secondary">85%</span>
-                </div>
-                <div className="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
-                  <div className="h-full bg-secondary w-[85%]"></div>
-                </div>
-                <p className="text-[10px] text-slate-500 mt-2">Hardware deployment complete. Finalizing software orchestration.</p>
+              <div>
+                <p className="text-xs font-medium text-on-surface">New vote cast on <span className="text-primary">#084</span></p>
+                <span className="text-[10px] text-outline">2 minutes ago</span>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="cybernetic trading terminal interface abstract logo teal glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe8MjOjZzDxlVvH48Wy4E-dTRILxrj4ZAHFB6fhFH0NVTsE_BZIt4QCeNUS3dQ85SLrxTWuBAy87ep8UxcURORQWjG7NUEgsxlX30SAvaY2dvQFEzyw27gQsAP_7LBb0M84jhTOGrJgSOgZTHsTwaHOYLQywpA7kj_32eNUyY32kjeEnbFyytAjOZRRB6CXxtm8gJI2FH9wtAUI3mqLSkhGnq1D4MysZudAjxQeZk6A7qpbCrRQrjmyEq5wkfvtudI6eFJ9_1whB4"/>
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                <span className="material-symbols-outlined text-primary text-sm" data-icon="add">add</span>
               </div>
-              <div className="flex-1">
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-bold">Project Orion: DEX Aggregator</span>
-                  <span className="text-xs font-bold text-indigo-400">42%</span>
-                </div>
-                <div className="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
-                  <div className="h-full bg-indigo-400 w-[42%]"></div>
-                </div>
-                <p className="text-[10px] text-slate-500 mt-2">Liquidity contract auditing phase. Integration with MCP servers in progress.</p>
+              <div>
+                <p className="text-xs font-medium text-on-surface">Proposal <span className="text-primary">#085</span> drafted</p>
+                <span className="text-[10px] text-outline">1 hour ago</span>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-tertiary/20 flex items-center justify-center">
+                <span className="material-symbols-outlined text-tertiary text-sm" data-icon="payments">payments</span>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-on-surface">Treasury payout: <span className="text-tertiary">$12.5K</span></p>
+                <span className="text-[10px] text-outline">5 hours ago</span>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center">
+                <span className="material-symbols-outlined text-secondary text-sm" data-icon="lock_open">lock_open</span>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-on-surface">Staking unlock: <span className="text-secondary">40K AXO</span></p>
+                <span className="text-[10px] text-outline">1 day ago</span>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </main>
   );
 };
 
-export default Overview;
+export default Dao;
