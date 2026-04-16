@@ -24,7 +24,9 @@ export default function Header() {
             <span className="material-symbols-outlined">notifications</span>
           </button>
           <button className="hover:text-indigo-200 transition-colors duration-200 active:scale-95 transition-transform">
-            <span className="material-symbols-outlined">settings</span>
+            <Link to="/settings">
+              <span className="material-symbols-outlined">settings</span>
+            </Link>
           </button>
         </div>
         <WalletConnectButton />

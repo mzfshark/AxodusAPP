@@ -30,7 +30,7 @@ export default function Sidebar() {
           <span className="material-symbols-outlined">layers</span>
           <span>Staking</span>
         </NavLink>
-        <NavLink to="/settings" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+        <NavLink to="/dao" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">account_balance</span>
           <span>DAOs</span>
         </NavLink>
@@ -53,6 +53,10 @@ export default function Sidebar() {
         <NavLink to="/lottery" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
           <span className="material-symbols-outlined">casino</span>
           <span>Lottery</span>
+        </NavLink>
+        <NavLink to="/mcps" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>
+          <span className="material-symbols-outlined">mcp</span>
+          <span>MCP Servers</span>
         </NavLink>
         <div className="h-px bg-white/5 my-4"></div>
         <NavLink to="/mcps" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 ${isActive ? 'text-indigo-300 bg-[#2d3449] rounded-lg shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform' : 'text-slate-500 hover:text-slate-300 hover:bg-[#131b2e] transition-all duration-300'}`}>

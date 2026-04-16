@@ -26,6 +26,7 @@ import Academy from "./pages/Academy";
 import Dex from "./pages/Dex";
 import Lottery from "./pages/Lottery";
 import Mcps from "./pages/Mcps";
+import Dao from "./pages/Dao";
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "portfolio", element: <Portfolio /> },
       { path: "settings", element: <Settings /> },
+      { path: "dao", element: <Dao /> },
       { path: "transactions", element: <TransactionHistoryPage /> },
       { path: "trading/bots", element: <BotManagement /> },
       { path: "trading/portfolio", element: <PortfolioPage /> },
