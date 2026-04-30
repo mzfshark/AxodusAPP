@@ -53,7 +53,7 @@ const Marketplace = () => {
 </div>
 </section>
 {/*  Categorized Grid  */}
-<div className="space-y-16">
+<div className="space-y-16 mb-10">
 {/*  NFTs Section  */}
 <section>
 <div className="flex items-center justify-between mb-8">
@@ -149,7 +149,7 @@ const Marketplace = () => {
 </div>
 </section>
 {/*  Bento Grid for Courses & Games  */}
-<section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
 {/*  Premium Courses (2 columns)  */}
 <div className="lg:col-span-2">
 <div className="flex items-center justify-between mb-8">
@@ -238,23 +238,7 @@ const Marketplace = () => {
 </section>
 </div>
 {/*  Footer Meta  */}
-<footer className="mt-24 pt-12 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-8 pb-12">
-<div className="flex items-center gap-4 opacity-50">
-<span className="text-xl font-bold tracking-tighter">Axodus</span>
-<span className="text-xs text-outline">© 2024 Kinetic Ecosystem Inc.</span>
-</div>
-<div className="flex gap-8 text-sm text-outline">
-<a className="hover:text-primary" href="#">Terms of Service</a>
-<a className="hover:text-primary" href="#">Privacy Policy</a>
-<a className="hover:text-primary" href="#">Documentation</a>
-<a className="hover:text-primary" href="#">API</a>
-</div>
-<div className="flex gap-4">
-<div className="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline hover:text-white cursor-pointer"><span className="material-symbols-outlined text-lg">public</span></div>
-<div className="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline hover:text-white cursor-pointer"><span className="material-symbols-outlined text-lg">forum</span></div>
-<div className="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-outline hover:text-white cursor-pointer"><span className="material-symbols-outlined text-lg">share</span></div>
-</div>
-</footer>
+/* Removed footer component */
 
     </>
   );
