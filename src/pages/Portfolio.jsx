@@ -7,46 +7,47 @@ const Portfolio = () => {
     <main className="flex-1 bg-background p-6 lg:p-10 space-y-10 overflow-hidden">
       {/* Hero Section: TVL Overview */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-4 flex flex-col justify-between p-8 rounded-3xl surface-container-highest relative overflow-hidden bg-gradient-to-br from-[#131b2e] to-[#2d3449]">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+        <div className="lg:col-span-4 bg-surface-container-low rounded-3xl p-6 ghost-border">
           <div>
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-[0.2em] mb-2 block">Total Value Locked</span>
+            <span className="text-xs font-semibold text-outline uppercase tracking-[0.2em] mb-2 block">Total Value Locked</span>
             <div className="flex items-baseline gap-3">
-              <h1 className="text-5xl font-extrabold tracking-tighter text-white">$4.28B</h1>
+              <h1 className="text-5xl font-extrabold tracking-tighter text-on-surface">$4.28B</h1>
               <span className="text-secondary text-sm font-semibold flex items-center gap-1">
-                <span className="material-symbols-outlined text-base">trending_up</span>
+                <span className="material-symbols-outlined text-outline">trending_up</span>
                 +12.4%
               </span>
             </div>
           </div>
-          <div className="mt-8 flex gap-4">
+          <div className="mt-6 flex gap-4">
             <button className="hero-gradient px-6 py-2.5 rounded-xl font-bold text-sm text-on-primary shadow-lg shadow-indigo-500/20">Deposit Now</button>
-            <button className="bg-surface-container-high px-6 py-2.5 rounded-xl font-bold text-sm text-white border border-outline-variant/20">Withdraw</button>
+            <button className="bg-surface-container-high px-6 py-2.5 rounded-xl font-bold text-sm text-on-surface border border-outline-variant/20">Withdraw</button>
           </div>
         </div>
-        <div className="lg:col-span-8 p-6 rounded-3xl surface-container-highest bg-[#131b2e]/50 border border-white/5">
+        <div className="lg:col-span-8 bg-surface-container-low rounded-3xl p-6 ghost-border">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-white">Yield History</h3>
+            <h3 className="text-lg font-semibold text-on-surface">Yield History</h3>
             <div className="flex gap-2">
-              <button className="text-xs px-3 py-1 rounded bg-indigo-500/20 text-indigo-300">1W</button>
-              <button className="text-xs px-3 py-1 rounded hover:bg-white/5 text-slate-500">1M</button>
-              <button className="text-xs px-3 py-1 rounded hover:bg-white/5 text-slate-500">1Y</button>
+              <button className="text-xs px-3 py-1 rounded bg-surface-container-lowest/50 text-outline/50">1W</button>
+              <button className="text-xs px-3 py-1 rounded hover:bg-surface-container-lowest text-outline hover:text-on-surface">1M</button>
+              <button className="text-xs px-3 py-1 rounded hover:bg-surface-container-lowest text-outline hover:text-on-surface">1Y</button>
             </div>
           </div>
-          <div className="h-48 flex items-end gap-1 relative">
+          <div className="h-48 flex items-end gap-2 relative">
             {/* Mock Area Chart Visual */}
             <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
               <img className="w-full h-full object-cover rounded-lg" alt="abstract flowing blue and purple neon gradient line graph representing kinetic growth on a dark digital mesh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCac0WJDqXuk5-qdQh_8RzVJ4NL7stPXeHqhh_sM-JjFemMRU6uCHMV-vPTcElIo86jBUa1qXeCb_fLC1YeMnVR5s-RtczxrtK3nIEPwqoo8nbHPBFTjPoSY9-_xV6EMVQEMxpVRTqVCPgvijBRUqMjCmKPwDGIxGSMlh1EDBTtWSwrNLt2WZQl3FoEL0boHrKiTltQRy7zQ9SNClgaWuQ7_4jDg7VcyYenHNNpG3E0co5Cqgmr0vL1GSVZd4dAiJf7Aam98HzU8Ds"/>
             </div>
-            {/* UI representation of peaks */}
-            <div className="flex-1 bg-indigo-500/20 rounded-t h-[40%]"></div>
-            <div className="flex-1 bg-indigo-500/30 rounded-t h-[55%"></div>
-            <div className="flex-1 bg-indigo-500/40 rounded-t h-[70%"></div>
-            <div className="flex-1 bg-indigo-500/50 rounded-t h-[65%"></div>
-            <div className="flex-1 bg-indigo-500/60 rounded-t h-[85%"></div>
-            <div className="flex-1 bg-indigo-500/70 rounded-t h-[80%"></div>
-            <div className="flex-1 bg-indigo-500/80 rounded-t h-[95%"></div>
-            <div className="flex-1 bg-indigo-500/90 rounded-t h-[100%"></div>
+            {/* UI representation of peaks - properly centered */}
+            <div className="absolute inset-4 flex items-end gap-2">
+              <div className="flex-1 bg-primary/20 rounded-t h-[40%] hover:bg-primary/40 transition-all"></div>
+              <div className="flex-1 bg-primary/30 rounded-t h-[55%] hover:bg-primary/50 transition-all"></div>
+              <div className="flex-1 bg-primary/40 rounded-t h-[70%] hover:bg-primary/60 transition-all"></div>
+              <div className="flex-1 bg-primary/50 rounded-t h-[65%] hover:bg-primary/70 transition-all"></div>
+              <div className="flex-1 bg-primary/60 rounded-t h-[85%] hover:bg-primary/80 transition-all"></div>
+              <div className="flex-1 bg-primary/70 rounded-t h-[80%] hover:bg-primary/90 transition-all"></div>
+              <div className="flex-1 bg-primary/80 rounded-t h-[95%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary/90 rounded-t h-[100%] hover:bg-primary shadow-[0_0_10px_rgba(192,193,255,0.5)]"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -57,15 +58,15 @@ const Portfolio = () => {
           {/* Staking Section */}
           <section>
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                <span className="material-symbols-outlined text-indigo-400">layers</span>
+              <h2 className="text-2xl font-bold tracking-tight text-on-surface flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary">layers</span>
                 Staking Opportunities
               </h2>
-              <button className="text-indigo-400 text-sm font-semibold hover:underline">View All Pools</button>
+              <button className="text-primary text-sm font-semibold hover:underline">View All Pools</button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Core $NEURONS Pool */}
-              <div className="glass-panel p-6 rounded-2xl border border-white/5 hover:border-indigo-500/30 transition-all group">
+              <div className="bg-surface-container-low rounded-2xl p-6 ghost-border hover:border-primary/30 transition-all group">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/40">
@@ -83,18 +84,18 @@ const Portfolio = () => {
                 </div>
                 <div className="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 flex justify-between">
                   <div>
-                    <span className="text-[10px] text-slate-500 block uppercase">Earned Rewards</span>
-                    <span className="text-lg font-bold text-white">1,240.50 <span className="text-xs font-normal text-slate-400">$NRS</span></span>
+                    <span className="text-[10px] text-outline block uppercase">Earned Rewards</span>
+                    <span className="text-lg font-bold text-on-surface">1,240.50 <span className="text-xs font-normal text-outline">$NRS</span></span>
                   </div>
-                  <button className="text-indigo-400 font-semibold text-sm self-end">Claim</button>
+                  <button className="text-primary font-semibold text-sm self-end">Claim</button>
                 </div>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold text-sm border border-indigo-500/20 hover:bg-indigo-500 hover:text-white transition-all">Stake</button>
-                  <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-slate-300 font-bold text-sm border border-outline-variant/10">Unstake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-primary/10 text-primary font-bold text-sm border border-primary/20 hover:bg-primary hover:text-on-primary transition-all">Stake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-bold text-sm border border-outline-variant/10">Unstake</button>
                 </div>
               </div>
               {/* ETH/WBTC Pool */}
-              <div className="glass-panel p-6 rounded-2xl border border-white/5 hover:border-indigo-500/30 transition-all">
+              <div className="bg-surface-container-low rounded-2xl p-6 ghost-border hover:border-primary/30 transition-all">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-3">
                     <div className="flex -space-x-3">
@@ -131,57 +132,57 @@ const Portfolio = () => {
           </section>
           {/* Lending Markets */}
           <section>
-            <h2 className="text-2xl font-bold tracking-tight text-white mb-6 flex items-center gap-2">
-              <span className="material-symbols-outlined text-indigo-400">account_balance_wallet</span>
+            <h2 className="text-2xl font-bold tracking-tight text-on-surface mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">account_balance_wallet</span>
               Lending Markets
             </h2>
-            <div className="overflow-hidden rounded-2xl surface-container-highest border border-white/5">
+            <div className="overflow-hidden rounded-2xl bg-surface-container-low border border-outline-variant/10">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-white/5">
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Asset</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Supply APY</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Borrow APY</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Liquidity</th>
-                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider"></th>
+                  <tr className="bg-surface-container-lowest/50">
+                    <th className="px-6 py-4 text-xs font-semibold text-outline uppercase tracking-wider">Asset</th>
+                    <th className="px-6 py-4 text-xs font-semibold text-outline uppercase tracking-wider">Supply APY</th>
+                    <th className="px-6 py-4 text-xs font-semibold text-outline uppercase tracking-wider">Borrow APY</th>
+                    <th className="px-6 py-4 text-xs font-semibold text-outline uppercase tracking-wider">Liquidity</th>
+                    <th className="px-6 py-4 text-xs font-semibold text-outline uppercase tracking-wider"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
-                  <tr className="hover:bg-white/5 transition-colors group">
+                <tbody className="divide-y divide-outline-variant/10">
+                  <tr className="hover:bg-surface-container transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 text-xs font-bold">USDT</div>
-                        <span className="font-semibold text-white">Tether</span>
+                        <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center text-secondary text-xs font-bold">USDT</div>
+                        <span className="font-semibold text-on-surface">Tether</span>
                       </div>
                     </td>
                     <td className="px-6 py-5"><span className="text-secondary font-bold">4.2%</span></td>
-                    <td className="px-6 py-5 text-slate-300">5.8%</td>
-                    <td className="px-6 py-5 text-slate-400">$142M</td>
-                    <td className="px-6 py-5 text-right"><button className="px-4 py-1.5 rounded-lg bg-indigo-500 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Lend</button></td>
+                    <td className="px-6 py-5 text-on-surface-variant">5.8%</td>
+                    <td className="px-6 py-5 text-outline">$142M</td>
+                    <td className="px-6 py-5 text-right"><button className="px-4 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Lend</button></td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors group">
+                  <tr className="hover:bg-surface-container transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 text-xs font-bold">ETH</div>
-                        <span className="font-semibold text-white">Ethereum</span>
+                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">ETH</div>
+                        <span className="font-semibold text-on-surface">Ethereum</span>
                       </div>
                     </td>
                     <td className="px-6 py-5"><span className="text-secondary font-bold">2.1%</span></td>
-                    <td className="px-6 py-5 text-slate-300">3.4%</td>
-                    <td className="px-6 py-5 text-slate-400">$892M</td>
-                    <td className="px-6 py-5 text-right"><button className="px-4 py-1.5 rounded-lg bg-indigo-500 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Lend</button></td>
+                    <td className="px-6 py-5 text-on-surface-variant">3.4%</td>
+                    <td className="px-6 py-5 text-outline">$892M</td>
+                    <td className="px-6 py-5 text-right"><button className="px-4 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Lend</button></td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors group">
+                  <tr className="hover:bg-surface-container transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 text-xs font-bold">BTC</div>
-                        <span className="font-semibold text-white">Bitcoin</span>
+                        <div className="w-8 h-8 rounded-full bg-tertiary/20 flex items-center justify-center text-tertiary text-xs font-bold">BTC</div>
+                        <span className="font-semibold text-on-surface">Bitcoin</span>
                       </div>
                     </td>
                     <td className="px-6 py-5"><span className="text-secondary font-bold">1.8%</span></td>
-                    <td className="px-6 py-5 text-slate-300">2.9%</td>
-                    <td className="px-6 py-5 text-slate-400">$2.1B</td>
-                    <td className="px-6 py-5 text-right"><button className="px-4 py-1.5 rounded-lg bg-indigo-500 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Lend</button></td>
+                    <td className="px-6 py-5 text-on-surface-variant">2.9%</td>
+                    <td className="px-6 py-5 text-outline">$2.1B</td>
+                    <td className="px-6 py-5 text-right"><button className="px-4 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">Lend</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -191,7 +192,7 @@ const Portfolio = () => {
         {/* Right Sidebar Content */}
         <div className="space-y-10">
           {/* User Status Widget */}
-          <section className="glass-panel p-8 rounded-3xl border border-white/5 space-y-8">
+          <section className="bg-surface-container-low p-8 rounded-3xl ghost-border space-y-8">
             <div>
               <h3 className="text-lg font-bold text-white mb-6">Loan Health</h3>
               <div className="relative flex items-center justify-center">
@@ -222,10 +223,10 @@ const Portfolio = () => {
           </section>
           {/* Liquidity Pools (DEX LPs) */}
           <section className="space-y-4">
-            <h3 className="text-lg font-bold text-white px-2">Top Yield Pools</h3>
+            <h3 className="text-lg font-bold text-on-surface px-2">Top Yield Pools</h3>
             <div className="space-y-4">
               {/* Pool Card */}
-              <div className="surface-container-highest p-5 rounded-2xl border border-white/5 hover:translate-y-[-2px] transition-transform cursor-pointer">
+              <div className="bg-surface-container-low p-5 rounded-2xl ghost-border hover:translate-y-[-2px] transition-transform cursor-pointer">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex -space-x-2">
                     <div className="w-8 h-8 rounded-full bg-indigo-600 border border-surface z-10 flex items-center justify-center"><span className="material-symbols-outlined text-xs text-white">bolt</span></div>

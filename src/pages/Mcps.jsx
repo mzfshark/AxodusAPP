@@ -2,51 +2,44 @@ import React from 'react';
 
 const Mcps = () => {
   return (
-    <>
-      
+    <main className="flex-1 overflow-y-auto bg-background">
+      <div className="p-8 max-w-7xl mx-auto space-y-8">
+        
 {/*  Page Header  */}
-<div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-<div>
-<h1 className="text-4xl font-extrabold tracking-tight text-white mb-1">MCP Servers</h1>
-<p className="text-outline text-sm">Real-time monitoring and node orchestration for the Axodus Network.</p>
-</div>
-<div className="flex gap-2">
-<div className="flex flex-col items-end">
-<span className="text-[10px] text-outline uppercase tracking-widest font-bold">Global Uptime</span>
-<span className="text-2xl font-black text-secondary">99.98%</span>
-</div>
-</div>
+<div className="flex items-end gap-3 mb-6">
+  <h1 className="text-3xl font-bold tracking-tight text-on-surface">MCP Servers</h1>
+  <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">Monitoring</span>
 </div>
 {/*  Server Grid  */}
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 {/*  Morpheus Server  */}
-<div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
 <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
 <span className="material-symbols-outlined">hub</span>
 </div>
 <div>
-<h3 className="font-bold text-white">Morpheus</h3>
+<h3 className="font-bold text-on-surface">Morpheus</h3>
 <span className="text-[10px] mono text-outline">ID: AX-001-MRP</span>
 </div>
 </div>
 <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary/20 text-secondary text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span> Online
-                    </span>
+                   </span>
 </div>
 <div className="grid grid-cols-2 gap-4 mb-6">
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
-<p className="text-lg font-bold text-white">99.9%</p>
+<p className="text-lg font-bold text-on-surface">99.9%</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Latency</p>
-<p className="text-lg font-bold text-white">12ms</p>
+<p className="text-lg font-bold text-on-surface">12ms</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Load</p>
-<p className="text-lg font-bold text-white">42%</p>
+<p className="text-lg font-bold text-on-surface">42%</p>
 </div>
 <div className="flex items-end justify-end">
 <div className="h-8 w-20 flex items-end gap-0.5">
@@ -67,33 +60,33 @@ const Mcps = () => {
 </div>
 </div>
 {/*  Agent Smith Server  */}
-<div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
 <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
 <span className="material-symbols-outlined">security</span>
 </div>
 <div>
-<h3 className="font-bold text-white">Agent Smith</h3>
+<h3 className="font-bold text-on-surface">Agent Smith</h3>
 <span className="text-[10px] mono text-outline">ID: AX-002-ASM</span>
 </div>
 </div>
 <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary/20 text-secondary text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span> Online
-                    </span>
+                   </span>
 </div>
 <div className="grid grid-cols-2 gap-4 mb-6">
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
-<p className="text-lg font-bold text-white">100%</p>
+<p className="text-lg font-bold text-on-surface">100%</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Latency</p>
-<p className="text-lg font-bold text-white">8ms</p>
+<p className="text-lg font-bold text-on-surface">8ms</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Load</p>
-<p className="text-lg font-bold text-white">18%</p>
+<p className="text-lg font-bold text-on-surface">18%</p>
 </div>
 <div className="flex items-end justify-end">
 <div className="h-8 w-20 flex items-end gap-0.5">
@@ -114,33 +107,33 @@ const Mcps = () => {
 </div>
 </div>
 {/*  Trading Server  */}
-<div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
 <div className="p-2 rounded-lg bg-tertiary/10 text-tertiary">
 <span className="material-symbols-outlined">trending_up</span>
 </div>
 <div>
-<h3 className="font-bold text-white">Trading</h3>
+<h3 className="font-bold text-on-surface">Trading</h3>
 <span className="text-[10px] mono text-outline">ID: AX-003-TRD</span>
 </div>
 </div>
 <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary/20 text-tertiary text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-tertiary"></span> Warning
-                    </span>
+                   </span>
 </div>
 <div className="grid grid-cols-2 gap-4 mb-6">
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
-<p className="text-lg font-bold text-white">98.4%</p>
+<p className="text-lg font-bold text-on-surface">98.4%</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Latency</p>
-<p className="text-lg font-bold text-white">45ms</p>
+<p className="text-lg font-bold text-on-surface">45ms</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Load</p>
-<p className="text-lg font-bold text-white">89%</p>
+<p className="text-lg font-bold text-on-surface">89%</p>
 </div>
 <div className="flex items-end justify-end">
 <div className="h-8 w-20 flex items-end gap-0.5">
@@ -161,33 +154,33 @@ const Mcps = () => {
 </div>
 </div>
 {/*  RedHat Server  */}
-<div className="bg-surface-container-low rounded-xl p-5 border border-outline-variant/10 group hover:bg-surface-container transition-all duration-300">
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-3">
 <div className="p-2 rounded-lg bg-error/10 text-error">
 <span className="material-symbols-outlined">terminal</span>
 </div>
 <div>
-<h3 className="font-bold text-white">RedHat</h3>
+<h3 className="font-bold text-on-surface">RedHat</h3>
 <span className="text-[10px] mono text-outline">ID: AX-004-RHT</span>
 </div>
 </div>
 <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error/20 text-error text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-error"></span> Offline
-                    </span>
+                   </span>
 </div>
 <div className="grid grid-cols-2 gap-4 mb-6 opacity-50">
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
-<p className="text-lg font-bold text-white">0%</p>
+<p className="text-lg font-bold text-on-surface">0%</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Latency</p>
-<p className="text-lg font-bold text-white">---</p>
+<p className="text-lg font-bold text-on-surface">---</p>
 </div>
 <div>
 <p className="text-[10px] text-outline uppercase mb-1">Load</p>
-<p className="text-lg font-bold text-white">0%</p>
+<p className="text-lg font-bold text-on-surface">0%</p>
 </div>
 <div className="flex items-end justify-end">
 <div className="h-1 w-20 bg-outline-variant/20 rounded-full"></div>
@@ -324,8 +317,10 @@ const Mcps = () => {
 </div>
 </div>
 
-    </>
-  );
+     </div>
+   </main>
+ );
 };
+
 
 export default Mcps;

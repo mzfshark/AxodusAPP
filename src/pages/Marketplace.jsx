@@ -6,7 +6,7 @@ const Marketplace = () => {
       
 {/*  Hero Featured Section  */}
 <section className="relative h-[480px] rounded-3xl overflow-hidden mb-12 group">
-<div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract flowing liquid 3d shapes in deep purple and cyan colors with futuristic digital lighting and grainy texture" style={{"backgroundImage":"url('https"}}>
+<div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract flowing liquid 3d shapes in deep purple and cyan colors with futuristic digital lighting and grainy texture" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDl4DuYX9gbX4SWrpDd8sswePdo5WUWoM5rncPygLQ7DHKiOgHneFuFWS2ymu8CcQ7abVmuYGIfZGaBkXlbTf5bliKJeTNm0l_yaPbuX6R_sCNyCdC2bkT8BAYNXFXxti0XhQmiV8TyGsrdL0rAGkItpx6tk-lSfj2eYR0GLBw143S1iYdxos-z85Tpy1h5iv0RnevCywel6IBQnVCEjcdh-Zh5VLAt2h0rw3C6KQQh3k68lhS7nmjCHr5472nKge_Aer2p42C89j8')"}}>
 </div>
 <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/40 to-transparent"></div>
 <div className="relative h-full flex flex-col justify-center px-12 max-w-2xl">
@@ -53,7 +53,7 @@ const Marketplace = () => {
 </div>
 </section>
 {/*  Categorized Grid  */}
-<div className="space-y-16 mb-10">
+<div className="space-y-16 mb-10 px-4 sm:px-6 lg:px-8">
 {/*  NFTs Section  */}
 <section>
 <div className="flex items-center justify-between mb-8">
@@ -149,7 +149,7 @@ const Marketplace = () => {
 </div>
 </section>
 {/*  Bento Grid for Courses & Games  */}
-<section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+<section className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10 px-4 sm:px-6 lg:px-8">
 {/*  Premium Courses (2 columns)  */}
 <div className="lg:col-span-2">
 <div className="flex items-center justify-between mb-8">
@@ -237,8 +237,6 @@ const Marketplace = () => {
 </div>
 </section>
 </div>
-{/*  Footer Meta  */}
-/* Removed footer component */
 
     </>
   );
