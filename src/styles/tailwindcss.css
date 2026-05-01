@@ -1,0 +1,372 @@
+/* ============================================================
+   TAILWINDCSS LOCAL CUSTOMIZATION LAYER
+   ============================================================
+   This file provides a centralized location for customization.
+   
+   Customize margins, padding, containers, borders, spacing,
+   and other layout utilities here instead of editing node_modules.
+   
+   ALL custom classes used across pages are defined here for
+   100% CSS adherence and maintainability.
+   
+   Note: Global.css imports Tailwind base directives, this file
+   adds custom utilities and component classes.
+============================================================ */
+
+/* === TAILWINDCSS CUSTOMIZATION ============================== */
+
+/* === GLASS & TRANSPARENCY EFFECTS ========================== */
+
+/* Glass panel/card effects - different blur levels */
+@layer components {
+  .glass-panel {
+    @apply bg-opacity-30 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl border border-white/5;
+  }
+
+  .glass-card {
+    @apply bg-surface-container-low/40 backdrop-blur-md -webkit-backdrop-filter backdrop-blur-md border border-outline-variant/20;
+  }
+
+  .glass-effect {
+    @apply bg-opacity-40 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl;
+  }
+
+  .glassPanel {
+    @apply bg-opacity-30 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl border border-white/5;
+  }
+
+  .glassCard {
+    @apply bg-surface-container-low/40 backdrop-blur-md -webkit-backdrop-filter backdrop-blur-md border border-outline-variant/20;
+  }
+
+  .glassEffect {
+    @apply bg-opacity-40 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl;
+  }
+}
+
+/* === CUSTOM BORDER COLORS ================================== */
+/* Colors are now defined in tailwind.config.js */
+/* Tailwind automatically creates border-{color} utilities from the config */
+
+/* === BORDERS & GHOST EFFECTS ================================ */
+
+@layer utilities {
+  .ghost-border {
+    @apply border border-outline-variant/10;
+  }
+
+  .ghostBorder {
+    @apply border border-outline-variant/10;
+  }
+}
+
+/* === GRADIENTS ============================================== */
+
+@layer utilities {
+  .hero-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-container;
+  }
+
+  .kinetic-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-container;
+  }
+
+  .kineticGradient {
+    @apply bg-gradient-to-r from-primary to-primary-container;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-primary-container -webkit-background-clip text -webkit-text-fill-color transparent;
+  }
+
+  .gradientText {
+    @apply bg-gradient-to-r from-primary to-primary-container -webkit-background-clip text -webkit-text-fill-color transparent;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-r from-primary to-primary-container;
+  }
+
+  .gradientBg {
+    @apply bg-gradient-to-r from-primary to-primary-container;
+  }
+}
+
+/* === GLOW EFFECTS =========================================== */
+
+@layer utilities {
+  .glow-secondary {
+    @apply filter drop-shadow-[0_0_4px_rgba(65,228,184,0.4)];
+  }
+
+  .glowSecondary {
+    @apply filter drop-shadow-[0_0_4px_rgba(65,228,184,0.4)];
+  }
+
+  .glow-error {
+    @apply filter drop-shadow-[0_0_4px_rgba(255,180,171,0.4)];
+  }
+
+  .glowError {
+    @apply filter drop-shadow-[0_0_4px_rgba(255,180,171,0.4)];
+  }
+
+  .glow-primary {
+    @apply filter drop-shadow-[0_0_8px_rgba(192,193,255,0.4)];
+  }
+}
+
+/* === TYPOGRAPHY =========================================== */
+
+@layer utilities {
+  .mono {
+    @apply font-mono;
+  }
+
+  .mono-text {
+    @apply font-mono text-xs;
+  }
+}
+
+/* === CUSTOM SPACING SCALE ================================== */
+
+@layer utilities {
+  /* Custom margin utilities */
+  .m-xs { @apply m-1; }
+  .m-sm { @apply m-2; }
+  .m-base { @apply m-4; }
+  .m-lg { @apply m-6; }
+  .m-xl { @apply m-8; }
+  .m-2xl { @apply m-12; }
+
+  /* Custom padding utilities */
+  .p-xs { @apply p-1; }
+  .p-sm { @apply p-2; }
+  .p-base { @apply p-4; }
+  .p-lg { @apply p-6; }
+  .p-xl { @apply p-8; }
+  .p-2xl { @apply p-12; }
+
+  /* Custom gap utilities for flexbox/grid */
+  .gap-xs { @apply gap-1; }
+  .gap-sm { @apply gap-2; }
+  .gap-base { @apply gap-4; }
+  .gap-lg { @apply gap-6; }
+  .gap-xl { @apply gap-8; }
+  .gap-2xl { @apply gap-12; }
+
+  /* Custom container utilities */
+  .container-sm { @apply max-w-sm mx-auto px-4; }
+  .container-md { @apply max-w-md mx-auto px-4; }
+  .container-lg { @apply max-w-lg mx-auto px-4; }
+  .container-xl { @apply max-w-xl mx-auto px-4; }
+  .container-2xl { @apply max-w-2xl mx-auto px-4; }
+  .container-full { @apply max-w-full mx-auto px-4; }
+
+  /* Custom border utilities */
+  .border-xs { @apply border-0; }
+  .border-sm { @apply border; }
+  .border-md { @apply border-2; }
+  .border-lg { @apply border-4; }
+
+  /* Custom shadow utilities - glassmorphism friendly */
+  .shadow-glass { @apply shadow-sm backdrop-blur-md; }
+  .shadow-glass-md { @apply shadow-md backdrop-blur-lg; }
+  .shadow-glass-lg { @apply shadow-lg backdrop-blur-xl; }
+
+  /* Custom rounded utilities */
+  .rounded-xs { @apply rounded-sm; }
+  .rounded-sm { @apply rounded; }
+  .rounded-md { @apply rounded-md; }
+  .rounded-lg { @apply rounded-lg; }
+  .rounded-xl { @apply rounded-xl; }
+  .rounded-full { @apply rounded-full; }
+}
+
+/* === COMPONENT CUSTOMIZATION ============================== */
+
+/* Card component customization */
+@layer components {
+  .card {
+    @apply rounded-lg border border-opacity-15 p-6 backdrop-blur-md;
+  }
+
+  .card-sm {
+    @apply rounded-md border border-opacity-15 p-4 backdrop-blur-md;
+  }
+
+  .card-lg {
+    @apply rounded-xl border border-opacity-15 p-8 backdrop-blur-lg;
+  }
+
+  /* Button component customization */
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1 rounded text-sm;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 rounded-lg text-lg;
+  }
+
+  /* Input component customization */
+  .input {
+    @apply w-full px-4 py-2 rounded-md border border-opacity-15 bg-opacity-5 backdrop-blur-sm transition-colors;
+  }
+
+  .input-sm {
+    @apply px-3 py-1 rounded text-sm;
+  }
+
+  .input-lg {
+    @apply px-5 py-3 rounded-lg text-lg;
+  }
+}
+
+/* === RESPONSIVE CONTAINER CUSTOMIZATION ==================== */
+
+@media (max-width: 640px) {
+  .responsive-p { @apply p-3; }
+  .responsive-m { @apply m-2; }
+  .responsive-gap { @apply gap-2; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .responsive-p { @apply p-4; }
+  .responsive-m { @apply m-3; }
+  .responsive-gap { @apply gap-3; }
+}
+
+@media (min-width: 1025px) {
+  .responsive-p { @apply p-6; }
+  .responsive-m { @apply m-4; }
+  .responsive-gap { @apply gap-4; }
+}
+
+/* === ANIMATION CUSTOMIZATION =============================== */
+
+@layer utilities {
+  @keyframes slide-in-from-top {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-in-top {
+    animation: slide-in-from-top 0.3s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-from-left 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+}
+
+/* === SCROLLBAR UTILITIES ================================== */
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #060e20;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 2px;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* === DASHBOARD UTILITIES ================================== */
+
+@layer utilities {
+  .dashboard-container {
+    @apply w-full h-full;
+  }
+
+  .dashboard-section {
+    @apply w-full;
+  }
+}
+
+/* === TAILWINDCSS OVERRIDES FOR AXODUS BRANDING ============= */
+
+/* Override default Tailwind colors with Axodus palette */
+@layer base {
+  :root {
+    /* Primary colors from Axodus theme */
+    --tw-colors-axodus-primary: #c0c1ff;
+    --tw-colors-axodus-primary-dark: #8083ff;
+    --tw-colors-axodus-secondary: #41e4b8;
+    --tw-colors-axodus-tertiary: #ffb783;
+  }
+}
+
+/* Custom Axodus-specific utilities */
+@layer utilities {
+  .text-axodus-primary { @apply text-[#c0c1ff]; }
+  .text-axodus-secondary { @apply text-[#41e4b8]; }
+  .text-axodus-tertiary { @apply text-[#ffb783]; }
+
+  .bg-axodus-primary { @apply bg-[#c0c1ff]; }
+  .bg-axodus-secondary { @apply bg-[#41e4b8]; }
+  .bg-axodus-tertiary { @apply bg-[#ffb783]; }
+
+  .border-axodus-primary { @apply border-[#c0c1ff]; }
+  .border-axodus-secondary { @apply border-[#41e4b8]; }
+  .border-axodus-tertiary { @apply border-[#ffb783]; }
+
+  .shadow-axodus { @apply shadow-lg shadow-[#c0c1ff]/20; }
+  .shadow-axodus-lg { @apply shadow-2xl shadow-[#c0c1ff]/30; }
+}
