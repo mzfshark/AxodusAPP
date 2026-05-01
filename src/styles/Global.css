@@ -2,28 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
-@theme {
-  --color-surface-container-highest: #2d3449;
-  --color-surface-container-high: #222a3d;
-  --color-primary: #c0c1ff;
-  --color-error: #ffb4ab;
-  --color-on-surface-variant: #c7c4d7;
-  --color-background: #0b1326;
-  --color-on-background: #dae2fd;
-  --color-outline: #908fa0;
-  --color-on-surface: #dae2fd;
-  --color-secondary: #41e4b8;
-  --color-surface-container-lowest: #060e20;
-  --color-surface-bright: #31394d;
-  --color-surface: #0b1326;
-  --color-surface-container-low: #131b2e;
-  --color-surface-container: #171f33;
-  --color-primary-container: #8083ff;
-  --color-on-primary-container: #0d0096;
-  --color-on-primary: #1000a9;
-  --color-tertiary: #ffb783;
-}
-
 /* === THEME TOKENS ================================================= */
 
 /* Light theme (default) */
