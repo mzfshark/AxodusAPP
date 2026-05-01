@@ -402,3 +402,7 @@
   color: var(--bg);
   font-weight: 400;
 }
+
+:global(.border) {
+  border: 1px solid var(--border);
+}
