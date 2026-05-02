@@ -34,7 +34,7 @@ const Lottery = () => {
 </div>
 </div>
 <div className="hidden md:flex flex-col justify-center items-end text-right">
-<div className="glass-card p-6 rounded-2xl border border-white/5 max-w-sm">
+<div className="glass-card p-6 rounded-2xl border border-white/5 w-full max-w-xl">
 <p className="text-sm text-[#908fa0] mb-4">Last Winning Combination</p>
 <div className="flex gap-2">
 <span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">07</span>

@@ -9,7 +9,7 @@ const Marketplace = () => {
 <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="abstract flowing liquid 3d shapes in deep purple and cyan colors with futuristic digital lighting and grainy texture" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDl4DuYX9gbX4SWrpDd8sswePdo5WUWoM5rncPygLQ7DHKiOgHneFuFWS2ymu8CcQ7abVmuYGIfZGaBkXlbTf5bliKJeTNm0l_yaPbuX6R_sCNyCdC2bkT8BAYNXFXxti0XhQmiV8TyGsrdL0rAGkItpx6tk-lSfj2eYR0GLBw143S1iYdxos-z85Tpy1h5iv0RnevCywel6IBQnVCEjcdh-Zh5VLAt2h0rw3C6KQQh3k68lhS7nmjCHr5472nKge_Aer2p42C89j8')"}}>
 </div>
 <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/40 to-transparent"></div>
-<div className="relative h-full flex flex-col justify-center px-12 max-w-2xl">
+<div className="relative h-full flex flex-col justify-center px-6 md:px-12 max-w-4xl">
 <div className="flex items-center gap-2 mb-4">
 <span className="px-3 py-1 bg-secondary/20 text-secondary text-[10px] font-black uppercase tracking-tighter rounded-full border border-secondary/30">Trending Now</span>
 <span className="text-outline text-[10px] font-bold uppercase tracking-widest">End in: 04h 22m 10s</span>
