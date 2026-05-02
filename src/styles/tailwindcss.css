@@ -20,27 +20,43 @@
 /* Glass panel/card effects - different blur levels */
 @layer components {
   .glass-panel {
-    @apply bg-opacity-30 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl border border-white/5;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
   .glass-card {
-    @apply bg-surface-container-low/40 backdrop-blur-md -webkit-backdrop-filter backdrop-blur-md border border-outline-variant/20;
+    background: rgba(30, 38, 54, 0.4);
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .glass-effect {
-    @apply bg-opacity-40 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
   .glassPanel {
-    @apply bg-opacity-30 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl border border-white/5;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
   .glassCard {
-    @apply bg-surface-container-low/40 backdrop-blur-md -webkit-backdrop-filter backdrop-blur-md border border-outline-variant/20;
+    background: rgba(30, 38, 54, 0.4);
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .glassEffect {
-    @apply bg-opacity-40 backdrop-blur-xl -webkit-backdrop-filter backdrop-blur-xl;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 }
 
@@ -52,11 +68,11 @@
 
 @layer utilities {
   .ghost-border {
-    @apply border border-outline-variant/10;
+    border: 1px solid rgba(70, 69, 84, 0.1);
   }
 
   .ghostBorder {
-    @apply border border-outline-variant/10;
+    border: 1px solid rgba(70, 69, 84, 0.1);
   }
 }
 
@@ -64,32 +80,51 @@
 
 @layer utilities {
   .hero-gradient {
-    @apply bg-gradient-to-r from-primary to-primary-container;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+  }
+
+  .primary-gradient {
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
   }
 
   .kinetic-gradient {
-    @apply bg-gradient-to-r from-primary to-primary-container;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
   }
 
   .kineticGradient {
-    @apply bg-gradient-to-r from-primary to-primary-container;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary to-primary-container -webkit-background-clip text -webkit-text-fill-color transparent;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   .gradientText {
-    @apply bg-gradient-to-r from-primary to-primary-container -webkit-background-clip text -webkit-text-fill-color transparent;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   .gradient-bg {
-    @apply bg-gradient-to-r from-primary to-primary-container;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
   }
 
   .gradientBg {
-    @apply bg-gradient-to-r from-primary to-primary-container;
+    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
   }
+}
+
+/* === SHORTHAND SURFACE BACKGROUNDS ========================= */
+/* Some pages use surface tokens without the `bg-` prefix */
+@layer utilities {
+  .surface-container-low { @apply bg-surface-container-low; }
+  .surface-container-highest { @apply bg-surface-container-highest; }
 }
 
 /* === GLOW EFFECTS =========================================== */
@@ -188,15 +223,24 @@
 /* Card component customization */
 @layer components {
   .card {
-    @apply rounded-lg border border-opacity-15 p-6 backdrop-blur-md;
+    @apply rounded-lg p-6;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .card-sm {
-    @apply rounded-md border border-opacity-15 p-4 backdrop-blur-md;
+    @apply rounded-md p-4;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .card-lg {
-    @apply rounded-xl border border-opacity-15 p-8 backdrop-blur-lg;
+    @apply rounded-xl p-8;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   /* Button component customization */
@@ -214,7 +258,11 @@
 
   /* Input component customization */
   .input {
-    @apply w-full px-4 py-2 rounded-md border border-opacity-15 bg-opacity-5 backdrop-blur-sm transition-colors;
+    @apply w-full px-4 py-2 rounded-md transition-colors;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    background: rgba(11, 19, 38, 0.2);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
   .input-sm {
@@ -367,6 +415,6 @@
   .border-axodus-secondary { @apply border-[#41e4b8]; }
   .border-axodus-tertiary { @apply border-[#ffb783]; }
 
-  .shadow-axodus { @apply shadow-lg shadow-[#c0c1ff]/20; }
-  .shadow-axodus-lg { @apply shadow-2xl shadow-[#c0c1ff]/30; }
+  .shadow-axodus { box-shadow: 0 10px 15px -3px rgba(192, 193, 255, 0.20), 0 4px 6px -4px rgba(192, 193, 255, 0.20); }
+  .shadow-axodus-lg { box-shadow: 0 25px 50px -12px rgba(192, 193, 255, 0.30); }
 }
