@@ -592,6 +592,12 @@ body {
 .primary-gradient {
   background: var(--color-accent) !important;
 }
+.bg-for{ 
+  background: var(--success) !important;
+}
+.bg-against {
+  background: var(--error) !important;
+}
 
 .border-outline-variant,
 .border-white\/5 {

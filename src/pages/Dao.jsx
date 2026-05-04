@@ -126,7 +126,7 @@ const Dao = () => {
                   <span className="text-on-surface">8.2M AXO (72%)</span>
                 </div>
                 <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
-                  <div className="h-full bg-secondary rounded-full" style={{width: "72%"}}></div>
+                  <div className="h-full bg-for rounded-full" style={{width: "72%"}}></div>
                 </div>
               </div>
               <div className="space-y-2">
@@ -137,7 +137,7 @@ const Dao = () => {
                   <span className="text-on-surface">3.1M AXO (28%)</span>
                 </div>
                 <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
-                  <div className="h-full bg-error rounded-full" style={{width: "28%"}}></div>
+                  <div className="h-full bg-against rounded-full" style={{width: "28%"}}></div>
                 </div>
               </div>
             </div>
@@ -186,7 +186,7 @@ const Dao = () => {
                   <span className="text-on-surface">1.2M AXO (94%)</span>
                 </div>
                 <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
-                  <div className="h-full bg-secondary rounded-full" style={{width: "94%"}}></div>
+                  <div className="h-full bg-for rounded-full" style={{width: "94%"}}></div>
                 </div>
               </div>
               <div className="space-y-2">
@@ -197,7 +197,7 @@ const Dao = () => {
                   <span className="text-on-surface">75K AXO (6%)</span>
                 </div>
                 <div className="w-full h-2 bg-surface-container-lowest rounded-full overflow-hidden">
-                  <div className="h-full bg-error rounded-full" style={{width: "6%"}}></div>
+                  <div className="h-full bg-against rounded-full" style={{width: "6%"}}></div>
                 </div>
               </div>
             </div>
