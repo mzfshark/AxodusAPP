@@ -27,12 +27,12 @@ const Overview = () => {
           <div className="w-1/2 h-full flex items-end">
             <div className="w-full h-40 flex items-end gap-1 px-4 opacity-60">
               {/* Simple custom CSS sparkline visualization */}
-              <div className="bg-secondary/40 w-full h-[30%] rounded-t-sm"></div>
-              <div className="bg-secondary/50 w-full h-[45%] rounded-t-sm"></div>
-              <div className="bg-secondary/60 w-full h-[40%] rounded-t-sm"></div>
-              <div className="bg-secondary/70 w-full h-[60%] rounded-t-sm"></div>
-              <div className="bg-secondary/80 w-full h-[55%] rounded-t-sm"></div>
-              <div className="bg-secondary/90 w-full h-[75%] rounded-t-sm"></div>
+              <div className="bg-secondary w-full h-[30%] rounded-t-sm"></div>
+              <div className="bg-secondary w-full h-[45%] rounded-t-sm"></div>
+              <div className="bg-secondary w-full h-[40%] rounded-t-sm"></div>
+              <div className="bg-secondary w-full h-[60%] rounded-t-sm"></div>
+              <div className="bg-secondary w-full h-[55%] rounded-t-sm"></div>
+              <div className="bg-secondary w-full h-[75%] rounded-t-sm"></div>
               <div className="bg-secondary w-full h-[90%] rounded-t-sm shadow-[0_0_15px_#41e4b8]"></div>
             </div>
           </div>

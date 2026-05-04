@@ -384,7 +384,7 @@
 }
 
 :global(.border) {
-  border: 1px solid var(--border);
+  border: none;
 }
 
 /* === AXODUS UI STANDARDIZATION ================================== */
@@ -560,7 +560,7 @@ body {
 
 .bg-surface-container-highest,
 .bg-surface-bright {
-  background-color: var(--color-surface-raised) !important;
+  background-color: var(--color-bg-soft) !important;
 }
 
 .text-on-surface,
@@ -576,7 +576,7 @@ body {
 
 .text-outline,
 .text-slate-500 {
-  color: var(--color-text-muted) !important;
+  color: var(--color-accent) !important;
 }
 
 .text-primary,
