@@ -3,8 +3,10 @@ import React from 'react';
 export default function BotManagement() {
   return (
     <>
-      
+
+    <main className="flex-1 overflow-y-auto bg-background">    
 <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+
 <div>
 <p className="text-label-md uppercase tracking-[0.2em] text-primary/70 font-semibold mb-2">Portfolio Overview</p>
 <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-white">Trading Bots Dashboard</h1>
@@ -217,7 +219,7 @@ export default function BotManagement() {
 </div>
 </div>
 </section>
-
+</main>
     </>
   );
 }
