@@ -131,23 +131,23 @@
 
 @layer utilities {
   .glow-secondary {
-    @apply filter drop-shadow-[0_0_4px_rgba(65,228,184,0.4)];
+    filter: drop-shadow(0 0 4px rgba(65, 228, 184, 0.4));
   }
 
   .glowSecondary {
-    @apply filter drop-shadow-[0_0_4px_rgba(65,228,184,0.4)];
+    filter: drop-shadow(0 0 4px rgba(65, 228, 184, 0.4));
   }
 
   .glow-error {
-    @apply filter drop-shadow-[0_0_4px_rgba(255,180,171,0.4)];
+    filter: drop-shadow(0 0 4px rgba(255, 180, 171, 0.4));
   }
 
   .glowError {
-    @apply filter drop-shadow-[0_0_4px_rgba(255,180,171,0.4)];
+    filter: drop-shadow(0 0 4px rgba(255, 180, 171, 0.4));
   }
 
   .glow-primary {
-    @apply filter drop-shadow-[0_0_8px_rgba(192,193,255,0.4)];
+    filter: drop-shadow(0 0 8px rgba(192, 193, 255, 0.4));
   }
 }
 
@@ -155,11 +155,12 @@
 
 @layer utilities {
   .mono {
-    @apply font-mono;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
   .mono-text {
-    @apply font-mono text-xs;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.75rem;
   }
 }
 
@@ -167,55 +168,55 @@
 
 @layer utilities {
   /* Custom margin utilities */
-  .m-xs { @apply m-1; }
-  .m-sm { @apply m-2; }
-  .m-base { @apply m-4; }
-  .m-lg { @apply m-6; }
-  .m-xl { @apply m-8; }
-  .m-2xl { @apply m-12; }
+  .m-xs { margin: 0.25rem; }
+  .m-sm { margin: 0.5rem; }
+  .m-base { margin: 1rem; }
+  .m-lg { margin: 1.5rem; }
+  .m-xl { margin: 2rem; }
+  .m-2xl { margin: 3rem; }
 
   /* Custom padding utilities */
-  .p-xs { @apply p-1; }
-  .p-sm { @apply p-2; }
-  .p-base { @apply p-4; }
-  .p-lg { @apply p-6; }
-  .p-xl { @apply p-8; }
-  .p-2xl { @apply p-12; }
+  .p-xs { padding: 0.25rem; }
+  .p-sm { padding: 0.5rem; }
+  .p-base { padding: 1rem; }
+  .p-lg { padding: 1.5rem; }
+  .p-xl { padding: 2rem; }
+  .p-2xl { padding: 3rem; }
 
   /* Custom gap utilities for flexbox/grid */
-  .gap-xs { @apply gap-1; }
-  .gap-sm { @apply gap-2; }
-  .gap-base { @apply gap-4; }
-  .gap-lg { @apply gap-6; }
-  .gap-xl { @apply gap-8; }
-  .gap-2xl { @apply gap-12; }
+  .gap-xs { gap: 0.25rem; }
+  .gap-sm { gap: 0.5rem; }
+  .gap-base { gap: 1rem; }
+  .gap-lg { gap: 1.5rem; }
+  .gap-xl { gap: 2rem; }
+  .gap-2xl { gap: 3rem; }
 
   /* Custom container utilities */
-  .container-sm { @apply max-w-sm mx-auto px-4; }
-  .container-md { @apply max-w-md mx-auto px-4; }
-  .container-lg { @apply max-w-lg mx-auto px-4; }
-  .container-xl { @apply max-w-xl mx-auto px-4; }
-  .container-2xl { @apply max-w-2xl mx-auto px-4; }
-  .container-full { @apply max-w-full mx-auto px-4; }
+  .container-sm { max-width: 24rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-md { max-width: 28rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-lg { max-width: 32rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-xl { max-width: 36rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-2xl { max-width: 42rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-full { max-width: 100%; margin-inline: auto; padding-inline: 1rem; }
 
   /* Custom border utilities */
-  .border-xs { @apply border-0; }
-  .border-sm { @apply border; }
-  .border-md { @apply border-2; }
-  .border-lg { @apply border-4; }
+  .border-xs { border-width: 0; }
+  .border-sm { border-width: 1px; }
+  .border-md { border-width: 2px; }
+  .border-lg { border-width: 4px; }
 
   /* Custom shadow utilities - glassmorphism friendly */
-  .shadow-glass { @apply shadow-sm backdrop-blur-md; }
-  .shadow-glass-md { @apply shadow-md backdrop-blur-lg; }
-  .shadow-glass-lg { @apply shadow-lg backdrop-blur-xl; }
+  .shadow-glass { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); backdrop-filter: blur(12px); }
+  .shadow-glass-md { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.16); backdrop-filter: blur(16px); }
+  .shadow-glass-lg { box-shadow: 0 10px 15px rgba(0, 0, 0, 0.18); backdrop-filter: blur(24px); }
 
   /* Custom rounded utilities */
-  .rounded-xs { @apply rounded-sm; }
-  .rounded-sm { @apply rounded; }
-  .rounded-md { @apply rounded-md; }
-  .rounded-lg { @apply rounded-lg; }
-  .rounded-xl { @apply rounded-xl; }
-  .rounded-full { @apply rounded-full; }
+  .rounded-xs { border-radius: 0.125rem; }
+  .rounded-sm { border-radius: 0.25rem; }
+  .rounded-md { border-radius: 0.375rem; }
+  .rounded-lg { border-radius: 0.5rem; }
+  .rounded-xl { border-radius: 0.75rem; }
+  .rounded-full { border-radius: 9999px; }
 }
 
 /* === COMPONENT CUSTOMIZATION ============================== */
@@ -223,21 +224,24 @@
 /* Card component customization */
 @layer components {
   .card {
-    @apply rounded-lg p-6;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
     border: 1px solid rgba(70, 69, 84, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .card-sm {
-    @apply rounded-md p-4;
+    border-radius: 0.375rem;
+    padding: 1rem;
     border: 1px solid rgba(70, 69, 84, 0.2);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .card-lg {
-    @apply rounded-xl p-8;
+    border-radius: 0.75rem;
+    padding: 2rem;
     border: 1px solid rgba(70, 69, 84, 0.2);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -245,20 +249,30 @@
 
   /* Button component customization */
   .btn {
-    @apply px-4 py-2 rounded-md font-medium transition-all duration-200;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 200ms ease;
   }
 
   .btn-sm {
-    @apply px-3 py-1 rounded text-sm;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
   }
 
   .btn-lg {
-    @apply px-6 py-3 rounded-lg text-lg;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
   }
 
   /* Input component customization */
   .input {
-    @apply w-full px-4 py-2 rounded-md transition-colors;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
     border: 1px solid rgba(70, 69, 84, 0.2);
     background: rgba(11, 19, 38, 0.2);
     backdrop-filter: blur(6px);
@@ -266,32 +280,36 @@
   }
 
   .input-sm {
-    @apply px-3 py-1 rounded text-sm;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
   }
 
   .input-lg {
-    @apply px-5 py-3 rounded-lg text-lg;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
   }
 }
 
 /* === RESPONSIVE CONTAINER CUSTOMIZATION ==================== */
 
 @media (max-width: 640px) {
-  .responsive-p { @apply p-3; }
-  .responsive-m { @apply m-2; }
-  .responsive-gap { @apply gap-2; }
+  .responsive-p { padding: 0.75rem; }
+  .responsive-m { margin: 0.5rem; }
+  .responsive-gap { gap: 0.5rem; }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
-  .responsive-p { @apply p-4; }
-  .responsive-m { @apply m-3; }
-  .responsive-gap { @apply gap-3; }
+  .responsive-p { padding: 1rem; }
+  .responsive-m { margin: 0.75rem; }
+  .responsive-gap { gap: 0.75rem; }
 }
 
 @media (min-width: 1025px) {
-  .responsive-p { @apply p-6; }
-  .responsive-m { @apply m-4; }
-  .responsive-gap { @apply gap-4; }
+  .responsive-p { padding: 1.5rem; }
+  .responsive-m { margin: 1rem; }
+  .responsive-gap { gap: 1rem; }
 }
 
 /* === ANIMATION CUSTOMIZATION =============================== */
@@ -380,11 +398,12 @@
 
 @layer utilities {
   .dashboard-container {
-    @apply w-full h-full;
+    width: 100%;
+    height: 100%;
   }
 
   .dashboard-section {
-    @apply w-full;
+    width: 100%;
   }
 }
 
@@ -403,17 +422,17 @@
 
 /* Custom Axodus-specific utilities */
 @layer utilities {
-  .text-axodus-primary { @apply text-[#c0c1ff]; }
-  .text-axodus-secondary { @apply text-[#41e4b8]; }
-  .text-axodus-tertiary { @apply text-[#ffb783]; }
+  .text-axodus-primary { color: #c0c1ff; }
+  .text-axodus-secondary { color: #41e4b8; }
+  .text-axodus-tertiary { color: #ffb783; }
 
-  .bg-axodus-primary { @apply bg-[#c0c1ff]; }
-  .bg-axodus-secondary { @apply bg-[#41e4b8]; }
-  .bg-axodus-tertiary { @apply bg-[#ffb783]; }
+  .bg-axodus-primary { background-color: #c0c1ff; }
+  .bg-axodus-secondary { background-color: #41e4b8; }
+  .bg-axodus-tertiary { background-color: #ffb783; }
 
-  .border-axodus-primary { @apply border-[#c0c1ff]; }
-  .border-axodus-secondary { @apply border-[#41e4b8]; }
-  .border-axodus-tertiary { @apply border-[#ffb783]; }
+  .border-axodus-primary { border-color: #c0c1ff; }
+  .border-axodus-secondary { border-color: #41e4b8; }
+  .border-axodus-tertiary { border-color: #ffb783; }
 
   .shadow-axodus { box-shadow: 0 10px 15px -3px rgba(192, 193, 255, 0.20), 0 4px 6px -4px rgba(192, 193, 255, 0.20); }
   .shadow-axodus-lg { box-shadow: 0 25px 50px -12px rgba(192, 193, 255, 0.30); }
