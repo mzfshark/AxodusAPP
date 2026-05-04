@@ -8,7 +8,7 @@ export default function Header() {
     <nav className="app-header fixed top-0 left-0 w-full z-50 backdrop-blur-xl flex justify-between items-center px-6 py-3 border-b font-['Inter'] tracking-tight text-sm font-semibold">
       <div className="flex items-center gap-8">
         <Link to="/dashboard" className="flex items-center">
-          <img src="/logo.svg" alt="Axodus" className="h-8 w-auto" />
+          <img src="/logo.png" alt="Axodus" className="h-8 w-auto" />
         </Link>
         {/* Search Bar Center */}
         <div className="hidden md:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 min-w-[320px]">
