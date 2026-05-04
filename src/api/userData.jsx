@@ -37,6 +37,7 @@ export async function getUserInvestments(address) {
   
   // Mock para gráfico de performance histórica
   export async function getUserPerformance(address) {
+    console.log(`Fetching user performance for: ${address}`);
     await new Promise((resolve) => setTimeout(resolve, 300));
   
     return [

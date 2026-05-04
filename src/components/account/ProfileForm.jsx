@@ -22,7 +22,9 @@ export default function ProfileForm() {
         const data = JSON.parse(raw);
         setForm((prev) => ({ ...prev, ...data }));
       }
-    } catch {}
+    } catch {
+      // Ignore invalid local profile cache.
+    }
   }, []);
 
   const onChange = (e) => {

@@ -45,7 +45,7 @@ export const calculateTotalValue = (portfolioState) => {
   
   // Sum CEX balances
   Object.values(portfolioState.balances).forEach(exchange => {
-    Object.entries(exchange).forEach(([token, data]) => {
+    Object.values(exchange).forEach((data) => {
       if (data.total_usd) {
         total += parseFloat(data.total_usd);
       }

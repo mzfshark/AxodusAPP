@@ -19,7 +19,7 @@ const TokenBalance = () => {
       <h2>Your Token Balances</h2>
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {tokenList.map(({ address, symbol, decimals }) => {
+        {tokenList.map(({ address, symbol }) => {
           const raw = tokenBalances[address] ?? '0';
           // formata usando Intl ou ethers.utils.formatUnits se precisar
           const balance = Number(raw).toLocaleString(undefined, {
@@ -28,7 +28,7 @@ const TokenBalance = () => {
 
           return (
             <li key={address}>
-              {symbol} — {balance}
+              {symbol} — {balance}
             </li>
           );
         })}

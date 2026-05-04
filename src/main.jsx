@@ -20,8 +20,24 @@ window.addEventListener('unhandledrejection', (event) => {
   console.error('[Unhandled Rejection]', event.reason);
 });
 
+window.addEventListener('error', (event) => {
+  const target = event.target;
+  if (target instanceof HTMLImageElement && !target.dataset.fallbackApplied) {
+    target.dataset.fallbackApplied = "true";
+    target.src = "/logo.svg";
+    target.classList.add("image-fallback");
+  }
+}, true);
+
 const persisted = localStorage.getItem("theme");
-if (persisted === "dark") document.documentElement.classList.add("dark");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+const initialTheme = persisted === "light" || persisted === "dark"
+  ? persisted
+  : prefersDark
+    ? "dark"
+    : "light";
+document.documentElement.dataset.theme = initialTheme;
+document.documentElement.classList.toggle("dark", initialTheme === "dark");
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

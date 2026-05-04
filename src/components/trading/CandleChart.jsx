@@ -42,45 +42,6 @@ const CandleChart = ({ data, loading, error }) => {
     );
   }
 
-  // Custom candlestick shape
-  const CandleStick = (props) => {
-    const { x, y, width, height, fill, payload } = props;
-    
-    if (!payload || !payload.open || !payload.close) return null;
-
-    const isGreen = payload.close >= payload.open;
-    const color = isGreen ? '#4caf50' : '#f44336';
-    
-    const yHigh = y;
-    const yLow = y + height;
-    const yOpen = isGreen ? yLow : y;
-    const yClose = isGreen ? y : yLow;
-    const bodyHeight = Math.abs(yClose - yOpen);
-
-    return (
-      <g>
-        {/* Wick */}
-        <line
-          x1={x + width / 2}
-          y1={yHigh}
-          x2={x + width / 2}
-          y2={yLow}
-          stroke={color}
-          strokeWidth={1}
-        />
-        {/* Body */}
-        <rect
-          x={x}
-          y={Math.min(yOpen, yClose)}
-          width={width}
-          height={Math.max(bodyHeight, 1)}
-          fill={color}
-          stroke={color}
-        />
-      </g>
-    );
-  };
-
   return (
     <div className="container">
       <div className="header">

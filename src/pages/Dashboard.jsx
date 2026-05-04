@@ -1,5 +1,5 @@
 // src/pages/Dashboard.jsx
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Overview from './Overview';
 
 const Dashboard = () => {

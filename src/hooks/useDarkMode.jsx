@@ -15,15 +15,16 @@ export default function useDarkMode() {
 
   useEffect(() => {
     const root = document.documentElement;
-    let isDark = false;
+    let resolvedTheme = "light";
     
     if (theme === "system") {
-      isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     } else {
-      isDark = theme === "dark";
+      resolvedTheme = theme;
     }
 
-    root.classList.toggle("dark", isDark);
+    root.dataset.theme = resolvedTheme;
+    root.classList.toggle("dark", resolvedTheme === "dark");
     localStorage.setItem("theme", theme);
   }, [theme]);
 
@@ -33,6 +34,8 @@ export default function useDarkMode() {
     
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e) => {
+      const resolvedTheme = e.matches ? "dark" : "light";
+      document.documentElement.dataset.theme = resolvedTheme;
       document.documentElement.classList.toggle("dark", e.matches);
     };
     
