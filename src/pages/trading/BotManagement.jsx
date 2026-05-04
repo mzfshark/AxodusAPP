@@ -4,7 +4,7 @@ export default function BotManagement() {
   return (
     <>
 
-    <main className="flex-1 overflow-y-auto bg-background">    
+<main className="flex-1 app-view-shell">   
 <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
 
 <div>
@@ -12,7 +12,7 @@ export default function BotManagement() {
 <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-white">Trading Bots Dashboard</h1>
 </div>
 <div className="flex gap-4">
-<div className="bg-surface-container-low px-6 py-4 rounded-xl flex items-center gap-4 border border-outline-variant/5">
+<div className="bg-surface-container-low px-6 py-4 rounded-xl flex items-center gap-4 border-outline-variant/5">
 <div className="text-right">
 <p className="text-xs text-outline font-medium uppercase tracking-wider">Market Sentiment</p>
 <p className="text-lg font-bold text-secondary">Greed: 72</p>
@@ -22,7 +22,7 @@ export default function BotManagement() {
 </div>
 </header>
 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-<div className="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<div className="bg-surface-container px-6 py-8 rounded-xl border-outline-variant/5 relative overflow-hidden group">
 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
 <span className="material-symbols-outlined text-6xl">account_balance_wallet</span>
 </div>
@@ -32,21 +32,21 @@ export default function BotManagement() {
 <span className="text-sm font-semibold text-secondary">+4.2%</span>
 </div>
 </div>
-<div className="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<div className="bg-surface-container px-6 py-8 rounded-xl border-outline-variant/5 relative overflow-hidden group">
 <p className="text-sm font-medium text-outline mb-4">Total ROI</p>
 <div className="flex items-baseline gap-2">
 <span className="text-3xl font-bold text-white tracking-tight">+148.3%</span>
 <span className="text-sm font-semibold text-primary">All Time</span>
 </div>
 </div>
-<div className="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<div className="bg-surface-container px-6 py-8 rounded-xl border-outline-variant/5 relative overflow-hidden group">
 <p className="text-sm font-medium text-outline mb-4">Active Bots</p>
 <div className="flex items-baseline gap-2">
 <span className="text-3xl font-bold text-white tracking-tight">08</span>
 <span className="text-sm font-semibold text-outline">/ 12 Slots</span>
 </div>
 </div>
-<div className="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<div className="bg-surface-container px-6 py-8 rounded-xl border-outline-variant/5 relative overflow-hidden group">
 <p className="text-sm font-medium text-outline mb-4">Overall Win Rate</p>
 <div className="flex items-baseline gap-2">
 <span className="text-3xl font-bold text-white tracking-tight">68.4%</span>
@@ -60,10 +60,10 @@ export default function BotManagement() {
 <button className="text-primary text-sm font-semibold flex items-center gap-2 hover:gap-3 transition-all">View All Performance <span className="material-symbols-outlined text-sm">arrow_forward</span></button>
 </div>
 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-<div className="bg-surface-container-high rounded-2xl p-6 border border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
+<div className="bg-surface-container-high rounded-2xl p-6 border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-4">
-<div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+<div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border-primary/20">
 <span className="material-symbols-outlined text-primary">psychology</span>
 </div>
 <div>
@@ -96,10 +96,10 @@ export default function BotManagement() {
 </div>
 </div>
 </div>
-<div className="bg-surface-container-high rounded-2xl p-6 border border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
+<div className="bg-surface-container-high rounded-2xl p-6 border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-4">
-<div className="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center border border-secondary/20">
+<div className="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center border-secondary/20">
 <span className="material-symbols-outlined text-secondary">bolt</span>
 </div>
 <div>
@@ -132,10 +132,10 @@ export default function BotManagement() {
 <div className="flex-1 bg-secondary/60 rounded-t-sm h-[90%] glow-secondary"></div>
 </div>
 </div>
-<div className="bg-surface-container-high rounded-2xl p-6 border border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
+<div className="bg-surface-container-high rounded-2xl p-6 border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-4">
-<div className="w-12 h-12 bg-tertiary/10 rounded-xl flex items-center justify-center border border-tertiary/20">
+<div className="w-12 h-12 bg-tertiary/10 rounded-xl flex items-center justify-center border-tertiary/20">
 <span className="material-symbols-outlined text-tertiary">trending_up</span>
 </div>
 <div>
@@ -158,7 +158,7 @@ export default function BotManagement() {
 <p className="text-lg font-bold text-tertiary">+34.5%</p>
 </div>
 </div>
-<div className="p-3 bg-surface-container-lowest/50 rounded-xl flex items-center justify-between border border-outline-variant/5">
+<div className="p-3 bg-surface-container-lowest/50 rounded-xl flex items-center justify-between border-outline-variant/5">
 <span className="text-[10px] text-outline uppercase font-bold">Auto-Resume at</span>
 <span className="text-xs font-mono text-primary">$3,240.00 ETH</span>
 </div>
@@ -171,7 +171,7 @@ export default function BotManagement() {
 <div className="h-[1px] flex-1 bg-gradient-to-r from-outline-variant/20 to-transparent"></div>
 </div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-<div className="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/5 flex items-center gap-6 hover:bg-surface-container transition-all cursor-pointer">
+<div className="bg-surface-container-low p-5 rounded-2xl border-outline-variant/5 flex items-center gap-6 hover:bg-surface-container transition-all cursor-pointer">
 <img className="w-24 h-24 rounded-xl object-cover filter grayscale hover:grayscale-0 transition-all" data-alt="abstract digital connection network with neon nodes and glowing paths on a dark obsidian background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUElz2SFLFYY57JStT5LoF-hTLhEHe_1bd_1POTPnVZ2-eD7DOzi5PCslhRKxqTSSq3swDF7VzznEuFvaLVFrXFoFnlzkVksgqU4s-rAEiL7ReRdk-IYFp9wB7MId_AGzFcHuDylHy2IZg6DAivmwC0GtGMJYjh47SS1BA0tAuJrmBt_sgTBcmRaZuJiRzm-6ybrpn398rz5kFMjzYgKZe80ilI1UIihITHcxeeZCyxaHhQ7nmPMW28NPigwdYORu11RJd-ZS-lnU"/>
 <div className="flex-1">
 <div className="flex items-center justify-between mb-1">
@@ -194,7 +194,7 @@ export default function BotManagement() {
 <span className="material-symbols-outlined">add</span>
 </button>
 </div>
-<div className="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/5 flex items-center gap-6 hover:bg-surface-container transition-all cursor-pointer">
+<div className="bg-surface-container-low p-5 rounded-2xl border-outline-variant/5 flex items-center gap-6 hover:bg-surface-container transition-all cursor-pointer">
 <img className="w-24 h-24 rounded-xl object-cover filter grayscale hover:grayscale-0 transition-all" data-alt="vibrant abstract explosion of electric blue and violet energy waves in a deep cosmic void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQzlo0zCY2g4umFJfrpYizz4Qq_lbM_aHooXv6ADTTqrUSF9HRpvONcFZGl1CB1y3EX5qVH-JLectV7ZTeBTesrdh3h3ADkgqAAdmxYCv5DNrkzwaGcqKAW8NVGGrSgdHQF_gcS1PtKet1u3yUV4KOJaz1x2XCV91aqxmg4INoLX1vaRALVVu5L6XCYAxAd8eGh5RZeY9TO8c6ZfrsVRTmIPkW3iyi8l9tL58UW7mKsIqLMG2OxfsAhnSZLH4-GyHi5Q5xnl-eNRU"/>
 <div className="flex-1">
 <div className="flex items-center justify-between mb-1">
@@ -220,6 +220,7 @@ export default function BotManagement() {
 </div>
 </section>
 </main>
+
     </>
   );
 }
