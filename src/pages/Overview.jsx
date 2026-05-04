@@ -21,7 +21,7 @@ const Overview = () => {
             </div>
             <div className="flex gap-4 mt-8">
               <button className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-transform">Deposit</button>
-              <button className="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm border border-outline-variant/10 hover:bg-surface-bright transition-colors">Withdraw</button>
+              <button className="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm border-outline-variant/10 hover:bg-surface-bright transition-colors">Withdraw</button>
             </div>
           </div>
           <div className="w-1/2 h-full flex items-end">
@@ -60,7 +60,7 @@ const Overview = () => {
       {/* 2. Portfolio Distribution & Yields */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
         {/* Distribution Visual */}
-        <div className="lg:col-span-5 glass-panel p-8 rounded-xl border border-white/5">
+        <div className="lg:col-span-5 glass-panel p-8 rounded-xl border-white/5">
           <h3 className="text-lg font-bold text-white mb-8">Portfolio Distribution</h3>
           <div className="relative flex flex-col items-center justify-center">
             {/* Radar Chart SVG */}
@@ -186,14 +186,14 @@ const Overview = () => {
       {/* 3. Governance & Business Status */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Governance Proposals */}
-        <div className="bg-surface-container-highest p-8 rounded-xl border border-white/5">
+        <div className="bg-surface-container-highest p-8 rounded-xl border-white/5">
           <div className="flex justify-between items-center mb-8">
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
               <span className="material-symbols-outlined text-indigo-400">gavel</span> Active Governance
             </h3>
           </div>
           <div className="space-y-6">
-            <div className="p-4 bg-surface-container rounded-lg border border-outline-variant/10">
+            <div className="p-4 bg-surface-container rounded-lg border-outline-variant/10">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="text-sm font-bold text-on-surface">AX-104: Expand Mining in Norway</h4>
                 <span className="px-2 py-1 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">CORE</span>
@@ -206,7 +206,7 @@ const Overview = () => {
                 <div className="h-full bg-indigo-400 w-[72%]"></div>
               </div>
             </div>
-            <div className="p-4 bg-surface-container rounded-lg border border-outline-variant/10">
+            <div className="p-4 bg-surface-container rounded-lg border-outline-variant/10">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="text-sm font-bold text-on-surface">AX-105: Dynamic Burn Rate Adjust</h4>
                 <span className="px-2 py-1 rounded text-[10px] font-bold bg-secondary/20 text-secondary">ECON</span>
@@ -222,7 +222,7 @@ const Overview = () => {
           </div>
         </div>
         {/* Business Project Progress */}
-        <div className="bg-surface-container-highest p-8 rounded-xl border border-white/5">
+        <div className="bg-surface-container-highest p-8 rounded-xl border-white/5">
           <h3 className="text-lg font-bold text-white mb-8 flex items-center gap-2">
             <span className="material-symbols-outlined text-secondary">rocket_launch</span> Business Progress
           </h3>

@@ -20,7 +20,7 @@ const Portfolio = () => {
           </div>
           <div className="mt-6 flex gap-4">
             <button className="hero-gradient px-6 py-2.5 rounded-xl font-bold text-sm text-on-primary shadow-lg shadow-indigo-500/20">Deposit Now</button>
-            <button className="bg-surface-container-high px-6 py-2.5 rounded-xl font-bold text-sm text-on-surface border border-outline-variant/20">Withdraw</button>
+            <button className="bg-surface-container-high px-6 py-2.5 rounded-xl font-bold text-sm text-on-surface border-outline-variant/20">Withdraw</button>
           </div>
         </div>
         <div className="lg:col-span-8 bg-surface-container-low rounded-3xl p-6 ghost-border">
@@ -90,8 +90,8 @@ const Portfolio = () => {
                   <button className="text-primary font-semibold text-sm self-end">Claim</button>
                 </div>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 rounded-lg bg-primary/10 text-primary font-bold text-sm border border-primary/20 hover:bg-primary hover:text-on-primary transition-all">Stake</button>
-                  <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-bold text-sm border border-outline-variant/10">Unstake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-primary/10 text-primary font-bold text-sm border-primary/20 hover:bg-primary hover:text-on-primary transition-all">Stake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-bold text-sm border-outline-variant/10">Unstake</button>
                 </div>
               </div>
               {/* ETH/WBTC Pool */}
@@ -124,8 +124,8 @@ const Portfolio = () => {
                   <button className="text-indigo-400 font-semibold text-sm self-end">Claim</button>
                 </div>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold text-sm border border-indigo-500/20 hover:bg-indigo-500 hover:text-white transition-all">Stake</button>
-                  <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-slate-300 font-bold text-sm border border-outline-variant/10">Unstake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-indigo-500/10 text-indigo-400 font-bold text-sm border-indigo-500/20 hover:bg-indigo-500 hover:text-white transition-all">Stake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-slate-300 font-bold text-sm border-outline-variant/10">Unstake</button>
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ const Portfolio = () => {
               <span className="material-symbols-outlined text-primary">account_balance_wallet</span>
               Lending Markets
             </h2>
-            <div className="overflow-hidden rounded-2xl bg-surface-container-low border border-outline-variant/10">
+            <div className="overflow-hidden rounded-2xl bg-surface-container-low border-outline-variant/10">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-surface-container-lowest/50">
@@ -208,7 +208,7 @@ const Portfolio = () => {
               </div>
               <p className="text-xs text-center text-slate-500 mt-4 leading-relaxed px-4">Your liquidation threshold is far. Keep your collateral ratio above 1.5 to stay safe.</p>
             </div>
-            <div className="bg-surface-container-lowest rounded-2xl p-6 border border-white/5">
+            <div className="bg-surface-container-lowest rounded-2xl p-6 border-white/5">
               <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-4 block">Claimable Rewards</span>
               <div className="flex items-center justify-between">
                 <div>
@@ -229,8 +229,8 @@ const Portfolio = () => {
               <div className="bg-surface-container-low p-5 rounded-2xl ghost-border hover:translate-y-[-2px] transition-transform cursor-pointer">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-indigo-600 border border-surface z-10 flex items-center justify-center"><span className="material-symbols-outlined text-xs text-white">bolt</span></div>
-                    <div className="w-8 h-8 rounded-full bg-green-500 border border-surface flex items-center justify-center text-[10px] font-bold text-white">U</div>
+                    <div className="w-8 h-8 rounded-full bg-indigo-600 border-surface z-10 flex items-center justify-center"><span className="material-symbols-outlined text-xs text-white">bolt</span></div>
+                    <div className="w-8 h-8 rounded-full bg-green-500 border-surface flex items-center justify-center text-[10px] font-bold text-white">U</div>
                   </div>
                   <span className="text-secondary font-bold text-lg">124.5% <span className="text-[10px] text-slate-500 align-middle">APY</span></span>
                 </div>
@@ -240,11 +240,11 @@ const Portfolio = () => {
                 </div>
               </div>
               {/* Pool Card */}
-              <div className="surface-container-highest p-5 rounded-2xl border border-white/5 hover:translate-y-[-2px] transition-transform cursor-pointer">
+              <div className="surface-container-highest p-5 rounded-2xl border-white/5 hover:translate-y-[-2px] transition-transform cursor-pointer">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-500 border border-surface z-10 flex items-center justify-center text-[10px] font-bold text-white">E</div>
-                    <div className="w-8 h-8 rounded-full bg-orange-500 border border-surface flex items-center justify-center text-[10px] font-bold text-white">B</div>
+                    <div className="w-8 h-8 rounded-full bg-blue-500 border-surface z-10 flex items-center justify-center text-[10px] font-bold text-white">E</div>
+                    <div className="w-8 h-8 rounded-full bg-orange-500 border-surface flex items-center justify-center text-[10px] font-bold text-white">B</div>
                   </div>
                   <span className="text-white font-bold text-lg">18.4% <span className="text-[10px] text-slate-500 align-middle">APY</span></span>
                 </div>
@@ -254,11 +254,11 @@ const Portfolio = () => {
                 </div>
               </div>
               {/* Pool Card */}
-              <div className="surface-container-highest p-5 rounded-2xl border border-white/5 hover:translate-y-[-2px] transition-transform cursor-pointer">
+              <div className="surface-container-highest p-5 rounded-2xl border-white/5 hover:translate-y-[-2px] transition-transform cursor-pointer">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-purple-500 border border-surface z-10 flex items-center justify-center text-[10px] font-bold text-white">S</div>
-                    <div className="w-8 h-8 rounded-full bg-blue-400 border border-surface flex items-center justify-center text-[10px] font-bold text-white">U</div>
+                    <div className="w-8 h-8 rounded-full bg-purple-500 border-surface z-10 flex items-center justify-center text-[10px] font-bold text-white">S</div>
+                    <div className="w-8 h-8 rounded-full bg-blue-400 border-surface flex items-center justify-center text-[10px] font-bold text-white">U</div>
                   </div>
                   <span className="text-white font-bold text-lg">26.1% <span className="text-[10px] text-slate-500 align-middle">APY</span></span>
                 </div>

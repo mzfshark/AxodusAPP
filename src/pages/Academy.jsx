@@ -18,7 +18,7 @@ const Academy = () => {
 <p className="text-on-surface-variant mb-6 text-lg">A comprehensive guide to understanding blockchain architecture, smart contracts, and the new economy.</p>
 <div className="flex items-center gap-4">
 <button className="kinetic-gradient text-on-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary/10">Start Learning</button>
-<button className="glass-effect text-on-surface px-8 py-3 rounded-xl font-bold text-sm border border-outline-variant/10">View Syllabus</button>
+<button className="glass-effect text-on-surface px-8 py-3 rounded-xl font-bold text-sm border-outline-variant/10">View Syllabus</button>
 </div>
 </div>
 </section>

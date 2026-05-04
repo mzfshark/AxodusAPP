@@ -11,7 +11,7 @@ export default function Header() {
           <img src="/logo.png" alt="Axodus" className="h-8 w-auto" />
         </Link>
         {/* Search Bar Center */}
-        <div className="hidden md:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 min-w-[320px]">
+        <div className="hidden md:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border-outline-variant/10 min-w-[320px]">
           <span className="material-symbols-outlined text-slate-500 text-sm">search</span>
           <input className="bg-transparent border-none focus:ring-0 text-xs text-on-surface-variant w-full placeholder-slate-500" placeholder="Search ecosystem..." type="text"/>
         </div>

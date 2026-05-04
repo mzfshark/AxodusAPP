@@ -51,7 +51,7 @@ const Dao = () => {
         </div>
 
         {/* Treasury Balance */}
-        <div className="md:col-span-2 bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group border border-outline-variant/10">
+        <div className="md:col-span-2 bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group border-outline-variant/10">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"></div>
           <div className="relative z-10">
             <div className="text-xs font-medium text-outline mb-4">Treasury Balance</div>
@@ -88,7 +88,7 @@ const Dao = () => {
             Active Proposals
           </h2>
           <div className="flex gap-2">
-            <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border border-primary/20">All</button>
+            <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border-primary/20">All</button>
             <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Core</button>
             <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Grants</button>
           </div>
@@ -96,11 +96,11 @@ const Dao = () => {
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Proposal Card 1 */}
-          <div className="glass-panel rounded-2xl p-6 border border-outline-variant/5 hover:border-primary/20 transition-all group">
+          <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary/20 transition-all group">
             <div className="flex justify-between items-start mb-6">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black bg-secondary/10 text-secondary px-2 py-0.5 rounded border border-secondary/20 uppercase tracking-tighter">Active</span>
+                  <span className="text-[10px] font-black bg-secondary/10 text-secondary px-2 py-0.5 rounded border-secondary/20 uppercase tracking-tighter">Active</span>
                   <span className="text-[10px] text-outline font-bold uppercase tracking-wider">Proposal #084</span>
                 </div>
                 <h3 className="text-lg font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">
@@ -156,11 +156,11 @@ const Dao = () => {
           </div>
 
           {/* Proposal Card 2 */}
-          <div className="glass-panel rounded-2xl p-6 border border-outline-variant/5 hover:border-primary/20 transition-all group">
+          <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary/20 transition-all group">
             <div className="flex justify-between items-start mb-6">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black bg-tertiary/10 text-tertiary px-2 py-0.5 rounded border border-tertiary/20 uppercase tracking-tighter">Quorum Pending</span>
+                  <span className="text-[10px] font-black bg-tertiary/10 text-tertiary px-2 py-0.5 rounded border-tertiary/20 uppercase tracking-tighter">Quorum Pending</span>
                   <span className="text-[10px] text-outline font-bold uppercase tracking-wider">Proposal #083</span>
                 </div>
                 <h3 className="text-lg font-bold text-on-surface leading-snug group-hover:text-primary transition-colors">

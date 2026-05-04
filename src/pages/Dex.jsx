@@ -19,7 +19,7 @@ const Dex = () => {
 </div>
 <div className="space-y-2">
 {/*  From Token  */}
-<div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-white/5">
 <div className="flex justify-between mb-2">
 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">From</span>
 <span className="text-xs text-slate-400">Balance: 14,250.00</span>
@@ -40,7 +40,7 @@ const Dex = () => {
 </div>
 </div>
 {/*  To Token  */}
-<div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-white/5">
 <div className="flex justify-between mb-2">
 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">To (Estimated)</span>
 <span className="text-xs text-slate-400">Balance: 0.42</span>
@@ -106,22 +106,22 @@ const Dex = () => {
 </svg>
 {/*  Chart Overlay info  */}
 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/20 pointer-events-none">
-<div className="bg-surface-bright px-3 py-1.5 rounded-lg border border-white/10 shadow-2xl">
+<div className="bg-surface-bright px-3 py-1.5 rounded-lg border-white/10 shadow-2xl">
 <p className="text-[10px] text-slate-400 font-bold uppercase">Volume 24h</p>
 <p className="text-sm font-bold">$12.4M</p>
 </div>
 </div>
 </div>
 <div className="mt-4 grid grid-cols-3 gap-2">
-<div className="text-center py-2 bg-surface-container-lowest rounded-xl border border-white/5">
+<div className="text-center py-2 bg-surface-container-lowest rounded-xl border-white/5">
 <p className="text-[10px] text-slate-500 font-bold uppercase">Low</p>
 <p className="text-xs font-semibold">$3,210</p>
 </div>
-<div className="text-center py-2 bg-surface-container-lowest rounded-xl border border-white/5">
+<div className="text-center py-2 bg-surface-container-lowest rounded-xl border-white/5">
 <p className="text-[10px] text-slate-500 font-bold uppercase">High</p>
 <p className="text-xs font-semibold">$3,580</p>
 </div>
-<div className="text-center py-2 bg-surface-container-lowest rounded-xl border border-white/5">
+<div className="text-center py-2 bg-surface-container-lowest rounded-xl border-white/5">
 <p className="text-[10px] text-slate-500 font-bold uppercase">MCap</p>
 <p className="text-xs font-semibold">$4.2B</p>
 </div>
@@ -231,7 +231,7 @@ const Dex = () => {
 <h2 className="text-lg font-bold tracking-tight">Active Hooks</h2>
 </div>
 <div className="space-y-4">
-<div className="bg-surface-container-lowest p-4 rounded-2xl border border-primary/10">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-primary/10">
 <div className="flex justify-between items-start mb-2">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-secondary text-lg" data-icon="monitoring" data-weight="fill">monitoring</span>
@@ -241,7 +241,7 @@ const Dex = () => {
 </div>
 <p className="text-xs text-slate-400 leading-relaxed">Adjusts pool fees based on 5min volatility windows. Currently optimized for $NEURONS volatility.</p>
 </div>
-<div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-white/5">
 <div className="flex justify-between items-start mb-2">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-tertiary text-lg" data-icon="account_tree">account_tree</span>
@@ -250,7 +250,7 @@ const Dex = () => {
 </div>
 <p className="text-xs text-slate-400 leading-relaxed">Cross-checks Chainlink price feeds before trade execution to prevent sandwich attacks.</p>
 </div>
-<div className="bg-surface-container-lowest p-4 rounded-2xl border border-white/5">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-white/5">
 <div className="flex justify-between items-start mb-2">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-indigo-400 text-lg" data-icon="polyline">polyline</span>
@@ -260,7 +260,7 @@ const Dex = () => {
 <p className="text-xs text-slate-400 leading-relaxed">Implementing concentrated liquidity within specific bands for better capital efficiency.</p>
 </div>
 </div>
-<button className="mt-6 w-full py-3 bg-surface-container-highest text-primary font-bold rounded-xl text-sm border border-primary/20 hover:bg-primary/5 transition-colors">
+<button className="mt-6 w-full py-3 bg-surface-container-highest text-primary font-bold rounded-xl text-sm border-primary/20 hover:bg-primary/5 transition-colors">
               Browse Hooks Marketplace
             </button>
 </div>
@@ -275,12 +275,12 @@ const Dex = () => {
 </div>
 <div className="space-y-4">
 {/*  Position 1  */}
-<div className="p-4 bg-surface-container-lowest rounded-2xl border border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
+<div className="p-4 bg-surface-container-lowest rounded-2xl border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">
 <div className="flex -space-x-1">
 <div className="w-5 h-5 rounded-full bg-secondary text-[8px] font-bold flex items-center justify-center text-on-secondary">N</div>
-<img alt="USDT" className="w-5 h-5 rounded-full border border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7dP_cZUHJlUtYc2nJ24WueMtf5X1zerk2ylDT7rj4Ga7vxN8yunL3t7jrx3cpvCITmJaHJAsjuIBGNDznXPT4nQADjxqX9H_FWBaM6c4i1O8GmqAq2fa3sxIcl-p494H5wF2CCRxQaM2MRs-TE3Qk6CdRHSl3JlkjCzj2SLAVc8uj6564qBaKV0EjUVGm1jAzXztCqgWpV5LuMiC0ESFZwv6ldSDdIPQc94ilxG0MuRFXpymqRgwNXL8LX-u35JRo2hB64NAzFbc"/>
+<img alt="USDT" className="w-5 h-5 rounded-full border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7dP_cZUHJlUtYc2nJ24WueMtf5X1zerk2ylDT7rj4Ga7vxN8yunL3t7jrx3cpvCITmJaHJAsjuIBGNDznXPT4nQADjxqX9H_FWBaM6c4i1O8GmqAq2fa3sxIcl-p494H5wF2CCRxQaM2MRs-TE3Qk6CdRHSl3JlkjCzj2SLAVc8uj6564qBaKV0EjUVGm1jAzXztCqgWpV5LuMiC0ESFZwv6ldSDdIPQc94ilxG0MuRFXpymqRgwNXL8LX-u35JRo2hB64NAzFbc"/>
 </div>
 <span className="text-xs font-bold">NEURONS / USDT</span>
 </div>
@@ -299,12 +299,12 @@ const Dex = () => {
 </div>
 </div>
 {/*  Position 2  */}
-<div className="p-4 bg-surface-container-lowest rounded-2xl border border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
+<div className="p-4 bg-surface-container-lowest rounded-2xl border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">
 <div className="flex -space-x-1">
-<img alt="ETH" className="w-5 h-5 rounded-full border border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG_4Q6TamCM06y4SgudhgCJzLu0gleXyb4rePgzpYSlHiK_hmQ0n3M1pJOTXleFMv29KMpvdA8fadhSRq_PqmCcGwqW0HPjrEGIOZJwVq_JhDEa4kAWYPEEBgZRhsqjV4n2FY5lnCYVJp9pJmDJp3vU8GzYmxB0uzrT20HAdj3u5Jjkmadl29wDzRjWyFW5TC3uYlosTXa6ViIRdqobdkDC5cWg1PFWM9zUrYPZwY094r09j-yVyFkU03Qpgdd_xRFRgjAFF6DX1I"/>
-<img alt="BTC" className="w-5 h-5 rounded-full border border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgj8aFOlL6GX41g0eJJLoNIo-Z4arg7UKV1UnHSOt09PHroGAGcdE2pByr82jm9ODfmciDL2zCAVQWFVkrSKFx2oAHfwXy63EV5L_2u2Z0BqNwdfwtz8DQ62h1U4yfz3C27UVkihDnFb5UH9c9CsWbcoJXI0hZS-PAfEbKwzfnzAonS8YDtttOB1tQ8ISsA63dkuqhzmI5BfAn9zOqr1vEn0WkwRVIu-3Nbb-ONiRn9q97CU9zNjF9ItVemx2wa_DvmRiZu4T-ooQ"/>
+<img alt="ETH" className="w-5 h-5 rounded-full border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG_4Q6TamCM06y4SgudhgCJzLu0gleXyb4rePgzpYSlHiK_hmQ0n3M1pJOTXleFMv29KMpvdA8fadhSRq_PqmCcGwqW0HPjrEGIOZJwVq_JhDEa4kAWYPEEBgZRhsqjV4n2FY5lnCYVJp9pJmDJp3vU8GzYmxB0uzrT20HAdj3u5Jjkmadl29wDzRjWyFW5TC3uYlosTXa6ViIRdqobdkDC5cWg1PFWM9zUrYPZwY094r09j-yVyFkU03Qpgdd_xRFRgjAFF6DX1I"/>
+<img alt="BTC" className="w-5 h-5 rounded-full border-background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgj8aFOlL6GX41g0eJJLoNIo-Z4arg7UKV1UnHSOt09PHroGAGcdE2pByr82jm9ODfmciDL2zCAVQWFVkrSKFx2oAHfwXy63EV5L_2u2Z0BqNwdfwtz8DQ62h1U4yfz3C27UVkihDnFb5UH9c9CsWbcoJXI0hZS-PAfEbKwzfnzAonS8YDtttOB1tQ8ISsA63dkuqhzmI5BfAn9zOqr1vEn0WkwRVIu-3Nbb-ONiRn9q97CU9zNjF9ItVemx2wa_DvmRiZu4T-ooQ"/>
 </div>
 <span className="text-xs font-bold">ETH / WBTC</span>
 </div>

@@ -13,7 +13,7 @@ const Lottery = () => {
 </div>
 <div className="relative z-20 px-12 w-full grid grid-cols-1 md:grid-cols-2 gap-8">
 <div className="space-y-6">
-<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-xs font-bold uppercase tracking-widest">
+<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border-secondary/20 text-secondary text-xs font-bold uppercase tracking-widest">
 <span className="relative flex h-2 w-2">
 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
 <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
@@ -34,15 +34,15 @@ const Lottery = () => {
 </div>
 </div>
 <div className="hidden md:flex flex-col justify-center items-end text-right">
-<div className="glass-card p-6 rounded-2xl border border-white/5 w-full max-w-xl">
+<div className="glass-card p-6 rounded-2xl border-white/5 w-full max-w-xl">
 <p className="text-sm text-[#908fa0] mb-4">Last Winning Combination</p>
 <div className="flex gap-2">
-<span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">07</span>
-<span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">14</span>
-<span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">22</span>
-<span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">31</span>
-<span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">45</span>
-<span className="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center text-primary font-bold">52</span>
+<span className="w-10 h-10 rounded-full border-primary/30 flex items-center justify-center text-primary font-bold">07</span>
+<span className="w-10 h-10 rounded-full border-primary/30 flex items-center justify-center text-primary font-bold">14</span>
+<span className="w-10 h-10 rounded-full border-primary/30 flex items-center justify-center text-primary font-bold">22</span>
+<span className="w-10 h-10 rounded-full border-primary/30 flex items-center justify-center text-primary font-bold">31</span>
+<span className="w-10 h-10 rounded-full border-primary/30 flex items-center justify-center text-primary font-bold">45</span>
+<span className="w-10 h-10 rounded-full border-primary/30 flex items-center justify-center text-primary font-bold">52</span>
 <span className="w-10 h-10 rounded-full kinetic-gradient flex items-center justify-center text-on-primary font-bold">09</span>
 </div>
 <p className="mt-4 text-xs text-secondary">Total Payout: 1.2M $NEURONS</p>
@@ -60,7 +60,7 @@ const Lottery = () => {
 <div className="p-3 bg-surface-container-highest rounded-xl">
 <span className="material-symbols-outlined text-primary text-3xl" style={{"fontVariationSettings":"'FILL' 1"}}>stars</span>
 </div>
-<span className="text-[10px] text-outline font-bold uppercase tracking-widest border border-outline/20 px-2 py-1 rounded">Weekly</span>
+<span className="text-[10px] text-outline font-bold uppercase tracking-widest border-outline/20 px-2 py-1 rounded">Weekly</span>
 </div>
 <div>
 <h3 className="text-2xl font-bold text-white mb-2">Super7</h3>
@@ -81,7 +81,7 @@ const Lottery = () => {
 <div className="p-3 bg-surface-container-highest rounded-xl">
 <span className="material-symbols-outlined text-secondary text-3xl" style={{"fontVariationSettings":"'FILL' 1"}}>bolt</span>
 </div>
-<span className="text-[10px] text-secondary font-bold uppercase tracking-widest border border-secondary/20 px-2 py-1 rounded">Every Hour</span>
+<span className="text-[10px] text-secondary font-bold uppercase tracking-widest border-secondary/20 px-2 py-1 rounded">Every Hour</span>
 </div>
 <div>
 <h3 className="text-2xl font-bold text-white mb-2">EasyLotto</h3>
@@ -97,7 +97,7 @@ const Lottery = () => {
 </div>
 </div>
 {/*  Recent Winners Ticker  */}
-<div className="bg-surface-container-low rounded-2xl border border-outline-variant/5 flex flex-col">
+<div className="bg-surface-container-low rounded-2xl border-outline-variant/5 flex flex-col">
 <div className="p-6 border-b border-outline-variant/10 flex justify-between items-center">
 <h4 className="font-bold text-white flex items-center gap-2">
 <span className="material-symbols-outlined text-tertiary text-lg">emoji_events</span>

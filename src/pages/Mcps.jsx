@@ -53,8 +53,8 @@ const Mcps = () => {
 </div>
 </div>
 <div className="flex gap-2">
-<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border border-outline-variant/10">Restart</button>
-<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border border-outline-variant/10">
+<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
+<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
 <span className="material-symbols-outlined text-sm">stop</span>
 </button>
 </div>
@@ -100,8 +100,8 @@ const Mcps = () => {
 </div>
 </div>
 <div className="flex gap-2">
-<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border border-outline-variant/10">Restart</button>
-<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border border-outline-variant/10">
+<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
+<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
 <span className="material-symbols-outlined text-sm">stop</span>
 </button>
 </div>
@@ -147,8 +147,8 @@ const Mcps = () => {
 </div>
 </div>
 <div className="flex gap-2">
-<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border border-outline-variant/10">Restart</button>
-<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border border-outline-variant/10">
+<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
+<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
 <span className="material-symbols-outlined text-sm">stop</span>
 </button>
 </div>
@@ -194,7 +194,7 @@ const Mcps = () => {
 {/*  Dashboard Bottom Section (Bento)  */}
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 {/*  Terminal Feed  */}
-<div className="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border border-outline-variant/10">
+<div className="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border-outline-variant/10">
 <div className="bg-surface-container-low px-4 py-3 flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-sm text-outline">terminal</span>
@@ -254,7 +254,7 @@ const Mcps = () => {
 </div>
 </div>
 {/*  Health Trends  */}
-<div className="bg-surface-container-low rounded-xl p-6 border border-outline-variant/10 flex flex-col justify-between">
+<div className="bg-surface-container-low rounded-xl p-6 border-outline-variant/10 flex flex-col justify-between">
 <div>
 <h3 className="text-lg font-bold text-white mb-6">Cluster Health</h3>
 <div className="space-y-6">
