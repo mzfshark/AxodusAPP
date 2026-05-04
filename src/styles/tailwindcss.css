@@ -123,8 +123,8 @@
 /* === SHORTHAND SURFACE BACKGROUNDS ========================= */
 /* Some pages use surface tokens without the `bg-` prefix */
 @layer utilities {
-  .surface-container-low { @apply bg-surface-container-low; }
-  .surface-container-highest { @apply bg-surface-container-highest; }
+  .surface-container-low { background-color: var(--color-surface-secondary); }
+  .surface-container-highest { background-color: var(--color-surface-primary); }
 }
 
 /* === GLOW EFFECTS =========================================== */
