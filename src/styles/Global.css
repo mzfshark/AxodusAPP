@@ -15,6 +15,7 @@
   --success: #4caf50;
   --warning: #ff9f43;
   --info: #4ecdc4;
+  --error: #e53935;
   --border: #e0e0e01f;
   --axodus-bg: #0b1326;
   --axodus-text: #dae2fd;
@@ -597,6 +598,9 @@ body {
 }
 .bg-against {
   background: var(--color-error) !important;
+}
+.bg-progress-bar {
+  background: var(--md-sys-color-inverse-primary) !important;
 }
 
 .border-outline-variant,

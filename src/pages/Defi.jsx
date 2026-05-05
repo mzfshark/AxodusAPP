@@ -39,18 +39,17 @@ const Defi = () => {
           <div className="h-48 flex items-end gap-2 relative">
             {/* Mock Area Chart Visual */}
             <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-              <img className="w-full h-full object-cover rounded-lg" alt="abstract flowing blue and purple neon gradient line graph representing kinetic growth on a dark digital mesh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCac0WJDqXuk5-qdQh_8RzVJ4NL7stPXeHqhh_sM-JjFemMRU6uCHMV-vPTcElIo86jBUa1qXeCb_fLC1YeMnVR5s-RtczxrtK3nIEPwqoo8nbHPBFTjPoSY9-_xV6EMVQEMxpVRTqVCPgvijBRUqMjCmKPwDGIxGSMlh1EDBTtWSwrNLt2WZQl3FoEL0boHrKiTltQRy7zQ9SNClgaWuQ7_4jDg7VcyYenHNNpG3E0co5Cqgmr0vL1GSVZd4dAiJf7Aam98HzU8Ds"/>
             </div>
             {/* UI representation of peaks - properly centered */}
             <div className="absolute inset-4 flex items-end gap-2">
-              <div className="flex-1 bg-primary/20 rounded-t h-[40%] hover:bg-primary/40 transition-all"></div>
-              <div className="flex-1 bg-primary/30 rounded-t h-[55%] hover:bg-primary/50 transition-all"></div>
-              <div className="flex-1 bg-primary/40 rounded-t h-[70%] hover:bg-primary/60 transition-all"></div>
-              <div className="flex-1 bg-primary/50 rounded-t h-[65%] hover:bg-primary/70 transition-all"></div>
-              <div className="flex-1 bg-primary/60 rounded-t h-[85%] hover:bg-primary/80 transition-all"></div>
-              <div className="flex-1 bg-primary/70 rounded-t h-[80%] hover:bg-primary/90 transition-all"></div>
-              <div className="flex-1 bg-primary/80 rounded-t h-[95%] hover:bg-primary transition-all"></div>
-              <div className="flex-1 bg-primary/90 rounded-t h-[100%] hover:bg-primary shadow-[0_0_10px_rgba(192,193,255,0.5)]"></div>
+              <div className="flex-1 bg-primary rounded-t h-[40%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary rounded-t h-[55%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary rounded-t h-[70%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary rounded-t h-[65%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary rounded-t h-[85%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary rounded-t h-[80%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-primary rounded-t h-[95%] hover:bg-primary transition-all"></div>
+              <div className="flex-1 bg-for rounded-t h-[100%] hover:bg-primary shadow-[0_0_10px_rgba(192,193,255,0.5)]"></div>
             </div>
           </div>
         </div>

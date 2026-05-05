@@ -64,7 +64,7 @@ export default function BotManagement() {
 <div className="bg-surface-container-high rounded-2xl p-6 border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
 <div className="flex justify-between items-start mb-6">
 <div className="flex items-center gap-4">
-<div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border-primary/20">
+<div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center border-primary">
 <span className="material-symbols-outlined text-primary">psychology</span>
 </div>
 <div>
@@ -93,7 +93,7 @@ export default function BotManagement() {
 <span className="text-white font-bold">+18.4%</span>
 </div>
 <div className="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-<div className="h-full bg-primary rounded-full" style={{ width: '65%' }}></div>
+<div className="h-full bg-progress-bar rounded-full" style={{ width: '65%' }}></div>
 </div>
 </div>
 </div>

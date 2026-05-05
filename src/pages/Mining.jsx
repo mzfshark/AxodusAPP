@@ -10,6 +10,7 @@ const Mining = () => {
           <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Mining</span>
           <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter"> Hashpower Overview</h1>
         </div>
+        <div><p></p>  </div>
 {/*  1. Header Metrics (Editorial Style)  */}
 <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
 <div className="surface-container-low p-6 rounded-2xl flex flex-col justify-between min-h-[140px]">
@@ -229,7 +230,7 @@ const Mining = () => {
 </div>
 <p className="text-2xl font-black text-white">450 <span className="text-xs text-outline font-medium">TH/s</span></p>
 <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div className="h-full bg-primary w-[62%]"></div>
+<div className="h-full bg-progress-bar w-[62%]"></div>
 </div>
 </div>
 <div className="space-y-4">
@@ -239,7 +240,7 @@ const Mining = () => {
 </div>
 <p className="text-2xl font-black text-white">125 <span className="text-xs text-outline font-medium">TH/s</span></p>
 <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div className="h-full bg-secondary w-[17%]"></div>
+<div className="h-full bg-progress-bar w-[17%]"></div>
 </div>
 </div>
 <div className="space-y-4">
@@ -249,7 +250,7 @@ const Mining = () => {
 </div>
 <p className="text-2xl font-black text-white">150 <span className="text-xs text-outline font-medium">TH/s</span></p>
 <div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
-<div className="h-full bg-outline w-[21%]"></div>
+<div className="h-full bg-progress-bar w-[21%]"></div>
 </div>
 </div>
 </div>
