@@ -9,7 +9,7 @@ export default function BotManagement() {
 
         <div>
           <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Trading</span>
-          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Overview</h1>
+          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Automated Operations</h1>
         </div>
 
 <div className="flex gap-4">
@@ -30,14 +30,14 @@ export default function BotManagement() {
 <p className="text-sm font-medium text-outline mb-4">Total P&amp;L (24h)</p>
 <div className="flex items-baseline gap-2">
 <span className="text-3xl font-bold text-white tracking-tight">+$1,420.55</span>
-<span className="text-sm font-semibold text-secondary">+4.2%</span>
+<span className="text-sm font-semibold text-green">+4.2%</span>
 </div>
 </div>
 <div className="bg-surface-container px-6 py-8 rounded-xl border-outline-variant/5 relative overflow-hidden group">
 <p className="text-sm font-medium text-outline mb-4">Total ROI</p>
 <div className="flex items-baseline gap-2">
 <span className="text-3xl font-bold text-white tracking-tight">+148.3%</span>
-<span className="text-sm font-semibold text-primary">All Time</span>
+<span className="text-sm font-semibold text-green">All Time</span>
 </div>
 </div>
 <div className="bg-surface-container px-6 py-8 rounded-xl border-outline-variant/5 relative overflow-hidden group">

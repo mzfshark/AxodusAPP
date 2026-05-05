@@ -15,7 +15,7 @@ const Overview = () => {
             <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 block">Total Net Worth</span>
             <div className="flex items-baseline gap-2 mb-2">
               <span className="text-5xl font-extrabold tracking-tighter text-white">$142,850.32</span>
-              <span className="text-secondary text-sm font-bold flex items-center">
+              <span className="text-green text-sm font-bold flex items-center">
                 <span className="material-symbols-outlined text-sm">trending_up</span> +5.24%
               </span>
             </div>

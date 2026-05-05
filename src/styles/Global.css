@@ -587,6 +587,12 @@ body {
 .text-indigo-400 {
   color: var(--color-accent) !important;
 }
+.text-green{
+  color: var(--color-success) !important;
+}
+.text-red{
+  color: var(--color-error) !important;
+}
 
 .bg-primary,
 .bg-secondary,
