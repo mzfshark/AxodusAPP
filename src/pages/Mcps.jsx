@@ -24,7 +24,7 @@ const Mcps = () => {
 <span className="text-[10px] mono text-outline">ID: AX-001-MRP</span>
 </div>
 </div>
-<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary/20 text-secondary text-[10px] font-bold uppercase tracking-wider">
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary  text-secondary text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span> Online
                    </span>
 </div>
@@ -43,18 +43,18 @@ const Mcps = () => {
 </div>
 <div className="flex items-end justify-end">
 <div className="h-8 w-20 flex items-end gap-0.5">
-<div className="w-1 bg-secondary/20 h-2"></div>
-<div className="w-1 bg-secondary/40 h-4"></div>
-<div className="w-1 bg-secondary/30 h-3"></div>
+<div className="w-1 bg-secondary  h-2"></div>
+<div className="w-1 bg-secondary h-4"></div>
+<div className="w-1 bg-secondary h-3"></div>
 <div className="w-1 bg-secondary h-6 shadow-[0_0_8px_#41e4b8]"></div>
-<div className="w-1 bg-secondary/60 h-4"></div>
-<div className="w-1 bg-secondary/80 h-5"></div>
+<div className="w-1 bg-secondary h-4"></div>
+<div className="w-1 bg-secondary h-5"></div>
 </div>
 </div>
 </div>
 <div className="flex gap-2">
 <button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
-<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
+<button className="px-3 bg-surface-container-highest hover:bg-error  hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
 <span className="material-symbols-outlined text-sm">stop</span>
 </button>
 </div>
@@ -71,7 +71,7 @@ const Mcps = () => {
 <span className="text-[10px] mono text-outline">ID: AX-002-ASM</span>
 </div>
 </div>
-<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary/20 text-secondary text-[10px] font-bold uppercase tracking-wider">
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary  text-secondary text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span> Online
                    </span>
 </div>
@@ -90,18 +90,18 @@ const Mcps = () => {
 </div>
 <div className="flex items-end justify-end">
 <div className="h-8 w-20 flex items-end gap-0.5">
-<div className="w-1 bg-secondary/20 h-1"></div>
-<div className="w-1 bg-secondary/20 h-2"></div>
-<div className="w-1 bg-secondary/30 h-1"></div>
-<div className="w-1 bg-secondary/40 h-2"></div>
-<div className="w-1 bg-secondary/30 h-1"></div>
-<div className="w-1 bg-secondary/50 h-2"></div>
+<div className="w-1 bg-secondary  h-1"></div>
+<div className="w-1 bg-secondary  h-2"></div>
+<div className="w-1 bg-secondary h-1"></div>
+<div className="w-1 bg-secondary h-2"></div>
+<div className="w-1 bg-secondary h-1"></div>
+<div className="w-1 bg-secondary h-2"></div>
 </div>
 </div>
 </div>
 <div className="flex gap-2">
 <button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
-<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
+<button className="px-3 bg-surface-container-highest hover:bg-error  hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
 <span className="material-symbols-outlined text-sm">stop</span>
 </button>
 </div>
@@ -118,7 +118,7 @@ const Mcps = () => {
 <span className="text-[10px] mono text-outline">ID: AX-003-TRD</span>
 </div>
 </div>
-<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary/20 text-tertiary text-[10px] font-bold uppercase tracking-wider">
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary  text-tertiary text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-tertiary"></span> Warning
                    </span>
 </div>
@@ -137,18 +137,18 @@ const Mcps = () => {
 </div>
 <div className="flex items-end justify-end">
 <div className="h-8 w-20 flex items-end gap-0.5">
-<div className="w-1 bg-tertiary/60 h-4"></div>
-<div className="w-1 bg-tertiary/80 h-6"></div>
+<div className="w-1 bg-tertiary h-4"></div>
+<div className="w-1 bg-tertiary h-6"></div>
 <div className="w-1 bg-tertiary h-8 shadow-[0_0_8px_#ffb783]"></div>
-<div className="w-1 bg-tertiary/90 h-7"></div>
-<div className="w-1 bg-tertiary/70 h-5"></div>
-<div className="w-1 bg-tertiary/80 h-6"></div>
+<div className="w-1 bg-tertiary h-7"></div>
+<div className="w-1 bg-tertiary h-5"></div>
+<div className="w-1 bg-tertiary h-6"></div>
 </div>
 </div>
 </div>
 <div className="flex gap-2">
 <button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
-<button className="px-3 bg-surface-container-highest hover:bg-error/20 hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
+<button className="px-3 bg-surface-container-highest hover:bg-error  hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
 <span className="material-symbols-outlined text-sm">stop</span>
 </button>
 </div>
@@ -165,7 +165,7 @@ const Mcps = () => {
 <span className="text-[10px] mono text-outline">ID: AX-004-RHT</span>
 </div>
 </div>
-<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error/20 text-error text-[10px] font-bold uppercase tracking-wider">
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error  text-error text-[10px] font-bold uppercase tracking-wider">
 <span className="h-1.5 w-1.5 rounded-full bg-error"></span> Offline
                    </span>
 </div>
@@ -183,7 +183,7 @@ const Mcps = () => {
 <p className="text-lg font-bold text-on-surface">0%</p>
 </div>
 <div className="flex items-end justify-end">
-<div className="h-1 w-20 bg-outline-variant/20 rounded-full"></div>
+<div className="h-1 w-20 bg-outline-variant  rounded-full"></div>
 </div>
 </div>
 <div className="flex gap-2">
@@ -201,49 +201,49 @@ const Mcps = () => {
 <span className="text-[10px] font-bold uppercase tracking-widest text-outline">Live System Logs</span>
 </div>
 <div className="flex gap-1.5">
-<span className="h-2 w-2 rounded-full bg-error/40"></span>
-<span className="h-2 w-2 rounded-full bg-tertiary/40"></span>
-<span className="h-2 w-2 rounded-full bg-secondary/40"></span>
+<span className="h-2 w-2 rounded-full bg-error"></span>
+<span className="h-2 w-2 rounded-full bg-tertiary"></span>
+<span className="h-2 w-2 rounded-full bg-secondary"></span>
 </div>
 </div>
 <div className="p-4 mono text-xs leading-relaxed h-80 overflow-y-auto custom-scrollbar bg-[#060e20]">
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:02:11]</span>
+<span className="text-outline whitespace-nowrap">[14:02:11]</span>
 <span className="text-secondary">INFO</span>
 <span className="text-on-surface-variant">Morpheus connection handshake established. Protocol v4.2.1</span>
 </div>
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:02:15]</span>
+<span className="text-outline whitespace-nowrap">[14:02:15]</span>
 <span className="text-secondary">INFO</span>
 <span className="text-on-surface-variant">Agent Smith: Synchronizing biometric identity database...</span>
 </div>
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:02:22]</span>
+<span className="text-outline whitespace-nowrap">[14:02:22]</span>
 <span className="text-tertiary">WARN</span>
 <span className="text-on-surface-variant">Trading: High memory pressure detected in sub-process [3391].</span>
 </div>
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:03:01]</span>
+<span className="text-outline whitespace-nowrap">[14:03:01]</span>
 <span className="text-error">CRIT</span>
 <span className="text-on-surface-variant">RedHat: Heartbeat lost. Attempting automated recovery...</span>
 </div>
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:03:05]</span>
+<span className="text-outline whitespace-nowrap">[14:03:05]</span>
 <span className="text-error">FAIL</span>
 <span className="text-on-surface-variant">RedHat: Recovery failed. Manual intervention required. Node ID AX-004-RHT.</span>
 </div>
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:04:12]</span>
+<span className="text-outline whitespace-nowrap">[14:04:12]</span>
 <span className="text-secondary">INFO</span>
 <span className="text-on-surface-variant">Security patch 'ECHO-7' applied to all active nodes.</span>
 </div>
 <div className="flex gap-4 mb-2">
-<span className="text-outline/40 whitespace-nowrap">[14:04:45]</span>
+<span className="text-outline whitespace-nowrap">[14:04:45]</span>
 <span className="text-secondary">INFO</span>
 <span className="text-on-surface-variant">Optimizing network routing tables for low-latency cluster.</span>
 </div>
 <div className="flex gap-4 mb-1">
-<span className="text-outline/40 whitespace-nowrap">[14:05:00]</span>
+<span className="text-outline whitespace-nowrap">[14:05:00]</span>
 <span className="text-primary animate-pulse">&gt;</span>
 <span className="text-primary font-bold">System scanning... Ready for commands.</span>
 </div>
@@ -294,16 +294,16 @@ const Mcps = () => {
 </div>
 <div className="h-12 w-full flex items-end gap-1 overflow-hidden">
 {/*  Simple Sparkline Representation  */}
-<div className="flex-1 bg-primary/20 h-4 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/40 h-8 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/30 h-6 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/60 h-10 rounded-t-sm"></div>
+<div className="flex-1 bg-primary  h-4 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-8 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-6 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-10 rounded-t-sm"></div>
 <div className="flex-1 bg-primary h-12 rounded-t-sm shadow-[0_0_10px_#c0c1ff]"></div>
-<div className="flex-1 bg-primary/80 h-10 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/40 h-6 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/20 h-4 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/30 h-5 rounded-t-sm"></div>
-<div className="flex-1 bg-primary/50 h-8 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-10 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-6 rounded-t-sm"></div>
+<div className="flex-1 bg-primary  h-4 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-5 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-8 rounded-t-sm"></div>
 </div>
 </div>
 </div>
