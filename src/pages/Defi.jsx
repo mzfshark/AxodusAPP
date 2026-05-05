@@ -1,10 +1,14 @@
-// src/pages/Portfolio.jsx
+// src/pages/Defi.jsx
 import React from 'react';
 import "@/styles/Global.css";
 
-const Portfolio = () => {
+const Defi = () => {
   return (
     <main className="flex-1 bg-background p-6 lg:p-10 space-y-10 overflow-hidden">
+              <div>
+          <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Defi</span>
+          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Invest & Staking</h1>
+        </div>
       {/* Hero Section: TVL Overview */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-4 bg-surface-container-low rounded-3xl p-6 ghost-border">

@@ -2,12 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import Dashboard from "./pages/Dashboard";
-import Portfolio from "./pages/Portfolio";
+import Defi from "./pages/Defi";
 import Settings from "./pages/Settings";
 import TransactionHistoryPage from "./pages/TransactionHistoryPage";
 import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
-import AccountPage from "./pages/AccountPage";
+import Business from "./pages/Business";
 import BotManagement from "./pages/trading/BotManagement";
 import PortfolioPage from "./pages/trading/PortfolioPage";
 import TradingPanel from "./pages/trading/TradingPanel";
@@ -33,9 +33,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Overview /> },
       { path: "connect", element: <ConnectWalletPage /> },
-      { path: "account", element: <AccountPage /> },
+      { path: "account", element: <Business /> },
       { path: "dashboard", element: <Dashboard /> },
-      { path: "portfolio", element: <Portfolio /> },
+      { path: "defi", element: <Defi /> },
       { path: "settings", element: <Settings /> },
       { path: "dao", element: <Dao /> },
       { path: "transactions", element: <TransactionHistoryPage /> },

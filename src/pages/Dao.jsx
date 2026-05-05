@@ -8,7 +8,7 @@ const Dao = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Governance</span>
-          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Kinetic Proposals</h1>
+          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Proposals</h1>
         </div>
         <button className="primary-gradient flex items-center gap-2 px-6 py-3 text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95 transition-all">
           <span className="material-symbols-outlined" data-icon="add_circle" style={{fontVariationSettings: "'FILL' 1"}}>add_circle</span>

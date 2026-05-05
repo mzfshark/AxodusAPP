@@ -5,7 +5,11 @@ const Mining = () => {
     <>
       
 {/*  Canvas Body  */}
-<div className="pt-24 px-8 pb-12 space-y-10 max-w-[1600px] mx-auto">
+<main className="flex-1 app-view-shell">
+          <div>
+          <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Mining</span>
+          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter"> Hashpower Overview</h1>
+        </div>
 {/*  1. Header Metrics (Editorial Style)  */}
 <section className="grid grid-cols-1 md:grid-cols-4 gap-6">
 <div className="surface-container-low p-6 rounded-2xl flex flex-col justify-between min-h-[140px]">
@@ -254,7 +258,7 @@ const Mining = () => {
 <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/5 blur-[120px] rounded-full"></div>
 </div>
 </section>
-</div>
+</main>
 
     </>
   );

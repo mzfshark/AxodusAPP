@@ -593,10 +593,10 @@ body {
   background: var(--color-accent) !important;
 }
 .bg-for{ 
-  background: var(--success) !important;
+  background: var(--color-success) !important;
 }
 .bg-against {
-  background: var(--error) !important;
+  background: var(--color-error) !important;
 }
 
 .border-outline-variant,

@@ -7,11 +7,11 @@ export default function BotManagement() {
 <main className="flex-1 app-view-shell">   
 <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
 
-<div>
+        <div>
+          <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Trading</span>
+          <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Overview</h1>
+        </div>
 
-<h1 className="text-3xl font-bold tracking-tight text-on-surface">Trading Bots Dashboard</h1>
-<span className="text-label-md uppercase tracking-[0.2em] text-primary/70 font-semibold mb-2">Portfolio Overview</span>
-</div>
 <div className="flex gap-4">
 <div className="bg-surface-container-low px-6 py-4 rounded-xl flex items-center gap-4 border-outline-variant/5">
 <div className="text-right">

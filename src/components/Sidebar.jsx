@@ -8,7 +8,7 @@ const primaryNavItems = [
   { to: "/dashboard", icon: "dashboard", label: "Overview", filled: true },
   { to: "/mining", icon: "bolt", label: "Mining" },
   { to: "/trading/bots", icon: "swap_horiz", label: "Trading" },
-  { to: "/portfolio", icon: "layers", label: "Staking" },
+  { to: "/defi", icon: "layers", label: "Staking & Defi" },
   { to: "/dao", icon: "account_balance", label: "DAOs" },
   { to: "/account", icon: "business_center", label: "Business" },
   { to: "/marketplace", icon: "shopping_cart", label: "Marketplace" },

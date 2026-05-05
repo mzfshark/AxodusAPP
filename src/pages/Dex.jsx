@@ -4,6 +4,7 @@ const Dex = () => {
   return (
     <>
       <main className="flex-1 app-view-shell">
+
 {/*  Hero Section: Trading Dashboard  */}
 <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
 {/*  Left: Swap & Chart (Editorial Centerpiece)  */}
