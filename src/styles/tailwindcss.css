@@ -20,43 +20,43 @@
 /* Glass panel/card effects - different blur levels */
 @layer components {
   .glass-panel {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: color-mix(in srgb, var(--color-surface-primary) 92%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   .glass-card {
-    background: rgba(30, 38, 54, 0.4);
-    border: 1px solid rgba(70, 69, 84, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--color-surface-primary) 94%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .glass-effect {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: color-mix(in srgb, var(--color-surface-secondary) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   .glassPanel {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: color-mix(in srgb, var(--color-surface-primary) 92%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   .glassCard {
-    background: rgba(30, 38, 54, 0.4);
-    border: 1px solid rgba(70, 69, 84, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--color-surface-primary) 94%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .glassEffect {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: color-mix(in srgb, var(--color-surface-secondary) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 }
 
@@ -68,11 +68,11 @@
 
 @layer utilities {
   .ghost-border {
-    border: 1px solid rgba(70, 69, 84, 0.1);
+    border: 1px solid var(--color-border-muted);
   }
 
   .ghostBorder {
-    border: 1px solid rgba(70, 69, 84, 0.1);
+    border: 1px solid var(--color-border-muted);
   }
 }
 
@@ -80,23 +80,23 @@
 
 @layer utilities {
   .hero-gradient {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
   }
 
   .primary-gradient {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
   }
 
   .kinetic-gradient {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
   }
 
   .kineticGradient {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
   }
 
   .gradient-text {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -104,7 +104,7 @@
   }
 
   .gradientText {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -112,11 +112,11 @@
   }
 
   .gradient-bg {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
   }
 
   .gradientBg {
-    background-image: linear-gradient(to right, rgb(192, 193, 255), rgb(128, 131, 255));
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
   }
 }
 
@@ -131,23 +131,23 @@
 
 @layer utilities {
   .glow-secondary {
-    filter: drop-shadow(0 0 4px rgba(65, 228, 184, 0.4));
+    filter: none;
   }
 
   .glowSecondary {
-    filter: drop-shadow(0 0 4px rgba(65, 228, 184, 0.4));
+    filter: none;
   }
 
   .glow-error {
-    filter: drop-shadow(0 0 4px rgba(255, 180, 171, 0.4));
+    filter: none;
   }
 
   .glowError {
-    filter: drop-shadow(0 0 4px rgba(255, 180, 171, 0.4));
+    filter: none;
   }
 
   .glow-primary {
-    filter: drop-shadow(0 0 8px rgba(192, 193, 255, 0.4));
+    filter: none;
   }
 }
 
@@ -434,6 +434,6 @@
   .border-axodus-secondary { border-color: #41e4b8; }
   .border-axodus-tertiary { border-color: #ffb783; }
 
-  .shadow-axodus { box-shadow: 0 10px 15px -3px rgba(192, 193, 255, 0.20), 0 4px 6px -4px rgba(192, 193, 255, 0.20); }
-  .shadow-axodus-lg { box-shadow: 0 25px 50px -12px rgba(192, 193, 255, 0.30); }
+  .shadow-axodus { box-shadow: var(--shadow-soft); }
+  .shadow-axodus-lg { box-shadow: var(--shadow-soft); }
 }

@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { getPortfolioState, calculateTotalValue } from '@services/api/portfolioService';
-import './LivePnLChart.module.css';
+import styles from './LivePnLChart.module.css';
 
 const LivePnLChart = ({ updateInterval = 5000 }) => {
   const [pnlData, setPnlData] = useState([]);
@@ -78,38 +78,38 @@ const LivePnLChart = ({ updateInterval = 5000 }) => {
 
   if (loading && pnlData.length === 0) {
     return (
-      <div className="container">
-        <div className="loading">Loading PnL data...</div>
+      <div className={styles.container}>
+        <div className={styles.loading}>Loading PnL data...</div>
       </div>
     );
   }
 
   if (error && pnlData.length === 0) {
     return (
-      <div className="container">
-        <div className="error">Error: {error}</div>
+      <div className={styles.container}>
+        <div className={styles.error}>Error: {error}</div>
       </div>
     );
   }
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <div>
           <h3>Live Portfolio Value</h3>
-          <div className="currentValue">
+          <div className={styles.currentValue}>
             ${currentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
-          <div className={`change ${parseFloat(change.value) >= 0 ? "positive" : "negative"}`}>
+          <div className={`${styles.change} ${parseFloat(change.value) >= 0 ? styles.positive : styles.negative}`}>
             {parseFloat(change.value) >= 0 ? '+' : ''}
             ${change.value} ({change.percentage}%)
           </div>
         </div>
-        <div className="info">
-          <div className="dataPoints">
+        <div className={styles.info}>
+          <div className={styles.dataPoints}>
             {pnlData.length} data points
           </div>
-          <div className="updateTime">
+          <div className={styles.updateTime}>
             Last update: {pnlData.length > 0 ? pnlData[pnlData.length - 1].time : 'N/A'}
           </div>
         </div>
@@ -117,22 +117,23 @@ const LivePnLChart = ({ updateInterval = 5000 }) => {
 
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={pnlData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-muted)" />
           <XAxis
             dataKey="time"
-            stroke="#666"
+            stroke="var(--color-text-muted)"
             style={{ fontSize: '12px' }}
           />
           <YAxis
-            stroke="#666"
+            stroke="var(--color-text-muted)"
             style={{ fontSize: '12px' }}
             tickFormatter={(value) => `$${value.toLocaleString()}`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#fff',
-              border: '1px solid #ddd',
+              backgroundColor: 'var(--color-surface-primary)',
+              border: '1px solid var(--color-border-muted)',
               borderRadius: '8px',
+              color: 'var(--color-text-primary)',
               padding: '10px',
             }}
             formatter={(value) => [
@@ -143,7 +144,7 @@ const LivePnLChart = ({ updateInterval = 5000 }) => {
           <Line
             type="monotone"
             dataKey="value"
-            stroke="#4ecdc4"
+            stroke="var(--color-accent)"
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 6 }}

@@ -1,9 +1,12 @@
 .container {
-  background: var(--card-bg);
+  background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-muted);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-soft);
   height: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .header {
@@ -16,18 +19,18 @@
 .header h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: var(--text);
+  color: var(--color-text-primary);
   font-weight: 600;
 }
 
 .liveBadge {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--error);
+  color: var(--color-error);
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  background: var(--bg-alt);
-  border: 1px solid var(--error);
+  background: var(--color-surface-secondary);
+  border: 1px solid var(--color-error);
 }
 
 .columns {
@@ -36,8 +39,8 @@
   padding: 0.5rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border-muted);
   margin-bottom: 0.5rem;
 }
 
@@ -54,11 +57,11 @@
 }
 
 .bidLabel {
-  color: var(--success);
+  color: var(--color-success);
 }
 
 .askLabel {
-  color: var(--error);
+  color: var(--color-error);
 }
 
 .orderRow {
@@ -72,7 +75,7 @@
 }
 
 .orderRow:hover {
-  background: var(--bg-alt);
+  background: var(--color-surface-secondary);
 }
 
 .barBackground {
@@ -92,18 +95,18 @@
 }
 
 .bidPrice {
-  color: var(--success);
+  color: var(--color-success);
   font-weight: 600;
 }
 
 .askPrice {
-  color: var(--error);
+  color: var(--color-error);
   font-weight: 600;
 }
 
 .amount,
 .total {
-  color: var(--text-muted);
+  color: var(--color-text-muted);
 }
 
 .spread {
@@ -111,18 +114,18 @@
   justify-content: space-between;
   padding: 0.75rem;
   margin: 0.5rem 0;
-  background: var(--bg-alt);
+  background: var(--color-surface-secondary);
   border-radius: 8px;
   font-size: 0.9rem;
 }
 
 .spreadLabel {
-  color: var(--text-muted);
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .spreadValue {
-  color: var(--info);
+  color: var(--color-accent);
   font-weight: 700;
 }
 
@@ -131,9 +134,9 @@
 .empty {
   text-align: center;
   padding: 2rem;
-  color: var(--text-muted);
+  color: var(--color-text-muted);
 }
 
 .error {
-  color: var(--error);
+  color: var(--color-error);
 }

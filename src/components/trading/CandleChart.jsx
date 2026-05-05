@@ -15,44 +15,44 @@ import {
   CartesianGrid,
   Line,
 } from 'recharts';
-import './CandleChart.module.css';
+import styles from './CandleChart.module.css';
 
 const CandleChart = ({ data, loading, error }) => {
   if (loading && data.length === 0) {
     return (
-      <div className="container">
-        <div className="loading">Loading chart data...</div>
+      <div className={styles.container}>
+        <div className={styles.loading}>Loading chart data...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container">
-        <div className="error">Error: {error}</div>
+      <div className={styles.container}>
+        <div className={styles.error}>Error: {error}</div>
       </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <div className="container">
-        <div className="empty">No data available</div>
+      <div className={styles.container}>
+        <div className={styles.empty}>No data available</div>
       </div>
     );
   }
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h3>Price Chart</h3>
-        <div className="legend">
-          <span className="legendItem">
-            <span className="dot" style={{ backgroundColor: '#4caf50' }}></span>
+        <div className={styles.legend}>
+          <span className={styles.legendItem}>
+            <span className={styles.dot} style={{ backgroundColor: '#4caf50' }}></span>
             Up
           </span>
-          <span className="legendItem">
-            <span className="dot" style={{ backgroundColor: '#f44336' }}></span>
+          <span className={styles.legendItem}>
+            <span className={styles.dot} style={{ backgroundColor: '#f44336' }}></span>
             Down
           </span>
         </div>
@@ -60,25 +60,26 @@ const CandleChart = ({ data, loading, error }) => {
 
       <ResponsiveContainer width="100%" height={400}>
         <ComposedChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-muted)" />
           <XAxis
             dataKey="date"
-            stroke="#666"
+            stroke="var(--color-text-muted)"
             style={{ fontSize: '12px' }}
             angle={-45}
             textAnchor="end"
             height={80}
           />
           <YAxis
-            stroke="#666"
+            stroke="var(--color-text-muted)"
             style={{ fontSize: '12px' }}
             domain={['dataMin - 50', 'dataMax + 50']}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#fff',
-              border: '1px solid #ddd',
+              backgroundColor: 'var(--color-surface-primary)',
+              border: '1px solid var(--color-border-muted)',
               borderRadius: '8px',
+              color: 'var(--color-text-primary)',
               padding: '10px',
             }}
             formatter={(value) => `$${parseFloat(value).toLocaleString()}`}
@@ -86,7 +87,7 @@ const CandleChart = ({ data, loading, error }) => {
           <Line
             type="monotone"
             dataKey="close"
-            stroke="#4ecdc4"
+            stroke="var(--color-accent)"
             strokeWidth={2}
             dot={false}
           />

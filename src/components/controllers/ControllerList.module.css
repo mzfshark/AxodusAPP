@@ -1,5 +1,6 @@
 .container {
   height: 100%;
+  min-width: 0;
 }
 
 .header {
@@ -13,7 +14,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .refreshButton {
@@ -27,13 +28,13 @@
 }
 
 .refreshButton:hover {
-  background: #f5f5f5;
+  background: var(--color-surface-secondary);
 }
 
 .empty {
   text-align: center;
   padding: 2rem;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .list {
@@ -44,20 +45,20 @@
 
 .item {
   padding: 1rem;
-  border: 2px solid #e0e0e0;
+  border: 1px solid var(--color-border-muted);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .item:hover {
-  border-color: #4ecdc4;
-  background: #f8f9fa;
+  border-color: var(--color-border);
+  background: var(--color-surface-secondary);
 }
 
 .itemSelected {
-  border-color: #4ecdc4;
-  background: #f0f9ff;
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 
 .itemHeader {
@@ -70,7 +71,7 @@
 .itemTitle {
   font-weight: 600;
   font-size: 0.95rem;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
 .typeBadge {
@@ -84,6 +85,6 @@
 .itemDescription {
   margin: 0;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }

@@ -8,13 +8,13 @@
   --color-surface-secondary: #2d3449;
   --color-surface-tertiary: #3b4358;
   --color-surface-raised: #4c556d;
-  --color-border: rgba(92, 198, 208, 0.18);
+  --color-border: rgba(92, 198, 208, 0.14);
   --color-border-muted: rgba(255, 255, 255, 0.08);
   --color-text-primary: #dae2fd;
   --color-text-secondary: #b8c3dc;
   --color-text-muted: #908fa0;
   --color-accent: #5cc6d0;
-  --color-accent-soft: rgba(92, 198, 208, 0.16);
+  --color-accent-soft: rgba(92, 198, 208, 0.10);
   --color-success: #41e4b8;
   --color-warning: #ffb783;
   --color-error: #ff7f7a;
@@ -39,7 +39,7 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  --shadow-soft: 0 16px 40px rgba(0, 0, 0, 0.24);
+  --shadow-soft: 0 14px 32px rgba(0, 0, 0, 0.18);
   --transition-fast: 160ms ease;
 }
 

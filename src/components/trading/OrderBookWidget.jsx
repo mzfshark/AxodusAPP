@@ -5,21 +5,21 @@
  */
 
 import React from 'react';
-import './OrderBookWidget.module.css';
+import styles from './OrderBookWidget.module.css';
 
 const OrderBookWidget = ({ orderBook, loading, error }) => {
   if (loading) {
     return (
-      <div className="container">
-        <div className="loading">Loading order book...</div>
+      <div className={styles.container}>
+        <div className={styles.loading}>Loading order book...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container">
-        <div className="error">Error: {error}</div>
+      <div className={styles.container}>
+        <div className={styles.error}>Error: {error}</div>
       </div>
     );
   }
@@ -28,8 +28,8 @@ const OrderBookWidget = ({ orderBook, loading, error }) => {
 
   if (bids.length === 0 && asks.length === 0) {
     return (
-      <div className="container">
-        <div className="empty">No order book data</div>
+      <div className={styles.container}>
+        <div className={styles.empty}>No order book data</div>
       </div>
     );
   }
@@ -44,9 +44,9 @@ const OrderBookWidget = ({ orderBook, loading, error }) => {
     const percentage = (order.total / maxTotal) * 100;
 
     return (
-      <div key={order.price} className="orderRow">
+      <div key={order.price} className={styles.orderRow}>
         <div
-          className="barBackground"
+          className={styles.barBackground}
           style={{
             width: `${percentage}%`,
             background: isBid
@@ -54,51 +54,51 @@ const OrderBookWidget = ({ orderBook, loading, error }) => {
               : 'rgba(244, 67, 54, 0.1)',
           }}
         />
-        <div className="orderData">
-          <span className={isBid ? "bidPrice" : "askPrice"}>
+        <div className={styles.orderData}>
+          <span className={isBid ? styles.bidPrice : styles.askPrice}>
             ${order.price.toLocaleString()}
           </span>
-          <span className="amount">{order.amount.toFixed(6)}</span>
-          <span className="total">${order.total.toLocaleString()}</span>
+          <span className={styles.amount}>{order.amount.toFixed(6)}</span>
+          <span className={styles.total}>${order.total.toLocaleString()}</span>
         </div>
       </div>
     );
   };
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h3>Order Book</h3>
       </div>
 
-      <div className="columns">
+      <div className={styles.columns}>
         <span>Price</span>
         <span>Amount</span>
         <span>Total</span>
       </div>
 
       {/* Asks (Sell orders) - displayed in reverse */}
-      <div className="asks">
-        <div className="sectionLabel">
-          <span className="askLabel">Asks (Sell)</span>
+      <div className={styles.asks}>
+        <div className={styles.sectionLabel}>
+          <span className={styles.askLabel}>Asks (Sell)</span>
         </div>
         {asks.slice(0, 10).reverse().map((ask) => renderOrder(ask, false))}
       </div>
 
       {/* Spread */}
       {bids.length > 0 && asks.length > 0 && (
-        <div className="spread">
-          <span className="spreadLabel">Spread:</span>
-          <span className="spreadValue">
+        <div className={styles.spread}>
+          <span className={styles.spreadLabel}>Spread:</span>
+          <span className={styles.spreadValue}>
             ${(asks[0].price - bids[0].price).toFixed(2)}
           </span>
         </div>
       )}
 
       {/* Bids (Buy orders) */}
-      <div className="bids">
-        <div className="sectionLabel">
-          <span className="bidLabel">Bids (Buy)</span>
+      <div className={styles.bids}>
+        <div className={styles.sectionLabel}>
+          <span className={styles.bidLabel}>Bids (Buy)</span>
         </div>
         {bids.slice(0, 10).map((bid) => renderOrder(bid, true))}
       </div>

@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import hummingbotClient from '@services/api/hummingbotClient';
-import './SwapPanel.module.css';
+import styles from './SwapPanel.module.css';
 
 const SwapPanel = () => {
   const [chain, setChain] = useState('ethereum');
@@ -129,15 +129,15 @@ const SwapPanel = () => {
   const currentChainConfig = chainConfig[chain] || chainConfig.ethereum;
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h1>DEX Swap</h1>
-        <p className="subtitle">Trade tokens on decentralized exchanges via Gateway</p>
+        <p className={styles.subtitle}>Trade tokens on decentralized exchanges via Gateway</p>
       </div>
 
       {/* Chain & Connector Selection */}
-      <div className="controls">
-        <div className="controlGroup">
+      <div className={styles.controls}>
+        <div className={styles.controlGroup}>
           <label>Blockchain</label>
           <select value={chain} onChange={(e) => setChain(e.target.value)}>
             <option value="ethereum">Ethereum</option>
@@ -146,7 +146,7 @@ const SwapPanel = () => {
           </select>
         </div>
 
-        <div className="controlGroup">
+        <div className={styles.controlGroup}>
           <label>DEX Protocol</label>
           <select value={connector} onChange={(e) => setConnector(e.target.value)}>
             {currentChainConfig.connectors.map((conn) => (
@@ -157,7 +157,7 @@ const SwapPanel = () => {
           </select>
         </div>
 
-        <div className="controlGroup">
+        <div className={styles.controlGroup}>
           <label>Slippage Tolerance (%)</label>
           <input
             type="number"
@@ -171,14 +171,14 @@ const SwapPanel = () => {
       </div>
 
       {/* Swap Form */}
-      <form onSubmit={handleSwap} className="swapForm">
+      <form onSubmit={handleSwap} className={styles.swapForm}>
         {/* From Token */}
-        <div className="tokenSection">
-          <div className="tokenHeader">
-            <span className="tokenLabel">From</span>
+        <div className={styles.tokenSection}>
+          <div className={styles.tokenHeader}>
+            <span className={styles.tokenLabel}>From</span>
           </div>
 
-          <div className="tokenInput">
+          <div className={styles.tokenInput}>
             <input
               type="number"
               value={amount}
@@ -199,19 +199,19 @@ const SwapPanel = () => {
         </div>
 
         {/* Swap Button */}
-        <div className="swapButtonContainer">
-          <button type="button" onClick={swapTokens} className="swapButton">
+        <div className={styles.swapButtonContainer}>
+          <button type="button" onClick={swapTokens} className={styles.swapButton}>
             ⇅
           </button>
         </div>
 
         {/* To Token */}
-        <div className="tokenSection">
-          <div className="tokenHeader">
-            <span className="tokenLabel">To</span>
+        <div className={styles.tokenSection}>
+          <div className={styles.tokenHeader}>
+            <span className={styles.tokenLabel}>To</span>
           </div>
 
-          <div className="tokenInput">
+          <div className={styles.tokenInput}>
             <input
               type="text"
               value={
@@ -235,24 +235,24 @@ const SwapPanel = () => {
 
         {/* Quote Details */}
         {estimatedOutput && (
-          <div className="quoteDetails">
-            <div className="quoteRow">
+          <div className={styles.quoteDetails}>
+            <div className={styles.quoteRow}>
               <span>Estimated Output</span>
-              <span className="quoteValue">
+              <span className={styles.quoteValue}>
                 {parseFloat(estimatedOutput.estimated_output).toFixed(6)} {toToken}
               </span>
             </div>
-            <div className="quoteRow">
+            <div className={styles.quoteRow}>
               <span>Price Impact</span>
-              <span className="quoteValue">
+              <span className={styles.quoteValue}>
                 {estimatedOutput.price_impact
                   ? `${parseFloat(estimatedOutput.price_impact).toFixed(2)}%`
                   : 'N/A'}
               </span>
             </div>
-            <div className="quoteRow">
+            <div className={styles.quoteRow}>
               <span>Minimum Received</span>
-              <span className="quoteValue">
+              <span className={styles.quoteValue}>
                 {estimatedOutput.minimum_received
                   ? `${parseFloat(estimatedOutput.minimum_received).toFixed(6)} ${toToken}`
                   : 'N/A'}
@@ -262,17 +262,17 @@ const SwapPanel = () => {
         )}
 
         {/* Messages */}
-        {error && <div className="errorMessage">{error}</div>}
-        {success && <div className="successMessage">{success}</div>}
+        {error && <div className={styles.errorMessage}>{error}</div>}
+        {success && <div className={styles.successMessage}>{success}</div>}
 
         {/* Submit Button */}
-        <button type="submit" className="submitButton" disabled={loading}>
+        <button type="submit" className={styles.submitButton} disabled={loading}>
           {loading ? '⏳ Swapping...' : '🔄 Execute Swap'}
         </button>
       </form>
 
       {/* Warning */}
-      <div className="warning">
+      <div className={styles.warning}>
         <strong>⚠️ Important:</strong> Ensure Gateway is running and you have sufficient
         balance in your connected wallet. DEX swaps require gas fees and may take several
         seconds to complete.

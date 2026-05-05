@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import './PortfolioDistribution.module.css';
+import styles from './PortfolioDistribution.module.css';
 
 const COLORS = [
   '#4ecdc4',
@@ -24,24 +24,24 @@ const COLORS = [
 const PortfolioDistribution = ({ data, loading, error }) => {
   if (loading) {
     return (
-      <div className="container">
-        <div className="loading">Loading distribution...</div>
+      <div className={styles.container}>
+        <div className={styles.loading}>Loading distribution...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container">
-        <div className="error">Error: {error}</div>
+      <div className={styles.container}>
+        <div className={styles.error}>Error: {error}</div>
       </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <div className="container">
-        <div className="empty">No assets to display</div>
+      <div className={styles.container}>
+        <div className={styles.empty}>No assets to display</div>
       </div>
     );
   }
@@ -60,10 +60,10 @@ const PortfolioDistribution = ({ data, loading, error }) => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h3>Asset Distribution</h3>
-        <div className="totalAssets">
+        <div className={styles.totalAssets}>
           {data.length} asset{data.length !== 1 ? 's' : ''}
         </div>
       </div>
@@ -90,9 +90,10 @@ const PortfolioDistribution = ({ data, loading, error }) => {
               'Value',
             ]}
             contentStyle={{
-              backgroundColor: '#fff',
-              border: '1px solid #ddd',
+              backgroundColor: 'var(--color-surface-primary)',
+              border: '1px solid var(--color-border-muted)',
               borderRadius: '8px',
+              color: 'var(--color-text-primary)',
               padding: '10px',
             }}
           />
@@ -104,16 +105,16 @@ const PortfolioDistribution = ({ data, loading, error }) => {
         </PieChart>
       </ResponsiveContainer>
 
-      <div className="assetList">
+      <div className={styles.assetList}>
         {chartData.map((asset, index) => (
-          <div key={asset.name} className="assetItem">
-            <div className="assetColor" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-            <div className="assetName">{asset.name}</div>
-            <div className="assetValue">
+          <div key={asset.name} className={styles.assetItem}>
+            <div className={styles.assetColor} style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+            <div className={styles.assetName}>{asset.name}</div>
+            <div className={styles.assetValue}>
               ${parseFloat(asset.value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             {asset.amount && (
-              <div className="assetAmount">
+              <div className={styles.assetAmount}>
                 {parseFloat(asset.amount).toFixed(4)} {asset.name}
               </div>
             )}

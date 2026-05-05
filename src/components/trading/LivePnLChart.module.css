@@ -1,8 +1,11 @@
 .container {
-  background: white;
+  background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-muted);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-soft);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .header {
@@ -15,14 +18,14 @@
 .header h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .currentValue {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text-primary);
   margin-bottom: 0.25rem;
 }
 
@@ -32,16 +35,16 @@
 }
 
 .change.positive {
-  color: #4caf50;
+  color: var(--color-success);
 }
 
 .change.negative {
-  color: #f44336;
+  color: var(--color-error);
 }
 
 .info {
   text-align: right;
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
@@ -57,11 +60,11 @@
 .error {
   text-align: center;
   padding: 2rem;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .error {
-  color: #f44336;
+  color: var(--color-error);
 }
 
 @media (max-width: 768px) {
