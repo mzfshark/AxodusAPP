@@ -194,7 +194,7 @@ const Marketplace = () => {
 <div className="lg:col-span-1">
 <h2 className="text-3xl font-black tracking-tighter mb-8">Top Subscriptions</h2>
 <div className="space-y-4">
-<div className="bg-surface-container-lowest p-4 rounded-2xl border-outline-variant/10 hover:border-primary/20 transition-all flex items-center gap-4">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-outline-variant/10 hover:border-primary transition-all flex items-center gap-4">
 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
 <span className="material-symbols-outlined text-white text-3xl">terminal</span>
 </div>
@@ -207,7 +207,7 @@ const Marketplace = () => {
 <p className="text-[10px] text-outline">/mo</p>
 </div>
 </div>
-<div className="bg-surface-container-lowest p-4 rounded-2xl border-outline-variant/10 hover:border-primary/20 transition-all flex items-center gap-4">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-outline-variant/10 hover:border-primary transition-all flex items-center gap-4">
 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
 <span className="material-symbols-outlined text-white text-3xl">insights</span>
 </div>
@@ -220,7 +220,7 @@ const Marketplace = () => {
 <p className="text-[10px] text-outline">/mo</p>
 </div>
 </div>
-<div className="bg-surface-container-lowest p-4 rounded-2xl border-outline-variant/10 hover:border-primary/20 transition-all flex items-center gap-4">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-outline-variant/10 hover:border-primary transition-all flex items-center gap-4">
 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
 <span className="material-symbols-outlined text-white text-3xl">security</span>
 </div>

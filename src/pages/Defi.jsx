@@ -93,7 +93,7 @@ const Defi = () => {
                   <button className="text-primary font-semibold text-sm self-end">Claim</button>
                 </div>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-2.5 rounded-lg bg-primary/10 text-primary font-bold text-sm border-primary/20 hover:bg-primary hover:text-on-primary transition-all">Stake</button>
+                  <button className="flex-1 py-2.5 rounded-lg bg-primary text-primary font-bold text-sm border-primary hover:bg-primary hover:text-on-primary transition-all">Stake</button>
                   <button className="flex-1 py-2.5 rounded-lg bg-surface-container-highest text-on-surface font-bold text-sm border-outline-variant/10">Unstake</button>
                 </div>
               </div>
@@ -166,7 +166,7 @@ const Defi = () => {
                   <tr className="hover:bg-surface-container transition-colors group">
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">ETH</div>
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary text-xs font-bold">ETH</div>
                         <span className="font-semibold text-on-surface">Ethereum</span>
                       </div>
                     </td>

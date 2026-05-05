@@ -20,7 +20,7 @@ const Overview = () => {
               </span>
             </div>
             <div className="flex gap-4 mt-8">
-              <button className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-transform">Deposit</button>
+              <button className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary hover:-translate-y-0.5 transition-transform">Deposit</button>
               <button className="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm border-outline-variant/10 hover:bg-surface-bright transition-colors">Withdraw</button>
             </div>
           </div>

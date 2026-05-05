@@ -71,7 +71,7 @@ const Dex = () => {
 <span className="text-on-surface font-medium">0.5%</span>
 </div>
 </div>
-<button className="mt-6 w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-extrabold rounded-2xl active:scale-[0.98] transition-all text-lg shadow-xl shadow-primary/20">
+<button className="mt-6 w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-extrabold rounded-2xl active:scale-[0.98] transition-all text-lg shadow-xl shadow-primary">
               Swap Tokens
             </button>
 </div>
@@ -86,7 +86,7 @@ const Dex = () => {
 </div>
 </div>
 <div className="flex bg-surface-container-lowest p-1 rounded-lg">
-<button className="px-2 py-1 text-[10px] font-bold text-primary bg-primary/10 rounded-md">1D</button>
+<button className="px-2 py-1 text-[10px] font-bold text-primary bg-primary rounded-md">1D</button>
 <button className="px-2 py-1 text-[10px] font-bold text-slate-500 hover:text-slate-300">1W</button>
 <button className="px-2 py-1 text-[10px] font-bold text-slate-500 hover:text-slate-300">1M</button>
 </div>
@@ -188,7 +188,7 @@ const Dex = () => {
 <td className="px-6 py-4 font-medium">$156.2M</td>
 <td className="px-6 py-4 text-slate-300">$12.1M</td>
 <td className="px-6 py-4">
-<span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs font-bold">12.8%</span>
+<span className="bg-primary text-primary px-2 py-0.5 rounded-full text-xs font-bold">12.8%</span>
 </td>
 <td className="px-6 py-4 text-right">
 <button className="opacity-0 group-hover:opacity-100 bg-surface-container-highest px-3 py-1 rounded-lg text-xs font-bold transition-opacity">Add</button>
@@ -232,7 +232,7 @@ const Dex = () => {
 <h2 className="text-lg font-bold tracking-tight">Active Hooks</h2>
 </div>
 <div className="space-y-4">
-<div className="bg-surface-container-lowest p-4 rounded-2xl border-primary/10">
+<div className="bg-surface-container-lowest p-4 rounded-2xl border-primary">
 <div className="flex justify-between items-start mb-2">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-secondary text-lg" data-icon="monitoring" data-weight="fill">monitoring</span>
@@ -261,7 +261,7 @@ const Dex = () => {
 <p className="text-xs text-slate-400 leading-relaxed">Implementing concentrated liquidity within specific bands for better capital efficiency.</p>
 </div>
 </div>
-<button className="mt-6 w-full py-3 bg-surface-container-highest text-primary font-bold rounded-xl text-sm border-primary/20 hover:bg-primary/5 transition-colors">
+<button className="mt-6 w-full py-3 bg-surface-container-highest text-primary font-bold rounded-xl text-sm border-primary hover:bg-primary/5 transition-colors">
               Browse Hooks Marketplace
             </button>
 </div>
@@ -276,7 +276,7 @@ const Dex = () => {
 </div>
 <div className="space-y-4">
 {/*  Position 1  */}
-<div className="p-4 bg-surface-container-lowest rounded-2xl border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
+<div className="p-4 bg-surface-container-lowest rounded-2xl border-white/5 group hover:border-primary transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">
 <div className="flex -space-x-1">
@@ -300,7 +300,7 @@ const Dex = () => {
 </div>
 </div>
 {/*  Position 2  */}
-<div className="p-4 bg-surface-container-lowest rounded-2xl border-white/5 group hover:border-primary/20 transition-all cursor-pointer">
+<div className="p-4 bg-surface-container-lowest rounded-2xl border-white/5 group hover:border-primary transition-all cursor-pointer">
 <div className="flex justify-between items-center mb-3">
 <div className="flex items-center gap-2">
 <div className="flex -space-x-1">
@@ -309,7 +309,7 @@ const Dex = () => {
 </div>
 <span className="text-xs font-bold">ETH / WBTC</span>
 </div>
-<span className="bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">Pending</span>
+<span className="bg-primary text-primary text-[10px] px-2 py-0.5 rounded-full font-bold">Pending</span>
 </div>
 <div className="flex justify-between text-xs mb-1">
 <span className="text-slate-500">Value</span>

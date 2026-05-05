@@ -26,7 +26,7 @@ const Lottery = () => {
 <span className="text-xl font-bold text-primary-fixed tracking-widest">$NEURONS</span>
 </div>
 <div className="flex gap-4 items-center pt-4">
-<button className="kinetic-gradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform shadow-xl shadow-primary/20">Buy Tickets Now</button>
+<button className="kinetic-gradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform shadow-xl shadow-primary">Buy Tickets Now</button>
 <div className="flex flex-col">
 <span className="text-[10px] text-outline uppercase tracking-widest">Starts In</span>
 <span className="text-2xl font-mono font-bold text-white tracking-tighter">04 : 12 : 55</span>
@@ -55,7 +55,7 @@ const Lottery = () => {
 <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
 {/*  Super7 Card  */}
 <div className="bg-surface-container-high rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden group">
-<div className="absolute -right-16 -top-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
+<div className="absolute -right-16 -top-16 w-48 h-48 bg-primary rounded-full blur-3xl group-hover:bg-primary transition-all"></div>
 <div className="flex justify-between items-start">
 <div className="p-3 bg-surface-container-highest rounded-xl">
 <span className="material-symbols-outlined text-primary text-3xl" style={{"fontVariationSettings":"'FILL' 1"}}>stars</span>

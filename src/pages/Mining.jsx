@@ -185,7 +185,7 @@ const Mining = () => {
                 <div className="flex-1 h-40 bg-outline-variant/5 rounded-t-sm"></div>
                 <div className="flex-1 h-28 bg-outline-variant/5 rounded-t-sm"></div>
                 <div className="flex-1 h-44 bg-outline-variant/5 rounded-t-sm"></div>
-                <div className="flex-1 h-48 bg-primary/20 rounded-t-sm border-t-2 border-primary"></div>
+                <div className="flex-1 h-48 bg-primary rounded-t-sm border-t-2 border-primary"></div>
               </div>
               <div className="mt-8 grid grid-cols-2 gap-4">
                 <div className="p-3 rounded-xl bg-surface-container-highest/30">

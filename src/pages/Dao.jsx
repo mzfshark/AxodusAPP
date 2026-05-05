@@ -10,7 +10,7 @@ const Dao = () => {
           <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Governance</span>
           <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Proposals</h1>
         </div>
-        <button className="primary-gradient flex items-center gap-2 px-6 py-3 text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95 transition-all">
+        <button className="primary-gradient flex items-center gap-2 px-6 py-3 text-on-primary font-bold rounded-xl shadow-lg shadow-primary hover:shadow-primary/30 active:scale-95 transition-all">
           <span className="material-symbols-outlined" data-icon="add_circle" style={{fontVariationSettings: "'FILL' 1"}}>add_circle</span>
           Create Proposal
         </button>
@@ -88,7 +88,7 @@ const Dao = () => {
             Active Proposals
           </h2>
           <div className="flex gap-2">
-            <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border-primary/20">All</button>
+            <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border-primary">All</button>
             <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Core</button>
             <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Grants</button>
           </div>
@@ -96,7 +96,7 @@ const Dao = () => {
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Proposal Card 1 */}
-          <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary/20 transition-all group">
+          <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary transition-all group">
             <div className="flex justify-between items-start mb-6">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ const Dao = () => {
           </div>
 
           {/* Proposal Card 2 */}
-          <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary/20 transition-all group">
+          <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary transition-all group">
             <div className="flex justify-between items-start mb-6">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -226,7 +226,7 @@ const Dao = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-high transition-colors">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">0x...aF2</div>
+                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary font-black text-sm">0x...aF2</div>
                 <div>
                   <div className="text-sm font-bold text-on-surface">Kinetic Labs</div>
                   <div className="text-[10px] text-outline">Delegated: 2.1M AXO</div>
@@ -281,7 +281,7 @@ const Dao = () => {
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <span className="material-symbols-outlined text-primary text-sm" data-icon="add">add</span>
               </div>
               <div>

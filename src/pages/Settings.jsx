@@ -11,7 +11,7 @@ const Settings = () => {
               <span className="text-xs font-bold text-primary tracking-[0.2em] uppercase mb-2 block">Personalização</span>
               <h1 className="text-4xl font-extrabold text-on-surface tracking-tighter">Configurações</h1>
             </div>
-            <button className="primary-gradient flex items-center gap-2 px-6 py-3 text-on-primary font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-95 transition-all">
+            <button className="primary-gradient flex items-center gap-2 px-6 py-3 text-on-primary font-bold rounded-xl shadow-lg shadow-primary hover:shadow-primary/30 active:scale-95 transition-all">
               <span className="material-symbols-outlined" data-icon="save" style={{fontVariationSettings: "'FILL' 1"}}>save</span>
               Salvar Alterações
             </button>
@@ -81,14 +81,14 @@ const Settings = () => {
                 Configurações de Segurança
               </h2>
               <div className="flex gap-2">
-                <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border-primary/20">Todas</button>
+                <button className="px-4 py-1.5 rounded-full text-xs font-bold bg-surface-container-highest text-primary border-primary">Todas</button>
                 <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Autenticação</button>
                 <button className="px-4 py-1.5 rounded-full text-xs font-bold text-outline hover:bg-surface-container-high transition-colors">Permissões</button>
               </div>
             </div>
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               {/* Proposal Card 1 */}
-              <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary/20 transition-all group">
+              <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary transition-all group">
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ const Settings = () => {
                 </div>
               </div>
               {/* Proposal Card 2 */}
-              <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary/20 transition-all group">
+              <div className="glass-panel rounded-2xl p-6 border-outline-variant/5 hover:border-primary transition-all group">
                 <div className="flex justify-between items-start mb-6">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ const Settings = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-high transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black text-sm">PC</div>
+                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary font-black text-sm">PC</div>
                     <div>
                       <div className="text-sm font-bold text-on-surface">Meu Desktop</div>
                       <div className="text-[10px] text-outline">Localização: São Paulo, Brasil</div>
@@ -236,7 +236,7 @@ const Settings = () => {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                     <span className="material-symbols-outlined text-primary text-sm" data-icon="password">password</span>
                   </div>
                   <div>

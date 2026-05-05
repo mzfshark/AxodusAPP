@@ -84,16 +84,16 @@ export default function AccountPage() {
             </div>
             {/* Synthetic Chart Visualization Area */}
             <div className="flex-grow flex items-end gap-1 h-32 pt-4">
-              <div className="w-full bg-primary/20 h-1/2 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-2/3 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-3/4 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-1/2 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-4/5 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-full rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-3/4 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-1/2 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-2/3 rounded-t-sm hover:bg-primary/40 transition-all"></div>
-              <div className="w-full bg-primary/20 h-3/4 rounded-t-sm hover:bg-primary/40 transition-all"></div>
+              <div className="w-full bg-primary h-1/2 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-2/3 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-3/4 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-1/2 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-4/5 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-full rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-3/4 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-1/2 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-2/3 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-3/4 rounded-t-sm hover:bg-primary transition-all"></div>
             </div>
           </div>
           {/* Developer Portal Links */}
