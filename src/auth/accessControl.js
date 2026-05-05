@@ -22,7 +22,7 @@ export function deriveRoles(address) {
 // Mapa opcional por rota (sobrescrevível futuramente)
 export const routeAccess = {
   '/dashboard': [ROLES.user],
-  '/portfolio': [ROLES.user],
+  '/defi': [ROLES.user],
   '/transactions': [ROLES.user],
   '/settings': [ROLES.user],
   '/trading/bots': [ROLES.user],

@@ -188,28 +188,28 @@ export default function AccountPage() {
           <div className="bg-surface-container p-6 rounded-2xl ghost-border overflow-hidden">
             <h3 className="text-xl font-semibold mb-6">Recent Deployment Logs</h3>
             <div className="space-y-4 font-mono text-xs">
-              <div className="flex gap-4 p-3 bg-surface-container-lowest/50 rounded border-l-2 border-secondary">
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-secondary">
                 <span className="text-outline">14:22:05</span>
                 <div className="flex-grow">
                   <span className="text-secondary font-bold">SUCCESS</span>
                   <p className="text-on-surface mt-1">Mainnet-alpha node cluster successfully upgraded to v2.4.1. Consensus reaching 100%.</p>
                 </div>
               </div>
-              <div className="flex gap-4 p-3 bg-surface-container-lowest/50 rounded border-l-2 border-primary">
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-primary">
                 <span className="text-outline">12:10:48</span>
                 <div className="flex-grow">
                   <span className="text-primary font-bold">INFO</span>
                   <p className="text-on-surface mt-1">New validator set election completed. 12 new nodes admitted to active set.</p>
                 </div>
               </div>
-              <div className="flex gap-4 p-3 bg-surface-container-lowest/50 rounded border-l-2 border-tertiary">
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-tertiary">
                 <span className="text-outline">09:45:12</span>
                 <div className="flex-grow">
                   <span className="text-tertiary font-bold">WARN</span>
                   <p className="text-on-surface mt-1">Latency spike detected in Asian region endpoints. Autoscaling group 4 initiated.</p>
                 </div>
               </div>
-              <div className="flex gap-4 p-3 bg-surface-container-lowest/50 rounded border-l-2 border-primary">
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-primary">
                 <span className="text-outline">08:00:00</span>
                 <div className="flex-grow">
                   <span className="text-primary font-bold">SYSTEM</span>
