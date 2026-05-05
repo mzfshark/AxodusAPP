@@ -26,9 +26,12 @@ dist-ssr
 .next
 build
 .pnpm-store
+.continue
+.vscode
 
 .env
-.env.production
+.env.*
+! .env.example
 .env.development
 
 #Ignore vscode AI rules
