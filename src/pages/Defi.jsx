@@ -279,4 +279,4 @@ const Defi = () => {
   );
 };
 
-export default Portfolio;
+export default Defi;
