@@ -24,7 +24,7 @@ import Academy from "./pages/Academy";
 import Dex from "./pages/Dex";
 import Lottery from "./pages/Lottery";
 import Mcps from "./pages/Mcps";
-import { GovernanceDashboard } from "./modules/governance";
+import { GovernanceDashboard, GovernanceLanding, ProposalDetail } from "./modules/governance";
 
 
 const router = createBrowserRouter([
@@ -38,7 +38,9 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "defi", element: <Defi /> },
       { path: "settings", element: <Settings /> },
-      { path: "governance", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
+      { path: "governance", element: <GovernanceLanding /> },
+      { path: "governance/console", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
+      { path: "governance/proposals/:proposalId", element: <ProtectedRoute><ProposalDetail /></ProtectedRoute> },
       { path: "dao", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
       { path: "transactions", element: <TransactionHistoryPage /> },
       { path: "trading/bots", element: <BotManagement /> },

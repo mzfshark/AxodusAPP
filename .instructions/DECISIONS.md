@@ -110,3 +110,29 @@ Axodus/AxodusAPP
 Reasoning:
 
 This app is the central interface and deserves its own workspace-level instructions.
+
+---
+
+## Decision 11 — Axodus Governance Is Federal
+
+Axodus Governance has a central federal governance authority.
+
+All ecosystem DAOs should be modeled as sub-DAOs inside the Axodus federation.
+
+Sub-DAOs may preserve local strategic and operational autonomy, but they must remain subordinate to central Axodus governance constraints, constitutional rules, treasury policies, and ecosystem permissions.
+
+Reasoning:
+
+Each sub-DAO represents an ecosystem company, investment agency, product unit, or operating organization. Autonomy is useful for execution, but federal governance preserves ecosystem integrity, policy consistency, and constitutional accountability.
+
+---
+
+## Decision 12 — Harmony Governance Is Not Axodus Governance
+
+Harmony Governance should not be highlighted as part of Axodus Governance.
+
+It is a Business product delivered by Axodus for Harmony, not a sovereign component of the Axodus governance federation.
+
+Reasoning:
+
+The Axodus app should present Axodus-native governance. External client products may remain accessible through their own product surfaces, but they must not be framed as Axodus federal governance.

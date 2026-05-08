@@ -1,6 +1,10 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
+import DaoContextSelector from '../components/DaoContextSelector';
+import ProposalList from '../components/ProposalList';
+import SubDaoExplorer from '../components/SubDaoExplorer';
 import { useChainRegistry } from '../hooks/useChainRegistry';
+import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -81,10 +85,11 @@ function ExecutionChainPanel({ chain }) {
 
 function OperationsPanel() {
   const items = [
-    { label: 'DAO federation records', status: 'Prepared' },
+    { label: 'Axodus federal governance', status: 'Authority' },
+    { label: 'Investment agency sub-DAOs', status: 'Model' },
+    { label: 'Sub-DAO autonomous strategy', status: 'Scoped' },
+    { label: 'Central constitutional compliance', status: 'Required' },
     { label: 'Proposal aggregation', status: 'Next' },
-    { label: 'Remote execution receipts', status: 'Next' },
-    { label: 'Constitutional conditions', status: 'Hooked' },
   ];
 
   return (
@@ -112,6 +117,7 @@ function OperationsPanel() {
 
 export default function GovernanceDashboard() {
   const { chains, summary, source, status, error } = useChainRegistry();
+  const governanceConsole = useGovernanceConsole(chains);
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
 
   return (
@@ -122,21 +128,20 @@ export default function GovernanceDashboard() {
             <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Governance</span>
             <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">DAO Operating Dashboard</h1>
             <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
-              Axodus governance control surface for chain registry, federation readiness, plugin capabilities and execution state.
+              Connected control surface for the Axodus federal DAO and ecosystem sub-DAOs.
             </p>
           </div>
-          <a
-            href="https://governance.country"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 bg-surface-container-high px-4 py-2 text-sm font-bold text-on-surface hover:bg-surface-bright"
-          >
-            <span className="material-symbols-outlined text-[18px]">open_in_new</span>
-            Harmony Governance
-          </a>
         </header>
 
         <SourceBanner source={source} status={status} error={error} />
+
+        <DaoContextSelector
+          daos={governanceConsole.daos}
+          selectedDaoId={governanceConsole.selectedDaoId}
+          onSelect={governanceConsole.setSelectedDaoId}
+          selectedChain={governanceConsole.selectedChain}
+          status={governanceConsole.status}
+        />
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard icon="lan" label="Registered chains" value={summary.totalChains} detail={`${summary.evmCount} EVM core networks`} />
@@ -149,6 +154,24 @@ export default function GovernanceDashboard() {
           <ExecutionChainPanel chain={executionChain} />
           <OperationsPanel />
         </section>
+
+        <SubDaoExplorer
+          daos={governanceConsole.daos}
+          chains={chains}
+          selectedDao={governanceConsole.selectedDao}
+          selectedDaoId={governanceConsole.selectedDaoId}
+          onSelect={governanceConsole.setSelectedDaoId}
+          plugins={governanceConsole.plugins}
+          proposals={governanceConsole.proposals}
+          status={governanceConsole.status}
+          error={governanceConsole.error}
+        />
+
+        <ProposalList
+          proposals={governanceConsole.proposals}
+          selectedDao={governanceConsole.selectedDao}
+          canCreateProposal={governanceConsole.canCreateProposal}
+        />
 
         <ChainRegistryTable chains={chains} />
       </div>

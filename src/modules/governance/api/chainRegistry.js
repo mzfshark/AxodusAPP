@@ -1,4 +1,5 @@
-const registryEndpoint = '/api/registry/chains';
+const governanceApiBase = import.meta.env.VITE_GOVERNANCE_API_URL || '/governance-api';
+const registryEndpoint = `${governanceApiBase}/registry/chains`;
 
 const evmPluginTypes = [
   'tokenVoting',
