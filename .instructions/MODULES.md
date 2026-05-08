@@ -26,6 +26,8 @@ A module is a frontend domain package containing:
 Purpose:
 
 - DAO overview
+- Axodus federal governance overview
+- sub-DAO operating context
 - proposal lists
 - proposal detail
 - voting interface
@@ -36,6 +38,7 @@ Purpose:
 
 Initial pages:
 
+- Public Governance Landing
 - Governance Dashboard
 - DAO Explorer
 - Proposal List

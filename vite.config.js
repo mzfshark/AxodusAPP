@@ -34,6 +34,11 @@ export default defineConfig({
       'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https:; font-src 'self' data: https:;"
     },
     proxy: {
+      '/governance-api': {
+        target: process.env.VITE_GOVERNANCE_API_URL || 'http://localhost:4002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/governance-api/, ''),
+      },
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:8000',
         changeOrigin: true,

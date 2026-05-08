@@ -20,6 +20,7 @@ Examples:
 
 - /
 - /connect
+- /governance
 - /academy
 - /marketplace
 - /docs
@@ -31,7 +32,8 @@ Examples:
 Examples:
 
 - /dashboard
-- /governance
+- /governance/console
+- /governance/proposals/:proposalId
 - /treasury
 - /acs
 - /trading
