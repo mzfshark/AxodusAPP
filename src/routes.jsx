@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Defi from "./pages/Defi";
 import Settings from "./pages/Settings";
@@ -23,7 +24,7 @@ import Academy from "./pages/Academy";
 import Dex from "./pages/Dex";
 import Lottery from "./pages/Lottery";
 import Mcps from "./pages/Mcps";
-import Dao from "./pages/Dao";
+import { GovernanceDashboard } from "./modules/governance";
 
 
 const router = createBrowserRouter([
@@ -37,7 +38,8 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <Dashboard /> },
       { path: "defi", element: <Defi /> },
       { path: "settings", element: <Settings /> },
-      { path: "dao", element: <Dao /> },
+      { path: "governance", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
+      { path: "dao", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
       { path: "transactions", element: <TransactionHistoryPage /> },
       { path: "trading/bots", element: <BotManagement /> },
       { path: "trading/portfolio", element: <PortfolioPage /> },
