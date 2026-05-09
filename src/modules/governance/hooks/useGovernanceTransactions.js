@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { applyGovernanceActionGuards } from '../transactions/governanceActionGuards';
 import { createGovernanceTransactionAdapter } from '../transactions/governanceTransactionAdapter';
 import { useGovernanceOperationHistory } from './useGovernanceOperationHistory';
 import { useGovernanceReceiptTracker } from './useGovernanceReceiptTracker';
@@ -50,8 +51,30 @@ export function useGovernanceTransactions({ proposal, chain, walletAddress, acti
     return operation;
   }, [chain?.currentWalletChainId]);
 
-  const voteOperation = useMemo(() => withWalletChainGuard(adapter.vote(selectedVoteOption)), [adapter, selectedVoteOption, withWalletChainGuard]);
-  const executeOperation = useMemo(() => withWalletChainGuard(adapter.execute()), [adapter, withWalletChainGuard]);
+  const voteOperation = useMemo(
+    () =>
+      withWalletChainGuard(
+        applyGovernanceActionGuards({
+          operation: adapter.vote(selectedVoteOption),
+          proposal,
+          chain,
+          walletAddress,
+        }),
+      ),
+    [adapter, chain, proposal, selectedVoteOption, walletAddress, withWalletChainGuard],
+  );
+  const executeOperation = useMemo(
+    () =>
+      withWalletChainGuard(
+        applyGovernanceActionGuards({
+          operation: adapter.execute(),
+          proposal,
+          chain,
+          walletAddress,
+        }),
+      ),
+    [adapter, chain, proposal, walletAddress, withWalletChainGuard],
+  );
 
   async function submitVote() {
     setTransactionState({

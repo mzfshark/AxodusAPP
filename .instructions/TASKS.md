@@ -52,6 +52,7 @@
 - Create execution receipt UI — in progress: proposal detail exposes indexed remote receipts, local wallet transaction receipt tracking, and governance indexer reconciliation status
 - Create local governance operation history — in progress: proposal detail persists recent wallet operations by wallet/proposal while backend indexing catches up
 - Create governance transaction confirmation preview — in progress: proposal detail requires explicit review of action, chain, plugin contract, calldata, fee source and governance impact before opening the wallet prompt
+- Create governance action permission guards — in progress: vote/execute operations run wallet, backend chain capability, action-level plugin capability, indexing readiness and lifecycle checks before wallet submission
 
 ---
 

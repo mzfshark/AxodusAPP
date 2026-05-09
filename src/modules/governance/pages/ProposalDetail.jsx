@@ -128,6 +128,30 @@ function GovernanceOperationAction({ operation, submitLabel, submittingLabel, on
   );
 }
 
+function PermissionCheckList({ checks = [] }) {
+  if (!checks.length) return null;
+
+  const statusClass = {
+    passed: 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100',
+    warning: 'border-amber-300/20 bg-amber-950/20 text-amber-100',
+    blocked: 'border-red-300/20 bg-red-950/20 text-red-100',
+  };
+
+  return (
+    <div className="mt-4 space-y-2">
+      {checks.map((check) => (
+        <div
+          key={`${check.label}-${check.message}`}
+          className={`rounded-lg border px-3 py-2 text-xs ${statusClass[check.status] ?? 'border-white/10 bg-surface-container-high text-on-surface-variant'}`}
+        >
+          <div className="font-black uppercase">{check.label}</div>
+          <div className="mt-1 leading-5">{check.message}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function TransactionPreviewRow({ label, value }) {
   return (
     <div className="rounded-lg border border-white/5 bg-surface-container-high p-3">
@@ -169,6 +193,11 @@ function GovernanceTransactionConfirmation({ operation, proposal, selectedVoteOp
           <div className="rounded-lg border border-cyan-300/10 bg-cyan-950/20 p-4">
             <div className="text-xs font-black uppercase text-cyan-200">Governance impact</div>
             <p className="mt-2 text-sm leading-6 text-cyan-50">{governanceImpact}</p>
+          </div>
+
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-xs font-black uppercase text-slate-500">Permission checks</div>
+            <PermissionCheckList checks={operation.permissionChecks} />
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
@@ -378,6 +407,7 @@ export default function ProposalDetail() {
             Connected operator: {compactAddress(address)}. Adapter status: {voteOperation.status}. {voteOperation.reason}
           </p>
           <p className="mt-2 text-xs leading-5 text-on-surface-variant">{formatOperationTarget(voteOperation)}</p>
+          <PermissionCheckList checks={voteOperation.permissionChecks} />
         </ProposalOperationPanel>
 
         <ProposalOperationPanel
@@ -406,6 +436,7 @@ export default function ProposalDetail() {
             Adapter status: {executeOperation.status}. {executeOperation.reason}
           </p>
           <p className="mt-2 text-xs leading-5 text-on-surface-variant">{formatOperationTarget(executeOperation)}</p>
+          <PermissionCheckList checks={executeOperation.permissionChecks} />
         </ProposalOperationPanel>
 
         <ProposalOperationPanel
