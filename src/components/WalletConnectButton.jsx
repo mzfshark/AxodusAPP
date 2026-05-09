@@ -1,16 +1,17 @@
 // src/components/WalletConnectButton.jsx
 import React from 'react';
+import { AppKitAccountButton, AppKitConnectButton } from '@reown/appkit/react';
+import { useWallet } from '../hooks/useWallet';
 
-// carrega o web‑component e registra-o no customElements
-import '@reown/appkit-wallet-button/react';
+const WalletConnectButton = () => {
+  const { isConnected } = useWallet();
 
-
-const WalletConnectButton = () => (
-  <div style={{display:'flex',justifyContent:'center',padding:'0 3rem'}}>
-    {/* web‑component */}
-    <appkit-connect-button />
-  </div>
-);
+  return (
+    <div className="flex min-w-[156px] justify-center">
+      {isConnected ? <AppKitAccountButton /> : <AppKitConnectButton />}
+    </div>
+  );
+};
 
 export default WalletConnectButton;
 
