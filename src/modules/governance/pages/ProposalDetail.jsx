@@ -58,6 +58,11 @@ function receiptChain(receipt) {
   return receipt?.chainSlug ?? receipt?.network ?? receipt?.chain ?? receipt?.targetChain ?? 'Target chain not indexed';
 }
 
+function formatOperationTarget(operation) {
+  if (!operation?.request) return 'No transaction request prepared.';
+  return `${operation.request.functionName} on ${compactAddress(operation.request.address)} · chain ${operation.request.chainId}`;
+}
+
 function ProposalOperationPanel({ title, description, icon, children }) {
   return (
     <section className="rounded-lg border border-white/5 bg-surface-container-highest">
@@ -75,13 +80,18 @@ function ProposalOperationPanel({ title, description, icon, children }) {
   );
 }
 
-function OperationActionButton({ icon, disabled, onClick, children }) {
+function OperationActionButton({ icon, disabled, onClick, variant = 'primary', children }) {
+  const variantClass =
+    variant === 'secondary'
+      ? 'border border-cyan-300/30 bg-cyan-950/30 text-cyan-100 disabled:border-white/5 disabled:bg-surface-container-high disabled:text-slate-500'
+      : 'bg-primary text-on-primary disabled:bg-surface-container-high disabled:text-slate-500';
+
   return (
     <button
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-black text-on-primary disabled:cursor-not-allowed disabled:bg-surface-container-high disabled:text-slate-500"
+      className={`inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-black disabled:cursor-not-allowed ${variantClass}`}
     >
       <span className="material-symbols-outlined text-[18px]">{icon}</span>
       {children}
@@ -89,13 +99,30 @@ function OperationActionButton({ icon, disabled, onClick, children }) {
   );
 }
 
+function GovernanceOperationAction({ operation, submitLabel, submittingLabel, onSubmit, onSwitchChain, isSubmitting, isSwitching, icon }) {
+  if (operation.status === 'wrongChain') {
+    return (
+      <OperationActionButton icon="sync_alt" disabled={isSwitching} onClick={onSwitchChain} variant="secondary">
+        {isSwitching ? 'Switching network' : 'Switch network'}
+      </OperationActionButton>
+    );
+  }
+
+  return (
+    <OperationActionButton icon={icon} disabled={!operation.canSubmit || isSubmitting} onClick={onSubmit}>
+      {isSubmitting ? submittingLabel : submitLabel}
+    </OperationActionButton>
+  );
+}
+
 export default function ProposalDetail() {
   const { proposalId } = useParams();
-  const { address } = useWallet();
+  const { address, chain: walletChainId } = useWallet();
   const { chains } = useChainRegistry();
   const { proposal, actions, status, error } = useProposalDetail(proposalId);
 
-  const chain = chains.find((entry) => entry.network === proposal?.network || entry.slug === proposal?.network);
+  const registryChain = chains.find((entry) => entry.network === proposal?.network || entry.slug === proposal?.network);
+  const chain = registryChain ? { ...registryChain, currentWalletChainId: walletChainId } : { currentWalletChainId: walletChainId };
   const decodedActions = getProposalActions(proposal, actions);
   const receipts = getProposalReceipts(proposal);
   const voteTotals = getVoteOptionTotals(proposal);
@@ -106,8 +133,12 @@ export default function ProposalDetail() {
     voteOperation,
     executeOperation,
     transactionState,
-    prepareVote,
-    prepareExecute,
+    isSubmitting,
+    isSwitching,
+    submitVote,
+    submitExecute,
+    switchVoteChain,
+    switchExecuteChain,
   } = useGovernanceTransactions({
     proposal,
     chain,
@@ -186,7 +217,7 @@ export default function ProposalDetail() {
       <section className="grid gap-6 xl:grid-cols-3">
         <ProposalOperationPanel
           title="Voting"
-          description="Prepared for adapter-backed voting. Transaction submission remains disabled until wallet execution is connected."
+          description="Prepared for adapter-backed voting with wallet submission and chain-aware execution guards."
           icon="how_to_vote"
         >
           <div className="grid gap-3">
@@ -211,13 +242,21 @@ export default function ProposalDetail() {
             ))}
           </div>
           <div className="mt-4">
-            <OperationActionButton icon="how_to_vote" disabled={!voteOperation.canSubmit} onClick={prepareVote}>
-              Submit vote
-            </OperationActionButton>
+            <GovernanceOperationAction
+              operation={voteOperation}
+              submitLabel="Submit vote"
+              submittingLabel="Submitting"
+              onSubmit={submitVote}
+              onSwitchChain={switchVoteChain}
+              isSubmitting={isSubmitting}
+              isSwitching={isSwitching}
+              icon="how_to_vote"
+            />
           </div>
           <p className="mt-3 text-xs leading-5 text-on-surface-variant">
             Connected operator: {compactAddress(address)}. Adapter status: {voteOperation.status}. {voteOperation.reason}
           </p>
+          <p className="mt-2 text-xs leading-5 text-on-surface-variant">{formatOperationTarget(voteOperation)}</p>
         </ProposalOperationPanel>
 
         <ProposalOperationPanel
@@ -231,13 +270,21 @@ export default function ProposalDetail() {
             <p className="mt-2 text-xs leading-5 text-on-surface-variant">{executionReadiness.reason}</p>
           </div>
           <div className="mt-4">
-            <OperationActionButton icon="play_arrow" disabled={!executeOperation.canSubmit} onClick={prepareExecute}>
-              Execute proposal
-            </OperationActionButton>
+            <GovernanceOperationAction
+              operation={executeOperation}
+              submitLabel="Execute proposal"
+              submittingLabel="Submitting"
+              onSubmit={submitExecute}
+              onSwitchChain={switchExecuteChain}
+              isSubmitting={isSubmitting}
+              isSwitching={isSwitching}
+              icon="play_arrow"
+            />
           </div>
           <p className="mt-3 text-xs leading-5 text-on-surface-variant">
             Adapter status: {executeOperation.status}. {executeOperation.reason}
           </p>
+          <p className="mt-2 text-xs leading-5 text-on-surface-variant">{formatOperationTarget(executeOperation)}</p>
         </ProposalOperationPanel>
 
         <ProposalOperationPanel
@@ -276,6 +323,9 @@ export default function ProposalDetail() {
             <div>
               <h2 className="text-sm font-black uppercase text-cyan-100">Governance Transaction Adapter</h2>
               <p className="mt-1 text-sm leading-6 text-cyan-50">{transactionState.message}</p>
+              <p className="mt-1 break-words text-xs leading-5 text-cyan-100">
+                {transactionState.operation?.request?.data ?? 'No calldata generated.'}
+              </p>
             </div>
           </div>
         </section>

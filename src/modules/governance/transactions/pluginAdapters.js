@@ -1,3 +1,5 @@
+import { resolveExecuteBinding, resolveVoteBinding } from './deploymentBindings';
+
 const adapterStatus = {
   ready: 'ready',
   blocked: 'blocked',
@@ -98,12 +100,56 @@ function baseOperation({ action, proposal, chain, walletAddress }) {
   };
 }
 
+function toPreparedOperation(base, binding) {
+  if (binding.status !== 'prepared') {
+    return {
+      ...base,
+      status: binding.status ?? adapterStatus.blocked,
+      canSubmit: false,
+      reason: binding.reason,
+    };
+  }
+
+  return {
+    ...base,
+    status: adapterStatus.ready,
+    canSubmit: true,
+    reason: binding.reason,
+    request: binding.request,
+  };
+}
+
 function buildEvmAdapter(pluginType) {
   return {
     pluginType,
     family: 'evm',
-    prepareVote: (context) => baseOperation({ ...context, action: 'vote' }),
-    prepareExecute: (context) => baseOperation({ ...context, action: 'execute' }),
+    prepareVote: (context) => {
+      const base = baseOperation({ ...context, action: 'vote' });
+      if (base.status !== adapterStatus.pendingAbi) return base;
+
+      return toPreparedOperation(
+        base,
+        resolveVoteBinding({
+          pluginType,
+          proposal: context.proposal,
+          chain: context.chain,
+          voteOption: context.voteOption,
+        }),
+      );
+    },
+    prepareExecute: (context) => {
+      const base = baseOperation({ ...context, action: 'execute' });
+      if (base.status !== adapterStatus.pendingAbi) return base;
+
+      return toPreparedOperation(
+        base,
+        resolveExecuteBinding({
+          pluginType,
+          proposal: context.proposal,
+          chain: context.chain,
+        }),
+      );
+    },
   };
 }
 

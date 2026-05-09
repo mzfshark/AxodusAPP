@@ -4,6 +4,7 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { SolanaAdapter } from '@reown/appkit-adapter-solana';
 import { 
   mainnet, 
+  sepolia,
   bsc, 
   harmonyOne, 
   arbitrum, 
@@ -31,6 +32,7 @@ export const metadata = {
 // EVM Networks
 export const evmNetworks = [
   mainnet, 
+  sepolia,
   bsc, 
   arbitrum, 
   harmonyOne, 
