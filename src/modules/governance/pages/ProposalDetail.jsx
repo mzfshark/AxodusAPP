@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useWallet } from '@/hooks/useWallet';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useProposalDetail } from '../hooks/useProposalDetail';
+import { useGovernanceTransactions } from '../hooks/useGovernanceTransactions';
 import {
   compactAddress,
   formatProposalDate,
@@ -74,12 +75,13 @@ function ProposalOperationPanel({ title, description, icon, children }) {
   );
 }
 
-function DisabledActionButton({ icon, children }) {
+function OperationActionButton({ icon, disabled, onClick, children }) {
   return (
     <button
       type="button"
-      disabled
-      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-surface-container-high px-4 py-2.5 text-sm font-black text-slate-500 disabled:cursor-not-allowed"
+      disabled={disabled}
+      onClick={onClick}
+      className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-black text-on-primary disabled:cursor-not-allowed disabled:bg-surface-container-high disabled:text-slate-500"
     >
       <span className="material-symbols-outlined text-[18px]">{icon}</span>
       {children}
@@ -98,6 +100,20 @@ export default function ProposalDetail() {
   const receipts = getProposalReceipts(proposal);
   const voteTotals = getVoteOptionTotals(proposal);
   const executionReadiness = getExecutionReadiness({ ...proposal, actions: decodedActions }, chain);
+  const {
+    selectedVoteOption,
+    setSelectedVoteOption,
+    voteOperation,
+    executeOperation,
+    transactionState,
+    prepareVote,
+    prepareExecute,
+  } = useGovernanceTransactions({
+    proposal,
+    chain,
+    walletAddress: address,
+    actions: decodedActions,
+  });
 
   if (status === 'loading') {
     return (
@@ -175,17 +191,32 @@ export default function ProposalDetail() {
         >
           <div className="grid gap-3">
             {voteTotals.map((option) => (
-              <div key={option.key} className="flex items-center justify-between rounded-lg border border-white/5 bg-surface-container-high px-4 py-3">
-                <span className="text-sm font-bold text-on-surface">{option.label}</span>
+              <label
+                key={option.key}
+                className="flex cursor-pointer items-center justify-between rounded-lg border border-white/5 bg-surface-container-high px-4 py-3"
+              >
+                <span className="flex items-center gap-3 text-sm font-bold text-on-surface">
+                  <input
+                    type="radio"
+                    name="governance-vote-option"
+                    value={option.key}
+                    checked={selectedVoteOption === option.key}
+                    onChange={() => setSelectedVoteOption(option.key)}
+                    className="h-4 w-4 accent-cyan-300"
+                  />
+                  {option.label}
+                </span>
                 <span className="text-sm font-semibold text-on-surface-variant">{option.value}</span>
-              </div>
+              </label>
             ))}
           </div>
           <div className="mt-4">
-            <DisabledActionButton icon="how_to_vote">Submit vote</DisabledActionButton>
+            <OperationActionButton icon="how_to_vote" disabled={!voteOperation.canSubmit} onClick={prepareVote}>
+              Submit vote
+            </OperationActionButton>
           </div>
           <p className="mt-3 text-xs leading-5 text-on-surface-variant">
-            Connected operator: {compactAddress(address)}. Voting availability will be resolved by plugin type, chain capability and member voting power.
+            Connected operator: {compactAddress(address)}. Adapter status: {voteOperation.status}. {voteOperation.reason}
           </p>
         </ProposalOperationPanel>
 
@@ -200,8 +231,13 @@ export default function ProposalDetail() {
             <p className="mt-2 text-xs leading-5 text-on-surface-variant">{executionReadiness.reason}</p>
           </div>
           <div className="mt-4">
-            <DisabledActionButton icon="play_arrow">Execute proposal</DisabledActionButton>
+            <OperationActionButton icon="play_arrow" disabled={!executeOperation.canSubmit} onClick={prepareExecute}>
+              Execute proposal
+            </OperationActionButton>
           </div>
+          <p className="mt-3 text-xs leading-5 text-on-surface-variant">
+            Adapter status: {executeOperation.status}. {executeOperation.reason}
+          </p>
         </ProposalOperationPanel>
 
         <ProposalOperationPanel
@@ -232,6 +268,18 @@ export default function ProposalDetail() {
           )}
         </ProposalOperationPanel>
       </section>
+
+      {transactionState.status !== 'idle' ? (
+        <section className="rounded-lg border border-cyan-400/20 bg-cyan-950/20 px-5 py-4">
+          <div className="flex items-start gap-3">
+            <span className="material-symbols-outlined text-cyan-200">account_tree</span>
+            <div>
+              <h2 className="text-sm font-black uppercase text-cyan-100">Governance Transaction Adapter</h2>
+              <p className="mt-1 text-sm leading-6 text-cyan-50">{transactionState.message}</p>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="rounded-lg border border-white/5 bg-surface-container-highest">

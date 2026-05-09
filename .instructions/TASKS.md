@@ -47,7 +47,8 @@
 - Create proposal list shell — in progress: console shows real indexed proposals when available, links rows into proposal detail, and keeps an explicit empty state otherwise
 - Create proposal list
 - Create proposal detail page — in progress: protected `/governance/proposals/:proposalId` reads proposal detail/actions from the governance backend
-- Create voting UI — in progress: proposal detail exposes adapter-ready voting totals and disabled wallet action surface
+- Create governance transaction adapter — in progress: frontend isolates vote/execute preparation by plugin type and chain capability before wiring wagmi/viem writes
+- Create voting UI — in progress: proposal detail exposes adapter-ready vote option selection and wallet action readiness
 - Create execution receipt UI — in progress: proposal detail exposes receipt/status slots for remote execution payloads
 
 ---
