@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { createGovernanceTransactionAdapter } from '../transactions/governanceTransactionAdapter';
+import { useGovernanceOperationHistory } from './useGovernanceOperationHistory';
+import { useGovernanceReceiptTracker } from './useGovernanceReceiptTracker';
 import { useGovernanceWalletWriter } from './useGovernanceWalletWriter';
 
 const initialState = {
@@ -13,6 +15,13 @@ export function useGovernanceTransactions({ proposal, chain, walletAddress, acti
   const [transactionState, setTransactionState] = useState(initialState);
   const { isPending, isSwitching, submitOperation, switchToOperationChain } = useGovernanceWalletWriter({
     currentChainId: chain?.currentWalletChainId,
+  });
+  const receiptTracking = useGovernanceReceiptTracker({ transactionState });
+  const operationHistory = useGovernanceOperationHistory({
+    proposal,
+    walletAddress,
+    transactionState,
+    receiptTracking,
   });
 
   const adapter = useMemo(
@@ -154,6 +163,8 @@ export function useGovernanceTransactions({ proposal, chain, walletAddress, acti
     voteOperation,
     executeOperation,
     transactionState,
+    receiptTracking,
+    operationHistory,
     isSubmitting: isPending || transactionState.status === 'submitting',
     isSwitching,
     submitVote,

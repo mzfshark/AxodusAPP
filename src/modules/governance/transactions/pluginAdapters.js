@@ -91,6 +91,7 @@ function baseOperation({ action, proposal, chain, walletAddress }) {
 
   return {
     action,
+    network: proposal?.network ?? chain?.network ?? chain?.slug ?? null,
     pluginType,
     pluginAddress,
     proposalIndex,

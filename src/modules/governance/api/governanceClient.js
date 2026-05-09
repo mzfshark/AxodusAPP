@@ -81,6 +81,15 @@ export async function fetchGovernanceProposalActions({ proposalId, signal } = {}
   return requestJson(`/proposals/${encodeURIComponent(proposalId)}/actions`, { signal });
 }
 
+export async function fetchGovernanceTransactionIndexingStatus({ network, txHash, type, signal } = {}) {
+  if (!network || !txHash || !type) {
+    return { isProcessed: false };
+  }
+
+  const query = toQuery({ type });
+  return requestJson(`/transactions/${encodeURIComponent(network)}/${encodeURIComponent(txHash)}/status?${query}`, { signal });
+}
+
 export async function fetchGovernancePlugins({ dao, signal } = {}) {
   if (!dao?.address || !dao?.network) {
     return [];
