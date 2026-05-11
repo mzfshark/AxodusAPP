@@ -12,14 +12,39 @@ const evmPluginTypes = [
   'spp',
 ];
 
+const compatible = { status: 'compatible', reasonCodes: [] };
+
+const evmLocalGovernanceModels = [
+  '$Neurons',
+  'local-token',
+  'auto-generated-platform-token',
+  'multisig',
+  'gauge',
+  'reputation',
+  'nft-governance',
+  'plugin-defined',
+];
+
+const harmonyLocalGovernanceModels = [
+  '$Neurons',
+  'local-token',
+  'auto-generated-platform-token',
+  'multisig',
+  'harmony-validator-snapshot',
+  'harmony-delegation-snapshot',
+  'plugin-defined',
+];
+
 const pluginCapability = ({ pluginType, label, adapter, vote = true, execute = true, strategy, legacy = false }) => ({
   interfaceType: pluginType,
   label,
   adapter,
+  governanceNucleus: 'local',
   actions: { createProposal: true, vote, execute, settings: true },
   executionModes: legacy ? ['legacy-adapter'] : ['direct', 'remote', 'federal'],
   votingPowerStrategy: strategy,
   compatibleRoles: legacy ? ['voting', 'spoke'] : ['execution', 'voting', 'spoke'],
+  constitutionalCompatibility: compatible,
   requiresDeployment: true,
   requiresIndexer: true,
   legacy,
@@ -137,10 +162,13 @@ const fallbackChains = [
       treasury: true,
       remoteExecution: true,
       constitutionalConditions: true,
+      governanceNuclei: ['constitutional', 'local'],
+      constitutionalCompatibility: compatible,
+      localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
   },
   {
     chainId: 1,
@@ -161,10 +189,13 @@ const fallbackChains = [
       treasury: true,
       remoteExecution: true,
       constitutionalConditions: true,
+      governanceNuclei: ['constitutional', 'local'],
+      constitutionalCompatibility: compatible,
+      localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
   },
   {
     chainId: 8453,
@@ -185,10 +216,13 @@ const fallbackChains = [
       treasury: true,
       remoteExecution: true,
       constitutionalConditions: true,
+      governanceNuclei: ['constitutional', 'local'],
+      constitutionalCompatibility: compatible,
+      localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
   },
   {
     chainId: 42161,
@@ -209,10 +243,13 @@ const fallbackChains = [
       treasury: true,
       remoteExecution: true,
       constitutionalConditions: true,
+      governanceNuclei: ['constitutional', 'local'],
+      constitutionalCompatibility: compatible,
+      localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
   },
   {
     chainId: 137,
@@ -233,10 +270,13 @@ const fallbackChains = [
       treasury: true,
       remoteExecution: true,
       constitutionalConditions: true,
+      governanceNuclei: ['constitutional', 'local'],
+      constitutionalCompatibility: compatible,
+      localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
   },
   {
     chainId: 1666600000,
@@ -257,6 +297,9 @@ const fallbackChains = [
       treasury: true,
       remoteExecution: false,
       constitutionalConditions: false,
+      governanceNuclei: ['constitutional', 'local'],
+      constitutionalCompatibility: compatible,
+      localGovernanceModels: harmonyLocalGovernanceModels,
       supportedPluginTypes: [
         'tokenVoting',
         'nativeTokenVoting',
@@ -268,7 +311,7 @@ const fallbackChains = [
       ],
       pluginCapabilities: harmonyPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: true, status: 'configured' },
+    indexingStatus: { requested: true, rpcConfigured: true, status: 'configured', reasonCode: null },
   },
 ];
 

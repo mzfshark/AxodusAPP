@@ -141,11 +141,15 @@ function PermissionCheckList({ checks = [] }) {
     <div className="mt-4 space-y-2">
       {checks.map((check) => (
         <div
-          key={`${check.label}-${check.message}`}
+          key={`${check.label}-${check.reasonCode ?? check.message}`}
           className={`rounded-lg border px-3 py-2 text-xs ${statusClass[check.status] ?? 'border-white/10 bg-surface-container-high text-on-surface-variant'}`}
         >
-          <div className="font-black uppercase">{check.label}</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-black uppercase">{check.label}</span>
+            {check.source ? <span className="rounded border border-current/20 px-1.5 py-0.5 text-[10px] uppercase opacity-80">{check.source}</span> : null}
+          </div>
           <div className="mt-1 leading-5">{check.message}</div>
+          {check.reasonCode ? <div className="mt-1 font-mono text-[10px] uppercase opacity-80">{check.reasonCode}</div> : null}
         </div>
       ))}
     </div>

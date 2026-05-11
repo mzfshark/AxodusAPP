@@ -53,8 +53,8 @@
 - Create local governance operation history — in progress: proposal detail persists recent wallet operations by wallet/proposal while backend indexing catches up
 - Create governance transaction confirmation preview — in progress: proposal detail requires explicit review of action, chain, plugin contract, calldata, fee source and governance impact before opening the wallet prompt
 - Create governance action permission guards — in progress: vote/execute operations run wallet, backend chain capability, action-level plugin capability, indexing readiness and lifecycle checks before wallet submission
-- Add governance nuclei model — pending: distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities
-- Add Constitutional Guardrail reason codes — pending: replace opaque exclusion-style restrictions with transparent guardrail codes across UI/API flows
+- Add governance nuclei model — in progress: chain registry and frontend fallback distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities
+- Add Constitutional Guardrail reason codes — in progress: backend registry/indexer status and frontend permission guards expose transparent guardrail codes across UI/API flows
 
 ---
 
