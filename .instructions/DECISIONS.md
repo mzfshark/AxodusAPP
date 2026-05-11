@@ -113,17 +113,26 @@ This app is the central interface and deserves its own workspace-level instructi
 
 ---
 
-## Decision 11 — Axodus Governance Is Federal
+## Decision 11 — Axodus Governance Has Two Governance Nuclei
 
-Axodus Governance has a central federal governance authority.
+Axodus Governance has two distinct governance nuclei:
 
-All ecosystem DAOs should be modeled as sub-DAOs inside the Axodus federation.
+1. Constitutional Governance, powered by `$Neurons`.
+2. Local Governance, controlled by each federated startup, DAO, company, product, or community.
 
-Sub-DAOs may preserve local strategic and operational autonomy, but they must remain subordinate to central Axodus governance constraints, constitutional rules, treasury policies, and ecosystem permissions.
+The Constitutional Governance layer defines federal standards, capabilities, conditions, guardrails, and ecosystem-wide legitimacy.
+
+The Local Governance layer may use `$Neurons`, local tokens, auto-generated platform tokens, multisigs, gauges, reputation systems, NFT governance, or plugin-defined models.
+
+All ecosystem DAOs should be modeled as federated local governance contexts inside the Axodus constitutional federation.
+
+Sub-DAOs may preserve local strategic and operational autonomy, but they must remain constitutionally compatible with Axodus standards, treasury policies, execution guardrails, and ecosystem permissions.
 
 Reasoning:
 
-Each sub-DAO represents an ecosystem company, investment agency, product unit, or operating organization. Autonomy is useful for execution, but federal governance preserves ecosystem integrity, policy consistency, and constitutional accountability.
+Each sub-DAO represents an ecosystem company, investment agency, product unit, community, or operating organization. Autonomy is useful for execution, but Constitutional Governance preserves ecosystem integrity, policy consistency, and constitutional accountability.
+
+The app must not frame local autonomy as sovereignty outside the Axodus constitutional model.
 
 ---
 
@@ -136,3 +145,29 @@ It is a Business product delivered by Axodus for Harmony, not a sovereign compon
 Reasoning:
 
 The Axodus app should present Axodus-native governance. External client products may remain accessible through their own product surfaces, but they must not be framed as Axodus federal governance.
+
+---
+
+## Decision 13 — Constitutional Guardrails Require Transparent Reason Codes
+
+AxodusAPP must not use opaque automatic exclusion language or hidden blocking behavior.
+
+Restricted governance actions should be presented as **Constitutional Guardrails** with transparent reason codes.
+
+Reason codes should explain why an action is blocked, warned, degraded, delayed, or requires review.
+
+Examples:
+
+- `CHAIN_NOT_CONSTITUTIONALLY_ENABLED`
+- `PLUGIN_CAPABILITY_NOT_REGISTERED`
+- `LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE`
+- `TREASURY_POLICY_REQUIRES_REVIEW`
+- `EXECUTION_CHAIN_NOT_AUTHORIZED`
+- `VOTING_POWER_SOURCE_NOT_VERIFIED`
+- `INDEXER_STATE_NOT_READY`
+- `REMOTE_EXECUTION_GUARDRAIL_ACTIVE`
+- `AGENT_PERMISSION_SCOPE_EXCEEDED`
+
+Reasoning:
+
+Governance restrictions must be auditable and understandable by users, operators, SDKs, indexers, and future AI agents.
