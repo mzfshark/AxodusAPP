@@ -117,5 +117,15 @@
     "opentelemetry-sdk": "*",
     "opentelemetry-exporter-otlp": "*",
     "jaeger-client": "*"
+  },
+  "pnpm": {
+    "overrides": {
+      "axios": "^1.15.2",
+      "fast-uri": "^3.1.2",
+      "hono": "^4.12.18",
+      "lodash": "^4.18.1",
+      "protobufjs": "^7.5.5",
+      "valibot": "^1.2.0"
+    }
   }
 }

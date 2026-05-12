@@ -1,5 +1,17 @@
-function checkResult(label, status, message, reasonCode = null, source = null) {
-  return { label, status, message, reasonCode, source };
+function severityForReason(reasonCode, status) {
+  if (!reasonCode) return null;
+  if (reasonCode === 'TREASURY_POLICY_REQUIRES_REVIEW' || reasonCode === 'AGENT_PERMISSION_SCOPE_EXCEEDED') return 'constitutional';
+  if (status === 'blocked') return 'critical';
+  if (status === 'warning') return 'warning';
+  return 'info';
+}
+
+function getConstitutionalStanding(target) {
+  return target?.constitutionalStanding ?? target?.constitutionalCompatibility;
+}
+
+function checkResult(label, status, message, reasonCode = null, source = null, reasonSeverity = null) {
+  return { label, status, message, reasonCode, source, reasonSeverity: reasonSeverity ?? severityForReason(reasonCode, status) };
 }
 
 function blockOperation(operation, reason, permissionChecks) {
@@ -11,6 +23,7 @@ function blockOperation(operation, reason, permissionChecks) {
     canSubmit: false,
     reason,
     reasonCode: blockingCheck?.reasonCode ?? null,
+    reasonSeverity: blockingCheck?.reasonSeverity ?? null,
     permissionChecks,
   };
 }
@@ -113,33 +126,35 @@ export function applyGovernanceActionGuards({ operation, proposal, chain, wallet
     );
   }
 
-  if (chain?.capabilities?.constitutionalCompatibility?.status === 'incompatible') {
-    const reasonCode =
-      chain.capabilities.constitutionalCompatibility.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
+  const chainStanding = getConstitutionalStanding(chain?.capabilities);
+
+  if (chainStanding?.status === 'restricted' || chainStanding?.status === 'incompatible') {
+    const reasonCode = chainStanding.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
     permissionChecks.push(
       checkResult(
-        'Constitutional compatibility',
+        'Constitutional standing',
         'blocked',
-        'This local governance context is not constitutionally compatible.',
+        'This local governance context has restricted constitutional standing.',
         reasonCode,
         'Constitutional Governance',
+        chainStanding.reasonSeverity,
       ),
     );
-  } else if (chain?.capabilities?.constitutionalCompatibility?.status === 'requires-review') {
-    const reasonCode =
-      chain.capabilities.constitutionalCompatibility.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
+  } else if (chainStanding?.status === 'under-review' || chainStanding?.status === 'requires-review') {
+    const reasonCode = chainStanding.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
     permissionChecks.push(
       checkResult(
-        'Constitutional compatibility',
+        'Constitutional standing',
         'warning',
         'This local governance context requires constitutional review.',
         reasonCode,
         'Constitutional Governance',
+        chainStanding.reasonSeverity,
       ),
     );
   } else {
     permissionChecks.push(
-      checkResult('Constitutional compatibility', 'passed', 'Local governance model is constitutionally compatible.', null, 'Constitutional Governance'),
+      checkResult('Constitutional standing', 'passed', 'Local governance standing is compliant in the current registry view.', null, 'Constitutional Governance'),
     );
   }
 
@@ -158,11 +173,12 @@ export function applyGovernanceActionGuards({ operation, proposal, chain, wallet
         checkResult('Execution capability', 'blocked', 'Remote execution is not enabled for this spoke chain.', 'REMOTE_EXECUTION_GUARDRAIL_ACTIVE', 'chain capability'),
       );
     } else {
-      permissionChecks.push(checkResult('Execution capability', 'passed', 'Execution capability is compatible with this chain role.', null, 'chain capability'));
+      permissionChecks.push(checkResult('Execution capability', 'passed', 'Execution capability is allowed for this chain role.', null, 'chain capability'));
     }
   }
 
   const pluginCapability = getPluginCapability(chain, operation.pluginType);
+  const pluginStanding = getConstitutionalStanding(pluginCapability);
 
   if (!operation.pluginType) {
     permissionChecks.push(checkResult('Plugin capability', 'blocked', 'Proposal plugin type is not indexed yet.', 'PLUGIN_CAPABILITY_NOT_REGISTERED', 'plugin capability'));
@@ -180,28 +196,28 @@ export function applyGovernanceActionGuards({ operation, proposal, chain, wallet
         'plugin capability',
       ),
     );
-  } else if (pluginCapability?.constitutionalCompatibility?.status === 'incompatible') {
-    const reasonCode =
-      pluginCapability.constitutionalCompatibility.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
+  } else if (pluginStanding?.status === 'restricted' || pluginStanding?.status === 'incompatible') {
+    const reasonCode = pluginStanding.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
     permissionChecks.push(
       checkResult(
-        'Plugin constitutional compatibility',
+        'Plugin constitutional standing',
         'blocked',
-        `${operation.pluginType} is not constitutionally compatible for this governance context.`,
+        `${operation.pluginType} has restricted constitutional standing for this governance context.`,
         reasonCode,
         'Local Governance',
+        pluginStanding.reasonSeverity,
       ),
     );
-  } else if (pluginCapability?.constitutionalCompatibility?.status === 'requires-review') {
-    const reasonCode =
-      pluginCapability.constitutionalCompatibility.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
+  } else if (pluginStanding?.status === 'under-review' || pluginStanding?.status === 'requires-review') {
+    const reasonCode = pluginStanding.reasonCodes?.[0] ?? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE';
     permissionChecks.push(
       checkResult(
-        'Plugin constitutional compatibility',
+        'Plugin constitutional standing',
         'warning',
         `${operation.pluginType} requires constitutional review before full execution confidence.`,
         reasonCode,
         'Local Governance',
+        pluginStanding.reasonSeverity,
       ),
     );
   } else {

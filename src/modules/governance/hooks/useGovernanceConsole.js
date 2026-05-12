@@ -3,11 +3,17 @@ import { fetchGovernanceDaos, fetchGovernancePlugins, fetchGovernanceProposals, 
 import { useWallet } from '@/hooks/useWallet';
 
 function normalizeDao(dao) {
+  const constitutionalStanding = dao.constitutionalStanding ?? dao.constitutionalCompliance ?? { status: 'under-review', reasonCodes: [], reasonSeverity: null };
+
   return {
     ...dao,
     id: dao.id ?? dao.entityId ?? `${dao.network}:${dao.address}`,
     name: dao.name ?? dao.ens ?? dao.subdomain ?? 'Unnamed DAO',
     federationRole: dao.federationRole ?? 'subdao',
+    federationMember: dao.federationMember ?? true,
+    federationTier: dao.federationTier ?? 'partner',
+    governanceStatus: dao.governanceStatus ?? constitutionalStanding.status ?? 'under-review',
+    constitutionalStanding,
     status: dao.status ?? 'indexed',
   };
 }
