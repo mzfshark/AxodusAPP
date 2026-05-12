@@ -42,14 +42,19 @@
 
 - Create Governance public landing — in progress: `/governance` exposes public registry/governance information without wallet requirement
 - Create Governance dashboard — in progress: protected `/governance/console` shell consumes the backend chain registry with fallback PoC data
-- Create Governance DAO context selector — in progress: console models Axodus Federal Governance plus indexed sub-DAOs
-- Create DAO explorer — in progress: console exposes a Sub-DAO Explorer for federal authority, indexed sub-DAOs, chain roles, capabilities, plugins and proposal readiness
+- Create Governance DAO context selector — in progress: console models Axodus Constitutional Governance plus Local Governance contexts for indexed sub-DAOs
+- Create DAO explorer — in progress: console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins and proposal readiness
 - Create proposal list shell — in progress: console shows real indexed proposals when available, links rows into proposal detail, and keeps an explicit empty state otherwise
 - Create proposal list
 - Create proposal detail page — in progress: protected `/governance/proposals/:proposalId` reads proposal detail/actions from the governance backend
 - Create governance transaction adapter — in progress: frontend isolates vote/execute preparation by plugin type and chain capability, with TokenVoting/Multisig ABI calldata binding, guarded wagmi write submission, and wallet network switching
 - Create voting UI — in progress: proposal detail exposes adapter-ready vote option selection and wallet action readiness
-- Create execution receipt UI — in progress: proposal detail exposes receipt/status slots for remote execution payloads
+- Create execution receipt UI — in progress: proposal detail exposes indexed remote receipts, local wallet transaction receipt tracking, and governance indexer reconciliation status
+- Create local governance operation history — in progress: proposal detail persists recent wallet operations by wallet/proposal while backend indexing catches up
+- Create governance transaction confirmation preview — in progress: proposal detail requires explicit review of action, chain, plugin contract, calldata, fee source and governance impact before opening the wallet prompt
+- Create governance action permission guards — in progress: vote/execute operations run wallet, backend chain capability, action-level plugin capability, indexing readiness and lifecycle checks before wallet submission
+- Add governance nuclei model — in progress: chain registry and frontend fallback distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities
+- Add Constitutional Guardrail reason codes — in progress: backend registry/indexer status and frontend permission guards expose transparent guardrail codes across UI/API flows
 
 ---
 

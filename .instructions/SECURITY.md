@@ -56,6 +56,35 @@ Before transactions:
 
 ---
 
+# Governance Guardrail Security
+
+Governance restrictions must be expressed as Constitutional Guardrails, not opaque automatic exclusion systems.
+
+The app must expose transparent reason codes when a governance action is:
+
+- blocked
+- warned
+- degraded
+- delayed
+- routed to review
+
+Reason codes should be stable enough for UI, backend, SDK, indexer, and future agent consumption.
+
+The UI should explain whether a restriction comes from:
+
+- Constitutional Governance
+- Local Governance
+- chain capability
+- plugin capability
+- treasury policy
+- execution status
+- indexer readiness
+- wallet or DAO permission state
+
+Local Governance may use different governance assets or models, but the app must clearly indicate whether the local model is constitutionally compatible.
+
+---
+
 # Protected Routes
 
 Sensitive routes must require:

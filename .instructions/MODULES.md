@@ -26,7 +26,8 @@ A module is a frontend domain package containing:
 Purpose:
 
 - DAO overview
-- Axodus federal governance overview
+- Axodus Constitutional Governance overview
+- Local Governance overview for federated startups, DAOs, companies, products, and communities
 - sub-DAO operating context
 - proposal lists
 - proposal detail
@@ -35,6 +36,15 @@ Purpose:
 - DAO registry
 - chain registry
 - federation visibility
+- Constitutional Guardrails and transparent reason codes
+
+Governance model:
+
+- Constitutional Governance is powered by `$Neurons`
+- Constitutional Governance defines federal standards, capabilities, conditions, guardrails, and ecosystem-wide legitimacy
+- Local Governance is controlled by each federated entity
+- Local Governance may use `$Neurons`, local tokens, auto-generated platform tokens, multisigs, gauges, reputation systems, NFT governance, or plugin-defined models
+- Local autonomy is allowed only while constitutionally compatible
 
 Initial pages:
 

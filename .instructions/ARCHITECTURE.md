@@ -149,6 +149,25 @@ Responsible for:
 - DAO modules enabled
 - DAO governance status
 - DAO role-based access
+- governance nucleus context:
+  - Constitutional Governance
+  - Local Governance
+- constitutional compatibility status
+- Constitutional Guardrail reason codes
+
+AxodusAPP must distinguish between Constitutional Governance and Local Governance.
+
+Constitutional Governance is powered by `$Neurons` and defines ecosystem-wide legitimacy, federal standards, capabilities, conditions, and guardrails.
+
+Local Governance is controlled by each federated startup, DAO, company, product, or community.
+
+Local Governance may use `$Neurons`, local tokens, auto-generated platform tokens, multisigs, gauges, reputation systems, NFT governance, or plugin-defined models.
+
+Local autonomy is allowed, but all local governance must remain constitutionally compatible.
+
+Do not represent governance restrictions as opaque exclusion lists.
+
+Represent restrictions as Constitutional Guardrails with transparent reason codes.
 
 ---
 
