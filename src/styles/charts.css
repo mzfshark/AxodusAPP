@@ -1,0 +1,73 @@
+/* ===========================================================
+   CHARTS – estilos específicos para OverviewCharts
+   -----------------------------------------------------------
+   Estrutura (renderizada pelo componente):
+   <div class="charts-grid">
+     <div class="chart-card half">  <!-- Pizza 1 -->
+     <div class="chart-card half">  <!-- Pizza 2 -->
+     <div class="chart-card full">  <!-- Line chart -->
+   </div>
+   =========================================================== */
+
+.charts-block,
+.chart-block {
+  width: 100%;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.25rem;
+  margin: 1rem 0;
+  min-width: 0;
+}
+
+.charts-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 1.25rem 0;
+  min-width: 0;
+}
+  
+  /* ---- cartão base ---- */
+.chart-card {
+  background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  min-width: 0;
+  overflow: hidden;
+}
+  
+  /* ocupação de largura */
+  .chart-card.half {
+    min-width: 0;
+  }
+  
+  .chart-card.full {
+    width: 100%;
+  }
+  
+  /* títulos dentro dos cartões (opcional) */
+  .chart-card h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    text-align: center;
+  }
+  
+  /* área de gráfico deve crescer para ocupar altura restante */
+  .chart-content {
+    flex: 1;
+    width: 100%;
+    max-height: 360px;
+    min-width: 0;
+  }
+  
+  /* exemplo de placeholder quando carregando */
+  .chart-loading {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+  

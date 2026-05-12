@@ -1,0 +1,177 @@
+[
+  {
+    "symbol": "ZPAY",
+    "name": "ZoidPay",
+    "address": "0xe1a9a5fae06696d314994a9d6915c12a63ad055d",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/16813/thumb/zpay.png?1696516382"
+  },
+  {
+    "symbol": "GSTS",
+    "name": "Gunstar Metaverse",
+    "address": "0x7edc0ec89f987ecd85617b891c44fe462a325869",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/21079/thumb/gst.png?1696520461"
+  },
+  {
+    "symbol": "WHEEE",
+    "name": "Wheester",
+    "address": "0x4ade201e7a66c3c9210bab9002522c8fdbc6d1d7",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/54979/thumb/_Wheee__X_Avatar_1-1.png?1743023056"
+  },
+  {
+    "symbol": "ETER",
+    "name": "Eternals",
+    "address": "0xa7fb873eb775408fb0a24e3163f94f138e448089",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/54896/thumb/2024_Eternals_Logomark-01_%281%29.png?1742412511"
+  },
+  {
+    "symbol": "RABBIT",
+    "name": "RabbitSwap",
+    "address": "0x2c664910222be7b7e203753c59a9667cbe282828",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/54655/thumb/0x2c664910222be7b7e203753c59a9667cbe282828.png?1740892904"
+  },
+  {
+    "symbol": "DADA",
+    "name": "Dagora",
+    "address": "0x193fcbb7f9eea67cac0d5a94ec7ccf2141c867ec",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/55009/thumb/Dada-token.png?1743160313"
+  },
+  {
+    "symbol": "USDT",
+    "name": "Viction Bridged USDT",
+    "address": "0x69b946132b4a6c74cd29ba3ff614ceea1ef9ff2b",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/54311/thumb/usdt-logo.png?1739207903"
+  },
+  {
+    "symbol": "ONEID",
+    "name": "OneID",
+    "address": "0x4359647fe0ef8b1ee201d5bc2bb5ab872c395f04",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/55165/thumb/OneID-Logo-Token.png?1744308266"
+  },
+  {
+    "symbol": "ARKEN",
+    "name": "Arken Finance",
+    "address": "0xb55dd628039552a7d93a70fc8932f677499ed479",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/26137/thumb/arken.png?1696525225"
+  },
+  {
+    "symbol": "CUSD",
+    "name": "CUSD",
+    "address": "0xb3008e7156ae2312b49b5200c3e1c3e80e529feb",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/33816/thumb/cusd_%281%29.png?1703039824"
+  },
+  {
+    "symbol": "SVIC",
+    "name": "Vicpool Staked VIC",
+    "address": "0x33336ce6ecd84bd3cdc2d6ae0a93f536e5589991",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/35557/thumb/color.png?1709127127"
+  },
+  {
+    "symbol": "SVIC",
+    "name": "deFusion Staked VIC",
+    "address": "0xcdde1f5d971a369eb952192f9a5c367f33a0a891",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/36096/thumb/SVIC-Logo_%281%29.jpg?1710481887"
+  },
+  {
+    "symbol": "C98",
+    "name": "Coin98",
+    "address": "0x0fd0288aaae91eaf935e2ec14b23486f86516c8c",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/17117/thumb/logo.png?1696516677"
+  },
+  {
+    "symbol": "CEC",
+    "name": "Counterfire Economic Coin",
+    "address": "0x111111267109489dc6f350608d5113b10c0c5cd7",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/40128/thumb/icon_CEC.png?1725917669"
+  },
+  {
+    "symbol": "WUSD",
+    "name": "Worldwide USD",
+    "address": "0x9ad16b6d3e401b8df25c985f9bebb490db8afe78",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/35358/thumb/WUSD%282%29.png?1715042139"
+  },
+  {
+    "symbol": "MASQ",
+    "name": "MASQ",
+    "address": "0xea478716a70dc086707e23de17965acb5c7b7840",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/13699/thumb/masq.png?1696513446"
+  },
+  {
+    "symbol": "MINTY",
+    "name": "Minterest",
+    "address": "0xbb0209e02b3cc33ef00321e8d20b78ca1cdcc8a0",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/29455/thumb/MINTY.png?1706817774"
+  },
+  {
+    "symbol": "FTT",
+    "name": "FTX",
+    "address": "0x33fa3c0c714638f12339f85dae89c42042a2d9af",
+    "decimals": 17,
+    "logoURI": "https://assets.coingecko.com/coins/images/9026/thumb/F.png?1696509161"
+  },
+  {
+    "symbol": "SAROS",
+    "name": "Saros",
+    "address": "0xb786d9c8120d311b948cf1e5aa48d8fbacf477e2",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/34594/thumb/saros-token-logo.png?1705476813"
+  },
+  {
+    "symbol": "USDV",
+    "name": "Verified USD",
+    "address": "0x323665443cef804a3b5206103304bd4872ea4253",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/32948/thumb/usdv_%281%29.png?1699933314"
+  },
+  {
+    "symbol": "SRM",
+    "name": "Serum",
+    "address": "0xc01643ac912b6a8ffc50cf8c1390934a6142bc91",
+    "decimals": 4,
+    "logoURI": "https://assets.coingecko.com/coins/images/11970/thumb/serum-logo.png?1696511829"
+  },
+  {
+    "symbol": "WETH",
+    "name": "Bridged WETH",
+    "address": "0x2eaa73bd0db20c64f53febea7b5f5e5bccc7fb8b",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/39723/thumb/WETH.PNG?1723733967"
+  },
+  {
+    "symbol": "MM",
+    "name": "Million",
+    "address": "0x0f320856fa4bc7e4030a6ab989d494c5e4d58308",
+    "decimals": 17,
+    "logoURI": "https://assets.coingecko.com/coins/images/16825/thumb/logo200x200.png?1696516393"
+  },
+  {
+    "symbol": "DACKIE",
+    "name": "DackieSwap  OLD ",
+    "address": "0xaedc38bd52b0380b2af4980948925734fd54fbf4",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/30752/thumb/dackieswap_large.png?1707290196"
+  },
+  {
+    "symbol": "GSTS",
+    "name": "Gunstar Metaverse",
+    "address": "0xc8e2b1e17d6c08d872bfaf5a1c46385a086bda5b",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/21079/thumb/gst.png?1696520461"
+  }
+]

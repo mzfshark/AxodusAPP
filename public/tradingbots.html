@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Axodus | Kinetic Observatory</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="@/styles/Global.css">
+</head>
+<body class="bg-background text-on-surface">
+<nav class="fixed top-0 w-full z-50 bg-[#0b1326] backdrop-blur-xl bg-opacity-60 bg-gradient-to-b from-[#131b2e] to-transparent flex justify-between items-center px-8 h-16 w-full font-['Inter'] tracking-tight">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-semibold tracking-tighter text-[#c0c1ff]"><a href="index.html">Axodus</a></span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<span class="text-[#c0c1ff] font-semibold border-b-2 border-[#c0c1ff] pb-1 cursor-pointer">Trading</span>
+<span class="text-[#908fa0] hover:text-white transition-colors duration-200 cursor-pointer">Mining</span>
+<span class="text-[#908fa0] hover:text-white transition-colors duration-200 cursor-pointer">Staking</span>
+<span class="text-[#908fa0] hover:text-white transition-colors duration-200 cursor-pointer">DAOs</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#908fa0] hover:text-white transition-colors cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-[#908fa0] hover:text-white transition-colors cursor-pointer">settings</span>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary-container px-5 py-2 rounded-xl text-sm font-semibold active:scale-95 transition-transform">Connect Wallet</button>
+</div>
+</nav>
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#131b2e] flex flex-col py-6 hidden lg:flex border-r border-outline-variant/10">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div>
+<p class="text-xl font-bold text-white leading-none">Axodus</p>
+<p class="text-[10px] text-outline uppercase tracking-widest mt-1">Kinetic Observatory</p>
+</div>
+</div>
+<div class="flex-1 space-y-1 px-4">
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<a href="mining.html">
+<span class="font-['Inter'] text-sm font-medium">Mining</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#c0c1ff] bg-[#2d3449] px-4 py-3 rounded-r-full cursor-pointer">
+<span class="material-symbols-outlined">query_stats</span>
+<a href="tradingbots.html">
+<span class="font-['Inter'] text-sm font-medium">Trading</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">layers</span>
+<a href="defi.html">
+<span class="font-['Inter'] text-sm font-medium">Staking</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">account_balance</span>
+<a href="dao.html">
+<span class="font-['Inter'] text-sm font-medium">DAOs</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">business_center</span>
+<a href="business.html">
+<span class="font-['Inter'] text-sm font-medium">Business</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">storefront</span>
+<a href="marketplace.html">
+<span class="font-['Inter'] text-sm font-medium">Marketplace</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">school</span>
+<a href="academy.html">
+<span class="font-['Inter'] text-sm font-medium">Academy</span>
+</a>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-3 hover:bg-[#2d3449]/50 hover:translate-x-1 transition-all duration-300 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">dns</span>
+<a href="mcs.html">
+<span class="font-['Inter'] text-sm font-medium">MCP Servers</span>
+</a>
+</div>
+</div>
+<div class="px-4 mt-auto border-t border-outline-variant/10 pt-6">
+<button class="w-full bg-primary/10 text-primary border border-primary/20 py-3 rounded-xl font-semibold hover:bg-primary/20 transition-all mb-6">Launch Bot</button>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-2 hover:bg-[#2d3449]/50 transition-all rounded-lg cursor-pointer">
+<span class="material-symbols-outlined text-sm">help</span>
+<span class="text-xs">Support</span>
+</div>
+<div class="flex items-center gap-3 text-[#908fa0] px-4 py-2 hover:bg-[#2d3449]/50 transition-all rounded-lg cursor-pointer">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="text-xs">Docs</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="lg:ml-64 pt-24 px-8 pb-12 min-h-screen bg-background">
+<header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<p class="text-label-md uppercase tracking-[0.2em] text-primary/70 font-semibold mb-2">Portfolio Overview</p>
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-white">Trading Bots Dashboard</h1>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-low px-6 py-4 rounded-xl flex items-center gap-4 border border-outline-variant/5">
+<div class="text-right">
+<p class="text-xs text-outline font-medium uppercase tracking-wider">Market Sentiment</p>
+<p class="text-lg font-bold text-secondary">Greed: 72</p>
+</div>
+<div class="w-12 h-12 rounded-full border-4 border-surface-container-highest border-t-secondary rotate-45"></div>
+</div>
+</div>
+</header>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+<div class="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl">account_balance_wallet</span>
+</div>
+<p class="text-sm font-medium text-outline mb-4">Total P&amp;L (24h)</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-white tracking-tight">+$1,420.55</span>
+<span class="text-sm font-semibold text-secondary">+4.2%</span>
+</div>
+</div>
+<div class="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<p class="text-sm font-medium text-outline mb-4">Total ROI</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-white tracking-tight">+148.3%</span>
+<span class="text-sm font-semibold text-primary">All Time</span>
+</div>
+</div>
+<div class="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<p class="text-sm font-medium text-outline mb-4">Active Bots</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-white tracking-tight">08</span>
+<span class="text-sm font-semibold text-outline">/ 12 Slots</span>
+</div>
+</div>
+<div class="bg-surface-container px-6 py-8 rounded-xl border border-outline-variant/5 relative overflow-hidden group">
+<p class="text-sm font-medium text-outline mb-4">Overall Win Rate</p>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-white tracking-tight">68.4%</span>
+<span class="text-sm font-semibold text-secondary">Optimal</span>
+</div>
+</div>
+</section>
+<section class="mb-12">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold text-white">Active Strategies</h2>
+<button class="text-primary text-sm font-semibold flex items-center gap-2 hover:gap-3 transition-all">View All Performance <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<div class="bg-surface-container-high rounded-2xl p-6 border border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg">Morpheus Arbitrage</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#41e4b8]"></span>
+<span class="text-[10px] uppercase tracking-wider text-secondary font-bold">Running</span>
+</div>
+</div>
+</div>
+<button class="text-[#908fa0] hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-xl">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">24h P&amp;L</p>
+<p class="text-lg font-bold text-secondary">+$422.10</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Win Rate</p>
+<p class="text-lg font-bold text-white">74.2%</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-outline px-1">
+<span>ROI Progress</span>
+<span class="text-white font-bold">+18.4%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 border border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center border border-secondary/20">
+<span class="material-symbols-outlined text-secondary">bolt</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg">Agent Smith Scalper</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#41e4b8]"></span>
+<span class="text-[10px] uppercase tracking-wider text-secondary font-bold">Running</span>
+</div>
+</div>
+</div>
+<button class="text-[#908fa0] hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-xl">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">24h P&amp;L</p>
+<p class="text-lg font-bold text-secondary">+$189.50</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Win Rate</p>
+<p class="text-lg font-bold text-white">62.8%</p>
+</div>
+</div>
+<div class="h-16 flex items-end gap-1 mb-2">
+<div class="flex-1 bg-secondary/20 rounded-t-sm h-[40%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm h-[60%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm h-[45%]"></div>
+<div class="flex-1 bg-secondary/50 rounded-t-sm h-[80%] glow-secondary"></div>
+<div class="flex-1 bg-secondary/30 rounded-t-sm h-[55%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm h-[70%]"></div>
+<div class="flex-1 bg-secondary/60 rounded-t-sm h-[90%] glow-secondary"></div>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-2xl p-6 border border-outline-variant/10 glass-panel hover:bg-surface-container-highest transition-all group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-tertiary/10 rounded-xl flex items-center justify-center border border-tertiary/20">
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+</div>
+<div>
+<h3 class="font-bold text-white text-lg">Neuro Trend Follower</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-outline shadow-[0_0_8px_#908fa0]"></span>
+<span class="text-[10px] uppercase tracking-wider text-outline font-bold">Paused</span>
+</div>
+</div>
+</div>
+<button class="text-[#908fa0] hover:text-white"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-3 rounded-xl">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Total P&amp;L</p>
+<p class="text-lg font-bold text-white">+$2,488.00</p>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl">
+<p class="text-[10px] text-outline uppercase tracking-wider mb-1">Total ROI</p>
+<p class="text-lg font-bold text-tertiary">+34.5%</p>
+</div>
+</div>
+<div class="p-3 bg-surface-container-lowest/50 rounded-xl flex items-center justify-between border border-outline-variant/5">
+<span class="text-[10px] text-outline uppercase font-bold">Auto-Resume at</span>
+<span class="text-xs font-mono text-primary">$3,240.00 ETH</span>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center gap-4 mb-8">
+<h2 class="text-2xl font-bold text-white">Available Strategies</h2>
+<div class="h-[1px] flex-1 bg-gradient-to-r from-outline-variant/20 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/5 flex items-center gap-6 hover:bg-surface-container transition-all cursor-pointer">
+<img class="w-24 h-24 rounded-xl object-cover filter grayscale hover:grayscale-0 transition-all" data-alt="abstract digital connection network with neon nodes and glowing paths on a dark obsidian background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUElz2SFLFYY57JStT5LoF-hTLhEHe_1bd_1POTPnVZ2-eD7DOzi5PCslhRKxqTSSq3swDF7VzznEuFvaLVFrXFoFnlzkVksgqU4s-rAEiL7ReRdk-IYFp9wB7MId_AGzFcHuDylHy2IZg6DAivmwC0GtGMJYjh47SS1BA0tAuJrmBt_sgTBcmRaZuJiRzm-6ybrpn398rz5kFMjzYgKZe80ilI1UIihITHcxeeZCyxaHhQ7nmPMW28NPigwdYORu11RJd-ZS-lnU"/>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-bold text-white">Oracle Grid Master</h4>
+<span class="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded uppercase tracking-wider">Low Risk</span>
+</div>
+<p class="text-xs text-outline mb-4 line-clamp-1">Optimized for sideways markets with tight volatility protection.</p>
+<div class="flex gap-6">
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Backtested ROI</p>
+<p class="text-sm font-bold text-white">12.5% / mo</p>
+</div>
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Asset</p>
+<p class="text-sm font-bold text-white">BTC/USDT</p>
+</div>
+</div>
+</div>
+<button class="bg-surface-container-highest p-3 rounded-full hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="bg-surface-container-low p-5 rounded-2xl border border-outline-variant/5 flex items-center gap-6 hover:bg-surface-container transition-all cursor-pointer">
+<img class="w-24 h-24 rounded-xl object-cover filter grayscale hover:grayscale-0 transition-all" data-alt="vibrant abstract explosion of electric blue and violet energy waves in a deep cosmic void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQzlo0zCY2g4umFJfrpYizz4Qq_lbM_aHooXv6ADTTqrUSF9HRpvONcFZGl1CB1y3EX5qVH-JLectV7ZTeBTesrdh3h3ADkgqAAdmxYCv5DNrkzwaGcqKAW8NVGGrSgdHQF_gcS1PtKet1u3yUV4KOJaz1x2XCV91aqxmg4INoLX1vaRALVVu5L6XCYAxAd8eGh5RZeY9TO8c6ZfrsVRTmIPkW3iyi8l9tL58UW7mKsIqLMG2OxfsAhnSZLH4-GyHi5Q5xnl-eNRU"/>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-bold text-white">Nebula Breakout</h4>
+<span class="px-2 py-1 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded uppercase tracking-wider">High Risk</span>
+</div>
+<p class="text-xs text-outline mb-4 line-clamp-1">Aggressive momentum tracking for high-volatility altcoin pairings.</p>
+<div class="flex gap-6">
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Backtested ROI</p>
+<p class="text-sm font-bold text-white">42.8% / mo</p>
+</div>
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Asset</p>
+<p class="text-sm font-bold text-white">SOL/USDT</p>
+</div>
+</div>
+</div>
+<button class="bg-surface-container-highest p-3 rounded-full hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<footer class="lg:ml-64 bg-surface-container-lowest py-8 px-8 border-t border-outline-variant/5">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-lg font-bold text-white">Axodus</span>
+<span class="text-outline text-sm">© 2024 Kinetic Systems LLC</span>
+</div>
+<div class="flex gap-8 text-sm text-outline">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">API Reference</a>
+<a class="hover:text-primary transition-colors" href="#">Security Audit</a>
+</div>
+</div>
+</footer>
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#0b1326] backdrop-blur-xl bg-opacity-90 z-50 px-6 py-3 flex justify-between items-center border-t border-outline-variant/10">
+<div class="flex flex-col items-center gap-1 text-[#908fa0]">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-[#c0c1ff]">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">query_stats</span>
+<span class="text-[10px] font-medium">Trade</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-[#908fa0]">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-[10px] font-medium">Wallet</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-[#908fa0]">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</div>
+</nav>
+</body></html>

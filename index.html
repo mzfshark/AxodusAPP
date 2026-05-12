@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Allow eval for Vite HMR in development; enable workers from blob for MQTT -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; font-src 'self' data: https: https://fonts.gstatic.com;">
+
+    <link rel="icon" type="image/svg+xml" href="/reown.svg" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Fonts: Inter, JetBrains Mono, Material Symbols Outlined -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+    <title>Axodus Finance - Dashboard</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Axodus Finance Dashboard for investors" />
+    <meta name="keywords" content="Axodus, DeFi, Dashboard, Crypto, Reown, Web3" />
+    <meta name="author" content="Axodus Team" />
+
+    <!-- Social / Open Graph -->
+    <meta property="og:title" content="Axodus Finance Dashboard" />
+    <meta property="og:description" content="Visualize your investments on-chain using AppKit and MetaMask." />
+    <meta property="og:image" content="/reown.svg" />
+    <meta property="og:url" content="https://axodus.finance" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

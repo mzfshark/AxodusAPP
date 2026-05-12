@@ -1,0 +1,15 @@
+name: Axodus MCP Servers
+version: 1.0.0
+schema: v1
+mcpServers:
+  - name: redhat
+    transport: stdio
+    command: /home/mzfshark/.openclaw/agents/redhat/axodus/venv/bin/python
+    args:
+      - /home/mzfshark/.openclaw/agents/redhat/axodus/axodus_mcps/servers/redhat/server.py
+    env:
+      PYTHONPATH: "/home/mzfshark/.openclaw/agents/redhat/axodus"
+    auth: bearer
+    mode: token
+    token: "54afc31ea3991c57b2fe861b5c436cf58de147997d9c370d"
+

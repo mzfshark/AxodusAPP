@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "jsx": "react-jsx",   // habilita JSX automático (React 17+)
+      "checkJs": false      // (opcional) desativa avisos TS em arquivos .js/.jsx
+    },
+    "include": ["src"],     // garanta que a pasta src está coberta
+    "exclude": ["node_modules"]
+  }
+  

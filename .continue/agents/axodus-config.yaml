@@ -1,0 +1,39 @@
+# This is an example configuration file
+# To learn more, see the full config.yaml reference: https://docs.continue.dev/reference
+
+name: Axodus Config
+version: 1.0.0
+schema: v1
+models:
+   
+  - name: Free Models Router
+    provider: openrouter
+    model: openrouter/free
+    apiKey: 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
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete
+  
+  - name: Mistral Codestral
+    provider: mistral
+    model: mistral/codestral-latest
+    apikey: TjX1jt59dyCQ3LkDTxIs2DMRqYghkhre
+    roles:
+      - chat
+      - edit
+      - apply
+
+  - name: Mistral free
+    provider: mistral
+    model: mistral/mistral-large-latest
+    apikey: 6arH0BKJBqh2e0pAlnkQpeUjJBzrFV5y
+    roles:
+      - chat
+      - edit
+      - apply
+  
+  - name: Autodetect
+    provider: ollama
+    model: AUTODETECT

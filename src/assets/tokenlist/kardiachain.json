@@ -1,0 +1,86 @@
+[
+  {
+    "symbol": "KAI",
+    "name": "KardiaChain",
+    "address": "0xaf984e23eaa3e7967f3c5e007fbe397d8566d23d",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/7942/thumb/kai.png?1696508172"
+  },
+  {
+    "symbol": "KDX",
+    "name": "Kaidex",
+    "address": "0xe9cac5d99375d02fb506be890011b2f57fc614e1",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/26599/thumb/biq_jmvv_400x400.jpg?1696525674"
+  },
+  {
+    "symbol": "USDC",
+    "name": "Multichain Bridged USDC  KardiaChain ",
+    "address": "0x765277eebeca2e31912c9946eae1021199b39c61",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/35226/thumb/USDC.jpg?1707922233"
+  },
+  {
+    "symbol": "KUSD-T",
+    "name": "KUSD T",
+    "address": "0x92364ec610efa050d296f1eeb131f2139fb8810e",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/19627/thumb/KUSD-T.png?1696519056"
+  },
+  {
+    "symbol": "USDT",
+    "name": "Bridged USDT",
+    "address": "0x551a5dcac57c66aa010940c2dcff5da9c53aa53b",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/35001/thumb/logo.png?1706959346"
+  },
+  {
+    "symbol": "VNDC",
+    "name": "VNDC",
+    "address": "0xeff34b63f55200a9d635b8abbbfcc719b4977864",
+    "decimals": 0,
+    "logoURI": "https://assets.coingecko.com/coins/images/9670/thumb/vndc-gold-coin.png?1696509740"
+  },
+  {
+    "symbol": "DPET",
+    "name": "My DeFi Pet",
+    "address": "0xfb62ae373aca027177d1c18ee0862817f9080d08",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/15321/thumb/mydefi.PNG?1696514970"
+  },
+  {
+    "symbol": "MYRA",
+    "name": "Mytheria",
+    "address": "0x6ef238e9e8cd2a96740897761c18894fc086b9d0",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/20470/thumb/mytheria.PNG?1696519878"
+  },
+  {
+    "symbol": "ONUS",
+    "name": "ONUS",
+    "address": "0x981fb6159ae351b7378d0d510930813de281fcb5",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/24599/thumb/ONUS_200.png?1696523773"
+  },
+  {
+    "symbol": "WETH",
+    "name": "Bridged WETH",
+    "address": "0x1540020a94aa8bc189aa97639da213a4ca49d9a7",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/39723/thumb/WETH.PNG?1723733967"
+  },
+  {
+    "symbol": "REAL",
+    "name": "Real Realm",
+    "address": "0x10c2ed4dcb8e81a5ce45d985f907364e1bc3e4e1",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/20880/thumb/vYjuvOhQ_400x400.jpg?1696520273"
+  },
+  {
+    "symbol": "HTD",
+    "name": "Heroes TD",
+    "address": "0xe58ea819a98c87ab1a763133a234c3954bb15901",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/20953/thumb/htd.png?1696520341"
+  }
+]

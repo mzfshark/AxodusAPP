@@ -1,0 +1,135 @@
+[
+  {
+    "symbol": "XUSDT",
+    "name": "Wanchain Bridged USDT  XDC Network ",
+    "address": "xdcd4b5f10d61916bd6e0860144a91ac658de8a1437",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/35677/thumb/usdt_%281%29.png?1709523076"
+  },
+  {
+    "symbol": "WXDC",
+    "name": "Wrapped XDC",
+    "address": "xdc951857744785e80e2de051c32ee7b25f9c458c42",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/28268/thumb/xinfin.jpeg?1696527269"
+  },
+  {
+    "symbol": "PSTXDC",
+    "name": "Prime Staked XDC",
+    "address": "0x7f115f68a789f819047b94efa0114aa9829b83d8",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/54097/thumb/XDC-PNL-CIRCLE.png?1738224626"
+  },
+  {
+    "symbol": "DOPU",
+    "name": "Dog With Purpose",
+    "address": "0x3fb46c4db76d8e9f69f3f8388f43a7ca7e140807",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/38634/thumb/Dopu-Coin_200x200_%282%29.png?1718172914"
+  },
+  {
+    "symbol": "XTT",
+    "name": "XSwap Treasure",
+    "address": "xdc17476dc3eda45ad916ceaddea325b240a7fb259d",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/28274/thumb/XTT.png?1696527275"
+  },
+  {
+    "symbol": "FXD",
+    "name": "Fathom Dollar",
+    "address": "xdc49d3f7543335cf38Fa10889CCFF10207e22110B5",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/31113/thumb/fxd_200x200_%281%29.png?1696529943"
+  },
+  {
+    "symbol": "USDCE",
+    "name": "Bridged USDC  XDC Bridge ",
+    "address": "0x2a8e898b6242355c290e1f4fc966b8788729a4d4",
+    "decimals": 6,
+    "logoURI": "https://assets.coingecko.com/coins/images/55016/thumb/usdc.png?1743167722"
+  },
+  {
+    "symbol": "PLI",
+    "name": "Plugin",
+    "address": "xdcff7412ea7c8445c46a8254dfb557ac1e48094391",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/19586/thumb/244800308_116216454152265_6257676145772128053_n.png?1696519017"
+  },
+  {
+    "symbol": "BBB",
+    "name": "Beny Bad Boy",
+    "address": "0xfa4ddcfa8e3d0475f544d0de469277cf6e0a6fd1",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/50629/thumb/bbb.png?1732594921"
+  },
+  {
+    "symbol": "GBEX",
+    "name": "Globiance Exchange",
+    "address": "xdc34514748f86a8da01ef082306b6d6e738f777f5a",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/24859/thumb/gbex.png?1696524019"
+  },
+  {
+    "symbol": "CGO",
+    "name": "Comtech Gold",
+    "address": "xdc8f9920283470f52128bf11b0c14e798be704fd15",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/25682/thumb/CGO_200x200.png?1696524810"
+  },
+  {
+    "symbol": "XSP",
+    "name": "XSwap Protocol",
+    "address": "xdc36726235dadbdb4658d33e62a249dca7c4b2bc68",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/20696/thumb/sCokBB2.png?1696520096"
+  },
+  {
+    "symbol": "GAMA",
+    "name": "GAMA Coin",
+    "address": "0x678adf7955d8f6dcaa9e2fcc1c5ba70bccc464e6",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/51308/thumb/Gama_Icon_%281%29.png?1730628523"
+  },
+  {
+    "symbol": "CIFI",
+    "name": "Circularity Finance",
+    "address": "xdce5F9AE9D32D93d3934007568B30B7A7cA489C486",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/34072/thumb/Frame_238219.png?1703842554"
+  },
+  {
+    "symbol": "LBT",
+    "name": "Law Blocks",
+    "address": "xdc05940b2df33d6371201e7ae099ced4c363855dfe",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/26266/thumb/photo_6264996132874731595_y.jpg?1717679177"
+  },
+  {
+    "symbol": "SRX",
+    "name": "StorX",
+    "address": "xdc5d5f074837f5d4618b3916ba74de1bf9662a3fed",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/16922/thumb/StorX_Logo_white_300x300-01.png?1696516493"
+  },
+  {
+    "symbol": "FXD",
+    "name": "Fathom Dollar",
+    "address": "0x49d3f7543335cf38fa10889ccff10207e22110b5",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/31113/thumb/fxd_200x200_%281%29.png?1696529943"
+  },
+  {
+    "symbol": "ICE",
+    "name": "IceCreamSwap",
+    "address": "xdc54051d9dbe99687867090d95fe15c3d3e35512ba",
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/26237/thumb/icecream.png?1696525321"
+  },
+  {
+    "symbol": "ECOIN",
+    "name": "Ecoin",
+    "address": "xdc536dd70445cea1e97f9bf1bada04cbda5199a2a1",
+    "decimals": 10,
+    "logoURI": "https://assets.coingecko.com/coins/images/10849/thumb/IMG_4307.jpg?1696510805"
+  }
+]

@@ -1,0 +1,95 @@
+.container {
+  background: var(--color-surface-primary);
+  border: 1px solid var(--color-border-muted);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.totalAssets {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.loading,
+.error,
+.empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.assetList {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.assetItem {
+  display: grid;
+  grid-template-columns: 20px 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: var(--color-surface-secondary);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.assetItem:hover {
+  background: var(--color-surface-tertiary);
+}
+
+.assetColor {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.assetName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.assetValue {
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.assetAmount {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .assetItem {
+    grid-template-columns: 20px 1fr;
+    gap: 0.5rem;
+  }
+
+  .assetValue,
+  .assetAmount {
+    grid-column: 2;
+  }
+}

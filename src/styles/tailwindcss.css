@@ -1,0 +1,439 @@
+/* ============================================================
+   TAILWINDCSS LOCAL CUSTOMIZATION LAYER
+   ============================================================
+   This file provides a centralized location for customization.
+   
+   Customize margins, padding, containers, borders, spacing,
+   and other layout utilities here instead of editing node_modules.
+   
+   ALL custom classes used across pages are defined here for
+   100% CSS adherence and maintainability.
+   
+   Note: Global.css imports Tailwind base directives, this file
+   adds custom utilities and component classes.
+============================================================ */
+
+/* === TAILWINDCSS CUSTOMIZATION ============================== */
+
+/* === GLASS & TRANSPARENCY EFFECTS ========================== */
+
+/* Glass panel/card effects - different blur levels */
+@layer components {
+  .glass-panel {
+    background: color-mix(in srgb, var(--color-surface-primary) 92%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .glass-card {
+    background: color-mix(in srgb, var(--color-surface-primary) 94%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .glass-effect {
+    background: color-mix(in srgb, var(--color-surface-secondary) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .glassPanel {
+    background: color-mix(in srgb, var(--color-surface-primary) 92%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .glassCard {
+    background: color-mix(in srgb, var(--color-surface-primary) 94%, transparent);
+    border: 1px solid var(--color-border-muted);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .glassEffect {
+    background: color-mix(in srgb, var(--color-surface-secondary) 88%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+}
+
+/* === CUSTOM BORDER COLORS ================================== */
+/* Colors are now defined in tailwind.config.js */
+/* Tailwind automatically creates border-{color} utilities from the config */
+
+/* === BORDERS & GHOST EFFECTS ================================ */
+
+@layer utilities {
+  .ghost-border {
+    border: 1px solid var(--color-border-muted);
+  }
+
+  .ghostBorder {
+    border: 1px solid var(--color-border-muted);
+  }
+}
+
+/* === GRADIENTS ============================================== */
+
+@layer utilities {
+  .hero-gradient {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+  }
+
+  .primary-gradient {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+  }
+
+  .kinetic-gradient {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+  }
+
+  .kineticGradient {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+  }
+
+  .gradient-text {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradientText {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-bg {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+  }
+
+  .gradientBg {
+    background-image: linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 74%, var(--color-surface-secondary)));
+  }
+}
+
+/* === SHORTHAND SURFACE BACKGROUNDS ========================= */
+/* Some pages use surface tokens without the `bg-` prefix */
+@layer utilities {
+  .surface-container-low { background-color: var(--color-surface-secondary); }
+  .surface-container-highest { background-color: var(--color-surface-primary); }
+}
+
+/* === GLOW EFFECTS =========================================== */
+
+@layer utilities {
+  .glow-secondary {
+    filter: none;
+  }
+
+  .glowSecondary {
+    filter: none;
+  }
+
+  .glow-error {
+    filter: none;
+  }
+
+  .glowError {
+    filter: none;
+  }
+
+  .glow-primary {
+    filter: none;
+  }
+}
+
+/* === TYPOGRAPHY =========================================== */
+
+@layer utilities {
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .mono-text {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.75rem;
+  }
+}
+
+/* === CUSTOM SPACING SCALE ================================== */
+
+@layer utilities {
+  /* Custom margin utilities */
+  .m-xs { margin: 0.25rem; }
+  .m-sm { margin: 0.5rem; }
+  .m-base { margin: 1rem; }
+  .m-lg { margin: 1.5rem; }
+  .m-xl { margin: 2rem; }
+  .m-2xl { margin: 3rem; }
+
+  /* Custom padding utilities */
+  .p-xs { padding: 0.25rem; }
+  .p-sm { padding: 0.5rem; }
+  .p-base { padding: 1rem; }
+  .p-lg { padding: 1.5rem; }
+  .p-xl { padding: 2rem; }
+  .p-2xl { padding: 3rem; }
+
+  /* Custom gap utilities for flexbox/grid */
+  .gap-xs { gap: 0.25rem; }
+  .gap-sm { gap: 0.5rem; }
+  .gap-base { gap: 1rem; }
+  .gap-lg { gap: 1.5rem; }
+  .gap-xl { gap: 2rem; }
+  .gap-2xl { gap: 3rem; }
+
+  /* Custom container utilities */
+  .container-sm { max-width: 24rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-md { max-width: 28rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-lg { max-width: 32rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-xl { max-width: 36rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-2xl { max-width: 42rem; margin-inline: auto; padding-inline: 1rem; }
+  .container-full { max-width: 100%; margin-inline: auto; padding-inline: 1rem; }
+
+  /* Custom border utilities */
+  .border-xs { border-width: 0; }
+  .border-sm { border-width: 1px; }
+  .border-md { border-width: 2px; }
+  .border-lg { border-width: 4px; }
+
+  /* Custom shadow utilities - glassmorphism friendly */
+  .shadow-glass { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12); backdrop-filter: blur(12px); }
+  .shadow-glass-md { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.16); backdrop-filter: blur(16px); }
+  .shadow-glass-lg { box-shadow: 0 10px 15px rgba(0, 0, 0, 0.18); backdrop-filter: blur(24px); }
+
+  /* Custom rounded utilities */
+  .rounded-xs { border-radius: 0.125rem; }
+  .rounded-sm { border-radius: 0.25rem; }
+  .rounded-md { border-radius: 0.375rem; }
+  .rounded-lg { border-radius: 0.5rem; }
+  .rounded-xl { border-radius: 0.75rem; }
+  .rounded-full { border-radius: 9999px; }
+}
+
+/* === COMPONENT CUSTOMIZATION ============================== */
+
+/* Card component customization */
+@layer components {
+  .card {
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .card-sm {
+    border-radius: 0.375rem;
+    padding: 1rem;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .card-lg {
+    border-radius: 0.75rem;
+    padding: 2rem;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /* Button component customization */
+  .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 200ms ease;
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+  }
+
+  /* Input component customization */
+  .input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease;
+    border: 1px solid rgba(70, 69, 84, 0.2);
+    background: rgba(11, 19, 38, 0.2);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .input-sm {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .input-lg {
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+  }
+}
+
+/* === RESPONSIVE CONTAINER CUSTOMIZATION ==================== */
+
+@media (max-width: 640px) {
+  .responsive-p { padding: 0.75rem; }
+  .responsive-m { margin: 0.5rem; }
+  .responsive-gap { gap: 0.5rem; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .responsive-p { padding: 1rem; }
+  .responsive-m { margin: 0.75rem; }
+  .responsive-gap { gap: 0.75rem; }
+}
+
+@media (min-width: 1025px) {
+  .responsive-p { padding: 1.5rem; }
+  .responsive-m { margin: 1rem; }
+  .responsive-gap { gap: 1rem; }
+}
+
+/* === ANIMATION CUSTOMIZATION =============================== */
+
+@layer utilities {
+  @keyframes slide-in-from-top {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-from-left {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-slide-in-top {
+    animation: slide-in-from-top 0.3s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-from-left 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+}
+
+/* === SCROLLBAR UTILITIES ================================== */
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #060e20;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 2px;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* === DASHBOARD UTILITIES ================================== */
+
+@layer utilities {
+  .dashboard-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .dashboard-section {
+    width: 100%;
+  }
+}
+
+/* === TAILWINDCSS OVERRIDES FOR AXODUS BRANDING ============= */
+
+/* Override default Tailwind colors with Axodus palette */
+@layer base {
+  :root {
+    /* Primary colors from Axodus theme */
+    --tw-colors-axodus-primary: #c0c1ff;
+    --tw-colors-axodus-primary-dark: #8083ff;
+    --tw-colors-axodus-secondary: #41e4b8;
+    --tw-colors-axodus-tertiary: #ffb783;
+  }
+}
+
+/* Custom Axodus-specific utilities */
+@layer utilities {
+  .text-axodus-primary { color: #c0c1ff; }
+  .text-axodus-secondary { color: #41e4b8; }
+  .text-axodus-tertiary { color: #ffb783; }
+
+  .bg-axodus-primary { background-color: #c0c1ff; }
+  .bg-axodus-secondary { background-color: #41e4b8; }
+  .bg-axodus-tertiary { background-color: #ffb783; }
+
+  .border-axodus-primary { border-color: #c0c1ff; }
+  .border-axodus-secondary { border-color: #41e4b8; }
+  .border-axodus-tertiary { border-color: #ffb783; }
+
+  .shadow-axodus { box-shadow: var(--shadow-soft); }
+  .shadow-axodus-lg { box-shadow: var(--shadow-soft); }
+}
