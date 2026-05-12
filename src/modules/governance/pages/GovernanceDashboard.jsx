@@ -1,6 +1,7 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import DaoContextSelector from '../components/DaoContextSelector';
+import { GovernanceLayerCard, GovernanceStandingSummary } from '../components/GovernanceStanding';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
 import { useChainRegistry } from '../hooks/useChainRegistry';
@@ -73,6 +74,7 @@ function ExecutionChainPanel({ chain }) {
               <dd className="mt-1 font-bold text-on-surface">{chain.finality?.confirmationBlocks} blocks</dd>
             </div>
           </dl>
+          <GovernanceStandingSummary chain={chain} />
         </div>
       ) : (
         <div className="rounded-md bg-surface-container-high p-4 text-sm text-on-surface-variant">
@@ -85,10 +87,10 @@ function ExecutionChainPanel({ chain }) {
 
 function OperationsPanel() {
   const items = [
-    { label: 'Axodus federal governance', status: 'Authority' },
+    { label: 'Axodus constitutional governance', status: 'Authority' },
     { label: 'Investment agency sub-DAOs', status: 'Model' },
     { label: 'Sub-DAO autonomous strategy', status: 'Scoped' },
-    { label: 'Central constitutional compliance', status: 'Required' },
+    { label: 'Constitutional standing observability', status: 'Required' },
     { label: 'Proposal aggregation', status: 'Next' },
   ];
 
@@ -126,9 +128,9 @@ export default function GovernanceDashboard() {
         <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Governance</span>
-            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">DAO Operating Dashboard</h1>
+            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">Governance Operations Center</h1>
             <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
-              Connected control surface for the Axodus federal DAO and ecosystem sub-DAOs.
+              Connected observability surface for constitutional governance, federation state, local governance and multichain execution readiness.
             </p>
           </div>
         </header>
@@ -153,6 +155,19 @@ export default function GovernanceDashboard() {
         <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_1.3fr]">
           <ExecutionChainPanel chain={executionChain} />
           <OperationsPanel />
+        </section>
+
+        <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <GovernanceLayerCard
+            title="Constitutional Governance Layer"
+            icon="gavel"
+            items={['Federation access', 'Constitutional standing', 'Ecosystem permissions', 'Protocol standards', 'Systemic guardrails']}
+          />
+          <GovernanceLayerCard
+            title="Local Governance Layer"
+            icon="groups"
+            items={['Treasury strategy', 'DAO operations', 'Local proposals', 'Member permissions', 'Local plugins', 'Local economic policies']}
+          />
         </section>
 
         <SubDaoExplorer

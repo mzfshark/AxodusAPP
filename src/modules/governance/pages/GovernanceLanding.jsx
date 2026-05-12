@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import ChainRoleBadge from '../components/ChainRoleBadge';
+import { GovernanceLayerCard, GovernanceStandingSummary } from '../components/GovernanceStanding';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 
 function PublicMetric({ label, value, detail }) {
@@ -19,6 +20,34 @@ function GovernanceLayer({ icon, title, description }) {
       <h3 className="mt-4 text-base font-bold text-on-surface">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-on-surface-variant">{description}</p>
     </div>
+  );
+}
+
+function GovernanceTopology() {
+  const layers = ['Axodus Constitution', 'Federation Registry', 'Partner DAO', 'Local Governance', 'Plugins / Treasury / Products'];
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Governance Topology</h2>
+          <p className="mt-1 text-xs text-on-surface-variant">Sovereignty layers rendered from governance registry state.</p>
+        </div>
+        <span className="material-symbols-outlined text-cyan-200">account_tree</span>
+      </div>
+      <div className="grid gap-3 md:grid-cols-5">
+        {layers.map((layer, index) => (
+          <div key={layer} className="flex items-center gap-3 md:flex-col">
+            <div className="w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-3 text-center text-sm font-black text-on-surface">
+              {layer}
+            </div>
+            {index < layers.length - 1 ? (
+              <span className="material-symbols-outlined rotate-90 text-cyan-200 md:rotate-0">arrow_downward</span>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -80,6 +109,9 @@ export default function GovernanceLanding() {
             <div className="mt-5 rounded-md border border-white/5 bg-surface-container-high p-3 text-xs text-on-surface-variant">
               Registry source: <span className="font-bold text-on-surface">{source}</span>
             </div>
+            <div className="mt-4">
+              <GovernanceStandingSummary chain={executionChain} compact />
+            </div>
           </div>
         </section>
 
@@ -99,12 +131,27 @@ export default function GovernanceLanding() {
           <GovernanceLayer
             icon="policy"
             title="Central Constitutional Authority"
-            description="Sub-DAOs keep local decision autonomy, but must remain compatible with Axodus federal governance constraints."
+            description="Sub-DAOs keep local decision autonomy, while constitutional standing remains visible through Axodus federation constraints."
           />
           <GovernanceLayer
             icon="business_center"
             title="Investment Agency Sub-DAOs"
             description="Each sub-DAO represents an ecosystem company or investment agency with scoped strategy and accountable operations."
+          />
+        </section>
+
+        <GovernanceTopology />
+
+        <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <GovernanceLayerCard
+            title="Constitutional Governance Layer"
+            icon="gavel"
+            items={['Federation access', 'Constitutional standing', 'Ecosystem permissions', 'Protocol standards', 'Systemic guardrails']}
+          />
+          <GovernanceLayerCard
+            title="Local Governance Layer"
+            icon="groups"
+            items={['Treasury strategy', 'DAO operations', 'Local proposals', 'Member permissions', 'Local plugins', 'Local economic policies']}
           />
         </section>
 

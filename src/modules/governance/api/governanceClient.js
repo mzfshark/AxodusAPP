@@ -43,6 +43,10 @@ export function getFederalDaoRecord() {
     address: null,
     chainRole: 'execution',
     federationRole: 'federal',
+    federationMember: true,
+    federationTier: 'root',
+    governanceStatus: 'compliant',
+    constitutionalStanding: { status: 'compliant', reasonCodes: [], reasonSeverity: null },
     status: 'bootstrap',
     isVirtual: true,
   };
