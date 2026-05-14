@@ -36,8 +36,21 @@ export function normalizeReasonSeverity(reasonCode, reasonSeverity, fallbackStat
   return reasonSeverity ?? severityForReason(reasonCode, fallbackStatus);
 }
 
+export function normalizeGuardrailReason(reason) {
+  if (!reason?.reasonCode) return null;
+
+  return {
+    ...reason,
+    reasonSeverity: normalizeReasonSeverity(reason.reasonCode, reason.reasonSeverity),
+  };
+}
+
 export function collectGovernanceGuardrailReasons(chain) {
   if (!chain) return [];
+
+  if (Array.isArray(chain.guardrailReasons) && chain.guardrailReasons.length > 0) {
+    return chain.guardrailReasons.map(normalizeGuardrailReason).filter(Boolean);
+  }
 
   const reasons = [];
   const standing = chain.constitutionalStanding ?? chain.capabilities?.constitutionalStanding;
