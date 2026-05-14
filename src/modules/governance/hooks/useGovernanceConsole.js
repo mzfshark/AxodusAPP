@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchGovernanceDaos, fetchGovernancePlugins, fetchGovernanceProposals, getFederalDaoRecord } from '../api/governanceClient';
 import { useWallet } from '@/hooks/useWallet';
-import { getConstitutionalStanding } from '../utils/governanceState';
+import { collectGovernanceGuardrailReasons, getConstitutionalStanding } from '../utils/governanceState';
 
 function normalizeDao(dao) {
   const hasStanding = dao.constitutionalStanding || dao.constitutionalCompliance || dao.constitutionalCompatibility;
@@ -96,6 +96,18 @@ export function useGovernanceConsole(chains) {
     () => chains.find((chain) => chain.network === selectedDao?.network || chain.slug === selectedDao?.network),
     [chains, selectedDao?.network],
   );
+  const selectedGuardrailReasons = useMemo(() => {
+    const chainReasons = collectGovernanceGuardrailReasons(selectedChain);
+    const daoReasons = (selectedDao?.constitutionalStanding?.reasonCodes ?? []).map((reasonCode) => ({
+      reasonCode,
+      reasonSeverity: selectedDao.constitutionalStanding.reasonSeverity ?? 'constitutional',
+      source: 'DAO federation standing',
+      scope: selectedDao.name,
+      network: selectedDao.network,
+    }));
+
+    return [...daoReasons, ...chainReasons];
+  }, [selectedChain, selectedDao]);
 
   const canCreateProposal = Boolean(
     selectedDao &&
@@ -117,5 +129,6 @@ export function useGovernanceConsole(chains) {
     error,
     canCreateProposal,
     walletAddress: address,
+    selectedGuardrailReasons,
   };
 }

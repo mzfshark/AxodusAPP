@@ -57,6 +57,8 @@
 - Add Constitutional Guardrail reason codes — in progress: backend registry/indexer status and frontend permission guards expose transparent guardrail codes across UI/API flows
 - Add governance standing model — in progress: frontend registry normalization maps legacy constitutional compatibility payloads into constitutional standing, governance status, federation tier and reason severity for rendering only
 - Evolve Governance Operations Center — in progress: `/governance/console` is positioned as a federation observability surface, not a narrow DAO admin page
+- Add Constitutional Guardrail observability — in progress: registry summary exposes active reason codes with severity, source, scope and network for console rendering
+- Add selected governance context guardrails — in progress: console exposes reason codes affecting the selected DAO and chain context separately from global registry guardrails
 
 ---
 

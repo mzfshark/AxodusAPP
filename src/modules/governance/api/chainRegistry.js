@@ -1,7 +1,9 @@
 import {
   COMPLIANT_CONSTITUTIONAL_STANDING,
+  collectGovernanceGuardrailReasons,
   getConstitutionalStanding,
   governanceStatusFromStanding,
+  normalizeGuardrailReason,
   normalizeReasonSeverity,
 } from '../utils/governanceState';
 
@@ -38,7 +40,7 @@ function normalizePluginCapabilities(pluginCapabilities) {
   );
 }
 
-export function normalizeChainGovernanceState(chain) {
+export function normalizeChainGovernanceState(chain, { useFallbackDefaults = false } = {}) {
   const capabilities = chain.capabilities ?? {};
   const constitutionalStanding = getConstitutionalStanding(
     capabilities.constitutionalStanding || capabilities.constitutionalCompatibility || chain.constitutionalStanding || chain.constitutionalCompatibility
@@ -46,13 +48,18 @@ export function normalizeChainGovernanceState(chain) {
       : null,
   );
   const governanceStatus = chain.governanceStatus ?? capabilities.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding);
+  const federationMember = chain.federationMember ?? (useFallbackDefaults ? true : undefined);
+  const federationTier =
+    chain.federationTier ??
+    (useFallbackDefaults ? (chain.roles?.includes('execution') ? 'root' : chain.legacyHarmonyAdapter ? 'observer' : 'partner') : undefined);
 
   return {
     ...chain,
     governanceStatus,
-    federationMember: chain.federationMember ?? true,
-    federationTier: chain.federationTier ?? (chain.roles?.includes('execution') ? 'root' : chain.legacyHarmonyAdapter ? 'observer' : 'partner'),
+    federationMember,
+    federationTier,
     constitutionalStanding,
+    guardrailReasons: Array.isArray(chain.guardrailReasons) ? chain.guardrailReasons.map(normalizeGuardrailReason).filter(Boolean) : chain.guardrailReasons,
     capabilities: {
       ...capabilities,
       governanceStatus,
@@ -415,11 +422,11 @@ export async function fetchChainRegistry() {
     throw new Error('Registry response is not an array');
   }
 
-  return data.map(normalizeChainGovernanceState);
+  return data.map((chain) => normalizeChainGovernanceState(chain));
 }
 
 export function getFallbackChainRegistry() {
-  return fallbackChains.map(normalizeChainGovernanceState);
+  return fallbackChains.map((chain) => normalizeChainGovernanceState(chain, { useFallbackDefaults: true }));
 }
 
 export function summarizeChainRegistry(chains) {
@@ -446,10 +453,10 @@ export function summarizeChainRegistry(chains) {
     acc[tier] = (acc[tier] ?? 0) + 1;
     return acc;
   }, {});
-  const reasonSeverityCounts = chains.reduce((acc, chain) => {
-    const severity = chain.indexingStatus?.reasonSeverity ?? chain.constitutionalStanding?.reasonSeverity;
-    if (!severity) return acc;
-    acc[severity] = (acc[severity] ?? 0) + 1;
+  const guardrailReasons = chains.flatMap(collectGovernanceGuardrailReasons);
+  const reasonSeverityCounts = guardrailReasons.reduce((acc, reason) => {
+    if (!reason.reasonSeverity) return acc;
+    acc[reason.reasonSeverity] = (acc[reason.reasonSeverity] ?? 0) + 1;
     return acc;
   }, {});
 
@@ -462,5 +469,6 @@ export function summarizeChainRegistry(chains) {
     governanceStatusCounts,
     federationTierCounts,
     reasonSeverityCounts,
+    guardrailReasons,
   };
 }
