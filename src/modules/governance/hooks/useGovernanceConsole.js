@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchGovernanceDaos, fetchGovernancePlugins, fetchGovernanceProposals, getFederalDaoRecord } from '../api/governanceClient';
 import { useWallet } from '@/hooks/useWallet';
+import { getConstitutionalStanding } from '../utils/governanceState';
 
 function normalizeDao(dao) {
-  const constitutionalStanding = dao.constitutionalStanding ?? dao.constitutionalCompliance ?? { status: 'under-review', reasonCodes: [], reasonSeverity: null };
+  const hasStanding = dao.constitutionalStanding || dao.constitutionalCompliance || dao.constitutionalCompatibility;
+  const constitutionalStanding = hasStanding
+    ? getConstitutionalStanding(dao)
+    : { status: 'under-review', reasonCodes: [], reasonSeverity: null };
 
   return {
     ...dao,

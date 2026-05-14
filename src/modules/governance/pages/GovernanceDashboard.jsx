@@ -117,6 +117,63 @@ function OperationsPanel() {
   );
 }
 
+function ObservabilityPanel({ summary }) {
+  const statusEntries = Object.entries(summary.governanceStatusCounts ?? {});
+  const tierEntries = Object.entries(summary.federationTierCounts ?? {});
+  const severityEntries = Object.entries(summary.reasonSeverityCounts ?? {});
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Governance Observability</h2>
+          <p className="mt-1 text-xs text-on-surface-variant">Registry-rendered status, federation tier and guardrail severity distribution.</p>
+        </div>
+        <span className="material-symbols-outlined text-cyan-200">monitoring</span>
+      </div>
+      <div className="grid gap-3 md:grid-cols-3">
+        <div className="rounded-md bg-surface-container-high p-3">
+          <div className="text-xs font-bold uppercase text-slate-500">Governance status</div>
+          <div className="mt-3 space-y-2">
+            {statusEntries.map(([status, count]) => (
+              <div key={status} className="flex items-center justify-between text-xs text-on-surface-variant">
+                <span>{status}</span>
+                <span className="font-black text-on-surface">{count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-md bg-surface-container-high p-3">
+          <div className="text-xs font-bold uppercase text-slate-500">Federation tiers</div>
+          <div className="mt-3 space-y-2">
+            {tierEntries.map(([tier, count]) => (
+              <div key={tier} className="flex items-center justify-between text-xs text-on-surface-variant">
+                <span>{tier}</span>
+                <span className="font-black text-on-surface">{count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="rounded-md bg-surface-container-high p-3">
+          <div className="text-xs font-bold uppercase text-slate-500">Guardrail severity</div>
+          <div className="mt-3 space-y-2">
+            {severityEntries.length > 0 ? (
+              severityEntries.map(([severity, count]) => (
+                <div key={severity} className="flex items-center justify-between text-xs text-on-surface-variant">
+                  <span>{severity}</span>
+                  <span className="font-black text-on-surface">{count}</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-xs text-on-surface-variant">No active severity metadata</div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function GovernanceDashboard() {
   const { chains, summary, source, status, error } = useChainRegistry();
   const governanceConsole = useGovernanceConsole(chains);
@@ -156,6 +213,8 @@ export default function GovernanceDashboard() {
           <ExecutionChainPanel chain={executionChain} />
           <OperationsPanel />
         </section>
+
+        <ObservabilityPanel summary={summary} />
 
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <GovernanceLayerCard
