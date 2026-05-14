@@ -1,5 +1,6 @@
 import {
   COMPLIANT_CONSTITUTIONAL_STANDING,
+  collectGovernanceGuardrailReasons,
   getConstitutionalStanding,
   governanceStatusFromStanding,
   normalizeReasonSeverity,
@@ -452,6 +453,7 @@ export function summarizeChainRegistry(chains) {
     acc[severity] = (acc[severity] ?? 0) + 1;
     return acc;
   }, {});
+  const guardrailReasons = chains.flatMap(collectGovernanceGuardrailReasons);
 
   return {
     totalChains: chains.length,
@@ -462,5 +464,6 @@ export function summarizeChainRegistry(chains) {
     governanceStatusCounts,
     federationTierCounts,
     reasonSeverityCounts,
+    guardrailReasons,
   };
 }

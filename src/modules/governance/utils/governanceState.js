@@ -35,3 +35,44 @@ export function severityForReason(reasonCode, status) {
 export function normalizeReasonSeverity(reasonCode, reasonSeverity, fallbackStatus = 'warning') {
   return reasonSeverity ?? severityForReason(reasonCode, fallbackStatus);
 }
+
+export function collectGovernanceGuardrailReasons(chain) {
+  if (!chain) return [];
+
+  const reasons = [];
+  const standing = chain.constitutionalStanding ?? chain.capabilities?.constitutionalStanding;
+
+  if (chain.indexingStatus?.reasonCode) {
+    reasons.push({
+      reasonCode: chain.indexingStatus.reasonCode,
+      reasonSeverity: normalizeReasonSeverity(chain.indexingStatus.reasonCode, chain.indexingStatus.reasonSeverity),
+      source: 'indexer readiness',
+      scope: chain.name,
+      network: chain.network,
+    });
+  }
+
+  (standing?.reasonCodes ?? []).forEach((reasonCode) => {
+    reasons.push({
+      reasonCode,
+      reasonSeverity: standing.reasonSeverity ?? 'constitutional',
+      source: 'Constitutional Governance',
+      scope: chain.name,
+      network: chain.network,
+    });
+  });
+
+  Object.entries(chain.capabilities?.pluginCapabilities ?? {}).forEach(([pluginType, capability]) => {
+    (capability.constitutionalStanding?.reasonCodes ?? []).forEach((reasonCode) => {
+      reasons.push({
+        reasonCode,
+        reasonSeverity: capability.constitutionalStanding.reasonSeverity ?? 'constitutional',
+        source: 'plugin capability',
+        scope: `${chain.name} / ${pluginType}`,
+        network: chain.network,
+      });
+    });
+  });
+
+  return reasons;
+}

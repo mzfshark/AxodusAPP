@@ -1,7 +1,7 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import DaoContextSelector from '../components/DaoContextSelector';
-import { GovernanceLayerCard, GovernanceStandingSummary } from '../components/GovernanceStanding';
+import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
 import { useChainRegistry } from '../hooks/useChainRegistry';
@@ -174,6 +174,61 @@ function ObservabilityPanel({ summary }) {
   );
 }
 
+function ConstitutionalGuardrailsPanel({
+  reasons = [],
+  title = 'Constitutional Guardrails',
+  description = 'Active reason codes rendered from registry, plugin and indexer state. The frontend does not infer enforcement.',
+}) {
+  const activeReasons = reasons.slice(0, 8);
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">{title}</h2>
+          <p className="mt-1 text-xs text-on-surface-variant">{description}</p>
+        </div>
+        <span className="rounded-md border border-white/10 px-3 py-1 text-xs font-bold text-slate-300">
+          {reasons.length} active reasons
+        </span>
+      </div>
+
+      {activeReasons.length > 0 ? (
+        <div className="divide-y divide-white/5">
+          {activeReasons.map((reason, index) => (
+            <article key={`${reason.network}-${reason.reasonCode}-${index}`} className="px-5 py-4">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-xs font-black uppercase text-on-surface">{reason.reasonCode}</span>
+                    <ReasonSeverityBadge severity={reason.reasonSeverity} />
+                  </div>
+                  <div className="mt-2 text-xs text-on-surface-variant">
+                    {reason.scope} · {reason.source}
+                  </div>
+                </div>
+                <span className="w-fit rounded-md border border-white/10 px-2 py-1 font-mono text-[11px] text-slate-300">
+                  {reason.network}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="px-5 py-8 text-center">
+          <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-surface-container-high text-cyan-200">
+            <span className="material-symbols-outlined">verified_user</span>
+          </div>
+          <h3 className="mt-4 text-base font-bold text-on-surface">No active guardrail reason codes</h3>
+          <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-on-surface-variant">
+            Registry, plugin and indexer state are not currently exposing active guardrail reasons.
+          </p>
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default function GovernanceDashboard() {
   const { chains, summary, source, status, error } = useChainRegistry();
   const governanceConsole = useGovernanceConsole(chains);
@@ -215,6 +270,14 @@ export default function GovernanceDashboard() {
         </section>
 
         <ObservabilityPanel summary={summary} />
+
+        <ConstitutionalGuardrailsPanel reasons={summary.guardrailReasons} />
+
+        <ConstitutionalGuardrailsPanel
+          title="Selected Context Guardrails"
+          description="Reason codes affecting the currently selected DAO and chain context."
+          reasons={governanceConsole.selectedGuardrailReasons}
+        />
 
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <GovernanceLayerCard
