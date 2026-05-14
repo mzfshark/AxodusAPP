@@ -1,3 +1,10 @@
+import {
+  COMPLIANT_CONSTITUTIONAL_STANDING,
+  getConstitutionalStanding,
+  governanceStatusFromStanding,
+  normalizeReasonSeverity,
+} from '../utils/governanceState';
+
 const governanceApiBase = import.meta.env.VITE_GOVERNANCE_API_URL || '/governance-api';
 const registryEndpoint = `${governanceApiBase}/registry/chains`;
 
@@ -13,27 +20,10 @@ const evmPluginTypes = [
 ];
 
 const compatible = { status: 'compatible', reasonCodes: [] };
-const compliantStanding = { status: 'compliant', reasonCodes: [], reasonSeverity: null };
-
-function mapCompatibilityToStanding(value) {
-  if (!value) return compliantStanding;
-  if (value.status === 'compatible') return { ...value, status: 'compliant', reasonSeverity: value.reasonSeverity ?? null };
-  if (value.status === 'requires-review') return { ...value, status: 'under-review', reasonSeverity: value.reasonSeverity ?? 'constitutional' };
-  if (value.status === 'incompatible') return { ...value, status: 'restricted', reasonSeverity: value.reasonSeverity ?? 'critical' };
-  return { ...value, reasonSeverity: value.reasonSeverity ?? null };
-}
-
-function governanceStatusFromStanding(standing) {
-  if (standing?.status === 'under-review') return 'under-review';
-  if (standing?.status === 'restricted') return 'restricted';
-  if (standing?.status === 'sanctioned') return 'sanctioned';
-  if (standing?.status === 'suspended') return 'suspended';
-  return 'compliant';
-}
 
 function normalizePluginCapability(capability) {
   if (!capability) return capability;
-  const constitutionalStanding = mapCompatibilityToStanding(capability.constitutionalStanding ?? capability.constitutionalCompatibility);
+  const constitutionalStanding = getConstitutionalStanding(capability);
   return {
     ...capability,
     governanceStatus: capability.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding),
@@ -50,8 +40,10 @@ function normalizePluginCapabilities(pluginCapabilities) {
 
 export function normalizeChainGovernanceState(chain) {
   const capabilities = chain.capabilities ?? {};
-  const constitutionalStanding = mapCompatibilityToStanding(
-    capabilities.constitutionalStanding ?? chain.constitutionalStanding ?? capabilities.constitutionalCompatibility ?? chain.constitutionalCompatibility,
+  const constitutionalStanding = getConstitutionalStanding(
+    capabilities.constitutionalStanding || capabilities.constitutionalCompatibility || chain.constitutionalStanding || chain.constitutionalCompatibility
+      ? { ...chain, ...capabilities }
+      : null,
   );
   const governanceStatus = chain.governanceStatus ?? capabilities.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding);
 
@@ -70,7 +62,7 @@ export function normalizeChainGovernanceState(chain) {
     indexingStatus: chain.indexingStatus
       ? {
           ...chain.indexingStatus,
-          reasonSeverity: chain.indexingStatus.reasonSeverity ?? (chain.indexingStatus.reasonCode ? 'warning' : null),
+          reasonSeverity: normalizeReasonSeverity(chain.indexingStatus.reasonCode, chain.indexingStatus.reasonSeverity),
         }
       : chain.indexingStatus,
   };
@@ -108,7 +100,7 @@ const pluginCapability = ({ pluginType, label, adapter, vote = true, execute = t
   votingPowerStrategy: strategy,
   compatibleRoles: legacy ? ['voting', 'spoke'] : ['execution', 'voting', 'spoke'],
   constitutionalCompatibility: compatible,
-  constitutionalStanding: compliantStanding,
+  constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
   requiresDeployment: true,
   requiresIndexer: true,
   legacy,
@@ -231,7 +223,7 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
-      constitutionalStanding: compliantStanding,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
       governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
@@ -263,7 +255,7 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
-      constitutionalStanding: compliantStanding,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
       governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
@@ -295,7 +287,7 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
-      constitutionalStanding: compliantStanding,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
       governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
@@ -327,7 +319,7 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
-      constitutionalStanding: compliantStanding,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
       governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
@@ -359,7 +351,7 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
-      constitutionalStanding: compliantStanding,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
       governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
@@ -444,6 +436,22 @@ export function summarizeChainRegistry(chains) {
   const evmCount = chains.filter((chain) => chain.family === 'evm').length;
   const legacyCount = chains.filter((chain) => chain.legacyHarmonyAdapter).length;
   const pluginTypes = new Set(chains.flatMap((chain) => chain.capabilities?.supportedPluginTypes ?? []));
+  const governanceStatusCounts = chains.reduce((acc, chain) => {
+    const status = chain.governanceStatus ?? 'under-review';
+    acc[status] = (acc[status] ?? 0) + 1;
+    return acc;
+  }, {});
+  const federationTierCounts = chains.reduce((acc, chain) => {
+    const tier = chain.federationTier ?? 'observer';
+    acc[tier] = (acc[tier] ?? 0) + 1;
+    return acc;
+  }, {});
+  const reasonSeverityCounts = chains.reduce((acc, chain) => {
+    const severity = chain.indexingStatus?.reasonSeverity ?? chain.constitutionalStanding?.reasonSeverity;
+    if (!severity) return acc;
+    acc[severity] = (acc[severity] ?? 0) + 1;
+    return acc;
+  }, {});
 
   return {
     totalChains: chains.length,
@@ -451,5 +459,8 @@ export function summarizeChainRegistry(chains) {
     legacyCount,
     pluginTypes: pluginTypes.size,
     roleCounts,
+    governanceStatusCounts,
+    federationTierCounts,
+    reasonSeverityCounts,
   };
 }

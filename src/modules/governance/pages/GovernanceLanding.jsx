@@ -119,7 +119,7 @@ export default function GovernanceLanding() {
           <PublicMetric label="Supported chains" value={publicRegistryChains.length} detail={`${summary.evmCount} EVM core networks`} />
           <PublicMetric label="Voting surfaces" value={publicRoleCounts.voting} detail="Cross-chain participation readiness" />
           <PublicMetric label="Spoke networks" value={publicRoleCounts.spoke} detail="Operational execution targets" />
-          <PublicMetric label="Plugin types" value={summary.pluginTypes} detail="Governance capabilities exposed by registry" />
+          <PublicMetric label="Compliant status" value={summary.governanceStatusCounts?.compliant ?? 0} detail="Registry-rendered governance status" />
         </section>
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-3">

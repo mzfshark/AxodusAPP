@@ -55,6 +55,8 @@
 - Create governance action permission guards — in progress: vote/execute operations run wallet, backend chain capability, action-level plugin capability, indexing readiness and lifecycle checks before wallet submission
 - Add governance nuclei model — in progress: chain registry and frontend fallback distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities
 - Add Constitutional Guardrail reason codes — in progress: backend registry/indexer status and frontend permission guards expose transparent guardrail codes across UI/API flows
+- Add governance standing model — in progress: frontend registry normalization maps legacy constitutional compatibility payloads into constitutional standing, governance status, federation tier and reason severity for rendering only
+- Evolve Governance Operations Center — in progress: `/governance/console` is positioned as a federation observability surface, not a narrow DAO admin page
 
 ---
 

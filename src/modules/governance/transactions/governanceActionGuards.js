@@ -1,14 +1,4 @@
-function severityForReason(reasonCode, status) {
-  if (!reasonCode) return null;
-  if (reasonCode === 'TREASURY_POLICY_REQUIRES_REVIEW' || reasonCode === 'AGENT_PERMISSION_SCOPE_EXCEEDED') return 'constitutional';
-  if (status === 'blocked') return 'critical';
-  if (status === 'warning') return 'warning';
-  return 'info';
-}
-
-function getConstitutionalStanding(target) {
-  return target?.constitutionalStanding ?? target?.constitutionalCompatibility;
-}
+import { getConstitutionalStanding, severityForReason } from '../utils/governanceState';
 
 function checkResult(label, status, message, reasonCode = null, source = null, reasonSeverity = null) {
   return { label, status, message, reasonCode, source, reasonSeverity: reasonSeverity ?? severityForReason(reasonCode, status) };
