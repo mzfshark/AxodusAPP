@@ -1,5 +1,6 @@
 import {
   COMPLIANT_CONSTITUTIONAL_STANDING,
+  UNDER_REVIEW_CONSTITUTIONAL_STANDING,
   collectGovernanceGuardrailReasons,
   getConstitutionalStanding,
   governanceStatusFromStanding,
@@ -23,9 +24,12 @@ const evmPluginTypes = [
 
 const compatible = { status: 'compatible', reasonCodes: [] };
 
-function normalizePluginCapability(capability) {
+function normalizePluginCapability(capability, { useFallbackDefaults = false } = {}) {
   if (!capability) return capability;
-  const constitutionalStanding = getConstitutionalStanding(capability);
+  const constitutionalStanding = getConstitutionalStanding(
+    capability,
+    useFallbackDefaults ? COMPLIANT_CONSTITUTIONAL_STANDING : UNDER_REVIEW_CONSTITUTIONAL_STANDING,
+  );
   return {
     ...capability,
     governanceStatus: capability.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding),
@@ -33,10 +37,10 @@ function normalizePluginCapability(capability) {
   };
 }
 
-function normalizePluginCapabilities(pluginCapabilities) {
+function normalizePluginCapabilities(pluginCapabilities, options) {
   const capabilities = pluginCapabilities ?? {};
   return Object.fromEntries(
-    Object.entries(capabilities).map(([pluginType, capability]) => [pluginType, normalizePluginCapability(capability)]),
+    Object.entries(capabilities).map(([pluginType, capability]) => [pluginType, normalizePluginCapability(capability, options)]),
   );
 }
 
@@ -46,6 +50,7 @@ export function normalizeChainGovernanceState(chain, { useFallbackDefaults = fal
     capabilities.constitutionalStanding || capabilities.constitutionalCompatibility || chain.constitutionalStanding || chain.constitutionalCompatibility
       ? { ...chain, ...capabilities }
       : null,
+    useFallbackDefaults ? COMPLIANT_CONSTITUTIONAL_STANDING : UNDER_REVIEW_CONSTITUTIONAL_STANDING,
   );
   const governanceStatus = chain.governanceStatus ?? capabilities.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding);
   const federationMember = chain.federationMember ?? (useFallbackDefaults ? true : undefined);
@@ -64,7 +69,7 @@ export function normalizeChainGovernanceState(chain, { useFallbackDefaults = fal
       ...capabilities,
       governanceStatus,
       constitutionalStanding,
-      pluginCapabilities: normalizePluginCapabilities(capabilities.pluginCapabilities),
+      pluginCapabilities: normalizePluginCapabilities(capabilities.pluginCapabilities, { useFallbackDefaults }),
     },
     indexingStatus: chain.indexingStatus
       ? {

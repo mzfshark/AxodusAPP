@@ -4,6 +4,12 @@ export const COMPLIANT_CONSTITUTIONAL_STANDING = {
   reasonSeverity: null,
 };
 
+export const UNDER_REVIEW_CONSTITUTIONAL_STANDING = {
+  status: 'under-review',
+  reasonCodes: [],
+  reasonSeverity: 'info',
+};
+
 export function mapCompatibilityToStanding(value) {
   if (!value) return COMPLIANT_CONSTITUTIONAL_STANDING;
   if (value.status === 'compatible') return { ...value, status: 'compliant', reasonSeverity: value.reasonSeverity ?? null };
@@ -12,8 +18,9 @@ export function mapCompatibilityToStanding(value) {
   return { ...value, reasonSeverity: value.reasonSeverity ?? null };
 }
 
-export function getConstitutionalStanding(target) {
-  return mapCompatibilityToStanding(target?.constitutionalStanding ?? target?.constitutionalCompliance ?? target?.constitutionalCompatibility);
+export function getConstitutionalStanding(target, fallback = COMPLIANT_CONSTITUTIONAL_STANDING) {
+  const standing = target?.constitutionalStanding ?? target?.constitutionalCompliance ?? target?.constitutionalCompatibility;
+  return standing ? mapCompatibilityToStanding(standing) : fallback;
 }
 
 export function governanceStatusFromStanding(standing) {
