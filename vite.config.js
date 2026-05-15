@@ -10,18 +10,12 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
-      '@api': path.resolve(__dirname, './src/api'),
       '@assets': path.resolve(__dirname, './src/assets'),
-      '@context': path.resolve(__dirname, './src/context'),
       '@pages': path.resolve(__dirname, './src/pages'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@services': path.resolve(__dirname, './src/services'),
       '@styles': path.resolve(__dirname, './src/styles'),
-      '@config': path.resolve(__dirname, './src/appkit.config.js' ),
-      '@adapters': path.resolve(__dirname, './src/adapters'),
-      '@solana/wallet-adapter-wallets': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-wallets'),
-      '@solana/wallet-adapter-base': path.resolve(__dirname, 'node_modules/@solana/wallet-adapter-base')
+      '@config': path.resolve(__dirname, './src/appkit.config.js' )
     }
   },
   server: {
@@ -31,19 +25,14 @@ export default defineConfig({
     host: true, // permite acesso externo
     allowedHosts: ['app.country'], // libera o domínio customizado
     headers: {
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https:; font-src 'self' data: https:;"
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; font-src 'self' data: https://fonts.gstatic.com;"
     },
     proxy: {
       '/governance-api': {
         target: process.env.VITE_GOVERNANCE_API_URL || 'http://localhost:4002',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/governance-api/, ''),
-      },
-      '/api': {
-        target: process.env.VITE_API_URL || 'http://localhost:8000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
+      }
     },
   },
   metadata: {
@@ -56,11 +45,7 @@ export default defineConfig({
       '@reown/appkit',
       '@reown/appkit/react',
       '@reown/appkit/networks',
-      '@reown/appkit-adapter-wagmi',
-      '@reown/appkit-adapter-solana',
-      '@reown/appkit-adapter-bitcoin',
-      '@solana/wallet-adapter-wallets',
-      '@solana/wallet-adapter-base'
+      '@reown/appkit-adapter-wagmi'
     ]
   },
   build: {
