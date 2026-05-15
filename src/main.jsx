@@ -2,12 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import routes from './routes'; 
-import { InvestmentProvider } from './context/InvestmentContext';
 import { AppKitProvider } from './providers/AppKitProvider';
 import { RouterProvider } from 'react-router-dom'; 
-import { RealtimeProvider } from './context/RealtimeContext';
-import { BotProvider } from './context/BotContext';
-import NotificationCenter from './components/notifications/NotificationCenter';
 import ErrorBoundary from './ErrorBoundary';
 import './styles/Global.css';
 
@@ -47,14 +43,7 @@ if (!rootElement) {
     <React.StrictMode>
       <ErrorBoundary>
         <AppKitProvider>
-          <RealtimeProvider>
-            <BotProvider>
-              <InvestmentProvider>
-                <RouterProvider router={routes} /> 
-                <NotificationCenter />
-              </InvestmentProvider>
-            </BotProvider>
-          </RealtimeProvider>
+          <RouterProvider router={routes} />
         </AppKitProvider>
       </ErrorBoundary>
     </React.StrictMode>
