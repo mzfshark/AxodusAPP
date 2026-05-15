@@ -16,6 +16,7 @@ import {
   getProposalTitle,
   getVoteOptionTotals,
 } from '../utils/proposals';
+import { collectGovernanceGuardrailReasons } from '../utils/governanceState';
 
 function DetailField({ label, value }) {
   return (
@@ -157,6 +158,29 @@ function PermissionCheckList({ checks = [] }) {
   );
 }
 
+function RegistryGuardrailsPanel({ reasons = [] }) {
+  if (!reasons.length) {
+    return <DetailField label="Registry guardrails" value="No active registry guardrail reasons" />;
+  }
+
+  return (
+    <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+      <div className="text-xs font-bold uppercase text-slate-500">Registry guardrails</div>
+      <div className="mt-3 space-y-3">
+        {reasons.map((reason, index) => (
+          <div key={`${reason.reasonCode}-${reason.scope ?? 'scope'}-${index}`} className="rounded-lg border border-white/5 bg-surface-container px-3 py-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {reason.source ? <span className="rounded border border-current/20 px-1.5 py-0.5 text-[10px] font-black uppercase opacity-80">{reason.source}</span> : null}
+              {reason.scope ? <span className="text-[11px] font-semibold text-on-surface-variant">{reason.scope}</span> : null}
+            </div>
+            <GuardrailReasonCode reasonCode={reason.reasonCode} reasonSeverity={reason.reasonSeverity} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function TransactionPreviewRow({ label, value }) {
   return (
     <div className="rounded-lg border border-white/5 bg-surface-container-high p-3">
@@ -267,6 +291,7 @@ export default function ProposalDetail() {
   const receipts = getProposalReceipts(proposal);
   const voteTotals = getVoteOptionTotals(proposal);
   const executionReadiness = getExecutionReadiness({ ...proposal, actions: decodedActions }, chain);
+  const registryGuardrailReasons = collectGovernanceGuardrailReasons(chain);
   const {
     selectedVoteOption,
     setSelectedVoteOption,
@@ -621,6 +646,7 @@ export default function ProposalDetail() {
             <DetailField label="Remote execution" value={capabilityLabel(chain?.capabilities?.remoteExecution)} />
             <DetailField label="Local governance models" value={chain?.capabilities?.localGovernanceModels?.join(', ') ?? 'Not indexed'} />
             <DetailField label="Indexer reason code" value={chain?.indexingStatus?.reasonCode ?? 'No active guardrail reason'} />
+            <RegistryGuardrailsPanel reasons={registryGuardrailReasons} />
           </div>
         </aside>
       </section>
