@@ -1,3 +1,10 @@
+import {
+  getMockGovernancePlugins,
+  getMockGovernanceProposal,
+  getMockGovernanceProposalActions,
+  getMockGovernanceProposals,
+} from './mockGovernanceData';
+
 const governanceApiBase = import.meta.env.VITE_GOVERNANCE_API_URL || '/governance-api';
 const apiBase = `${governanceApiBase}/v2`;
 
@@ -66,13 +73,22 @@ export async function fetchGovernanceProposals({ daoId, signal } = {}) {
 
   const query = toQuery({ daoId, page: 1, pageSize: 20, sort: 'incrementalId', direction: 'desc' });
   const response = await requestJson(`/proposals?${query}`, { signal });
-  return normalizePaginated(response);
+  const normalized = normalizePaginated(response);
+  const mockItems = normalized.items.length > 0 ? [] : getMockGovernanceProposals();
+
+  return {
+    ...normalized,
+    items: [...normalized.items, ...mockItems],
+  };
 }
 
 export async function fetchGovernanceProposal({ proposalId, signal } = {}) {
   if (!proposalId) {
     return null;
   }
+
+  const mockProposal = getMockGovernanceProposal(proposalId);
+  if (mockProposal) return mockProposal;
 
   return requestJson(`/proposals/${encodeURIComponent(proposalId)}`, { signal });
 }
@@ -81,6 +97,9 @@ export async function fetchGovernanceProposalActions({ proposalId, signal } = {}
   if (!proposalId) {
     return [];
   }
+
+  const mockActions = getMockGovernanceProposalActions(proposalId);
+  if (mockActions.length > 0) return mockActions;
 
   return requestJson(`/proposals/${encodeURIComponent(proposalId)}/actions`, { signal });
 }
@@ -96,10 +115,15 @@ export async function fetchGovernanceTransactionIndexingStatus({ network, txHash
 
 export async function fetchGovernancePlugins({ dao, signal } = {}) {
   if (!dao?.address || !dao?.network) {
-    return [];
+    return getMockGovernancePlugins();
   }
 
-  return requestJson(`/plugins/by-dao/${dao.network}/${dao.address}?${toQuery({ status: 'installed', isSupported: true })}`, {
+  const response = await requestJson(`/plugins/by-dao/${dao.network}/${dao.address}?${toQuery({ status: 'installed', isSupported: true })}`, {
     signal,
   });
+  const items = Array.isArray(response) ? response : response?.data;
+
+  if (Array.isArray(items) && items.length > 0) return response;
+
+  return getMockGovernancePlugins();
 }

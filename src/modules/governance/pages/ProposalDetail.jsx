@@ -367,6 +367,11 @@ export default function ProposalDetail() {
         <span className="w-fit rounded-md border border-white/10 px-3 py-1.5 text-xs font-bold text-slate-300">
           {getProposalStatus(proposal)}
         </span>
+        {proposal?.dataSource === 'dev-mock' ? (
+          <span className="w-fit rounded-md border border-cyan-300/20 bg-cyan-950/20 px-3 py-1.5 text-xs font-black uppercase text-cyan-100">
+            Dev mock data
+          </span>
+        ) : null}
       </div>
 
       <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5 md:p-6">
