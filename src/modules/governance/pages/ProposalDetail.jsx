@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useWallet } from '@/hooks/useWallet';
-import { GovernanceStandingSummary, GuardrailReasonCode } from '../components/GovernanceStanding';
+import { GovernanceStandingSummary } from '../components/GovernanceStanding';
+import GovernanceTransactionPreviewRow from '../components/GovernanceTransactionPreviewRow';
+import PermissionCheckList from '../components/PermissionCheckList';
+import ProposalExecutionPanel from '../components/ProposalExecutionPanel';
+import ProposalExecutionReceiptsPanel from '../components/ProposalExecutionReceiptsPanel';
+import ProposalOperationalSummary from '../components/ProposalOperationalSummary';
+import ProposalVotingPanel from '../components/ProposalVotingPanel';
+import RegistryGuardrailsPanel from '../components/RegistryGuardrailsPanel';
+import TransactionAdapterStatePanel from '../components/TransactionAdapterStatePanel';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useProposalDetail } from '../hooks/useProposalDetail';
 import { useGovernanceTransactions } from '../hooks/useGovernanceTransactions';
@@ -14,7 +22,6 @@ import {
   getProposalReceipts,
   getProposalStatus,
   getProposalTitle,
-  getVoteOptionTotals,
 } from '../utils/proposals';
 import { collectGovernanceGuardrailReasons } from '../utils/governanceState';
 
@@ -53,141 +60,11 @@ function actionLabel(action, index) {
   return action?.name ?? action?.functionName ?? action?.method ?? `Action ${index + 1}`;
 }
 
-function receiptStatus(receipt) {
-  return receipt?.status ?? receipt?.state ?? receipt?.executionStatus ?? 'Indexed';
-}
-
-function receiptChain(receipt) {
-  return receipt?.chainSlug ?? receipt?.network ?? receipt?.chain ?? receipt?.targetChain ?? 'Target chain not indexed';
-}
-
-function formatOperationTarget(operation) {
-  if (!operation?.request) return 'No transaction request prepared.';
-  return `${operation.request.functionName} on ${compactAddress(operation.request.address)} · chain ${operation.request.chainId}`;
-}
-
-function formatReceiptValue(value) {
-  if (value === undefined || value === null) return 'Not available';
-  return typeof value === 'bigint' ? value.toString() : String(value);
-}
-
 function formatHistoryTime(value) {
   if (!value) return 'Unknown time';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return 'Unknown time';
   return date.toLocaleString();
-}
-
-function ProposalOperationPanel({ title, description, icon, children }) {
-  return (
-    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
-      <div className="flex items-start gap-3 border-b border-white/5 px-5 py-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-container-high text-cyan-200">
-          <span className="material-symbols-outlined text-[20px]">{icon}</span>
-        </div>
-        <div>
-          <h2 className="text-lg font-bold text-on-surface">{title}</h2>
-          <p className="mt-1 text-xs leading-5 text-on-surface-variant">{description}</p>
-        </div>
-      </div>
-      <div className="p-5">{children}</div>
-    </section>
-  );
-}
-
-function OperationActionButton({ icon, disabled, onClick, variant = 'primary', children }) {
-  const variantClass =
-    variant === 'secondary'
-      ? 'border border-cyan-300/30 bg-cyan-950/30 text-cyan-100 disabled:border-white/5 disabled:bg-surface-container-high disabled:text-slate-500'
-      : 'bg-primary text-on-primary disabled:bg-surface-container-high disabled:text-slate-500';
-
-  return (
-    <button
-      type="button"
-      disabled={disabled}
-      onClick={onClick}
-      className={`inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-black disabled:cursor-not-allowed ${variantClass}`}
-    >
-      <span className="material-symbols-outlined text-[18px]">{icon}</span>
-      {children}
-    </button>
-  );
-}
-
-function GovernanceOperationAction({ operation, submitLabel, submittingLabel, onSubmit, onSwitchChain, isSubmitting, isSwitching, icon }) {
-  if (operation.status === 'wrongChain') {
-    return (
-      <OperationActionButton icon="sync_alt" disabled={isSwitching} onClick={onSwitchChain} variant="secondary">
-        {isSwitching ? 'Switching network' : 'Switch network'}
-      </OperationActionButton>
-    );
-  }
-
-  return (
-    <OperationActionButton icon={icon} disabled={!operation.canSubmit || isSubmitting} onClick={onSubmit}>
-      {isSubmitting ? submittingLabel : submitLabel}
-    </OperationActionButton>
-  );
-}
-
-function PermissionCheckList({ checks = [] }) {
-  if (!checks.length) return null;
-
-  const statusClass = {
-    passed: 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100',
-    warning: 'border-amber-300/20 bg-amber-950/20 text-amber-100',
-    blocked: 'border-red-300/20 bg-red-950/20 text-red-100',
-  };
-
-  return (
-    <div className="mt-4 space-y-2">
-      {checks.map((check) => (
-        <div
-          key={`${check.label}-${check.reasonCode ?? check.message}`}
-          className={`rounded-lg border px-3 py-2 text-xs ${statusClass[check.status] ?? 'border-white/10 bg-surface-container-high text-on-surface-variant'}`}
-        >
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-black uppercase">{check.label}</span>
-            {check.source ? <span className="rounded border border-current/20 px-1.5 py-0.5 text-[10px] uppercase opacity-80">{check.source}</span> : null}
-          </div>
-          <div className="mt-1 leading-5">{check.message}</div>
-          <GuardrailReasonCode reasonCode={check.reasonCode} reasonSeverity={check.reasonSeverity} />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function RegistryGuardrailsPanel({ reasons = [] }) {
-  if (!reasons.length) {
-    return <DetailField label="Registry guardrails" value="No active registry guardrail reasons" />;
-  }
-
-  return (
-    <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
-      <div className="text-xs font-bold uppercase text-slate-500">Registry guardrails</div>
-      <div className="mt-3 space-y-3">
-        {reasons.map((reason, index) => (
-          <div key={`${reason.reasonCode}-${reason.scope ?? 'scope'}-${index}`} className="rounded-lg border border-white/5 bg-surface-container px-3 py-2">
-            <div className="flex flex-wrap items-center gap-2">
-              {reason.source ? <span className="rounded border border-current/20 px-1.5 py-0.5 text-[10px] font-black uppercase opacity-80">{reason.source}</span> : null}
-              {reason.scope ? <span className="text-[11px] font-semibold text-on-surface-variant">{reason.scope}</span> : null}
-            </div>
-            <GuardrailReasonCode reasonCode={reason.reasonCode} reasonSeverity={reason.reasonSeverity} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function TransactionPreviewRow({ label, value }) {
-  return (
-    <div className="rounded-lg border border-white/5 bg-surface-container-high p-3">
-      <div className="text-[11px] font-black uppercase text-slate-500">{label}</div>
-      <div className="mt-1 break-words text-xs font-semibold text-on-surface">{value ?? 'Not available'}</div>
-    </div>
-  );
 }
 
 function GovernanceTransactionConfirmation({ operation, proposal, selectedVoteOption, onCancel, onConfirm, isSubmitting }) {
@@ -230,14 +107,14 @@ function GovernanceTransactionConfirmation({ operation, proposal, selectedVoteOp
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            <TransactionPreviewRow label="Proposal" value={getProposalTitle(proposal)} />
-            <TransactionPreviewRow label="Action" value={operation.action} />
-            <TransactionPreviewRow label="Plugin type" value={operation.pluginType} />
-            <TransactionPreviewRow label="Network" value={operation.network} />
-            <TransactionPreviewRow label="Required chain" value={operation.request?.chainId} />
-            <TransactionPreviewRow label="Contract" value={operation.request?.address} />
-            <TransactionPreviewRow label="Function" value={operation.request?.functionName} />
-            <TransactionPreviewRow label="Network fee" value="Estimated by wallet before signature." />
+            <GovernanceTransactionPreviewRow label="Proposal" value={getProposalTitle(proposal)} />
+            <GovernanceTransactionPreviewRow label="Action" value={operation.action} />
+            <GovernanceTransactionPreviewRow label="Plugin type" value={operation.pluginType} />
+            <GovernanceTransactionPreviewRow label="Network" value={operation.network} />
+            <GovernanceTransactionPreviewRow label="Required chain" value={operation.request?.chainId} />
+            <GovernanceTransactionPreviewRow label="Contract" value={operation.request?.address} />
+            <GovernanceTransactionPreviewRow label="Function" value={operation.request?.functionName} />
+            <GovernanceTransactionPreviewRow label="Network fee" value="Estimated by wallet before signature." />
           </div>
 
           <div className="rounded-lg border border-white/5 bg-surface-container-high p-3">
@@ -289,7 +166,6 @@ export default function ProposalDetail() {
   const chain = registryChain ? { ...registryChain, currentWalletChainId: walletChainId } : { currentWalletChainId: walletChainId };
   const decodedActions = getProposalActions(proposal, actions);
   const receipts = getProposalReceipts(proposal);
-  const voteTotals = getVoteOptionTotals(proposal);
   const executionReadiness = getExecutionReadiness({ ...proposal, actions: decodedActions }, chain);
   const registryGuardrailReasons = collectGovernanceGuardrailReasons(chain);
   const {
@@ -399,157 +275,45 @@ export default function ProposalDetail() {
         />
       </section>
 
+      <ProposalOperationalSummary
+        proposal={proposal}
+        chain={chain}
+        voteOperation={voteOperation}
+        executeOperation={executeOperation}
+        receipts={receipts}
+        guardrailReasons={registryGuardrailReasons}
+        decodedActions={decodedActions}
+      />
+
       <section className="grid gap-6 xl:grid-cols-3">
-        <ProposalOperationPanel
-          title="Voting"
-          description="Prepared for adapter-backed voting with wallet submission and chain-aware execution guards."
-          icon="how_to_vote"
-        >
-          <div className="grid gap-3">
-            {voteTotals.map((option) => (
-              <label
-                key={option.key}
-                className="flex cursor-pointer items-center justify-between rounded-lg border border-white/5 bg-surface-container-high px-4 py-3"
-              >
-                <span className="flex items-center gap-3 text-sm font-bold text-on-surface">
-                  <input
-                    type="radio"
-                    name="governance-vote-option"
-                    value={option.key}
-                    checked={selectedVoteOption === option.key}
-                    onChange={() => setSelectedVoteOption(option.key)}
-                    className="h-4 w-4 accent-cyan-300"
-                  />
-                  {option.label}
-                </span>
-                <span className="text-sm font-semibold text-on-surface-variant">{option.value}</span>
-              </label>
-            ))}
-          </div>
-          <div className="mt-4">
-            <GovernanceOperationAction
-              operation={voteOperation}
-              submitLabel="Submit vote"
-              submittingLabel="Submitting"
-              onSubmit={() => openConfirmation(voteOperation, submitVote)}
-              onSwitchChain={switchVoteChain}
-              isSubmitting={isSubmitting}
-              isSwitching={isSwitching}
-              icon="how_to_vote"
-            />
-          </div>
-          <p className="mt-3 text-xs leading-5 text-on-surface-variant">
-            Connected operator: {compactAddress(address)}. Adapter status: {voteOperation.status}. {voteOperation.reason}
-          </p>
-          <p className="mt-2 text-xs leading-5 text-on-surface-variant">{formatOperationTarget(voteOperation)}</p>
-          <PermissionCheckList checks={voteOperation.permissionChecks} />
-        </ProposalOperationPanel>
-
-        <ProposalOperationPanel
-          title="Execution"
-          description="Execution controls are capability-aware and ready for the transaction adapter layer."
-          icon="bolt"
-        >
-          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
-            <div className="text-xs font-bold uppercase text-slate-500">Readiness</div>
-            <div className="mt-2 text-sm font-semibold text-on-surface">{executionReadiness.canExecute ? 'Ready for adapter' : 'Blocked'}</div>
-            <p className="mt-2 text-xs leading-5 text-on-surface-variant">{executionReadiness.reason}</p>
-          </div>
-          <div className="mt-4">
-            <GovernanceOperationAction
-              operation={executeOperation}
-              submitLabel="Execute proposal"
-              submittingLabel="Submitting"
-              onSubmit={() => openConfirmation(executeOperation, submitExecute)}
-              onSwitchChain={switchExecuteChain}
-              isSubmitting={isSubmitting}
-              isSwitching={isSwitching}
-              icon="play_arrow"
-            />
-          </div>
-          <p className="mt-3 text-xs leading-5 text-on-surface-variant">
-            Adapter status: {executeOperation.status}. {executeOperation.reason}
-          </p>
-          <p className="mt-2 text-xs leading-5 text-on-surface-variant">{formatOperationTarget(executeOperation)}</p>
-          <PermissionCheckList checks={executeOperation.permissionChecks} />
-        </ProposalOperationPanel>
-
-        <ProposalOperationPanel
-          title="Execution Receipts"
-          description="Multichain execution receipts and LayerZero message state will appear here when indexed."
-          icon="fact_check"
-        >
-          {receipts.length > 0 ? (
-            <div className="space-y-3">
-              {receipts.map((receipt, index) => (
-                <div key={`${receiptChain(receipt)}-${index}`} className="rounded-lg border border-white/5 bg-surface-container-high p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-sm font-bold text-on-surface">{receiptChain(receipt)}</span>
-                    <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">{receiptStatus(receipt)}</span>
-                  </div>
-                  <div className="mt-2 break-words text-xs text-on-surface-variant">
-                    {receipt?.txHash ?? receipt?.transactionHash ?? receipt?.messageId ?? 'Receipt identifier not indexed'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-lg border border-dashed border-white/10 bg-surface-container-high p-5 text-center">
-              <span className="material-symbols-outlined text-3xl text-cyan-200">hub</span>
-              <p className="mt-3 text-sm font-bold text-on-surface">No execution receipts indexed</p>
-              <p className="mt-2 text-xs leading-5 text-on-surface-variant">This proposal has no remote execution state in the current backend payload.</p>
-            </div>
-          )}
-        </ProposalOperationPanel>
+        <ProposalVotingPanel
+          proposal={proposal}
+          selectedVoteOption={selectedVoteOption}
+          setSelectedVoteOption={setSelectedVoteOption}
+          voteOperation={voteOperation}
+          onSubmitVote={() => openConfirmation(voteOperation, submitVote)}
+          onSwitchVoteChain={switchVoteChain}
+          isSubmitting={isSubmitting}
+          isSwitching={isSwitching}
+          operatorAddress={address}
+        />
+        <ProposalExecutionPanel
+          executionReadiness={executionReadiness}
+          executeOperation={executeOperation}
+          onSubmitExecute={() => openConfirmation(executeOperation, submitExecute)}
+          onSwitchExecuteChain={switchExecuteChain}
+          isSubmitting={isSubmitting}
+          isSwitching={isSwitching}
+        />
+        <ProposalExecutionReceiptsPanel receipts={receipts} />
       </section>
 
-      {transactionState.status !== 'idle' ? (
-        <section className="rounded-lg border border-cyan-400/20 bg-cyan-950/20 px-5 py-4">
-          <div className="flex items-start gap-3">
-            <span className="material-symbols-outlined text-cyan-200">account_tree</span>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-sm font-black uppercase text-cyan-100">Governance Transaction Adapter</h2>
-              <p className="mt-1 text-sm leading-6 text-cyan-50">{transactionState.message}</p>
-              {receiptTracking.status !== 'idle' ? (
-                <div className="mt-3 grid gap-2 rounded-lg border border-cyan-300/10 bg-cyan-950/30 p-3 text-xs text-cyan-50 md:grid-cols-2">
-                  <div>
-                    <span className="font-black uppercase text-cyan-200">Receipt</span>
-                    <p className="mt-1">{receiptTracking.message}</p>
-                  </div>
-                  <div>
-                    <span className="font-black uppercase text-cyan-200">Status</span>
-                    <p className="mt-1">{receiptTracking.status}</p>
-                  </div>
-                  <div className="md:col-span-2">
-                    <span className="font-black uppercase text-cyan-200">Hash</span>
-                    <p className="mt-1 break-words">{receiptTracking.hash}</p>
-                  </div>
-                  {receiptTracking.receipt ? (
-                    <>
-                      <div>
-                        <span className="font-black uppercase text-cyan-200">Block</span>
-                        <p className="mt-1">{formatReceiptValue(receiptTracking.receipt.blockNumber)}</p>
-                      </div>
-                      <div>
-                        <span className="font-black uppercase text-cyan-200">Gas used</span>
-                        <p className="mt-1">{formatReceiptValue(receiptTracking.receipt.gasUsed)}</p>
-                      </div>
-                    </>
-                  ) : null}
-                  <div className="md:col-span-2">
-                    <span className="font-black uppercase text-cyan-200">Indexer</span>
-                    <p className="mt-1">{receiptTracking.indexerStatus?.message ?? 'Indexer reconciliation not started.'}</p>
-                    <p className="mt-1">Status: {receiptTracking.indexerStatus?.status ?? 'idle'}</p>
-                  </div>
-                </div>
-              ) : null}
-              <p className="mt-1 break-words text-xs leading-5 text-cyan-100">
-                {transactionState.operation?.request?.data ?? 'No calldata generated.'}
-              </p>
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <TransactionAdapterStatePanel
+        voteOperation={voteOperation}
+        executeOperation={executeOperation}
+        transactionState={transactionState}
+        receiptTracking={receiptTracking}
+      />
 
       {operationHistory.entries.length > 0 ? (
         <section className="rounded-lg border border-white/5 bg-surface-container-highest">
