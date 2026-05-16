@@ -6,6 +6,7 @@ import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
+import { acsMock } from '@/data/mock';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -86,20 +87,17 @@ function ExecutionChainPanel({ chain }) {
 }
 
 function OperationsPanel() {
-  const items = [
-    { label: 'Axodus constitutional governance', status: 'Authority' },
-    { label: 'Investment agency sub-DAOs', status: 'Model' },
-    { label: 'Sub-DAO autonomous strategy', status: 'Scoped' },
-    { label: 'Constitutional standing observability', status: 'Required' },
-    { label: 'Proposal aggregation', status: 'Next' },
-  ];
+  const items = acsMock.workflows.slice(0, 5).map((workflow) => ({
+    label: workflow.title,
+    status: workflow.status,
+  }));
 
   return (
     <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-on-surface">Governance Operations</h2>
-          <p className="text-xs text-on-surface-variant">Frontend shell for the multichain operating dashboard.</p>
+          <h2 className="text-lg font-bold text-on-surface">ACS Operations</h2>
+          <p className="text-xs text-on-surface-variant">Mock ACS workflow feed for the multichain operating dashboard.</p>
         </div>
         <span className="material-symbols-outlined text-cyan-200">account_tree</span>
       </div>

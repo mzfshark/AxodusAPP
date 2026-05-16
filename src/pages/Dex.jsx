@@ -1,4 +1,5 @@
 import React from 'react';
+import { dexMock } from '@/data/mock';
 
 const Dex = () => {
   return (
@@ -71,8 +72,8 @@ const Dex = () => {
 <span className="text-on-surface font-medium">0.5%</span>
 </div>
 </div>
-<button className="mt-6 w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-extrabold rounded-2xl active:scale-[0.98] transition-all text-lg shadow-xl shadow-primary">
-              Swap Tokens
+<button disabled={dexMock.summary.swapsDisabled} className="mt-6 w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-extrabold rounded-2xl active:scale-[0.98] transition-all text-lg shadow-xl shadow-primary disabled:cursor-not-allowed disabled:opacity-50">
+              Swaps disabled
             </button>
 </div>
 {/*  Mini Chart  */}

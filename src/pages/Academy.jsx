@@ -1,4 +1,5 @@
 import React from 'react';
+import { academyMock } from '@/data/mock';
 
 const Academy = () => {
   return (
@@ -17,8 +18,8 @@ const Academy = () => {
 <h1 className="text-3xl font-bold tracking-tight text-on-surface mb-4">Master the Decentralized Future</h1>
 <p className="text-on-surface-variant mb-6 text-lg">A comprehensive guide to understanding blockchain architecture, smart contracts, and the new economy.</p>
 <div className="flex items-center gap-4">
-<button className="kinetic-gradient text-on-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary">Start Learning</button>
-<button className="glass-effect text-on-surface px-8 py-3 rounded-xl font-bold text-sm border-outline-variant/10">View Syllabus</button>
+<button disabled className="kinetic-gradient text-on-primary px-8 py-3 rounded-xl font-bold text-sm shadow-xl shadow-primary disabled:cursor-not-allowed disabled:opacity-50">Preview course</button>
+<button disabled className="glass-effect text-on-surface px-8 py-3 rounded-xl font-bold text-sm border-outline-variant/10 disabled:cursor-not-allowed disabled:opacity-50">Mock syllabus</button>
 </div>
 </div>
 </section>
@@ -30,7 +31,7 @@ const Academy = () => {
 </div>
 <p className="text-xs font-bold text-outline uppercase tracking-widest mb-1">Weekly Progress</p>
 <div className="flex items-baseline gap-2">
-<span className="text-3xl font-bold text-on-surface">74%</span>
+<span className="text-3xl font-bold text-on-surface">{academyMock.learningProgress[0].progress}%</span>
 <span className="text-secondary text-xs font-medium">↑ 12%</span>
 </div>
 <div className="mt-4 w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
@@ -40,7 +41,7 @@ const Academy = () => {
 <div className="bg-surface-container-low rounded-2xl p-4 group">
 <p className="text-xs font-bold text-outline uppercase tracking-widest mb-1">Knowledge Points</p>
 <div className="flex items-baseline gap-2">
-<span className="text-3xl font-bold text-on-surface">12,480</span>
+<span className="text-3xl font-bold text-on-surface">{academyMock.summary.completedLessons}</span>
 <span className="text-primary text-xs font-medium">KP</span>
 </div>
 <div className="mt-4 flex items-center -space-x-2">
@@ -53,7 +54,7 @@ const Academy = () => {
 <div className="bg-surface-container-low rounded-2xl p-4 group">
 <p className="text-xs font-bold text-outline uppercase tracking-widest mb-1">Active Certifications</p>
 <div className="flex items-baseline gap-2">
-<span className="text-3xl font-bold text-on-surface">03</span>
+<span className="text-3xl font-bold text-on-surface">{String(academyMock.summary.issuedCertificates).padStart(2, '0')}</span>
 <span className="text-tertiary text-xs font-medium">In Progress</span>
 </div>
 <p className="mt-4 text-xs text-on-surface-variant leading-relaxed">Nex-gen Smart Contract Auditor exam scheduled for Friday.</p>

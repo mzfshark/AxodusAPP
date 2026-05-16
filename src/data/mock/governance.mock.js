@@ -1,0 +1,40 @@
+import { MOCK_DATES, MOCK_NOTICE } from './constants';
+
+export const governanceMock = {
+  summary: {
+    totalDaos: 6,
+    activeProposals: 2,
+    pendingProposals: 3,
+    executedProposals: 8,
+    rejectedProposals: 1,
+    constitutionalStatus: 'compatible',
+    federationStatus: 'bootstrap federation active',
+    boardroomStatus: 'review-ready',
+    communityDaoStatus: 'observing',
+    executiveDaoStatus: 'active',
+    mockNotice: MOCK_NOTICE,
+  },
+  daos: [
+    { id: 'dao-executive-001', name: 'Axodus Executive DAO', type: 'Executive DAO', layer: 'constitutional', chain: 'Ethereum Sepolia', address: '0x2222222222222222222222222222222222222222', status: 'active', standing: 'compliant', constitutionBound: true, pluginsEnabled: ['tokenVoting', 'admin'], treasuryPolicyStatus: 'guarded', votingType: '$Neurons token voting', quorum: '30%', supportThreshold: '60%', description: 'Federal execution authority for constitutional and treasury decisions.' },
+    { id: 'dao-boardroom-001', name: 'Axodus Boardroom Council', type: 'Boardroom Council', layer: 'review', chain: 'Ethereum Sepolia', address: '0x3333333333333333333333333333333333333333', status: 'active', standing: 'compliant', constitutionBound: true, pluginsEnabled: ['multisigReview'], treasuryPolicyStatus: 'advisory', votingType: 'Council review', quorum: '50%', supportThreshold: '66%', description: 'Operational review council for governance-sensitive changes.' },
+    { id: 'dao-community-001', name: 'Axodus Community DAO', type: 'Community DAO', layer: 'community', chain: 'Harmony', address: '0x4444444444444444444444444444444444444444', status: 'observing', standing: 'under-review', constitutionBound: true, pluginsEnabled: ['harmonyVoting'], treasuryPolicyStatus: 'disabled', votingType: 'Community signal', quorum: '20%', supportThreshold: '55%', description: 'Community signaling and local governance validation.' },
+    { id: 'dao-product-defi-001', name: 'Defi Product DAO', type: 'Product DAO', layer: 'product', chain: 'Polygon', address: '0x5555555555555555555555555555555555555555', status: 'planned', standing: 'pending', constitutionBound: true, pluginsEnabled: ['proposalReview'], treasuryPolicyStatus: 'not-connected', votingType: 'Product review', quorum: '25%', supportThreshold: '60%', description: 'Future DAO for Defi product configuration.' },
+    { id: 'dao-partner-001', name: 'Partner Operator DAO', type: 'Partner DAO', layer: 'partner', chain: 'Base', address: '0x6666666666666666666666666666666666666666', status: 'planned', standing: 'pending', constitutionBound: true, pluginsEnabled: [], treasuryPolicyStatus: 'not-connected', votingType: 'Partner voting', quorum: '25%', supportThreshold: '60%', description: 'Partner onboarding governance surface.' },
+    { id: 'dao-local-001', name: 'Local Startup DAO', type: 'Local DAO', layer: 'local', chain: 'Arbitrum', address: '0x7777777777777777777777777777777777777777', status: 'preview', standing: 'under-review', constitutionBound: true, pluginsEnabled: ['localTokenVoting'], treasuryPolicyStatus: 'scoped', votingType: 'Local token voting', quorum: '20%', supportThreshold: '55%', description: 'Local autonomy example with federal compatibility checks.' },
+  ],
+  plugins: [
+    { id: 'gov-plugin-token-voting-001', interfaceType: 'tokenVoting', pluginType: 'tokenVoting', address: '0x1111111111111111111111111111111111111111', status: 'installed', isSupported: true },
+    { id: 'gov-plugin-harmony-voting-001', interfaceType: 'harmonyVoting', pluginType: 'harmonyVoting', address: '0x8888888888888888888888888888888888888888', status: 'installed', isSupported: true },
+  ],
+  proposals: [
+    { id: 'gov-proposal-001', entityId: 'gov-proposal-001', proposalId: 'gov-proposal-001', incrementalId: 1, proposalIndex: '1', onchainProposalId: '1', title: 'Approve Sepolia Treasury Operating Window', summary: 'Validate a read-only operating window before any treasury execution adapter is enabled.', description: 'Development proposal for validating guardrails, permission checks, wallet previews, and registry observability.', status: 'Active', daoId: 'dao-executive-001', proposer: '0xAxo...001', createdAt: MOCK_DATES.recent, votingStart: MOCK_DATES.recent, votingEnd: MOCK_DATES.nextWeek, startDate: MOCK_DATES.recent, endDate: MOCK_DATES.nextWeek, network: 'ethereum-sepolia', daoAddress: '0x2222222222222222222222222222222222222222', pluginAddress: '0x1111111111111111111111111111111111111111', pluginType: 'tokenVoting', interfaceType: 'tokenVoting', executionTarget: '0x1111111111111111111111111111111111111111', riskLevel: 'medium', category: 'Treasury', votesFor: 128000, votesAgainst: 24000, abstain: 9000, quorumProgress: 64, supportProgress: 84, tally: { yes: '128000', no: '24000', abstain: '9000' }, reasonCodes: ['TREASURY_READ_ONLY', 'EXECUTION_GUARD_REQUIRED'], executionPreview: 'Register treasury operating window after governance approval.', actions: [{ name: 'Register operating window', functionName: 'setOperatingWindow', to: '0x2222222222222222222222222222222222222222', value: '0' }], receipts: [{ id: 'gov-receipt-001', status: 'pending', message: 'Awaiting indexer reconciliation.' }], executionReceipts: [{ chainSlug: 'ethereum-sepolia', status: 'Pending indexer reconciliation', messageId: 'dev-layerzero-message-1' }], metadata: { title: 'Approve Sepolia Treasury Operating Window', summary: 'Development-only governance proposal.', pluginType: 'tokenVoting', pluginAddress: '0x1111111111111111111111111111111111111111', proposalIndex: '1' }, dataSource: 'dev-mock' },
+    { id: 'gov-proposal-002', entityId: 'gov-proposal-002', proposalId: 'gov-proposal-002', incrementalId: 2, proposalIndex: '2', onchainProposalId: '2', title: 'Harmony Observer Guardrail Review', summary: 'Validate legacy observer-tier rendering without enabling remote execution.', description: 'Development proposal demonstrating Harmony as an observer/spoke adapter.', status: 'Under review', daoId: 'dao-community-001', proposer: '0xAxo...002', createdAt: MOCK_DATES.recent, votingStart: MOCK_DATES.recent, votingEnd: MOCK_DATES.nextWeek, startDate: MOCK_DATES.recent, endDate: MOCK_DATES.nextWeek, network: 'harmony-mainnet', daoAddress: '0x2222222222222222222222222222222222222222', pluginAddress: '0x8888888888888888888888888888888888888888', pluginType: 'harmonyVoting', interfaceType: 'harmonyVoting', executionTarget: null, riskLevel: 'low', category: 'Risk', votesFor: 42000, votesAgainst: 7000, abstain: 3000, quorumProgress: 42, supportProgress: 85, tally: { yes: '42000', no: '7000', abstain: '3000' }, reasonCodes: ['OBSERVER_ONLY', 'REMOTE_EXECUTION_DISABLED'], executionPreview: 'No execution action. Observer guardrail review only.', actions: [], receipts: [], metadata: { title: 'Harmony Observer Guardrail Review', summary: 'Development-only legacy adapter guardrail proposal.', pluginType: 'harmonyVoting', pluginAddress: '0x8888888888888888888888888888888888888888', proposalIndex: '2' }, dataSource: 'dev-mock' },
+  ],
+  guards: [
+    { id: 'gov-guard-001', name: 'Constitution Compliance Guard', status: 'active', severity: 'constitutional', description: 'Blocks proposals that violate federal standards.', reasonCode: 'CONSTITUTION_REQUIRED', blocking: true },
+    { id: 'gov-guard-002', name: 'Treasury Risk Guard', status: 'active', severity: 'high', description: 'Requires treasury policy review before execution.', reasonCode: 'TREASURY_RISK_REVIEW', blocking: true },
+    { id: 'gov-guard-003', name: 'Plugin Compatibility Guard', status: 'active', severity: 'medium', description: 'Checks whether the proposal plugin is supported by the target chain.', reasonCode: 'PLUGIN_COMPATIBILITY', blocking: false },
+    { id: 'gov-guard-004', name: 'DAO Standing Guard', status: 'active', severity: 'medium', description: 'Flags DAOs without compliant constitutional standing.', reasonCode: 'DAO_STANDING_REVIEW', blocking: false },
+    { id: 'gov-guard-005', name: 'Execution Chain Guard', status: 'active', severity: 'high', description: 'Prevents execution on unapproved chains.', reasonCode: 'EXECUTION_CHAIN_REQUIRED', blocking: true },
+  ],
+};
