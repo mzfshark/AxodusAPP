@@ -1,6 +1,7 @@
 // src/pages/Settings.jsx
 import React from 'react';
 import "@/styles/Global.css";
+import { settingsMock } from '@/data/mock';
 
 const Settings = () => {
   return (
@@ -25,7 +26,7 @@ const Settings = () => {
               </div>
               <div className="text-xs font-medium text-outline mb-4">Tema</div>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-on-surface">Escuro</span>
+                <span className="text-3xl font-black text-on-surface">{settingsMock.appSettings.theme}</span>
                 <span className="text-sm font-bold text-secondary">padrão</span>
               </div>
               <div className="mt-4 flex items-center gap-1 text-[10px] text-secondary">
@@ -40,7 +41,7 @@ const Settings = () => {
               </div>
               <div className="text-xs font-medium text-outline mb-4">Notificações</div>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-on-surface">Ativadas</span>
+                <span className="text-3xl font-black text-on-surface">{settingsMock.appSettings.riskWarningsEnabled ? 'Ativadas' : 'Desativadas'}</span>
                 <span className="text-sm font-bold text-primary">Email</span>
               </div>
               <div className="mt-4 flex items-center gap-1 text-[10px] text-primary">

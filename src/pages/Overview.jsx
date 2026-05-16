@@ -1,12 +1,13 @@
 import React from "react";
 import "@/styles/Global.css";
+import { defiMock, ecosystemMock, governanceMock } from '@/data/mock';
 
 const Overview = () => {
   return (
     <main className="flex-1 overflow-y-auto bg-background p-8">
       <header className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Ecosystem Overview</h1>
-        <p className="text-on-surface-variant text-sm">Real-time observatory of your Axodus digital footprint.</p>
+        <p className="text-on-surface-variant text-sm">{ecosystemMock.overview.mockNotice}</p>
       </header>
       {/* 1. Financial Summary Bento Section */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -14,14 +15,14 @@ const Overview = () => {
           <div className="relative z-10 w-1/2">
             <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 block">Total Net Worth</span>
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-5xl font-extrabold tracking-tighter text-white">$142,850.32</span>
+              <span className="text-5xl font-extrabold tracking-tighter text-white">{defiMock.summary.treasuryValueMock}</span>
               <span className="text-green text-sm font-bold flex items-center">
                 <span className="material-symbols-outlined text-sm">trending_up</span> +5.24%
               </span>
             </div>
             <div className="flex gap-4 mt-8">
-              <button className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary hover:-translate-y-0.5 transition-transform">Deposit</button>
-              <button className="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-lg font-bold text-sm border-outline-variant/10 hover:bg-surface-bright transition-colors">Withdraw</button>
+              <button disabled className="bg-primary/40 text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary cursor-not-allowed">Deposit disabled</button>
+              <button disabled className="bg-surface-container-high text-on-surface/50 px-6 py-2.5 rounded-lg font-bold text-sm border-outline-variant/10 cursor-not-allowed">Withdraw disabled</button>
             </div>
           </div>
           <div className="w-1/2 h-full flex items-end">
@@ -195,7 +196,7 @@ const Overview = () => {
           <div className="space-y-6">
             <div className="p-4 bg-surface-container rounded-lg border-outline-variant/10">
               <div className="flex justify-between items-start mb-3">
-                <h4 className="text-sm font-bold text-on-surface">AX-104: Expand Mining in Norway</h4>
+                <h4 className="text-sm font-bold text-on-surface">{governanceMock.proposals[0].title}</h4>
                 <span className="px-2 py-1 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">CORE</span>
               </div>
               <div className="flex justify-between text-xs mb-2">

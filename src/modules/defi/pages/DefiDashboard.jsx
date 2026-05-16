@@ -1,26 +1,14 @@
 import { AlertTriangle, Banknote, BarChart3, Layers, ShieldCheck, WalletCards } from 'lucide-react';
+import { defiMock } from '@/data/mock';
 
 const treasuryMetrics = [
-  { label: 'Treasury visibility', value: '$0.00', detail: 'Awaiting indexed treasury source', icon: Banknote },
-  { label: 'Active allocations', value: '0', detail: 'No live allocation adapter connected', icon: Layers },
-  { label: 'Vault exposure', value: 'Read-only', detail: 'Execution disabled until governance guards are live', icon: WalletCards },
-  { label: 'Risk posture', value: 'Pending', detail: 'Risk registry not connected yet', icon: ShieldCheck },
+  { label: 'Treasury visibility', value: defiMock.summary.treasuryValueMock, detail: 'Mock value. Awaiting indexed treasury source.', icon: Banknote },
+  { label: 'Active allocations', value: String(defiMock.summary.activeAllocations), detail: 'Mock allocations. No live allocation adapter connected.', icon: Layers },
+  { label: 'Vault exposure', value: 'Read-only', detail: 'Execution disabled until governance guards are live.', icon: WalletCards },
+  { label: 'Risk posture', value: defiMock.summary.riskScore, detail: 'Mock risk score. Risk registry not connected yet.', icon: ShieldCheck },
 ];
 
-const vaults = [
-  {
-    name: 'Treasury Reserve',
-    status: 'Not connected',
-    network: 'Governance selected chain',
-    exposure: '0%',
-  },
-  {
-    name: 'Protocol Liquidity',
-    status: 'Not connected',
-    network: 'Governance selected chain',
-    exposure: '0%',
-  },
-];
+const vaults = defiMock.vaults;
 
 export default function DefiDashboard() {
   return (
@@ -37,7 +25,7 @@ export default function DefiDashboard() {
           </div>
           <div className="flex items-center gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-100">
             <AlertTriangle className="h-4 w-4 shrink-0" aria-hidden="true" />
-            Mock-free execution mode
+            Read-only mock mode
           </div>
         </div>
       </header>
@@ -81,8 +69,8 @@ export default function DefiDashboard() {
                 {vaults.map((vault) => (
                   <tr key={vault.name}>
                     <td className="px-4 py-4 font-semibold text-on-surface">{vault.name}</td>
-                    <td className="px-4 py-4 text-outline">{vault.network}</td>
-                    <td className="px-4 py-4 text-outline">{vault.exposure}</td>
+                    <td className="px-4 py-4 text-outline">{vault.chain}</td>
+                    <td className="px-4 py-4 text-outline">{vault.allocation}</td>
                     <td className="px-4 py-4">
                       <span className="rounded-full bg-surface-container px-2 py-1 text-xs font-semibold text-outline">
                         {vault.status}

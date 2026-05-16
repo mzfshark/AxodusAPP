@@ -1,4 +1,5 @@
 import React from 'react';
+import { miningMock } from '@/data/mock';
 
 const Mining = () => {
   return (
@@ -88,8 +89,8 @@ const Mining = () => {
                     <p className="text-xs text-outline">Est. $28.65</p>
                   </div>
                   <div className="flex items-center">
-                    <button className="w-full py-2 px-4 rounded-xl gradient-bg text-on-primary font-bold text-sm tracking-tight">
-                      Buy Hashpower
+                    <button disabled className="w-full py-2 px-4 rounded-xl gradient-bg text-on-primary font-bold text-sm tracking-tight disabled:cursor-not-allowed disabled:opacity-50">
+                      {miningMock.summary.governanceControlled ? 'Governance controlled' : 'Buy Hashpower'}
                     </button>
                   </div>
                 </div>
@@ -116,8 +117,8 @@ const Mining = () => {
                     <p className="text-xs text-outline">Net Reward</p>
                   </div>
                   <div className="flex items-center">
-                    <button className="w-full py-2 px-4 rounded-xl border-outline-variant/30 text-white font-bold text-sm tracking-tight hover:bg-surface-container-highest">
-                      Manage NFTs
+                    <button disabled className="w-full py-2 px-4 rounded-xl border-outline-variant/30 text-white font-bold text-sm tracking-tight hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-50">
+                      Governance controlled
                     </button>
                   </div>
                 </div>
@@ -144,8 +145,8 @@ const Mining = () => {
                     <p className="text-xs text-outline">Paid in BTC</p>
                   </div>
                   <div className="flex items-center">
-                    <button className="w-full py-2 px-4 rounded-xl border-outline-variant/30 text-white font-bold text-sm tracking-tight hover:bg-surface-container-highest">
-                      New Contract
+                    <button disabled className="w-full py-2 px-4 rounded-xl border-outline-variant/30 text-white font-bold text-sm tracking-tight hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-50">
+                      Contract disabled
                     </button>
                   </div>
                 </div>
