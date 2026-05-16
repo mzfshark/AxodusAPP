@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useWallet } from '@/hooks/useWallet';
-import { GovernanceStandingSummary } from '../components/GovernanceStanding';
 import GovernanceTransactionPreviewRow from '../components/GovernanceTransactionPreviewRow';
 import PermissionCheckList from '../components/PermissionCheckList';
+import ProposalExecutionActionsPanel from '../components/ProposalExecutionActionsPanel';
 import ProposalExecutionPanel from '../components/ProposalExecutionPanel';
 import ProposalExecutionReceiptsPanel from '../components/ProposalExecutionReceiptsPanel';
+import ProposalGovernanceContextPanel from '../components/ProposalGovernanceContextPanel';
 import ProposalOperationalSummary from '../components/ProposalOperationalSummary';
 import ProposalVotingPanel from '../components/ProposalVotingPanel';
-import RegistryGuardrailsPanel from '../components/RegistryGuardrailsPanel';
+import RecentWalletOperationsPanel from '../components/RecentWalletOperationsPanel';
 import TransactionAdapterStatePanel from '../components/TransactionAdapterStatePanel';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useProposalDetail } from '../hooks/useProposalDetail';
@@ -46,25 +47,6 @@ function LifecycleItem({ label, value, icon }) {
       </div>
     </div>
   );
-}
-
-function capabilityLabel(value) {
-  return value ? 'Enabled' : 'Unavailable';
-}
-
-function actionTarget(action) {
-  return action?.to ?? action?.target ?? action?.address ?? action?.contractAddress ?? 'Not indexed';
-}
-
-function actionLabel(action, index) {
-  return action?.name ?? action?.functionName ?? action?.method ?? `Action ${index + 1}`;
-}
-
-function formatHistoryTime(value) {
-  if (!value) return 'Unknown time';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Unknown time';
-  return date.toLocaleString();
 }
 
 function GovernanceTransactionConfirmation({ operation, proposal, selectedVoteOption, onCancel, onConfirm, isSubmitting }) {
@@ -315,109 +297,11 @@ export default function ProposalDetail() {
         receiptTracking={receiptTracking}
       />
 
-      {operationHistory.entries.length > 0 ? (
-        <section className="rounded-lg border border-white/5 bg-surface-container-highest">
-          <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-lg font-bold text-on-surface">Recent Wallet Operations</h2>
-              <p className="mt-1 text-xs text-on-surface-variant">
-                Local transaction memory for this wallet and proposal while the backend indexer catches up.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={operationHistory.clearEntries}
-              className="inline-flex w-fit items-center justify-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs font-black text-slate-300 hover:border-cyan-300/40 hover:text-cyan-100"
-            >
-              <span className="material-symbols-outlined text-[16px]">delete</span>
-              Clear local history
-            </button>
-          </div>
-          <div className="divide-y divide-white/5">
-            {operationHistory.entries.map((entry) => (
-              <article key={entry.id} className="px-5 py-4">
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-md border border-cyan-300/20 bg-cyan-950/20 px-2 py-1 text-[11px] font-black uppercase text-cyan-100">
-                        {entry.action}
-                      </span>
-                      <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
-                        receipt: {entry.receiptStatus}
-                      </span>
-                      <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
-                        indexer: {entry.indexerStatus}
-                      </span>
-                    </div>
-                    <p className="mt-2 break-words text-xs text-on-surface-variant">{entry.hash}</p>
-                    <p className="mt-2 text-xs text-on-surface-variant">{entry.message}</p>
-                  </div>
-                  <div className="shrink-0 text-xs text-on-surface-variant lg:text-right">
-                    <p>{entry.network ?? 'Unknown network'}</p>
-                    <p className="mt-1">chain {entry.chainId ?? 'unknown'}</p>
-                    <p className="mt-1">{formatHistoryTime(entry.updatedAt)}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <RecentWalletOperationsPanel operationHistory={operationHistory} />
 
       <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-lg border border-white/5 bg-surface-container-highest">
-          <div className="border-b border-white/5 px-5 py-4">
-            <h2 className="text-lg font-bold text-on-surface">Execution Actions</h2>
-            <p className="mt-1 text-xs text-on-surface-variant">
-              Remote execution details will be attached here as the multichain adapter starts indexing receipts.
-            </p>
-          </div>
-
-          {decodedActions.length > 0 ? (
-            <div className="divide-y divide-white/5">
-              {decodedActions.map((action, index) => (
-                <article key={`${actionTarget(action)}-${index}`} className="px-5 py-4">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                    <div>
-                      <div className="text-sm font-bold text-on-surface">{actionLabel(action, index)}</div>
-                      <div className="mt-1 break-words text-xs text-on-surface-variant">{actionTarget(action)}</div>
-                    </div>
-                    <span className="w-fit rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
-                      {action?.value ?? '0'} value
-                    </span>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="px-5 py-10 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-surface-container-high text-cyan-200">
-                <span className="material-symbols-outlined">receipt_long</span>
-              </div>
-              <h3 className="mt-4 text-base font-bold text-on-surface">No actions indexed</h3>
-              <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-on-surface-variant">
-                This proposal may be vote-only, or the backend has not decoded execution actions yet.
-              </p>
-            </div>
-          )}
-        </div>
-
-        <aside className="rounded-lg border border-white/5 bg-surface-container-highest">
-          <div className="border-b border-white/5 px-5 py-4">
-            <h2 className="text-lg font-bold text-on-surface">Governance Context</h2>
-            <p className="mt-1 text-xs text-on-surface-variant">Registry-rendered governance standing and capability view for this proposal.</p>
-          </div>
-          <div className="space-y-3 p-5">
-            <GovernanceStandingSummary chain={chain} />
-            <DetailField label="Chain role" value={chain?.roles?.join(', ') ?? 'Not registered'} />
-            <DetailField label="Governance" value={capabilityLabel(chain?.capabilities?.governance)} />
-            <DetailField label="Voting" value={capabilityLabel(chain?.capabilities?.voting)} />
-            <DetailField label="Remote execution" value={capabilityLabel(chain?.capabilities?.remoteExecution)} />
-            <DetailField label="Local governance models" value={chain?.capabilities?.localGovernanceModels?.join(', ') ?? 'Not indexed'} />
-            <DetailField label="Indexer reason code" value={chain?.indexingStatus?.reasonCode ?? 'No active guardrail reason'} />
-            <RegistryGuardrailsPanel reasons={registryGuardrailReasons} />
-          </div>
-        </aside>
+        <ProposalExecutionActionsPanel actions={decodedActions} />
+        <ProposalGovernanceContextPanel chain={chain} registryGuardrailReasons={registryGuardrailReasons} />
       </section>
 
       <GovernanceTransactionConfirmation
