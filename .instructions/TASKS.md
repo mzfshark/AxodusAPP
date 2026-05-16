@@ -45,6 +45,7 @@
 - Create Governance DAO context selector — in progress: console models Axodus Constitutional Governance plus Local Governance contexts for indexed sub-DAOs
 - Create DAO explorer — in progress: console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins and proposal readiness
 - Create proposal list shell — in progress: console shows real indexed proposals when available, links rows into proposal detail, and keeps an explicit empty state otherwise
+- Add governance dev proposal fixtures — in progress: development-only mock proposals allow proposal detail, guardrail observability and transaction preview testing before live proposals are indexed
 - Create proposal list
 - Create proposal detail page — in progress: protected `/governance/proposals/:proposalId` reads proposal detail/actions from the governance backend
 - Create governance transaction adapter — in progress: frontend isolates vote/execute preparation by plugin type and chain capability, with TokenVoting/Multisig ABI calldata binding, guarded wagmi write submission, and wallet network switching

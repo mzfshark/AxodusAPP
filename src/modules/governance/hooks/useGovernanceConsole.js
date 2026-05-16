@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchGovernanceDaos, fetchGovernancePlugins, fetchGovernanceProposals, getFederalDaoRecord } from '../api/governanceClient';
+import { getMockGovernancePlugins, getMockGovernanceProposals, shouldUseGovernanceMocks } from '../api/mockGovernanceData';
 import { useWallet } from '@/hooks/useWallet';
 import { collectGovernanceGuardrailReasons, getConstitutionalStanding } from '../utils/governanceState';
 
@@ -67,8 +68,8 @@ export function useGovernanceConsole(chains) {
 
     async function loadDaoState() {
       if (!selectedDao || selectedDao.isVirtual) {
-        setProposals([]);
-        setPlugins([]);
+        setProposals(shouldUseGovernanceMocks() ? getMockGovernanceProposals() : []);
+        setPlugins(shouldUseGovernanceMocks() ? getMockGovernancePlugins() : []);
         return;
       }
 
@@ -82,8 +83,8 @@ export function useGovernanceConsole(chains) {
         setPlugins(Array.isArray(pluginResult) ? pluginResult : pluginResult?.data ?? []);
       } catch {
         if (controller.signal.aborted) return;
-        setProposals([]);
-        setPlugins([]);
+        setProposals(shouldUseGovernanceMocks() ? getMockGovernanceProposals() : []);
+        setPlugins(shouldUseGovernanceMocks() ? getMockGovernancePlugins() : []);
       }
     }
 

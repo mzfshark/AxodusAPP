@@ -36,6 +36,11 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
                 <span className="w-fit rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
                   {getProposalStatus(proposal)}
                 </span>
+                {proposal.dataSource === 'dev-mock' ? (
+                  <span className="w-fit rounded-md border border-cyan-300/20 bg-cyan-950/20 px-2 py-1 text-[11px] font-black uppercase text-cyan-100">
+                    Dev mock
+                  </span>
+                ) : null}
               </div>
             );
 
