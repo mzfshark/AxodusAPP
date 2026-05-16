@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
+import ProposalCreateDraftModal from './ProposalCreateDraftModal';
 import {
   formatProposalDate,
   getProposalDescription,
@@ -39,9 +40,10 @@ function ProposalMeta({ label, value }) {
   );
 }
 
-export default function ProposalList({ proposals, selectedDao, canCreateProposal }) {
+export default function ProposalList({ proposals, selectedDao, selectedChain, plugins = [], walletAddress, canCreateProposal }) {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const statusOptions = useMemo(() => {
     const statuses = Array.from(new Set(proposals.map((proposal) => getProposalStatus(proposal)).filter(Boolean)));
@@ -71,6 +73,7 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
         <button
           type="button"
           disabled={!canCreateProposal}
+          onClick={() => setCreateModalOpen(true)}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-black text-on-primary disabled:cursor-not-allowed disabled:bg-surface-container-high disabled:text-slate-500"
         >
           <span className="material-symbols-outlined text-[18px]">add_circle</span>
@@ -180,6 +183,16 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
           </p>
         </div>
       )}
+
+      <ProposalCreateDraftModal
+        open={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        selectedDao={selectedDao}
+        selectedChain={selectedChain}
+        plugins={plugins}
+        walletAddress={walletAddress}
+        canCreateProposal={canCreateProposal}
+      />
     </section>
   );
 }

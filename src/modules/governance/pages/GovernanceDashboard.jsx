@@ -4,6 +4,7 @@ import DaoContextSelector from '../components/DaoContextSelector';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
+import { shouldUseGovernanceMocks } from '../api/mockGovernanceData';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 import { acsMock } from '@/data/mock';
@@ -172,6 +173,84 @@ function ObservabilityPanel({ summary }) {
   );
 }
 
+function readinessTone(status) {
+  if (status === 'ready') return 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100';
+  if (status === 'dev') return 'border-cyan-300/20 bg-cyan-950/20 text-cyan-100';
+  if (status === 'waiting') return 'border-amber-300/20 bg-amber-950/20 text-amber-100';
+  return 'border-white/10 bg-surface-container-high text-slate-300';
+}
+
+function GovernanceReadinessPanel({ registryStatus, registrySource, selectedDao, selectedChain, proposals, plugins, canCreateProposal }) {
+  const mockMode = shouldUseGovernanceMocks();
+  const items = [
+    {
+      label: 'Registry source',
+      value: registryStatus === 'success' ? 'Backend synced' : registrySource === 'fallback' ? 'Fallback snapshot' : 'Loading',
+      detail: registryStatus === 'success' ? 'Chain and guardrail metadata are coming from the Governance API.' : 'Using local renderable state until backend data is reachable.',
+      status: registryStatus === 'success' ? 'ready' : 'waiting',
+      icon: 'dns',
+    },
+    {
+      label: 'Selected governance context',
+      value: selectedDao?.name ?? 'No DAO selected',
+      detail: selectedChain?.name ? `${selectedChain.name} · ${selectedDao?.governanceStatus ?? 'under-review'}` : 'No registered chain context selected.',
+      status: selectedDao && selectedChain ? 'ready' : 'waiting',
+      icon: 'account_tree',
+    },
+    {
+      label: 'Proposal data',
+      value: proposals.length ? `${proposals.length} proposal${proposals.length === 1 ? '' : 's'}` : 'No proposals indexed',
+      detail: mockMode ? 'Development fixtures are enabled for proposal UI validation.' : 'Proposal count reflects backend/indexer payloads.',
+      status: proposals.length ? (mockMode ? 'dev' : 'ready') : 'waiting',
+      icon: 'ballot',
+    },
+    {
+      label: 'Plugin data',
+      value: plugins.length ? `${plugins.length} plugin${plugins.length === 1 ? '' : 's'}` : 'No plugins indexed',
+      detail: mockMode ? 'Development plugin fixtures are enabled.' : 'Plugin capabilities are rendered from governance data sources.',
+      status: plugins.length ? (mockMode ? 'dev' : 'ready') : 'waiting',
+      icon: 'extension',
+    },
+    {
+      label: 'Proposal creation',
+      value: canCreateProposal ? 'Wallet-ready' : 'Read-only',
+      detail: canCreateProposal
+        ? 'Selected context has enough observed state for the create-proposal entry point.'
+        : 'Creation remains hidden until wallet, DAO, chain and plugin state are present.',
+      status: canCreateProposal ? 'ready' : 'waiting',
+      icon: 'edit_note',
+    },
+  ];
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Operations Readiness</h2>
+          <p className="mt-1 text-xs leading-5 text-on-surface-variant">
+            Rendered readiness of the current Governance Operations Center inputs. This panel reports observed frontend data availability only.
+          </p>
+        </div>
+        <span className="rounded-md border border-white/10 px-3 py-1 text-xs font-bold text-slate-300">
+          {mockMode ? 'dev fixtures enabled' : 'backend/indexer mode'}
+        </span>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-2 xl:grid-cols-5">
+        {items.map((item) => (
+          <div key={item.label} className={`rounded-lg border p-4 ${readinessTone(item.status)}`}>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="text-[11px] font-black uppercase opacity-80">{item.label}</span>
+              <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
+            </div>
+            <div className="text-sm font-black">{item.value}</div>
+            <p className="mt-2 text-xs leading-5 opacity-80">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ConstitutionalGuardrailsPanel({
   reasons = [],
   title = 'Constitutional Guardrails',
@@ -269,6 +348,16 @@ export default function GovernanceDashboard() {
 
         <ObservabilityPanel summary={summary} />
 
+        <GovernanceReadinessPanel
+          registryStatus={status}
+          registrySource={source}
+          selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+          proposals={governanceConsole.proposals}
+          plugins={governanceConsole.plugins}
+          canCreateProposal={governanceConsole.canCreateProposal}
+        />
+
         <ConstitutionalGuardrailsPanel reasons={summary.guardrailReasons} />
 
         <ConstitutionalGuardrailsPanel
@@ -305,6 +394,9 @@ export default function GovernanceDashboard() {
         <ProposalList
           proposals={governanceConsole.proposals}
           selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+          plugins={governanceConsole.plugins}
+          walletAddress={governanceConsole.walletAddress}
           canCreateProposal={governanceConsole.canCreateProposal}
         />
 
