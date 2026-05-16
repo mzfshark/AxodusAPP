@@ -15,6 +15,21 @@ export function getProposalDescription(proposal) {
   return proposal?.summary ?? proposal?.description ?? proposal?.metadata?.summary ?? proposal?.metadata?.description ?? 'No summary available.';
 }
 
+export function getProposalNetwork(proposal) {
+  return proposal?.network ?? proposal?.chainSlug ?? proposal?.chain ?? proposal?.metadata?.network ?? 'Not indexed';
+}
+
+export function getProposalPluginType(proposal) {
+  return (
+    proposal?.pluginType ??
+    proposal?.interfaceType ??
+    proposal?.plugin?.interfaceType ??
+    proposal?.plugin?.pluginType ??
+    proposal?.metadata?.pluginType ??
+    'Not indexed'
+  );
+}
+
 export function getProposalActions(proposal, decodedActions) {
   if (Array.isArray(decodedActions?.actions)) return decodedActions.actions;
   if (Array.isArray(decodedActions)) return decodedActions;
@@ -85,4 +100,14 @@ export function compactAddress(value) {
   if (!value || typeof value !== 'string') return 'Not indexed';
   if (value.length <= 14) return value;
   return `${value.slice(0, 6)}...${value.slice(-4)}`;
+}
+
+export function formatOperationTarget(operation) {
+  if (!operation?.request) return 'No transaction request prepared.';
+  return `${operation.request.functionName} on ${compactAddress(operation.request.address)} · chain ${operation.request.chainId}`;
+}
+
+export function formatReceiptValue(value) {
+  if (value === undefined || value === null) return 'Not available';
+  return typeof value === 'bigint' ? value.toString() : String(value);
 }
