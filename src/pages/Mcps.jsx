@@ -1,101 +1,328 @@
 import React from 'react';
-import { CircleSlash2, Cpu, Database, TerminalSquare, Workflow } from 'lucide-react';
-import { mcpMock } from '../mock/devEcosystemData';
+import { mcpsMock } from '@/data/mock';
 
-const statusClasses = {
-  Online: 'text-secondary',
-  Warning: 'text-tertiary',
-  Offline: 'text-error',
+const Mcps = () => {
+  return (
+    <main className="flex-1 overflow-y-auto bg-background">
+      <div className="p-8 max-w-7xl mx-auto space-y-8">
+        
+{/*  Page Header  */}
+<div className="flex items-end gap-3 mb-6">
+  <h1 className="text-3xl font-bold tracking-tight text-on-surface">MCP Servers</h1>
+  <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">Monitoring</span>
+  <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">{mcpsMock.summary.activeMcpServices}/{mcpsMock.summary.totalMcpServices} active</span>
+</div>
+{/*  Server Grid  */}
+<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+{/*  Morpheus Server  */}
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
+<div className="flex justify-between items-start mb-6">
+<div className="flex items-center gap-3">
+<div className="p-2 rounded-lg bg-secondary/10 text-secondary">
+<span className="material-symbols-outlined">hub</span>
+</div>
+<div>
+<h3 className="font-bold text-on-surface">Morpheus</h3>
+<span className="text-[10px] mono text-outline">ID: AX-001-MRP</span>
+</div>
+</div>
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary  text-secondary text-[10px] font-bold uppercase tracking-wider">
+<span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span> Online
+                   </span>
+</div>
+<div className="grid grid-cols-2 gap-4 mb-6">
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
+<p className="text-lg font-bold text-on-surface">99.9%</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Latency</p>
+<p className="text-lg font-bold text-on-surface">12ms</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Load</p>
+<p className="text-lg font-bold text-on-surface">42%</p>
+</div>
+<div className="flex items-end justify-end">
+<div className="h-8 w-20 flex items-end gap-0.5">
+<div className="w-1 bg-secondary  h-2"></div>
+<div className="w-1 bg-secondary h-4"></div>
+<div className="w-1 bg-secondary h-3"></div>
+<div className="w-1 bg-secondary h-6 shadow-[0_0_8px_#41e4b8]"></div>
+<div className="w-1 bg-secondary h-4"></div>
+<div className="w-1 bg-secondary h-5"></div>
+</div>
+</div>
+</div>
+<div className="flex gap-2">
+<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
+<button className="px-3 bg-surface-container-highest hover:bg-error  hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
+<span className="material-symbols-outlined text-sm">stop</span>
+</button>
+</div>
+</div>
+{/*  Agent Smith Server  */}
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
+<div className="flex justify-between items-start mb-6">
+<div className="flex items-center gap-3">
+<div className="p-2 rounded-lg bg-secondary/10 text-secondary">
+<span className="material-symbols-outlined">security</span>
+</div>
+<div>
+<h3 className="font-bold text-on-surface">Agent Smith</h3>
+<span className="text-[10px] mono text-outline">ID: AX-002-ASM</span>
+</div>
+</div>
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-secondary  text-secondary text-[10px] font-bold uppercase tracking-wider">
+<span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse"></span> Online
+                   </span>
+</div>
+<div className="grid grid-cols-2 gap-4 mb-6">
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
+<p className="text-lg font-bold text-on-surface">100%</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Latency</p>
+<p className="text-lg font-bold text-on-surface">8ms</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Load</p>
+<p className="text-lg font-bold text-on-surface">18%</p>
+</div>
+<div className="flex items-end justify-end">
+<div className="h-8 w-20 flex items-end gap-0.5">
+<div className="w-1 bg-secondary  h-1"></div>
+<div className="w-1 bg-secondary  h-2"></div>
+<div className="w-1 bg-secondary h-1"></div>
+<div className="w-1 bg-secondary h-2"></div>
+<div className="w-1 bg-secondary h-1"></div>
+<div className="w-1 bg-secondary h-2"></div>
+</div>
+</div>
+</div>
+<div className="flex gap-2">
+<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
+<button className="px-3 bg-surface-container-highest hover:bg-error  hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
+<span className="material-symbols-outlined text-sm">stop</span>
+</button>
+</div>
+</div>
+{/*  Trading Server  */}
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
+<div className="flex justify-between items-start mb-6">
+<div className="flex items-center gap-3">
+<div className="p-2 rounded-lg bg-tertiary/10 text-tertiary">
+<span className="material-symbols-outlined">trending_up</span>
+</div>
+<div>
+<h3 className="font-bold text-on-surface">Trading</h3>
+<span className="text-[10px] mono text-outline">ID: AX-003-TRD</span>
+</div>
+</div>
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary  text-tertiary text-[10px] font-bold uppercase tracking-wider">
+<span className="h-1.5 w-1.5 rounded-full bg-tertiary"></span> Warning
+                   </span>
+</div>
+<div className="grid grid-cols-2 gap-4 mb-6">
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
+<p className="text-lg font-bold text-on-surface">98.4%</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Latency</p>
+<p className="text-lg font-bold text-on-surface">45ms</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Load</p>
+<p className="text-lg font-bold text-on-surface">89%</p>
+</div>
+<div className="flex items-end justify-end">
+<div className="h-8 w-20 flex items-end gap-0.5">
+<div className="w-1 bg-tertiary h-4"></div>
+<div className="w-1 bg-tertiary h-6"></div>
+<div className="w-1 bg-tertiary h-8 shadow-[0_0_8px_#ffb783]"></div>
+<div className="w-1 bg-tertiary h-7"></div>
+<div className="w-1 bg-tertiary h-5"></div>
+<div className="w-1 bg-tertiary h-6"></div>
+</div>
+</div>
+</div>
+<div className="flex gap-2">
+<button className="flex-1 bg-surface-container-highest hover:bg-surface-bright text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">Restart</button>
+<button className="px-3 bg-surface-container-highest hover:bg-error  hover:text-error text-xs font-bold py-2 rounded-lg transition-colors border-outline-variant/10">
+<span className="material-symbols-outlined text-sm">stop</span>
+</button>
+</div>
+</div>
+{/*  RedHat Server  */}
+<div className="bg-surface-container-low rounded-xl p-5 ghost-border group hover:bg-surface-container transition-all duration-300">
+<div className="flex justify-between items-start mb-6">
+<div className="flex items-center gap-3">
+<div className="p-2 rounded-lg bg-error/10 text-error">
+<span className="material-symbols-outlined">terminal</span>
+</div>
+<div>
+<h3 className="font-bold text-on-surface">RedHat</h3>
+<span className="text-[10px] mono text-outline">ID: AX-004-RHT</span>
+</div>
+</div>
+<span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error  text-error text-[10px] font-bold uppercase tracking-wider">
+<span className="h-1.5 w-1.5 rounded-full bg-error"></span> Offline
+                   </span>
+</div>
+<div className="grid grid-cols-2 gap-4 mb-6 opacity-50">
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Uptime</p>
+<p className="text-lg font-bold text-on-surface">0%</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Latency</p>
+<p className="text-lg font-bold text-on-surface">---</p>
+</div>
+<div>
+<p className="text-[10px] text-outline uppercase mb-1">Load</p>
+<p className="text-lg font-bold text-on-surface">0%</p>
+</div>
+<div className="flex items-end justify-end">
+<div className="h-1 w-20 bg-outline-variant  rounded-full"></div>
+</div>
+</div>
+<div className="flex gap-2">
+<button className="flex-1 bg-primary text-on-primary hover:bg-primary-container text-xs font-bold py-2 rounded-lg transition-colors shadow-[0_0_15px_rgba(192,193,255,0.3)]">Start Server</button>
+</div>
+</div>
+</div>
+{/*  Dashboard Bottom Section (Bento)  */}
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+{/*  Terminal Feed  */}
+<div className="lg:col-span-2 bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border-outline-variant/10">
+<div className="bg-surface-container-low px-4 py-3 flex items-center justify-between">
+<div className="flex items-center gap-2">
+<span className="material-symbols-outlined text-sm text-outline">terminal</span>
+<span className="text-[10px] font-bold uppercase tracking-widest text-outline">Live System Logs</span>
+</div>
+<div className="flex gap-1.5">
+<span className="h-2 w-2 rounded-full bg-error"></span>
+<span className="h-2 w-2 rounded-full bg-tertiary"></span>
+<span className="h-2 w-2 rounded-full bg-secondary"></span>
+</div>
+</div>
+<div className="p-4 mono text-xs leading-relaxed h-80 overflow-y-auto custom-scrollbar bg-[#060e20]">
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:02:11]</span>
+<span className="text-secondary">INFO</span>
+<span className="text-on-surface-variant">Morpheus connection handshake established. Protocol v4.2.1</span>
+</div>
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:02:15]</span>
+<span className="text-secondary">INFO</span>
+<span className="text-on-surface-variant">Agent Smith: Synchronizing biometric identity database...</span>
+</div>
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:02:22]</span>
+<span className="text-tertiary">WARN</span>
+<span className="text-on-surface-variant">Trading: High memory pressure detected in sub-process [3391].</span>
+</div>
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:03:01]</span>
+<span className="text-error">CRIT</span>
+<span className="text-on-surface-variant">RedHat: Heartbeat lost. Attempting automated recovery...</span>
+</div>
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:03:05]</span>
+<span className="text-error">FAIL</span>
+<span className="text-on-surface-variant">RedHat: Recovery failed. Manual intervention required. Node ID AX-004-RHT.</span>
+</div>
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:04:12]</span>
+<span className="text-secondary">INFO</span>
+<span className="text-on-surface-variant">Security patch 'ECHO-7' applied to all active nodes.</span>
+</div>
+<div className="flex gap-4 mb-2">
+<span className="text-outline whitespace-nowrap">[14:04:45]</span>
+<span className="text-secondary">INFO</span>
+<span className="text-on-surface-variant">Optimizing network routing tables for low-latency cluster.</span>
+</div>
+<div className="flex gap-4 mb-1">
+<span className="text-outline whitespace-nowrap">[14:05:00]</span>
+<span className="text-primary animate-pulse">&gt;</span>
+<span className="text-primary font-bold">System scanning... Ready for commands.</span>
+</div>
+</div>
+<div className="p-2 bg-surface-container-low border-t border-outline-variant/10 flex items-center">
+<span className="mono text-primary text-xs px-2">$</span>
+<input className="bg-transparent border-none focus:ring-0 text-xs mono text-on-surface w-full p-1" placeholder="Enter command..." type="text"/>
+</div>
+</div>
+{/*  Health Trends  */}
+<div className="bg-surface-container-low rounded-xl p-6 border-outline-variant/10 flex flex-col justify-between">
+<div>
+<h3 className="text-lg font-bold text-white mb-6">Cluster Health</h3>
+<div className="space-y-6">
+{/*  CPU Usage  */}
+<div>
+<div className="flex justify-between items-center mb-2">
+<span className="text-xs font-medium text-on-surface-variant">Global CPU Usage</span>
+<span className="text-xs mono text-secondary">31.4%</span>
+</div>
+<div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div className="h-full bg-secondary w-[31%]" style={{"boxShadow":"0 0 10px rgba(65, 228, 184, 0.5)"}}></div>
+</div>
+<div className="mt-2 flex justify-between">
+<span className="text-[9px] text-outline">24h MIN: 12%</span>
+<span className="text-[9px] text-outline">24h MAX: 92%</span>
+</div>
+</div>
+{/*  Memory Usage  */}
+<div>
+<div className="flex justify-between items-center mb-2">
+<span className="text-xs font-medium text-on-surface-variant">Global RAM Allocation</span>
+<span className="text-xs mono text-tertiary">78.2%</span>
+</div>
+<div className="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div className="h-full bg-tertiary w-[78%]" style={{"boxShadow":"0 0 10px rgba(255, 183, 131, 0.5)"}}></div>
+</div>
+<div className="mt-2 flex justify-between">
+<span className="text-[9px] text-outline">TOTAL: 1.2TB</span>
+<span className="text-[9px] text-outline">FREE: 260GB</span>
+</div>
+</div>
+{/*  Network IO  */}
+<div>
+<div className="flex justify-between items-center mb-2">
+<span className="text-xs font-medium text-on-surface-variant">Network Throughput</span>
+<span className="text-xs mono text-primary">1.2 GB/s</span>
+</div>
+<div className="h-12 w-full flex items-end gap-1 overflow-hidden">
+{/*  Simple Sparkline Representation  */}
+<div className="flex-1 bg-primary  h-4 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-8 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-6 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-10 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-12 rounded-t-sm shadow-[0_0_10px_#c0c1ff]"></div>
+<div className="flex-1 bg-primary h-10 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-6 rounded-t-sm"></div>
+<div className="flex-1 bg-primary  h-4 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-5 rounded-t-sm"></div>
+<div className="flex-1 bg-primary h-8 rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<div className="mt-6 pt-6 border-t border-outline-variant/10">
+<div className="flex items-center gap-3">
+<span className="material-symbols-outlined text-outline">info</span>
+<p className="text-[10px] text-outline leading-tight">Last full cluster synchronization completed at 14:00:00 UTC. No anomalies detected in Morpheus core.</p>
+</div>
+</div>
+</div>
+</div>
+
+     </div>
+   </main>
+ );
 };
 
-export default function Mcps() {
-  return (
-    <main className="flex-1 overflow-y-auto bg-background p-8">
-      <header className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">MCP Servers</span>
-          <h1 className="mt-2 text-4xl font-extrabold tracking-tighter text-on-surface">Monitoring</h1>
-          <p className="mt-2 max-w-3xl text-sm text-outline">Mock observability data for the MCP nucleus in dev.</p>
-        </div>
-        <div className="rounded-lg border border-white/10 bg-surface-container-low px-4 py-3 text-sm text-outline">
-          Command stream is local only
-        </div>
-      </header>
 
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {mcpMock.servers.map((server) => (
-          <article key={server.id} className="rounded-xl border border-white/10 bg-surface-container-low p-5">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="font-bold text-on-surface">{server.name}</p>
-                <p className="mt-1 text-xs font-mono text-outline">{server.id}</p>
-              </div>
-              {server.status === 'Offline' ? (
-                <CircleSlash2 className="h-5 w-5 text-error" aria-hidden="true" />
-              ) : (
-                <Cpu className={`h-5 w-5 ${statusClasses[server.status] ?? 'text-outline'}`} aria-hidden="true" />
-              )}
-            </div>
-            <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-outline">Uptime</p>
-                <p className="mt-1 font-bold text-on-surface">{server.uptime}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-outline">Latency</p>
-                <p className="mt-1 font-bold text-on-surface">{server.latency}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-outline">Load</p>
-                <p className="mt-1 font-bold text-on-surface">{server.load}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-outline">Status</p>
-                <p className={`mt-1 font-bold ${statusClasses[server.status] ?? 'text-outline'}`}>{server.status}</p>
-              </div>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
-        <article className="xl:col-span-8 rounded-xl border border-white/10 bg-surface-container-low p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">System logs</h2>
-              <p className="mt-1 text-sm text-outline">Synthetic event feed.</p>
-            </div>
-            <TerminalSquare className="h-5 w-5 text-outline" aria-hidden="true" />
-          </div>
-          <div className="mt-5 space-y-3 font-mono text-xs">
-            {mcpMock.logs.map((line) => (
-              <div key={line} className="rounded-lg border border-white/10 bg-surface-container p-4 text-outline">
-                {line}
-              </div>
-            ))}
-          </div>
-        </article>
-
-        <article className="xl:col-span-4 rounded-xl border border-white/10 bg-surface-container-low p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">Command palette</h2>
-              <p className="mt-1 text-sm text-outline">Mock commands only.</p>
-            </div>
-            <Workflow className="h-5 w-5 text-outline" aria-hidden="true" />
-          </div>
-          <div className="mt-5 space-y-3">
-            {mcpMock.commands.map((command) => (
-              <div key={command} className="rounded-lg border border-white/10 bg-surface-container p-4 text-sm text-on-surface">
-                {command}
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 rounded-lg border border-white/10 bg-surface-container p-4">
-            <Database className="h-5 w-5 text-primary" aria-hidden="true" />
-          </div>
-        </article>
-      </section>
-    </main>
-  );
-}
+export default Mcps;

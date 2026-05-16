@@ -1,136 +1,225 @@
-import React from 'react';
-import { ArrowUpRight, BriefcaseBusiness, FileText, Gauge, Rocket, ShieldCheck } from 'lucide-react';
-import { businessMock } from '../mock/devEcosystemData';
+// src/pages/AccountPage.jsx
+import React from "react";
+import "@/styles/Global.css";
 
-export default function Business() {
+export default function AccountPage() {
   return (
-    <main className="flex-1 overflow-y-auto bg-background p-8">
-      <header className="mb-8 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Business</span>
-          <h1 className="mt-2 text-4xl font-extrabold tracking-tighter text-on-surface">Operating Snapshot</h1>
-          <p className="mt-2 max-w-3xl text-sm text-outline">Mock business telemetry for the Axodus dev environment.</p>
-        </div>
-        <div className="rounded-lg border border-white/10 bg-surface-container-low px-4 py-3 text-sm text-outline">
-          Read-only module
-        </div>
-      </header>
-
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {businessMock.metrics.map((metric) => (
-          <article key={metric.label} className="rounded-xl border border-white/10 bg-surface-container-low p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-outline">{metric.label}</p>
-            <div className="mt-3 flex items-end justify-between gap-4">
-              <p className="text-3xl font-extrabold text-on-surface">{metric.value}</p>
-              <ArrowUpRight className="h-5 w-5 text-secondary" aria-hidden="true" />
-            </div>
-            <p className="mt-2 text-sm text-outline">{metric.trend}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
-        <article className="xl:col-span-7 rounded-xl border border-white/10 bg-surface-container-low p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">API performance</h2>
-              <p className="mt-1 text-sm text-outline">Synthetic business metrics for development.</p>
-            </div>
-            <Gauge className="h-5 w-5 text-outline" aria-hidden="true" />
+    <main className="flex-1 overflow-y-auto bg-background">
+      <div className="p-8 max-w-7xl mx-auto space-y-8">
+        {/* Hero Metrics: Ecosystem Growth */}
+        <section className="">
+          <div className="flex items-end gap-3 mb-6">
+            <h1 className="text-3xl font-bold tracking-tight text-on-surface">Ecosystem Growth</h1>
+            <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">Observatory</span>
           </div>
-          <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {businessMock.api.map((item) => (
-              <div key={item.label} className="rounded-lg border border-white/10 bg-surface-container p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-outline">{item.label}</p>
-                <p className="mt-2 text-2xl font-bold text-on-surface">{item.value}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Metric Card 1 */}
+            <div className="bg-surface-container-low p-6 rounded-xl ghost-border relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span className="material-symbols-outlined text-6xl">groups</span>
               </div>
-            ))}
-          </div>
-          <div className="mt-6 grid h-32 grid-cols-10 gap-1">
-            {Array.from({ length: 10 }).map((_, index) => (
-              <div
-                key={index}
-                className="rounded-t-sm bg-primary/70"
-                style={{ height: `${35 + ((index * 13) % 60)}%` }}
-              />
-            ))}
-          </div>
-        </article>
-
-        <aside className="xl:col-span-5 rounded-xl border border-white/10 bg-surface-container-low p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">Governance ops</h2>
-              <p className="mt-1 text-sm text-outline">Dev grants and delivery logs.</p>
+              <p className="text-sm text-outline font-medium mb-1">Active Developers</p>
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-4xl font-extrabold tracking-tighter text-on-surface">1,402</h2>
+                <span className="text-secondary text-sm font-bold flex items-center">+12% <span className="material-symbols-outlined text-xs">arrow_upward</span></span>
+              </div>
+              <div className="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div className="h-full bg-secondary w-3/4"></div>
+              </div>
             </div>
-            <ShieldCheck className="h-5 w-5 text-outline" aria-hidden="true" />
+            {/* Metric Card 2 */}
+            <div className="bg-surface-container-low p-6 rounded-xl ghost-border relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span className="material-symbols-outlined text-6xl">rocket_launch</span>
+              </div>
+              <p className="text-sm text-outline font-medium mb-1">New Projects</p>
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-4xl font-extrabold tracking-tighter text-on-surface">84</h2>
+                <span className="text-secondary text-sm font-bold flex items-center">+5 <span className="material-symbols-outlined text-xs">arrow_upward</span></span>
+              </div>
+              <div className="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div className="h-full bg-primary w-1/2"></div>
+              </div>
+            </div>
+            {/* Metric Card 3 */}
+            <div className="bg-surface-container-low p-6 rounded-xl ghost-border relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span className="material-symbols-outlined text-6xl">terminal</span>
+              </div>
+              <p className="text-sm text-outline font-medium mb-1">GitHub Activity</p>
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-4xl font-extrabold tracking-tighter text-on-surface">12.8k</h2>
+                <span className="text-tertiary text-sm font-bold flex items-center">-2% <span className="material-symbols-outlined text-xs">arrow_downward</span></span>
+              </div>
+              <div className="mt-4 h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                <div className="h-full bg-tertiary w-2/3"></div>
+              </div>
+            </div>
           </div>
-          <div className="mt-5 space-y-4">
-            {businessMock.grants.map((grant) => (
-              <div key={grant.name} className="rounded-lg border border-white/10 bg-surface-container p-4">
-                <div className="flex items-start justify-between gap-4">
+        </section>
+        {/* API Performance & Quick Links Bento Grid */}
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* API Performance (Span 2) */}
+          <div className="lg:col-span-2 bg-surface-container p-6 rounded-2xl ghost-border flex flex-col gap-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-semibold">API Performance & Usage</h3>
+              <div className="flex gap-2">
+                <span className="px-3 py-1 bg-surface-container-lowest text-xs text-outline rounded-lg">Last 24h</span>
+                <span className="px-3 py-1 bg-surface-container-highest text-xs text-secondary rounded-lg font-bold">Stable</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-surface-container-lowest p-4 rounded-xl">
+                <p className="text-xs text-outline uppercase tracking-wider mb-1">Request Count</p>
+                <p className="text-2xl font-bold">4.2M</p>
+              </div>
+              <div className="bg-surface-container-lowest p-4 rounded-xl">
+                <p className="text-xs text-outline uppercase tracking-wider mb-1">Avg Latency</p>
+                <p className="text-2xl font-bold text-secondary">24ms</p>
+              </div>
+              <div className="bg-surface-container-lowest p-4 rounded-xl">
+                <p className="text-xs text-outline uppercase tracking-wider mb-1">Error Rate</p>
+                <p className="text-2xl font-bold text-error">0.04%</p>
+              </div>
+            </div>
+            {/* Synthetic Chart Visualization Area */}
+            <div className="flex-grow flex items-end gap-1 h-32 pt-4">
+              <div className="w-full bg-primary h-1/2 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-2/3 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-3/4 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-1/2 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-4/5 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-full rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-3/4 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-1/2 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-2/3 rounded-t-sm hover:bg-primary transition-all"></div>
+              <div className="w-full bg-primary h-3/4 rounded-t-sm hover:bg-primary transition-all"></div>
+            </div>
+          </div>
+          {/* Developer Portal Links */}
+          <div className="bg-surface-container-low p-6 rounded-2xl ghost-border space-y-4">
+            <h3 className="text-xl font-semibold mb-2">Developer Portal</h3>
+            <a className="flex items-center justify-between p-4 bg-surface-container-highest rounded-xl hover:translate-x-1 transition-transform group" href="#">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-primary">description</span>
+                <div>
+                  <p className="font-bold text-on-surface">Documentation</p>
+                  <p className="text-xs text-outline">v2.4 API Reference</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-outline group-hover:text-primary">chevron_right</span>
+            </a>
+            <a className="flex items-center justify-between p-4 bg-surface-container-highest rounded-xl hover:translate-x-1 transition-transform group" href="#">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-primary">download</span>
+                <div>
+                  <p className="font-bold text-on-surface">SDK Downloads</p>
+                  <p className="text-xs text-outline">JS, Python, Rust, Go</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-outline group-hover:text-primary">chevron_right</span>
+            </a>
+            <a className="flex items-center justify-between p-4 bg-surface-container-highest rounded-xl hover:translate-x-1 transition-transform group" href="#">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-primary">key</span>
+                <div>
+                  <p className="font-bold text-on-surface">API Key Manager</p>
+                  <p className="text-xs text-outline">Manage 4 active keys</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-outline group-hover:text-primary">chevron_right</span>
+            </a>
+          </div>
+        </section>
+        {/* Partners & Deployment Logs */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Business Partners / Grant Program */}
+          <div className="bg-surface-container-low p-6 rounded-2xl ghost-border">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-semibold">Active Grants & Partners</h3>
+              <button className="text-primary text-xs font-bold uppercase tracking-widest hover:underline">Apply for Grant</button>
+            </div>
+            <div className="space-y-4">
+              {/* Partner Item */}
+              <div className="p-4 bg-surface-container-lowest rounded-xl flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-[#131b2e] flex items-center justify-center text-primary font-black">N</div>
                   <div>
-                    <p className="font-semibold text-on-surface">{grant.name}</p>
-                    <p className="mt-1 text-sm text-outline">{grant.stage}</p>
+                    <p className="font-bold">NeuralNode Protocol</p>
+                    <p className="text-xs text-outline">Phase 2: L2 Integration</p>
                   </div>
-                  <p className="text-sm font-semibold text-secondary">{grant.amount}</p>
                 </div>
-                <p className="mt-2 text-xs text-outline">{grant.status}</p>
-              </div>
-            ))}
-          </div>
-        </aside>
-      </section>
-
-      <section className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-12">
-        <article className="xl:col-span-8 rounded-xl border border-white/10 bg-surface-container-low p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">Deployment logs</h2>
-              <p className="mt-1 text-sm text-outline">Readable status feed for the business nucleus.</p>
-            </div>
-            <FileText className="h-5 w-5 text-outline" aria-hidden="true" />
-          </div>
-          <div className="mt-5 space-y-3 font-mono text-xs">
-            {businessMock.logs.map((entry) => (
-              <div key={`${entry.time}-${entry.level}`} className="rounded-lg border border-white/10 bg-surface-container p-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-outline">{entry.time}</span>
-                  <span className="font-bold text-secondary">{entry.level}</span>
-                  <span className="text-on-surface">{entry.message}</span>
+                <div className="text-right">
+                  <p className="text-sm font-bold">$125,000</p>
+                  <p className="text-[10px] text-secondary font-bold uppercase">65% Complete</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </article>
-
-        <article className="xl:col-span-4 rounded-xl border border-white/10 bg-surface-container-low p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">Initiatives</h2>
-              <p className="mt-1 text-sm text-outline">Dev-ready partner lanes.</p>
+              {/* Partner Item */}
+              <div className="p-4 bg-surface-container-lowest rounded-xl flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-[#131b2e] flex items-center justify-center text-tertiary font-black">V</div>
+                  <div>
+                    <p className="font-bold">Vortex DEX</p>
+                    <p className="text-xs text-outline">Phase 1: Liquidity Launch</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold">$40,000</p>
+                  <p className="text-[10px] text-tertiary font-bold uppercase">Pending Review</p>
+                </div>
+              </div>
+              {/* Partner Item */}
+              <div className="p-4 bg-surface-container-lowest rounded-xl flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-[#131b2e] flex items-center justify-center text-primary-container font-black">O</div>
+                  <div>
+                    <p className="font-bold">OmniBridge</p>
+                    <p className="text-xs text-outline">Ecosystem Milestone: 1k users</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-bold">$15,000</p>
+                  <p className="text-[10px] text-secondary font-bold uppercase">Goal Reached</p>
+                </div>
+              </div>
             </div>
-            <BriefcaseBusiness className="h-5 w-5 text-outline" aria-hidden="true" />
           </div>
-          <div className="mt-5 space-y-3">
-            <div className="rounded-lg border border-white/10 bg-surface-container p-4">
-              <p className="text-sm font-semibold text-on-surface">Grant review queue</p>
-              <p className="mt-1 text-sm text-outline">2 open requests, 1 pending approval.</p>
-            </div>
-            <div className="rounded-lg border border-white/10 bg-surface-container p-4">
-              <p className="text-sm font-semibold text-on-surface">Delivery cadence</p>
-              <p className="mt-1 text-sm text-outline">Weekly releases with read-only telemetry.</p>
-            </div>
-            <div className="rounded-lg border border-white/10 bg-surface-container p-4">
-              <p className="text-sm font-semibold text-on-surface">Ops status</p>
-              <p className="mt-1 text-sm text-outline">No live backend dependency required in dev.</p>
+          {/* Recent Deployment Logs */}
+          <div className="bg-surface-container p-6 rounded-2xl ghost-border overflow-hidden">
+            <h3 className="text-xl font-semibold mb-6">Recent Deployment Logs</h3>
+            <div className="space-y-4 font-mono text-xs">
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-secondary">
+                <span className="text-outline">14:22:05</span>
+                <div className="flex-grow">
+                  <span className="text-secondary font-bold">SUCCESS</span>
+                  <p className="text-on-surface mt-1">Mainnet-alpha node cluster successfully upgraded to v2.4.1. Consensus reaching 100%.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-primary">
+                <span className="text-outline">12:10:48</span>
+                <div className="flex-grow">
+                  <span className="text-primary font-bold">INFO</span>
+                  <p className="text-on-surface mt-1">New validator set election completed. 12 new nodes admitted to active set.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-tertiary">
+                <span className="text-outline">09:45:12</span>
+                <div className="flex-grow">
+                  <span className="text-tertiary font-bold">WARN</span>
+                  <p className="text-on-surface mt-1">Latency spike detected in Asian region endpoints. Autoscaling group 4 initiated.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 p-3 bg-surface-container-lowest rounded border-l-2 border-primary">
+                <span className="text-outline">08:00:00</span>
+                <div className="flex-grow">
+                  <span className="text-primary font-bold">SYSTEM</span>
+                  <p className="text-on-surface mt-1">Daily snapshot of global state archived to decentralized storage [CID: QmX...].</p>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="mt-6 rounded-lg border border-white/10 bg-surface-container p-4">
-            <Rocket className="h-5 w-5 text-primary" aria-hidden="true" />
-          </div>
-        </article>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
