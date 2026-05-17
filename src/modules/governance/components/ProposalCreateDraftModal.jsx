@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { buildCreateProposalRequest } from '../api/createProposalContract';
 
 function observedValue(value) {
   return value || value === 0 ? value : 'Not indexed';
@@ -25,7 +26,7 @@ function FormField({ label, children }) {
 const inputClass =
   'w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-2 text-sm font-semibold text-on-surface outline-none placeholder:text-slate-500 focus:border-cyan-300/40';
 
-export default function ProposalCreateDraftModal({ open, onClose, selectedDao, selectedChain, plugins = [], walletAddress, canCreateProposal }) {
+export default function ProposalCreateDraftModal({ open, onClose, selectedDao, selectedChain, plugins = [], walletAddress, canCreateProposal, onCreateDraft }) {
   const firstPlugin = plugins.find((plugin) => plugin.interfaceType || plugin.pluginType || plugin.address);
   const [draft, setDraft] = useState({
     title: '',
@@ -61,14 +62,30 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
 
   function createLocalDraft(event) {
     event.preventDefault();
-    setPreview({
-      ...draft,
-      dao: selectedDao?.name,
-      network: selectedChain?.name ?? selectedDao?.network,
-      wallet: walletAddress,
-      createdAt: new Date().toISOString(),
-      status: 'local-draft',
+    const selectedPlugin = plugins.find((plugin) => (plugin.id ?? plugin.address ?? plugin.interfaceType) === draft.pluginId);
+    const pluginLabel = selectedPlugin?.name ?? selectedPlugin?.interfaceType ?? selectedPlugin?.pluginType ?? selectedPlugin?.address;
+    const createProposalRequest = buildCreateProposalRequest({
+      draft: { ...draft, pluginLabel },
+      selectedDao,
+      selectedChain,
+      walletAddress,
+      plugin: selectedPlugin,
     });
+    const createdDraft = onCreateDraft?.({
+      ...draft,
+      pluginLabel,
+      createProposalRequest,
+    });
+    setPreview(
+      createdDraft ?? {
+        ...draft,
+        daoName: selectedDao?.name,
+        chainName: selectedChain?.name ?? selectedDao?.network,
+        walletAddress,
+        createdAt: new Date().toISOString(),
+        status: 'Local draft',
+      },
+    );
   }
 
   return (
@@ -207,12 +224,22 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
                   <div>
                     <span className="font-black uppercase text-cyan-200">Context</span>
                     <p className="mt-1">
-                      {preview.dao} · {preview.network} · {preview.status}
+                      {preview.daoName} · {preview.chainName} · {preview.status}
                     </p>
                   </div>
                   <div>
                     <span className="font-black uppercase text-cyan-200">Summary</span>
                     <p className="mt-1">{preview.summary}</p>
+                  </div>
+                  <div>
+                    <span className="font-black uppercase text-cyan-200">Future interface</span>
+                    <p className="mt-1">{preview.createProposalRequest?.submissionMode ?? 'mock-review'} · backend validation required</p>
+                  </div>
+                  <div>
+                    <span className="font-black uppercase text-cyan-200">Reason codes</span>
+                    <p className="mt-1">
+                      {(preview.createProposalRequest?.guardrails?.reasonCodes ?? []).map((reason) => reason.reasonCode).join(', ') || 'No active reason codes'}
+                    </p>
                   </div>
                 </div>
               </div>

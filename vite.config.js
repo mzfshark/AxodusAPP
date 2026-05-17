@@ -58,5 +58,12 @@ export default defineConfig({
       ]
     }
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './tests/setupTests.jsx',
+    pool: 'vmThreads',
+    maxWorkers: 1,
+    fileParallelism: false,
+  },
   envPrefix: ['VITE_', 'REACT_APP_']
 });
