@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { buildCreateProposalRequest } from '../api/createProposalContract';
+import { buildCreateProposalRequest, getCreateProposalIntegrationStatus } from '../api/createProposalContract';
 
 function observedValue(value) {
   return value || value === 0 ? value : 'Not indexed';
@@ -27,6 +27,7 @@ const inputClass =
   'w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-2 text-sm font-semibold text-on-surface outline-none placeholder:text-slate-500 focus:border-cyan-300/40';
 
 export default function ProposalCreateDraftModal({ open, onClose, selectedDao, selectedChain, plugins = [], walletAddress, canCreateProposal, onCreateDraft }) {
+  const integration = getCreateProposalIntegrationStatus();
   const firstPlugin = plugins.find((plugin) => plugin.interfaceType || plugin.pluginType || plugin.address);
   const [draft, setDraft] = useState({
     title: '',
@@ -95,7 +96,7 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
           <div>
             <h2 className="text-lg font-black text-on-surface">Create Proposal Draft</h2>
             <p className="mt-1 text-xs leading-5 text-on-surface-variant">
-              Local mock workflow for proposal creation readiness. No backend write, wallet prompt or on-chain transaction is submitted.
+              Request preview workflow for proposal creation readiness. Draft generation does not open a wallet prompt or submit an on-chain transaction.
             </p>
           </div>
           <button
@@ -117,14 +118,26 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
                 <ContextItem label="Wallet" value={walletAddress} />
                 <ContextItem label="Plugins" value={plugins.length ? `${plugins.length} observed` : 'No plugin state'} />
                 <ContextItem label="Create state" value={canCreateProposal ? 'Draft enabled' : 'Read-only'} />
+                <ContextItem label="Submit mode" value={integration.submissionMode} />
               </div>
             </div>
 
-            <div className="rounded-lg border border-amber-300/20 bg-amber-950/20 p-4">
-              <div className="text-xs font-black uppercase text-amber-100">Boundary</div>
-              <p className="mt-2 text-sm leading-6 text-amber-50">
-                This modal renders observed governance state only. Constitutional validity, sanctions, permissions and execution remain sourced from contracts,
-                registry, indexers, guardrails and backend execution layers.
+            <div
+              className={`rounded-lg border p-4 ${
+                integration.backendEnabled ? 'border-emerald-300/20 bg-emerald-950/20' : 'border-amber-300/20 bg-amber-950/20'
+              }`}
+            >
+              <div className={`text-xs font-black uppercase ${integration.backendEnabled ? 'text-emerald-100' : 'text-amber-100'}`}>
+                {integration.backendEnabled ? 'Backend route observed' : 'Mock review route observed'}
+              </div>
+              <p className={`mt-2 text-sm leading-6 ${integration.backendEnabled ? 'text-emerald-50' : 'text-amber-50'}`}>
+                {integration.backendEnabled
+                  ? 'Generated drafts are shaped for the Governance API createProposal endpoint, but still require explicit review before submission.'
+                  : 'Generated drafts stay local until the Governance API createProposal endpoint is enabled.'}
+              </p>
+              <p className={`mt-2 text-xs leading-5 ${integration.backendEnabled ? 'text-emerald-100/80' : 'text-amber-100/80'}`}>
+                Constitutional validity, sanctions, permissions and execution remain sourced from contracts, registry, indexers, guardrails and backend execution
+                layers.
               </p>
             </div>
           </aside>
@@ -232,7 +245,7 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
                     <p className="mt-1">{preview.summary}</p>
                   </div>
                   <div>
-                    <span className="font-black uppercase text-cyan-200">Future interface</span>
+                    <span className="font-black uppercase text-cyan-200">Submission interface</span>
                     <p className="mt-1">{preview.createProposalRequest?.submissionMode ?? 'mock-review'} · backend validation required</p>
                   </div>
                   <div>

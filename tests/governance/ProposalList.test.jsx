@@ -59,7 +59,7 @@ function ProposalListHarness() {
     );
   }
 
-  function mockSubmitDraft(draftId) {
+  function submitDraft(draftId) {
     setDrafts((current) =>
       current.map((draft) =>
         draft.id === draftId
@@ -85,7 +85,7 @@ function ProposalListHarness() {
         canCreateProposal
         onCreateDraft={createDraft}
         onMarkReadyForReview={markDraftReadyForReview}
-        onMockSubmitDraft={mockSubmitDraft}
+        onSubmitDraft={submitDraft}
       />
     </MemoryRouter>
   );
@@ -131,6 +131,8 @@ function ProposalListFailureHarness() {
                   message: 'createProposal failed with HTTP 500',
                   reasonCode: 'CREATE_PROPOSAL_SUBMISSION_FAILED',
                   reasonSeverity: 'warning',
+                  source: 'backend submission boundary',
+                  status: 500,
                 },
               }
             : draft,
@@ -150,7 +152,7 @@ function ProposalListFailureHarness() {
         canCreateProposal
         onCreateDraft={() => null}
         onMarkReadyForReview={() => null}
-        onMockSubmitDraft={submitWithFailure}
+        onSubmitDraft={submitWithFailure}
       />
     </MemoryRouter>
   );
@@ -188,7 +190,7 @@ describe('ProposalList create proposal draft flow', () => {
     render(<ProposalListFailureHarness />);
 
     fireEvent.click(screen.getByRole('button', { name: /inspect request/i }));
-    fireEvent.click(screen.getByRole('button', { name: /mock submit/i }));
+    fireEvent.click(screen.getByRole('button', { name: /submit to backend/i }));
 
     expect(screen.getAllByText(/submitting/i).length).toBeGreaterThan(0);
 
@@ -198,6 +200,8 @@ describe('ProposalList create proposal draft flow', () => {
 
     expect(screen.getByText(/createProposal failed with HTTP 500/i)).toBeInTheDocument();
     expect(screen.getByText(/create_proposal_submission_failed/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /retry submit/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/http 500/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/backend submission boundary/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /retry backend/i })).toBeInTheDocument();
   });
 });
