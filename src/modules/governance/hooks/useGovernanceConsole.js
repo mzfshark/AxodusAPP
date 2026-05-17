@@ -1,13 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import { fetchGovernanceDaos, fetchGovernancePlugins, fetchGovernanceProposals, getFederalDaoRecord } from '../api/governanceClient';
+import { getMockGovernancePlugins, getMockGovernanceProposals, shouldUseGovernanceMocks } from '../api/mockGovernanceData';
 import { useWallet } from '@/hooks/useWallet';
+import { collectGovernanceGuardrailReasons, getConstitutionalStanding } from '../utils/governanceState';
 
 function normalizeDao(dao) {
+  const hasStanding = dao.constitutionalStanding || dao.constitutionalCompliance || dao.constitutionalCompatibility;
+  const constitutionalStanding = hasStanding
+    ? getConstitutionalStanding(dao)
+    : { status: 'under-review', reasonCodes: [], reasonSeverity: null };
+
   return {
     ...dao,
     id: dao.id ?? dao.entityId ?? `${dao.network}:${dao.address}`,
     name: dao.name ?? dao.ens ?? dao.subdomain ?? 'Unnamed DAO',
     federationRole: dao.federationRole ?? 'subdao',
+    federationMember: dao.federationMember ?? true,
+    federationTier: dao.federationTier ?? 'partner',
+    governanceStatus: dao.governanceStatus ?? constitutionalStanding.status ?? 'under-review',
+    constitutionalStanding,
     status: dao.status ?? 'indexed',
   };
 }
@@ -57,8 +68,8 @@ export function useGovernanceConsole(chains) {
 
     async function loadDaoState() {
       if (!selectedDao || selectedDao.isVirtual) {
-        setProposals([]);
-        setPlugins([]);
+        setProposals(shouldUseGovernanceMocks() ? getMockGovernanceProposals() : []);
+        setPlugins(shouldUseGovernanceMocks() ? getMockGovernancePlugins() : []);
         return;
       }
 
@@ -72,8 +83,8 @@ export function useGovernanceConsole(chains) {
         setPlugins(Array.isArray(pluginResult) ? pluginResult : pluginResult?.data ?? []);
       } catch {
         if (controller.signal.aborted) return;
-        setProposals([]);
-        setPlugins([]);
+        setProposals(shouldUseGovernanceMocks() ? getMockGovernanceProposals() : []);
+        setPlugins(shouldUseGovernanceMocks() ? getMockGovernancePlugins() : []);
       }
     }
 
@@ -86,6 +97,18 @@ export function useGovernanceConsole(chains) {
     () => chains.find((chain) => chain.network === selectedDao?.network || chain.slug === selectedDao?.network),
     [chains, selectedDao?.network],
   );
+  const selectedGuardrailReasons = useMemo(() => {
+    const chainReasons = collectGovernanceGuardrailReasons(selectedChain);
+    const daoReasons = (selectedDao?.constitutionalStanding?.reasonCodes ?? []).map((reasonCode) => ({
+      reasonCode,
+      reasonSeverity: selectedDao.constitutionalStanding.reasonSeverity ?? 'constitutional',
+      source: 'DAO federation standing',
+      scope: selectedDao.name,
+      network: selectedDao.network,
+    }));
+
+    return [...daoReasons, ...chainReasons];
+  }, [selectedChain, selectedDao]);
 
   const canCreateProposal = Boolean(
     selectedDao &&
@@ -107,5 +130,6 @@ export function useGovernanceConsole(chains) {
     error,
     canCreateProposal,
     walletAddress: address,
+    selectedGuardrailReasons,
   };
 }

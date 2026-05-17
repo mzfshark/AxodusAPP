@@ -1,0 +1,25 @@
+export const settingsMock = {
+  appSettings: {
+    theme: 'dark',
+    language: 'pt-BR',
+    defaultChain: 'Harmony',
+    riskWarningsEnabled: true,
+    governanceMode: 'governance-first',
+    mockModeEnabled: true,
+    experimentalFeaturesEnabled: false,
+  },
+  featureFlags: {
+    governance: true,
+    acs: true,
+    defi: true,
+    academy: true,
+    marketplace: true,
+    mining: true,
+    dex: true,
+    lottery: true,
+    mcps: true,
+    tradingLegacyDisabled: true,
+    hummingbotDisabled: true,
+    mqttDisabled: true,
+  },
+};

@@ -45,8 +45,9 @@
 - Create Governance DAO context selector — in progress: console models Axodus Constitutional Governance plus Local Governance contexts for indexed sub-DAOs
 - Create DAO explorer — in progress: console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins and proposal readiness
 - Create proposal list shell — in progress: console shows real indexed proposals when available, links rows into proposal detail, and keeps an explicit empty state otherwise
-- Create proposal list
-- Create proposal detail page — in progress: protected `/governance/proposals/:proposalId` reads proposal detail/actions from the governance backend
+- Add governance dev proposal fixtures — in progress: development-only mock proposals allow proposal detail, guardrail observability and transaction preview testing before live proposals are indexed
+- Create proposal list — in progress: list supports search, status filters, proposal metadata, dev mock labels, direct links into proposal detail and local mock proposal drafts persisted as browser-only observed state with request inspection, mock review/submit states, local mock submission receipts, backend submission error/retry display and an env-gated backend createProposal submission contract
+- Create proposal detail page — in progress: protected `/governance/proposals/:proposalId` reads proposal detail/actions from the governance backend and composes dedicated operational state, adapter preview, voting, execution, permission check, guardrail, receipt, execution action, governance context and wallet history panels
 - Create governance transaction adapter — in progress: frontend isolates vote/execute preparation by plugin type and chain capability, with TokenVoting/Multisig ABI calldata binding, guarded wagmi write submission, and wallet network switching
 - Create voting UI — in progress: proposal detail exposes adapter-ready vote option selection and wallet action readiness
 - Create execution receipt UI — in progress: proposal detail exposes indexed remote receipts, local wallet transaction receipt tracking, and governance indexer reconciliation status
@@ -55,6 +56,10 @@
 - Create governance action permission guards — in progress: vote/execute operations run wallet, backend chain capability, action-level plugin capability, indexing readiness and lifecycle checks before wallet submission
 - Add governance nuclei model — in progress: chain registry and frontend fallback distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities
 - Add Constitutional Guardrail reason codes — in progress: backend registry/indexer status and frontend permission guards expose transparent guardrail codes across UI/API flows
+- Add governance standing model — in progress: frontend registry normalization maps legacy constitutional compatibility payloads into constitutional standing, governance status, federation tier and reason severity for rendering only
+- Evolve Governance Operations Center — in progress: `/governance/console` is positioned as a federation observability surface, not a narrow DAO admin page, with operations readiness visibility for registry, selected context, proposals, plugins, local drafts, proposal creation state and createProposal integration mode
+- Add Constitutional Guardrail observability — in progress: registry summary exposes active reason codes with severity, source, scope and network for console rendering
+- Add selected governance context guardrails — in progress: console exposes reason codes affecting the selected DAO and chain context separately from global registry guardrails
 
 ---
 

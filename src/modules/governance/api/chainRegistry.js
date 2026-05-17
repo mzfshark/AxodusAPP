@@ -1,3 +1,13 @@
+import {
+  COMPLIANT_CONSTITUTIONAL_STANDING,
+  UNDER_REVIEW_CONSTITUTIONAL_STANDING,
+  collectGovernanceGuardrailReasons,
+  getConstitutionalStanding,
+  governanceStatusFromStanding,
+  normalizeGuardrailReason,
+  normalizeReasonSeverity,
+} from '../utils/governanceState';
+
 const governanceApiBase = import.meta.env.VITE_GOVERNANCE_API_URL || '/governance-api';
 const registryEndpoint = `${governanceApiBase}/registry/chains`;
 
@@ -13,6 +23,62 @@ const evmPluginTypes = [
 ];
 
 const compatible = { status: 'compatible', reasonCodes: [] };
+
+function normalizePluginCapability(capability, { useFallbackDefaults = false } = {}) {
+  if (!capability) return capability;
+  const constitutionalStanding = getConstitutionalStanding(
+    capability,
+    useFallbackDefaults ? COMPLIANT_CONSTITUTIONAL_STANDING : UNDER_REVIEW_CONSTITUTIONAL_STANDING,
+  );
+  return {
+    ...capability,
+    governanceStatus: capability.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding),
+    constitutionalStanding,
+  };
+}
+
+function normalizePluginCapabilities(pluginCapabilities, options) {
+  const capabilities = pluginCapabilities ?? {};
+  return Object.fromEntries(
+    Object.entries(capabilities).map(([pluginType, capability]) => [pluginType, normalizePluginCapability(capability, options)]),
+  );
+}
+
+export function normalizeChainGovernanceState(chain, { useFallbackDefaults = false } = {}) {
+  const capabilities = chain.capabilities ?? {};
+  const constitutionalStanding = getConstitutionalStanding(
+    capabilities.constitutionalStanding || capabilities.constitutionalCompatibility || chain.constitutionalStanding || chain.constitutionalCompatibility
+      ? { ...chain, ...capabilities }
+      : null,
+    useFallbackDefaults ? COMPLIANT_CONSTITUTIONAL_STANDING : UNDER_REVIEW_CONSTITUTIONAL_STANDING,
+  );
+  const governanceStatus = chain.governanceStatus ?? capabilities.governanceStatus ?? governanceStatusFromStanding(constitutionalStanding);
+  const federationMember = chain.federationMember ?? (useFallbackDefaults ? true : undefined);
+  const federationTier =
+    chain.federationTier ??
+    (useFallbackDefaults ? (chain.roles?.includes('execution') ? 'root' : chain.legacyHarmonyAdapter ? 'observer' : 'partner') : undefined);
+
+  return {
+    ...chain,
+    governanceStatus,
+    federationMember,
+    federationTier,
+    constitutionalStanding,
+    guardrailReasons: Array.isArray(chain.guardrailReasons) ? chain.guardrailReasons.map(normalizeGuardrailReason).filter(Boolean) : chain.guardrailReasons,
+    capabilities: {
+      ...capabilities,
+      governanceStatus,
+      constitutionalStanding,
+      pluginCapabilities: normalizePluginCapabilities(capabilities.pluginCapabilities, { useFallbackDefaults }),
+    },
+    indexingStatus: chain.indexingStatus
+      ? {
+          ...chain.indexingStatus,
+          reasonSeverity: normalizeReasonSeverity(chain.indexingStatus.reasonCode, chain.indexingStatus.reasonSeverity),
+        }
+      : chain.indexingStatus,
+  };
+}
 
 const evmLocalGovernanceModels = [
   '$Neurons',
@@ -40,11 +106,13 @@ const pluginCapability = ({ pluginType, label, adapter, vote = true, execute = t
   label,
   adapter,
   governanceNucleus: 'local',
+  governanceStatus: 'compliant',
   actions: { createProposal: true, vote, execute, settings: true },
   executionModes: legacy ? ['legacy-adapter'] : ['direct', 'remote', 'federal'],
   votingPowerStrategy: strategy,
   compatibleRoles: legacy ? ['voting', 'spoke'] : ['execution', 'voting', 'spoke'],
   constitutionalCompatibility: compatible,
+  constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
   requiresDeployment: true,
   requiresIndexer: true,
   legacy,
@@ -154,6 +222,9 @@ const fallbackChains = [
     environment: 'testnet',
     roles: ['execution', 'voting', 'spoke'],
     legacyHarmonyAdapter: false,
+    governanceStatus: 'compliant',
+    federationMember: true,
+    federationTier: 'root',
     finality: { confirmationBlocks: 12, reorgWindowBlocks: 96 },
     nativeCurrency: { symbol: 'ETH', decimals: 18 },
     capabilities: {
@@ -164,11 +235,13 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
+      governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY', reasonSeverity: 'warning' },
   },
   {
     chainId: 1,
@@ -181,6 +254,9 @@ const fallbackChains = [
     environment: 'mainnet',
     roles: ['voting', 'spoke'],
     legacyHarmonyAdapter: false,
+    governanceStatus: 'compliant',
+    federationMember: true,
+    federationTier: 'partner',
     finality: { confirmationBlocks: 12, reorgWindowBlocks: 96 },
     nativeCurrency: { symbol: 'ETH', decimals: 18 },
     capabilities: {
@@ -191,11 +267,13 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
+      governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY', reasonSeverity: 'warning' },
   },
   {
     chainId: 8453,
@@ -208,6 +286,9 @@ const fallbackChains = [
     environment: 'mainnet',
     roles: ['voting', 'spoke'],
     legacyHarmonyAdapter: false,
+    governanceStatus: 'compliant',
+    federationMember: true,
+    federationTier: 'partner',
     finality: { confirmationBlocks: 30, reorgWindowBlocks: 300 },
     nativeCurrency: { symbol: 'ETH', decimals: 18 },
     capabilities: {
@@ -218,11 +299,13 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
+      governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY', reasonSeverity: 'warning' },
   },
   {
     chainId: 42161,
@@ -235,6 +318,9 @@ const fallbackChains = [
     environment: 'mainnet',
     roles: ['voting', 'spoke'],
     legacyHarmonyAdapter: false,
+    governanceStatus: 'compliant',
+    federationMember: true,
+    federationTier: 'partner',
     finality: { confirmationBlocks: 30, reorgWindowBlocks: 300 },
     nativeCurrency: { symbol: 'ETH', decimals: 18 },
     capabilities: {
@@ -245,11 +331,13 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
+      governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY', reasonSeverity: 'warning' },
   },
   {
     chainId: 137,
@@ -262,6 +350,9 @@ const fallbackChains = [
     environment: 'mainnet',
     roles: ['voting', 'spoke'],
     legacyHarmonyAdapter: false,
+    governanceStatus: 'compliant',
+    federationMember: true,
+    federationTier: 'partner',
     finality: { confirmationBlocks: 128, reorgWindowBlocks: 512 },
     nativeCurrency: { symbol: 'POL', decimals: 18 },
     capabilities: {
@@ -272,11 +363,13 @@ const fallbackChains = [
       constitutionalConditions: true,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
+      constitutionalStanding: COMPLIANT_CONSTITUTIONAL_STANDING,
+      governanceStatus: 'compliant',
       localGovernanceModels: evmLocalGovernanceModels,
       supportedPluginTypes: evmPluginTypes,
       pluginCapabilities: evmPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY' },
+    indexingStatus: { requested: true, rpcConfigured: false, status: 'notConfigured', reasonCode: 'INDEXER_STATE_NOT_READY', reasonSeverity: 'warning' },
   },
   {
     chainId: 1666600000,
@@ -289,6 +382,9 @@ const fallbackChains = [
     environment: 'mainnet',
     roles: ['voting', 'spoke'],
     legacyHarmonyAdapter: true,
+    governanceStatus: 'under-review',
+    federationMember: true,
+    federationTier: 'observer',
     finality: { confirmationBlocks: 100, reorgWindowBlocks: 7200 },
     nativeCurrency: { symbol: 'ONE', decimals: 18 },
     capabilities: {
@@ -299,6 +395,8 @@ const fallbackChains = [
       constitutionalConditions: false,
       governanceNuclei: ['constitutional', 'local'],
       constitutionalCompatibility: compatible,
+      constitutionalStanding: { status: 'under-review', reasonCodes: ['REMOTE_EXECUTION_GUARDRAIL_ACTIVE'], reasonSeverity: 'constitutional' },
+      governanceStatus: 'under-review',
       localGovernanceModels: harmonyLocalGovernanceModels,
       supportedPluginTypes: [
         'tokenVoting',
@@ -311,7 +409,7 @@ const fallbackChains = [
       ],
       pluginCapabilities: harmonyPluginCapabilities,
     },
-    indexingStatus: { requested: true, rpcConfigured: true, status: 'configured', reasonCode: null },
+    indexingStatus: { requested: true, rpcConfigured: true, status: 'configured', reasonCode: null, reasonSeverity: null },
   },
 ];
 
@@ -329,11 +427,11 @@ export async function fetchChainRegistry() {
     throw new Error('Registry response is not an array');
   }
 
-  return data;
+  return data.map((chain) => normalizeChainGovernanceState(chain));
 }
 
 export function getFallbackChainRegistry() {
-  return fallbackChains;
+  return fallbackChains.map((chain) => normalizeChainGovernanceState(chain, { useFallbackDefaults: true }));
 }
 
 export function summarizeChainRegistry(chains) {
@@ -350,6 +448,22 @@ export function summarizeChainRegistry(chains) {
   const evmCount = chains.filter((chain) => chain.family === 'evm').length;
   const legacyCount = chains.filter((chain) => chain.legacyHarmonyAdapter).length;
   const pluginTypes = new Set(chains.flatMap((chain) => chain.capabilities?.supportedPluginTypes ?? []));
+  const governanceStatusCounts = chains.reduce((acc, chain) => {
+    const status = chain.governanceStatus ?? 'under-review';
+    acc[status] = (acc[status] ?? 0) + 1;
+    return acc;
+  }, {});
+  const federationTierCounts = chains.reduce((acc, chain) => {
+    const tier = chain.federationTier ?? 'observer';
+    acc[tier] = (acc[tier] ?? 0) + 1;
+    return acc;
+  }, {});
+  const guardrailReasons = chains.flatMap(collectGovernanceGuardrailReasons);
+  const reasonSeverityCounts = guardrailReasons.reduce((acc, reason) => {
+    if (!reason.reasonSeverity) return acc;
+    acc[reason.reasonSeverity] = (acc[reason.reasonSeverity] ?? 0) + 1;
+    return acc;
+  }, {});
 
   return {
     totalChains: chains.length,
@@ -357,5 +471,9 @@ export function summarizeChainRegistry(chains) {
     legacyCount,
     pluginTypes: pluginTypes.size,
     roleCounts,
+    governanceStatusCounts,
+    federationTierCounts,
+    reasonSeverityCounts,
+    guardrailReasons,
   };
 }

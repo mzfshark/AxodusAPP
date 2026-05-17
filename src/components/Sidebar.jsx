@@ -2,23 +2,39 @@
 
 import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
+import {
+  Banknote,
+  BookOpen,
+  BriefcaseBusiness,
+  Building2,
+  Coins,
+  Gauge,
+  Landmark,
+  Menu,
+  Moon,
+  MonitorCog,
+  Pickaxe,
+  ShoppingCart,
+  Sun,
+  Ticket,
+  X,
+} from 'lucide-react';
 import useDarkMode from '../hooks/useDarkMode';
 
 const primaryNavItems = [
-  { to: "/dashboard", icon: "dashboard", label: "Overview", filled: true },
-  { to: "/mining", icon: "bolt", label: "Mining" },
-  { to: "/trading/bots", icon: "swap_horiz", label: "Trading" },
-  { to: "/defi", icon: "layers", label: "Staking & Defi" },
-  { to: "/governance", icon: "account_balance", label: "Governance" },
-  { to: "/account", icon: "business_center", label: "Business" },
-  { to: "/marketplace", icon: "shopping_cart", label: "Marketplace" },
-  { to: "/academy", icon: "school", label: "Academy" },
-  { to: "/dex", icon: "currency_exchange", label: "DEX" },
-  { to: "/lottery", icon: "casino", label: "Lottery" },
+  { to: "/dashboard", icon: Gauge, label: "Overview" },
+  { to: "/mining", icon: Pickaxe, label: "Mining" },
+  { to: "/defi", icon: Banknote, label: "Treasury & Defi" },
+  { to: "/governance", icon: Landmark, label: "Governance" },
+  { to: "/account", icon: BriefcaseBusiness, label: "Business" },
+  { to: "/marketplace", icon: ShoppingCart, label: "Marketplace" },
+  { to: "/academy", icon: BookOpen, label: "Academy" },
+  { to: "/dex", icon: Coins, label: "DEX" },
+  { to: "/lottery", icon: Ticket, label: "Lottery" },
 ];
 
 const secondaryNavItems = [
-  { to: "/mcps", icon: "dns", label: "MCP Servers" },
+  { to: "/mcps", icon: Building2, label: "MCP Servers" },
 ];
 
 const navLinkClass = ({ isActive }) =>
@@ -33,12 +49,7 @@ function NavItems({ onNavigate }) {
     <>
       {primaryNavItems.map((item) => (
         <NavLink key={item.to} to={item.to} onClick={onNavigate} className={navLinkClass}>
-          <span
-            className="material-symbols-outlined"
-            style={item.filled ? { fontVariationSettings: "'FILL' 1" } : undefined}
-          >
-            {item.icon}
-          </span>
+          <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
           <span>{item.label}</span>
         </NavLink>
       ))}
@@ -47,7 +58,7 @@ function NavItems({ onNavigate }) {
 
       {secondaryNavItems.map((item) => (
         <NavLink key={item.to} to={item.to} onClick={onNavigate} className={navLinkClass}>
-          <span className="material-symbols-outlined">{item.icon}</span>
+          <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
           <span>{item.label}</span>
         </NavLink>
       ))}
@@ -63,21 +74,21 @@ function ThemeToggle({ theme, setTheme }) {
         className={`flex items-center justify-center w-1/3 py-1.5 rounded-lg transition-all duration-200 ${theme === 'light' ? 'active-nav-item shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
         title="Light Theme"
       >
-        <span className="material-symbols-outlined text-[18px]">light_mode</span>
+        <Sun className="h-[18px] w-[18px]" aria-hidden="true" />
       </button>
       <button
         onClick={() => setTheme('system')}
         className={`flex items-center justify-center w-1/3 py-1.5 rounded-lg transition-all duration-200 ${theme === 'system' ? 'active-nav-item shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
         title="System Theme"
       >
-        <span className="material-symbols-outlined text-[18px]">brightness_auto</span>
+        <MonitorCog className="h-[18px] w-[18px]" aria-hidden="true" />
       </button>
       <button
         onClick={() => setTheme('dark')}
         className={`flex items-center justify-center w-1/3 py-1.5 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'active-nav-item shadow-sm' : 'text-slate-500 hover:text-slate-300'}`}
         title="Dark Theme"
       >
-        <span className="material-symbols-outlined text-[18px]">dark_mode</span>
+        <Moon className="h-[18px] w-[18px]" aria-hidden="true" />
       </button>
     </div>
   );
@@ -96,7 +107,7 @@ export default function Sidebar() {
         aria-label="Open navigation menu"
         aria-expanded={isMobileMenuOpen}
       >
-        <span className="material-symbols-outlined">menu</span>
+        <Menu className="h-5 w-5" aria-hidden="true" />
       </button>
 
       {isMobileMenuOpen && (
@@ -119,7 +130,7 @@ export default function Sidebar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 aria-label="Close navigation menu"
               >
-                <span className="material-symbols-outlined">close</span>
+                <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
             <nav className="flex flex-col gap-1">

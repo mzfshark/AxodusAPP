@@ -1,7 +1,20 @@
 // src/appkit.config.js
 import { createAppKit } from '@reown/appkit/react';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
-import { SolanaAdapter } from '@reown/appkit-adapter-solana';
+import { createConfig, http } from 'wagmi';
+import {
+  arbitrum as wagmiArbitrum,
+  avalanche as wagmiAvalanche,
+  base as wagmiBase,
+  bsc as wagmiBsc,
+  celo as wagmiCelo,
+  cronos as wagmiCronos,
+  harmonyOne as wagmiHarmonyOne,
+  mainnet as wagmiMainnet,
+  optimism as wagmiOptimism,
+  polygon as wagmiPolygon,
+  sepolia as wagmiSepolia,
+} from 'wagmi/chains';
 import { 
   mainnet, 
   sepolia,
@@ -9,7 +22,6 @@ import {
   harmonyOne, 
   arbitrum, 
   polygon, 
-  solana, 
   avalanche, 
   base, 
   celo, 
@@ -18,7 +30,8 @@ import {
   cronos 
 } from '@reown/appkit/networks';
 
-export const projectId = import.meta.env.VITE_PROJECT_ID || '5e64f2b59a17e7bce18c075ae0fb40a8';
+export const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || '';
+export const hasWalletConnectProjectId = Boolean(projectId);
 
 const resolvedAppUrl = import.meta.env.VITE_PUBLIC_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5174');
 
@@ -45,36 +58,59 @@ export const evmNetworks = [
   cronos
 ];
 
-// Wagmi Adapter for EVM chains
-export const wagmiAdapter = new WagmiAdapter({
-  projectId,
-  networks: evmNetworks
-});
+const wagmiFallbackChains = [
+  wagmiMainnet,
+  wagmiSepolia,
+  wagmiBsc,
+  wagmiArbitrum,
+  wagmiHarmonyOne,
+  wagmiAvalanche,
+  wagmiPolygon,
+  wagmiCelo,
+  wagmiOptimism,
+  wagmiBase,
+  wagmiCronos,
+];
 
-// Solana Adapter - simplified to avoid build issues
-export const solanaAdapter = new SolanaAdapter({
-  wallets: []
+const fallbackTransports = wagmiFallbackChains.reduce((acc, chain) => {
+  acc[chain.id] = http();
+  return acc;
+}, {});
+
+// Wagmi Adapter for EVM chains
+export const wagmiAdapter = hasWalletConnectProjectId
+  ? new WagmiAdapter({
+      projectId,
+      networks: evmNetworks
+    })
+  : null;
+
+export const wagmiConfig = wagmiAdapter?.wagmiConfig ?? createConfig({
+  chains: wagmiFallbackChains,
+  transports: fallbackTransports,
 });
 
 // All networks for export
-export const networks = [...evmNetworks, solana];
+export const networks = evmNetworks;
 
 // AppKit instance
-export const appKit = createAppKit({
-  adapters: [wagmiAdapter, solanaAdapter],
-  networks,
-  projectId,
-  metadata,
-  features: {
-    analytics: true,
-    email: false,
-    socials: false,
-    emailShowWallets: true
-  },
-  themeMode: 'dark',
-  themeVariables: {
-    '--w3m-accent': '#3b82f6'
-  }
-});
+export const appKit = hasWalletConnectProjectId
+  ? createAppKit({
+      adapters: [wagmiAdapter],
+      networks,
+      projectId,
+      metadata,
+      features: {
+        analytics: true,
+        email: false,
+        socials: false,
+        emailShowWallets: true
+      },
+      themeMode: 'dark',
+      themeVariables: {
+        '--w3m-accent': '#3b82f6'
+      }
+    })
+  : null;
 
 export default appKit;

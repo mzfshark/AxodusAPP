@@ -15,13 +15,9 @@ export default function useDarkMode() {
 
   useEffect(() => {
     const root = document.documentElement;
-    let resolvedTheme = "light";
-    
-    if (theme === "system") {
-      resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    } else {
-      resolvedTheme = theme;
-    }
+    const resolvedTheme = theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      : theme;
 
     root.dataset.theme = resolvedTheme;
     root.classList.toggle("dark", resolvedTheme === "dark");

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import WalletConnectButton from "../components/WalletConnectButton";
 import { useWallet } from "../hooks/useWallet";
+import { walletMock } from '@/data/mock';
 import "@/styles/Global.css";
 
 export default function ConnectWalletPage() {
@@ -21,7 +22,7 @@ export default function ConnectWalletPage() {
   return (
     <div className="dashboard-container" style={{ textAlign: "center", marginTop: "5rem" }}>
       <h1>Connect your Wallet</h1>
-      <p>You must connect a wallet to access this page.</p>
+      <p>{walletMock.states[0].message}</p>
       <div style={{ marginTop: "2rem" }}>
         <WalletConnectButton />
       </div>

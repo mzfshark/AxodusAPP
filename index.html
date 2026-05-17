@@ -5,28 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Allow eval for Vite HMR in development; enable workers from blob for MQTT -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; font-src 'self' data: https: https://fonts.gstatic.com;">
+    <!-- Allow eval for Vite HMR in development. Wallet/Reown connections stay explicit in connect-src. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https: https://*.walletconnect.com https://*.walletconnect.org https://*.reown.com; font-src 'self' data: https://fonts.gstatic.com;">
 
     <link rel="icon" type="image/svg+xml" href="/reown.svg" />
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Fonts: Inter, JetBrains Mono, Material Symbols Outlined -->
+    <!-- Fonts: Inter and JetBrains Mono. Active app chrome uses lucide-react; Material Symbols remains for legacy static pages during migration. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
 
-    <title>Axodus Finance - Dashboard</title>
+    <title>Axodus App</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Axodus Finance Dashboard for investors" />
-    <meta name="keywords" content="Axodus, DeFi, Dashboard, Crypto, Reown, Web3" />
+    <meta name="description" content="Axodus ecosystem operating console" />
+    <meta name="keywords" content="Axodus, Governance, DeFi, DAO, Reown, Web3" />
     <meta name="author" content="Axodus Team" />
 
     <!-- Social / Open Graph -->
-    <meta property="og:title" content="Axodus Finance Dashboard" />
-    <meta property="og:description" content="Visualize your investments on-chain using AppKit and MetaMask." />
+    <meta property="og:title" content="Axodus App" />
+    <meta property="og:description" content="Governance-first operating console for the Axodus ecosystem." />
     <meta property="og:image" content="/reown.svg" />
     <meta property="og:url" content="https://axodus.finance" />
     <meta name="twitter:card" content="summary_large_image" />

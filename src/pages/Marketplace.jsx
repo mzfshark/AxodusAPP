@@ -1,4 +1,5 @@
 import React from 'react';
+import { marketplaceMock } from '@/data/mock';
 
 const Marketplace = () => {
   return (
@@ -21,13 +22,13 @@ const Marketplace = () => {
                         A generative masterpiece utilizing the Axodus Kinetic engine. Own the first evolving AI structure in the ecosystem.
                     </p>
 <div className="flex items-center gap-6">
-<button className="bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-4 rounded-xl text-lg font-extrabold active:scale-95 transition-transform flex items-center gap-2">
-                            Place a Bid <span className="material-symbols-outlined">trending_up</span>
+<button disabled className="bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-4 rounded-xl text-lg font-extrabold active:scale-95 transition-transform flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50">
+                            Bid disabled <span className="material-symbols-outlined">trending_up</span>
 </button>
 <div className="flex flex-col">
 <span className="text-outline text-xs uppercase tracking-widest">Current Bid</span>
-<span className="text-2xl font-black text-secondary">4,200 $NEURONS</span>
-<span className="text-sm text-outline/60">$12,450.00 USD</span>
+<span className="text-2xl font-black text-secondary">{marketplaceMock.products[0].price}</span>
+<span className="text-sm text-outline/60">Mock listing value</span>
 </div>
 </div>
 </div>
@@ -171,7 +172,7 @@ const Marketplace = () => {
 </div>
 <div className="flex items-center justify-between pt-6 border-t border-outline-variant/10">
 <span className="text-2xl font-black text-secondary">50 $N</span>
-<button className="bg-primary-container text-on-primary-container px-6 py-2 rounded-xl text-sm font-bold">Enroll Now</button>
+<button disabled className="bg-primary-container text-on-primary-container px-6 py-2 rounded-xl text-sm font-bold disabled:cursor-not-allowed disabled:opacity-50">Preview only</button>
 </div>
 </div>
 <div className="bg-surface-container-low p-6 rounded-3xl border-outline-variant/10 flex flex-col justify-between hover:bg-surface-container-high transition-colors">
@@ -185,7 +186,7 @@ const Marketplace = () => {
 </div>
 <div className="flex items-center justify-between pt-6 border-t border-outline-variant/10">
 <span className="text-2xl font-black text-secondary">75 $N</span>
-<button className="bg-primary-container text-on-primary-container px-6 py-2 rounded-xl text-sm font-bold">Enroll Now</button>
+<button disabled className="bg-primary-container text-on-primary-container px-6 py-2 rounded-xl text-sm font-bold disabled:cursor-not-allowed disabled:opacity-50">Preview only</button>
 </div>
 </div>
 </div>

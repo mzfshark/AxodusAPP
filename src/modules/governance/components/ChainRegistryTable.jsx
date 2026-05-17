@@ -1,5 +1,6 @@
 import CapabilityPill from './CapabilityPill';
 import ChainRoleBadge from './ChainRoleBadge';
+import { GovernanceStandingSummary, ReasonSeverityBadge } from './GovernanceStanding';
 
 function formatPlugins(chain) {
   const plugins = chain.capabilities?.supportedPluginTypes ?? [];
@@ -21,15 +22,17 @@ export default function ChainRegistryTable({ chains }) {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[980px] text-left text-sm">
+        <table className="w-full min-w-[1220px] text-left text-sm">
           <thead>
             <tr className="border-b border-white/5 text-[11px] uppercase tracking-wider text-slate-500">
               <th className="px-5 py-3 font-bold">Network</th>
               <th className="px-5 py-3 font-bold">Roles</th>
               <th className="px-5 py-3 font-bold">Adapter</th>
               <th className="px-5 py-3 font-bold">Finality</th>
+              <th className="px-5 py-3 font-bold">Federation Standing</th>
               <th className="px-5 py-3 font-bold">Capabilities</th>
               <th className="px-5 py-3 font-bold">Plugins</th>
+              <th className="px-5 py-3 font-bold">Guardrail State</th>
             </tr>
           </thead>
           <tbody>
@@ -64,6 +67,9 @@ export default function ChainRegistryTable({ chains }) {
                   <div className="text-xs text-slate-500">window {chain.finality?.reorgWindowBlocks ?? '-'}</div>
                 </td>
                 <td className="px-5 py-4">
+                  <GovernanceStandingSummary chain={chain} compact />
+                </td>
+                <td className="px-5 py-4">
                   <div className="flex flex-wrap gap-2">
                     <CapabilityPill enabled={chain.capabilities?.voting} label="Voting" />
                     <CapabilityPill enabled={chain.capabilities?.treasury} label="Treasury" />
@@ -72,6 +78,15 @@ export default function ChainRegistryTable({ chains }) {
                   </div>
                 </td>
                 <td className="px-5 py-4 text-xs text-on-surface-variant">{formatPlugins(chain)}</td>
+                <td className="px-5 py-4">
+                  <div className="text-xs text-on-surface-variant">{chain.indexingStatus?.status ?? 'Not indexed'}</div>
+                  {chain.indexingStatus?.reasonCode ? (
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-[10px] uppercase text-slate-400">{chain.indexingStatus.reasonCode}</span>
+                      <ReasonSeverityBadge severity={chain.indexingStatus.reasonSeverity} />
+                    </div>
+                  ) : null}
+                </td>
               </tr>
             ))}
           </tbody>

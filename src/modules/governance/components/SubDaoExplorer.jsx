@@ -1,5 +1,6 @@
 import CapabilityPill from './CapabilityPill';
 import ChainRoleBadge from './ChainRoleBadge';
+import { GovernanceStandingSummary, GovernanceStatusBadge } from './GovernanceStanding';
 
 function shortAddress(address) {
   if (!address) return 'Pending deployment';
@@ -41,11 +42,12 @@ function DaoExplorerRow({ dao, chain, selected, onSelect, selectedDao, plugins, 
             <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
               {daoStatusLabel(dao, selectedDao, activePlugins, proposals)}
             </span>
+            <GovernanceStatusBadge status={dao.governanceStatus ?? chain?.governanceStatus} />
           </div>
           <h3 className="mt-3 truncate text-base font-black text-on-surface">{dao.name}</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-on-surface-variant">
             {dao.description ??
-              'Sub-DAO operating inside the Axodus federation. Local execution remains autonomous, while constitutional compatibility remains federal.'}
+              'Sub-DAO operating inside the Axodus federation. Local execution remains autonomous while constitutional standing remains observable.'}
           </p>
           <div className="mt-3 font-mono text-[11px] text-slate-500">
             {dao.network ?? 'network-pending'} · {shortAddress(dao.address)}
@@ -81,15 +83,37 @@ function DaoExplorerRow({ dao, chain, selected, onSelect, selectedDao, plugins, 
           </div>
         </div>
         <div className="rounded-md bg-surface-container-high p-3">
-          <div className="text-xs text-slate-500">Indexed state</div>
-          <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-            <span className="rounded-md border border-white/10 px-2 py-1 text-slate-300">
-              Plugins: {selected ? activePlugins.length : 'select'}
-            </span>
-            <span className="rounded-md border border-white/10 px-2 py-1 text-slate-300">
-              Proposals: {proposalCount ?? 'select'}
-            </span>
+          <div className="text-xs text-slate-500">Federation standing</div>
+          <div className="mt-2">
+            <GovernanceStandingSummary
+              chain={{
+                ...chain,
+                governanceStatus: dao.governanceStatus ?? chain?.governanceStatus,
+                federationMember: dao.federationMember ?? chain?.federationMember,
+                federationTier: dao.federationTier ?? chain?.federationTier,
+                constitutionalStanding: dao.constitutionalStanding ?? chain?.constitutionalStanding,
+              }}
+              compact
+            />
           </div>
+        </div>
+      </div>
+
+      <div className="mt-3 rounded-md bg-surface-container-high p-3">
+        <div className="text-xs text-slate-500">Indexed state</div>
+        <div className="mt-2 grid grid-cols-2 gap-2 text-xs md:grid-cols-4">
+          <span className="rounded-md border border-white/10 px-2 py-1 text-slate-300">
+            Plugins: {selected ? activePlugins.length : 'select'}
+          </span>
+          <span className="rounded-md border border-white/10 px-2 py-1 text-slate-300">
+            Proposals: {proposalCount ?? 'select'}
+          </span>
+          <span className="rounded-md border border-white/10 px-2 py-1 text-slate-300">
+            Federation: {dao.federationMember === false ? 'no' : 'yes'}
+          </span>
+          <span className="rounded-md border border-white/10 px-2 py-1 text-slate-300">
+            Tier: {dao.federationTier ?? chain?.federationTier ?? 'pending'}
+          </span>
         </div>
       </div>
     </article>
@@ -106,7 +130,7 @@ export default function SubDaoExplorer({ daos, chains, selectedDao, selectedDaoI
         <div>
           <h2 className="text-lg font-bold text-on-surface">Sub-DAO Explorer</h2>
           <p className="mt-1 max-w-3xl text-xs leading-5 text-on-surface-variant">
-            Federal view of Axodus operating DAOs. Each sub-DAO represents an ecosystem company or investment agency with scoped autonomy under central governance constraints.
+            Federation view of Axodus operating DAOs. Each local governance context keeps scoped autonomy while its standing remains observable through Constitutional Guardrails.
           </p>
         </div>
         <span className="rounded-md border border-white/10 px-3 py-1 text-xs font-bold text-slate-300">

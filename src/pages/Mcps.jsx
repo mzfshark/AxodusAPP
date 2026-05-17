@@ -1,4 +1,5 @@
 import React from 'react';
+import { mcpsMock } from '@/data/mock';
 
 const Mcps = () => {
   return (
@@ -9,6 +10,7 @@ const Mcps = () => {
 <div className="flex items-end gap-3 mb-6">
   <h1 className="text-3xl font-bold tracking-tight text-on-surface">MCP Servers</h1>
   <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">Monitoring</span>
+  <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">{mcpsMock.summary.activeMcpServices}/{mcpsMock.summary.totalMcpServices} active</span>
 </div>
 {/*  Server Grid  */}
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">

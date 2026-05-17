@@ -1,4 +1,5 @@
 import React from 'react';
+import { lotteryMock } from '@/data/mock';
 
 const Lottery = () => {
   return (
@@ -26,7 +27,7 @@ const Lottery = () => {
 <span className="text-xl font-bold text-primary-fixed tracking-widest">$NEURONS</span>
 </div>
 <div className="flex gap-4 items-center pt-4">
-<button className="kinetic-gradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform shadow-xl shadow-primary">Buy Tickets Now</button>
+<button disabled={!lotteryMock.draws[0].ticketMintingEnabled} className="kinetic-gradient text-on-primary px-8 py-4 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform shadow-xl shadow-primary disabled:cursor-not-allowed disabled:opacity-50">Ticket minting disabled</button>
 <div className="flex flex-col">
 <span className="text-[10px] text-outline uppercase tracking-widest">Starts In</span>
 <span className="text-2xl font-mono font-bold text-white tracking-tighter">04 : 12 : 55</span>
