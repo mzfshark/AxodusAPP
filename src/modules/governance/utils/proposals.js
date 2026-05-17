@@ -1,5 +1,5 @@
 export function getProposalRouteId(proposal) {
-  return proposal?.id ?? proposal?.entityId ?? proposal?.proposalId ?? proposal?.proposalIndex ?? null;
+  return proposal?.routeId ?? proposal?.slug ?? proposal?.id ?? proposal?.entityId ?? proposal?.proposalId ?? proposal?.proposalIndex ?? null;
 }
 
 export function getProposalTitle(proposal) {

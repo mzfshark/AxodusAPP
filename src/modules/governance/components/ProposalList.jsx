@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
+import ProposalCreateDraftModal from './ProposalCreateDraftModal';
 import {
   formatProposalDate,
   getProposalDescription,
@@ -39,9 +40,126 @@ function ProposalMeta({ label, value }) {
   );
 }
 
-export default function ProposalList({ proposals, selectedDao, canCreateProposal }) {
+function LocalDraftInspection({ proposal }) {
+  const request = proposal?.createProposalRequest;
+  const reasons = request?.guardrails?.reasonCodes ?? [];
+  const receipt = proposal?.submissionReceipt;
+  const submissionError = proposal?.submissionError;
+
+  if (!request) {
+    return (
+      <div className="rounded-lg border border-white/5 bg-surface-container-high p-4 text-xs leading-5 text-on-surface-variant">
+        No create proposal request preview is attached to this local draft.
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-lg border border-cyan-300/20 bg-cyan-950/10 p-4">
+      <div className="mb-3 text-xs font-black uppercase text-cyan-200">Create proposal request preview</div>
+      <div className="grid gap-2 md:grid-cols-3">
+        <ProposalMeta label="Submission mode" value={request.submissionMode} />
+        <ProposalMeta label="DAO" value={request.dao?.name ?? 'Not indexed'} />
+        <ProposalMeta label="Chain" value={request.chain?.network ?? 'Not indexed'} />
+      </div>
+      <div className="mt-3 grid gap-2">
+        {reasons.map((reason) => (
+          <div key={reason.reasonCode} className="rounded-md border border-white/5 bg-surface-container-high px-3 py-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono text-[11px] font-black text-on-surface">{reason.reasonCode}</span>
+              <span className="rounded border border-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-slate-300">{reason.reasonSeverity}</span>
+            </div>
+            <p className="mt-1 text-xs leading-5 text-on-surface-variant">{reason.message}</p>
+          </div>
+        ))}
+      </div>
+      {receipt ? (
+        <div className="mt-3 rounded-lg border border-emerald-300/20 bg-emerald-950/10 p-3">
+          <div className="text-xs font-black uppercase text-emerald-100">
+            {receipt.submissionMode === 'backend' ? 'Backend submission receipt' : 'Mock submission receipt'}
+          </div>
+          <div className="mt-2 grid gap-2 md:grid-cols-3">
+            <ProposalMeta label="Receipt" value={receipt.id} />
+            <ProposalMeta label="Status" value={receipt.status} />
+            <ProposalMeta label="Indexer" value={receipt.indexerReconciliation?.status ?? 'Not indexed'} />
+          </div>
+          <p className="mt-2 text-xs leading-5 text-emerald-50">{receipt.message}</p>
+          <p className="mt-1 font-mono text-[11px] text-emerald-100">{receipt.indexerReconciliation?.reasonCode}</p>
+        </div>
+      ) : null}
+      {submissionError ? (
+        <div className="mt-3 rounded-lg border border-amber-300/20 bg-amber-950/20 p-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-black uppercase text-amber-100">Submission error</span>
+            <span className="rounded border border-white/10 px-2 py-0.5 text-[10px] font-black uppercase text-amber-100">
+              {submissionError.reasonSeverity}
+            </span>
+          </div>
+          <p className="mt-2 text-xs leading-5 text-amber-50">{submissionError.message}</p>
+          <p className="mt-1 font-mono text-[11px] text-amber-100">{submissionError.reasonCode}</p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function LocalDraftActions({ proposal, inspected, onInspect, onMarkReadyForReview, onMockSubmitDraft }) {
+  if (proposal?.dataSource !== 'local-draft') return null;
+
+  const submitted = Boolean(proposal.submissionReceipt) || proposal.submissionState === 'mock-submitted' || proposal.submissionState === 'backend-submitted';
+  const submitting = proposal.submissionState === 'submitting';
+  const failed = proposal.submissionState === 'submit-failed';
+  const reviewReady = proposal.submissionState === 'ready-for-review' || failed || submitted;
+
+  return (
+    <div className="flex flex-col gap-2 border-t border-white/5 pt-3 sm:flex-row sm:items-center sm:justify-between">
+      <p className="text-xs leading-5 text-on-surface-variant">
+        Browser-only draft. Review and submit states are local mock states; no backend write, wallet prompt or on-chain transaction is submitted.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => onInspect?.(inspected ? null : proposal.id)}
+          className="rounded-md border border-white/10 px-3 py-1.5 text-xs font-black uppercase text-slate-300 hover:border-cyan-300/30 hover:text-cyan-100"
+        >
+          {inspected ? 'Hide request' : 'Inspect request'}
+        </button>
+        <button
+          type="button"
+          disabled={reviewReady || submitting}
+          onClick={() => onMarkReadyForReview?.(proposal.id)}
+          className="rounded-md border border-amber-300/20 px-3 py-1.5 text-xs font-black uppercase text-amber-100 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
+        >
+          Ready for review
+        </button>
+        <button
+          type="button"
+          disabled={!reviewReady || submitted || submitting}
+          onClick={() => onMockSubmitDraft?.(proposal.id)}
+          className="rounded-md border border-cyan-300/20 px-3 py-1.5 text-xs font-black uppercase text-cyan-100 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
+        >
+          {submitting ? 'Submitting' : failed ? 'Retry submit' : 'Mock submit'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function ProposalList({
+  proposals,
+  selectedDao,
+  selectedChain,
+  plugins = [],
+  walletAddress,
+  canCreateProposal,
+  onCreateDraft,
+  onMarkReadyForReview,
+  onMockSubmitDraft,
+}) {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [inspectedDraftId, setInspectedDraftId] = useState(null);
 
   const statusOptions = useMemo(() => {
     const statuses = Array.from(new Set(proposals.map((proposal) => getProposalStatus(proposal)).filter(Boolean)));
@@ -71,6 +189,7 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
         <button
           type="button"
           disabled={!canCreateProposal}
+          onClick={() => setCreateModalOpen(true)}
           className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-black text-on-primary disabled:cursor-not-allowed disabled:bg-surface-container-high disabled:text-slate-500"
         >
           <span className="material-symbols-outlined text-[18px]">add_circle</span>
@@ -118,7 +237,7 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
       {filteredProposals.length > 0 ? (
         <div className="divide-y divide-white/5">
           {filteredProposals.map((proposal) => {
-            const proposalRouteId = getProposalRouteId(proposal);
+            const proposalRouteId = proposal.dataSource === 'local-draft' ? null : getProposalRouteId(proposal);
             const content = (
               <div className="grid gap-4">
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
@@ -130,6 +249,11 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
                     <span className="w-fit rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
                       {getProposalStatus(proposal)}
                     </span>
+                    {proposal.dataSource === 'local-draft' ? (
+                      <span className="w-fit rounded-md border border-amber-300/20 bg-amber-950/20 px-2 py-1 text-[11px] font-black uppercase text-amber-100">
+                        Local draft
+                      </span>
+                    ) : null}
                     {proposal.dataSource === 'dev-mock' ? (
                       <span className="w-fit rounded-md border border-cyan-300/20 bg-cyan-950/20 px-2 py-1 text-[11px] font-black uppercase text-cyan-100">
                         Dev mock
@@ -143,11 +267,19 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
                   <ProposalMeta label="Start" value={formatProposalDate(proposal?.startDate ?? proposal?.startAt)} />
                   <ProposalMeta label="End" value={formatProposalDate(proposal?.endDate ?? proposal?.endAt)} />
                 </div>
+                <LocalDraftActions
+                  proposal={proposal}
+                  inspected={inspectedDraftId === proposal.id}
+                  onInspect={setInspectedDraftId}
+                  onMarkReadyForReview={onMarkReadyForReview}
+                  onMockSubmitDraft={onMockSubmitDraft}
+                />
+                {inspectedDraftId === proposal.id ? <LocalDraftInspection proposal={proposal} /> : null}
               </div>
             );
 
             return (
-              <article key={proposalRouteId ?? proposal.proposalIndex} className="px-5 py-4 transition-colors hover:bg-white/[0.03]">
+              <article key={proposalRouteId ?? proposal.id ?? proposal.proposalIndex} className="px-5 py-4 transition-colors hover:bg-white/[0.03]">
                 {proposalRouteId ? (
                   <Link to={`/governance/proposals/${encodeURIComponent(proposalRouteId)}`} className="block">
                     {content}
@@ -180,6 +312,17 @@ export default function ProposalList({ proposals, selectedDao, canCreateProposal
           </p>
         </div>
       )}
+
+      <ProposalCreateDraftModal
+        open={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        selectedDao={selectedDao}
+        selectedChain={selectedChain}
+        plugins={plugins}
+        walletAddress={walletAddress}
+        canCreateProposal={canCreateProposal}
+        onCreateDraft={onCreateDraft}
+      />
     </section>
   );
 }

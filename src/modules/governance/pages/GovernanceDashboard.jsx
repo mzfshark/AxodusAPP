@@ -4,8 +4,11 @@ import DaoContextSelector from '../components/DaoContextSelector';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
+import { getCreateProposalIntegrationStatus } from '../api/createProposalContract';
+import { shouldUseGovernanceMocks } from '../api/mockGovernanceData';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
+import { useProposalDrafts } from '../hooks/useProposalDrafts';
 import { acsMock } from '@/data/mock';
 
 function StatCard({ icon, label, value, detail }) {
@@ -172,6 +175,174 @@ function ObservabilityPanel({ summary }) {
   );
 }
 
+function readinessTone(status) {
+  if (status === 'ready') return 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100';
+  if (status === 'dev') return 'border-cyan-300/20 bg-cyan-950/20 text-cyan-100';
+  if (status === 'waiting') return 'border-amber-300/20 bg-amber-950/20 text-amber-100';
+  return 'border-white/10 bg-surface-container-high text-slate-300';
+}
+
+function GovernanceReadinessPanel({ registryStatus, registrySource, selectedDao, selectedChain, proposals, plugins, proposalDrafts, canCreateProposal }) {
+  const mockMode = shouldUseGovernanceMocks();
+  const items = [
+    {
+      label: 'Registry source',
+      value: registryStatus === 'success' ? 'Backend synced' : registrySource === 'fallback' ? 'Fallback snapshot' : 'Loading',
+      detail: registryStatus === 'success' ? 'Chain and guardrail metadata are coming from the Governance API.' : 'Using local renderable state until backend data is reachable.',
+      status: registryStatus === 'success' ? 'ready' : 'waiting',
+      icon: 'dns',
+    },
+    {
+      label: 'Selected governance context',
+      value: selectedDao?.name ?? 'No DAO selected',
+      detail: selectedChain?.name ? `${selectedChain.name} · ${selectedDao?.governanceStatus ?? 'under-review'}` : 'No registered chain context selected.',
+      status: selectedDao && selectedChain ? 'ready' : 'waiting',
+      icon: 'account_tree',
+    },
+    {
+      label: 'Proposal data',
+      value: proposals.length ? `${proposals.length} proposal${proposals.length === 1 ? '' : 's'}` : 'No proposals indexed',
+      detail: mockMode ? 'Development fixtures are enabled for proposal UI validation.' : 'Proposal count reflects backend/indexer payloads.',
+      status: proposals.length ? (mockMode ? 'dev' : 'ready') : 'waiting',
+      icon: 'ballot',
+    },
+    {
+      label: 'Plugin data',
+      value: plugins.length ? `${plugins.length} plugin${plugins.length === 1 ? '' : 's'}` : 'No plugins indexed',
+      detail: mockMode ? 'Development plugin fixtures are enabled.' : 'Plugin capabilities are rendered from governance data sources.',
+      status: plugins.length ? (mockMode ? 'dev' : 'ready') : 'waiting',
+      icon: 'extension',
+    },
+    {
+      label: 'Local drafts',
+      value: proposalDrafts.length ? `${proposalDrafts.length} draft${proposalDrafts.length === 1 ? '' : 's'}` : 'No local drafts',
+      detail: proposalDrafts.length
+        ? 'Drafts are stored locally for development review and are not backend or on-chain proposals.'
+        : 'No local proposal drafts have been generated in this browser session.',
+      status: proposalDrafts.length ? 'dev' : 'waiting',
+      icon: 'draft',
+    },
+    {
+      label: 'Proposal creation',
+      value: canCreateProposal ? 'Wallet-ready' : 'Read-only',
+      detail: canCreateProposal
+        ? 'Selected context has enough observed state for the create-proposal entry point.'
+        : 'Creation remains hidden until wallet, DAO, chain and plugin state are present.',
+      status: canCreateProposal ? 'ready' : 'waiting',
+      icon: 'edit_note',
+    },
+  ];
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Operations Readiness</h2>
+          <p className="mt-1 text-xs leading-5 text-on-surface-variant">
+            Rendered readiness of the current Governance Operations Center inputs. This panel reports observed frontend data availability only.
+          </p>
+        </div>
+        <span className="rounded-md border border-white/10 px-3 py-1 text-xs font-bold text-slate-300">
+          {mockMode ? 'dev fixtures enabled' : 'backend/indexer mode'}
+        </span>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-2 xl:grid-cols-6">
+        {items.map((item) => (
+          <div key={item.label} className={`rounded-lg border p-4 ${readinessTone(item.status)}`}>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="text-[11px] font-black uppercase opacity-80">{item.label}</span>
+              <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
+            </div>
+            <div className="text-sm font-black">{item.value}</div>
+            <p className="mt-2 text-xs leading-5 opacity-80">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CreateProposalIntegrationPanel({ proposalDrafts = [] }) {
+  const integration = getCreateProposalIntegrationStatus();
+  const draftCounts = proposalDrafts.reduce(
+    (counts, draft) => ({
+      ...counts,
+      [draft.submissionState ?? 'draft']: (counts[draft.submissionState ?? 'draft'] ?? 0) + 1,
+    }),
+    {},
+  );
+  const draftStateEntries = Object.entries(draftCounts);
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Create Proposal Integration Status</h2>
+          <p className="mt-1 text-xs leading-5 text-on-surface-variant">
+            Observed integration mode for proposal creation. This panel reports routing state only; it does not evaluate governance validity.
+          </p>
+        </div>
+        <span
+          className={`rounded-md border px-3 py-1 text-xs font-black uppercase ${
+            integration.backendEnabled ? 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100' : 'border-cyan-300/20 bg-cyan-950/20 text-cyan-100'
+          }`}
+        >
+          {integration.backendEnabled ? 'backend enabled' : 'mock review'}
+        </span>
+      </div>
+
+      <div className="grid gap-4 p-5 lg:grid-cols-[1fr_1.2fr]">
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-[11px] font-black uppercase text-slate-500">Submission mode</div>
+            <div className="mt-2 font-mono text-sm font-black text-on-surface">{integration.submissionMode}</div>
+          </div>
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-[11px] font-black uppercase text-slate-500">Backend endpoint</div>
+            <div className="mt-2 break-all font-mono text-xs font-semibold text-on-surface">{integration.endpoint}</div>
+          </div>
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4 md:col-span-2">
+            <div className="text-[11px] font-black uppercase text-slate-500">Local draft states</div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {draftStateEntries.length > 0 ? (
+                draftStateEntries.map(([state, count]) => (
+                  <span key={state} className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
+                    {state}: {count}
+                  </span>
+                ))
+              ) : (
+                <span className="text-xs text-on-surface-variant">No local drafts in this browser context.</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+          <div className="text-[11px] font-black uppercase text-slate-500">Active create-proposal reason codes</div>
+          <div className="mt-3 grid gap-2">
+            {integration.reasonCodes.length > 0 ? (
+              integration.reasonCodes.map((reason) => (
+                <div key={reason.reasonCode} className="rounded-md border border-white/5 bg-surface-container px-3 py-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[11px] font-black uppercase text-on-surface">{reason.reasonCode}</span>
+                    <ReasonSeverityBadge severity={reason.reasonSeverity} />
+                  </div>
+                  <p className="mt-1 text-xs leading-5 text-on-surface-variant">{reason.message}</p>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-md border border-emerald-300/20 bg-emerald-950/10 px-3 py-2 text-xs leading-5 text-emerald-100">
+                No frontend create-proposal integration reason codes are active.
+              </div>
+            )}
+          </div>
+          <p className="mt-3 text-xs leading-5 text-on-surface-variant">{integration.boundary}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function ConstitutionalGuardrailsPanel({
   reasons = [],
   title = 'Constitutional Guardrails',
@@ -230,7 +401,13 @@ function ConstitutionalGuardrailsPanel({
 export default function GovernanceDashboard() {
   const { chains, summary, source, status, error } = useChainRegistry();
   const governanceConsole = useGovernanceConsole(chains);
+  const proposalDrafts = useProposalDrafts({
+    selectedDao: governanceConsole.selectedDao,
+    selectedChain: governanceConsole.selectedChain,
+    walletAddress: governanceConsole.walletAddress,
+  });
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
+  const visibleProposals = [...proposalDrafts.drafts, ...governanceConsole.proposals];
 
   return (
     <main className="min-h-full bg-background p-4 md:p-8">
@@ -269,6 +446,19 @@ export default function GovernanceDashboard() {
 
         <ObservabilityPanel summary={summary} />
 
+        <GovernanceReadinessPanel
+          registryStatus={status}
+          registrySource={source}
+          selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+          proposals={governanceConsole.proposals}
+          plugins={governanceConsole.plugins}
+          proposalDrafts={proposalDrafts.drafts}
+          canCreateProposal={governanceConsole.canCreateProposal}
+        />
+
+        <CreateProposalIntegrationPanel proposalDrafts={proposalDrafts.drafts} />
+
         <ConstitutionalGuardrailsPanel reasons={summary.guardrailReasons} />
 
         <ConstitutionalGuardrailsPanel
@@ -297,15 +487,21 @@ export default function GovernanceDashboard() {
           selectedDaoId={governanceConsole.selectedDaoId}
           onSelect={governanceConsole.setSelectedDaoId}
           plugins={governanceConsole.plugins}
-          proposals={governanceConsole.proposals}
+          proposals={visibleProposals}
           status={governanceConsole.status}
           error={governanceConsole.error}
         />
 
         <ProposalList
-          proposals={governanceConsole.proposals}
+          proposals={visibleProposals}
           selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+          plugins={governanceConsole.plugins}
+          walletAddress={governanceConsole.walletAddress}
           canCreateProposal={governanceConsole.canCreateProposal}
+          onCreateDraft={proposalDrafts.createDraft}
+          onMarkReadyForReview={proposalDrafts.markDraftReadyForReview}
+          onMockSubmitDraft={proposalDrafts.mockSubmitDraft}
         />
 
         <ChainRegistryTable chains={chains} />

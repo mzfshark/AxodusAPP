@@ -18,9 +18,12 @@ export function getMockGovernanceProposal(proposalId) {
 
   return mockGovernanceProposals.find(
     (proposal) =>
+      proposal.routeId === proposalId ||
+      proposal.slug === proposalId ||
       proposal.id === proposalId ||
       proposal.entityId === proposalId ||
       proposal.proposalId === proposalId ||
+      proposal.aliases?.includes(proposalId) ||
       String(proposal.proposalIndex) === String(proposalId),
   );
 }
