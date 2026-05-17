@@ -171,3 +171,30 @@ Examples:
 Reasoning:
 
 Governance restrictions must be auditable and understandable by users, operators, SDKs, indexers, and future AI agents.
+
+---
+
+## Decision 14 — Create Proposal UI Starts as a Preview Contract
+
+AxodusAPP may render and persist local create-proposal drafts before backend or on-chain submission is enabled.
+
+Local drafts are browser-only development state. They may expose review and mock submit states, but they must not be represented as indexed or on-chain proposals.
+
+The frontend create-proposal request shape is defined as a preview contract and must include:
+
+- DAO context
+- chain context
+- creator wallet
+- plugin metadata
+- proposal metadata
+- Constitutional Guardrail reason codes
+- backend validation requirement
+- indexer reconciliation requirement
+
+Reasoning:
+
+The Governance Operations Center needs a stable UI and integration contract before final contracts and backend endpoints are production-ready. The frontend must still preserve the boundary that constitutional validity, permissions, sanctions, execution and indexing truth come from governance data sources.
+
+Implementation note:
+
+The create-proposal submission contract may call the Governance API only when `VITE_GOVERNANCE_CREATE_PROPOSAL_ENABLED=true`. Otherwise, AxodusAPP must keep using explicit local mock receipts so development state cannot be confused with indexed or on-chain proposals.
