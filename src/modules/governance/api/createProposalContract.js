@@ -18,14 +18,18 @@ function createReason(reasonCode, reasonSeverity, source, message) {
 }
 
 function buildCreateProposalReasonCodes({ draft, walletAddress, plugin }) {
-  const reasons = [
-    createReason(
-      'CREATE_PROPOSAL_BACKEND_NOT_ENABLED',
-      'info',
-      'frontend submission boundary',
-      'Create proposal is currently a local mock workflow. Backend submission is not enabled.',
-    ),
-  ];
+  const reasons = [];
+
+  if (!backendCreateProposalEnabled) {
+    reasons.push(
+      createReason(
+        'CREATE_PROPOSAL_BACKEND_NOT_ENABLED',
+        'info',
+        'frontend submission boundary',
+        'Create proposal is currently a local mock workflow. Backend submission is not enabled.',
+      ),
+    );
+  }
 
   if (!walletAddress) {
     reasons.push(createReason('WALLET_NOT_CONNECTED', 'warning', 'wallet or DAO permission state', 'A connected wallet is required before live proposal submission.'));
@@ -62,7 +66,7 @@ export function buildCreateProposalRequest({
   selectedChain,
   walletAddress,
   plugin,
-  submissionMode = createProposalSubmissionModes.MOCK_REVIEW,
+  submissionMode = backendCreateProposalEnabled ? createProposalSubmissionModes.BACKEND : createProposalSubmissionModes.MOCK_REVIEW,
 }) {
   const reasonCodes = buildCreateProposalReasonCodes({ draft, walletAddress, plugin });
 
@@ -152,6 +156,35 @@ function normalizeCreateProposalReceipt(response, request) {
   };
 }
 
+async function readCreateProposalError(response) {
+  try {
+    const contentType = response.headers?.get?.('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      return await response.json();
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function createProposalSubmissionError(response, payload) {
+  const reasonCode = payload?.reasonCode ?? payload?.error?.reasonCode ?? 'CREATE_PROPOSAL_SUBMISSION_FAILED';
+  const reasonSeverity = payload?.reasonSeverity ?? payload?.error?.reasonSeverity ?? 'warning';
+  const source = payload?.source ?? payload?.error?.source ?? 'backend submission boundary';
+  const message = payload?.message ?? payload?.error?.message ?? `createProposal failed with HTTP ${response.status}`;
+  const error = new Error(message);
+
+  error.status = response.status;
+  error.reasonCode = reasonCode;
+  error.reasonSeverity = reasonSeverity;
+  error.source = source;
+  error.details = payload?.details ?? payload?.error?.details ?? payload ?? null;
+
+  return error;
+}
+
 export function submitCreateProposalMock({ draft, request } = {}) {
   const submittedAt = new Date().toISOString();
   const receiptId = `mock-create-${submittedAt.replace(/[^a-zA-Z0-9]/g, '').slice(0, 14)}`;
@@ -189,7 +222,7 @@ export async function createGovernanceProposal({ request, signal, fetchImpl = fe
   });
 
   if (!response.ok) {
-    throw new Error(`createProposal failed with HTTP ${response.status}`);
+    throw createProposalSubmissionError(response, await readCreateProposalError(response));
   }
 
   return normalizeCreateProposalReceipt(await response.json(), request);

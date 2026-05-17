@@ -70,7 +70,7 @@ export function useProposalDrafts({ selectedDao, selectedChain, walletAddress } 
         endDate: draftInput.endDate || null,
         rationale: draftInput.rationale || null,
         dataSource: 'local-draft',
-        submissionMode: 'mock-review',
+        submissionMode: draftInput.createProposalRequest?.submissionMode ?? 'mock-review',
         submissionState: 'draft',
         createProposalRequest: draftInput.createProposalRequest ?? null,
         executionPreview: 'Local draft only. No backend write, wallet prompt or on-chain transaction has been submitted.',
@@ -111,9 +111,11 @@ export function useProposalDrafts({ selectedDao, selectedChain, walletAddress } 
           submissionState: 'submit-failed',
           submissionError: {
             message: error?.message ?? 'Create proposal submission failed.',
-            reasonCode: 'CREATE_PROPOSAL_SUBMISSION_FAILED',
-            reasonSeverity: 'warning',
-            source: 'backend submission boundary',
+            reasonCode: error?.reasonCode ?? 'CREATE_PROPOSAL_SUBMISSION_FAILED',
+            reasonSeverity: error?.reasonSeverity ?? 'warning',
+            source: error?.source ?? 'backend submission boundary',
+            status: error?.status ?? null,
+            details: error?.details ?? null,
             failedAt: new Date().toISOString(),
           },
         };
@@ -148,6 +150,5 @@ export function useProposalDrafts({ selectedDao, selectedChain, walletAddress } 
     createDraft,
     markDraftReadyForReview: (draftId) => updateDraftState(draftId, 'ready-for-review'),
     submitDraft,
-    mockSubmitDraft: submitDraft,
   };
 }

@@ -96,25 +96,34 @@ function LocalDraftInspection({ proposal }) {
             </span>
           </div>
           <p className="mt-2 text-xs leading-5 text-amber-50">{submissionError.message}</p>
-          <p className="mt-1 font-mono text-[11px] text-amber-100">{submissionError.reasonCode}</p>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <span className="font-mono text-[11px] text-amber-100">{submissionError.reasonCode}</span>
+            {submissionError.status ? <span className="font-mono text-[11px] text-amber-100">HTTP {submissionError.status}</span> : null}
+          </div>
+          {submissionError.source ? <p className="mt-1 text-[11px] uppercase text-amber-100/80">{submissionError.source}</p> : null}
         </div>
       ) : null}
     </div>
   );
 }
 
-function LocalDraftActions({ proposal, inspected, onInspect, onMarkReadyForReview, onMockSubmitDraft }) {
+function LocalDraftActions({ proposal, inspected, onInspect, onMarkReadyForReview, onSubmitDraft }) {
   if (proposal?.dataSource !== 'local-draft') return null;
 
+  const submissionMode = proposal.createProposalRequest?.submissionMode ?? proposal.submissionMode ?? 'mock-review';
+  const liveBackendMode = submissionMode === 'backend';
   const submitted = Boolean(proposal.submissionReceipt) || proposal.submissionState === 'mock-submitted' || proposal.submissionState === 'backend-submitted';
   const submitting = proposal.submissionState === 'submitting';
   const failed = proposal.submissionState === 'submit-failed';
   const reviewReady = proposal.submissionState === 'ready-for-review' || failed || submitted;
+  const submitLabel = liveBackendMode ? 'Submit to backend' : 'Mock submit';
+  const retryLabel = liveBackendMode ? 'Retry backend' : 'Retry submit';
 
   return (
     <div className="flex flex-col gap-2 border-t border-white/5 pt-3 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-xs leading-5 text-on-surface-variant">
-        Browser-only draft. Review and submit states are local mock states; no backend write, wallet prompt or on-chain transaction is submitted.
+        Browser-local draft. Review state is local; submission follows the observed createProposal integration mode and never opens a wallet prompt or direct on-chain
+        transaction.
       </p>
       <div className="flex flex-wrap gap-2">
         <button
@@ -135,10 +144,10 @@ function LocalDraftActions({ proposal, inspected, onInspect, onMarkReadyForRevie
         <button
           type="button"
           disabled={!reviewReady || submitted || submitting}
-          onClick={() => onMockSubmitDraft?.(proposal.id)}
+          onClick={() => onSubmitDraft?.(proposal.id)}
           className="rounded-md border border-cyan-300/20 px-3 py-1.5 text-xs font-black uppercase text-cyan-100 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
         >
-          {submitting ? 'Submitting' : failed ? 'Retry submit' : 'Mock submit'}
+          {submitting ? 'Submitting' : failed ? retryLabel : submitLabel}
         </button>
       </div>
     </div>
@@ -154,7 +163,7 @@ export default function ProposalList({
   canCreateProposal,
   onCreateDraft,
   onMarkReadyForReview,
-  onMockSubmitDraft,
+  onSubmitDraft,
 }) {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -272,7 +281,7 @@ export default function ProposalList({
                   inspected={inspectedDraftId === proposal.id}
                   onInspect={setInspectedDraftId}
                   onMarkReadyForReview={onMarkReadyForReview}
-                  onMockSubmitDraft={onMockSubmitDraft}
+                  onSubmitDraft={onSubmitDraft}
                 />
                 {inspectedDraftId === proposal.id ? <LocalDraftInspection proposal={proposal} /> : null}
               </div>
