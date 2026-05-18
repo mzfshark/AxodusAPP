@@ -11,6 +11,18 @@ import Business from "./pages/Business";
 
 // Importações dos novos componentes estáticos
 import {
+  AcademyCertifications,
+  AcademyCourseDetails,
+  AcademyCourses,
+  AcademyDashboard,
+  AcademyGovernanceReview,
+  AcademyHome,
+  AcademyPathViewer,
+  AcademyProgressEngine,
+  AcademyRewards,
+  AcademyTutorProfile,
+} from "./modules/academy";
+import {
   MiningAllocations,
   MiningGovernance,
   MiningHashTokens,
@@ -33,7 +45,6 @@ import {
   MarketplaceProductDetail,
   MarketplaceSellerProfile,
 } from "./modules/marketplace";
-import Academy from "./pages/Academy";
 import Dex from "./pages/Dex";
 import Lottery from "./pages/Lottery";
 import Mcps from "./pages/Mcps";
@@ -76,7 +87,16 @@ const router = createBrowserRouter([
       { path: "marketplace/licenses", element: <MarketplaceLicenses /> },
       { path: "marketplace/dashboard", element: <MarketplaceDashboard /> },
       { path: "item/:chain/:contract/:id", element: <MarketplaceLegacyItem /> },
-      { path: "academy", element: <Academy /> },
+      { path: "academy", element: <AcademyHome /> },
+      { path: "academy/courses", element: <AcademyCourses /> },
+      { path: "academy/courses/:courseSlug", element: <AcademyCourseDetails /> },
+      { path: "academy/dashboard", element: <AcademyDashboard /> },
+      { path: "academy/progress", element: <AcademyProgressEngine /> },
+      { path: "academy/tutors/:tutorId", element: <AcademyTutorProfile /> },
+      { path: "academy/certifications", element: <AcademyCertifications /> },
+      { path: "academy/rewards", element: <AcademyRewards /> },
+      { path: "academy/governance-review", element: <AcademyGovernanceReview /> },
+      { path: "academy/paths/:pathId", element: <AcademyPathViewer /> },
       { path: "dex", element: <Dex /> },
       { path: "lottery", element: <Lottery /> },
       { path: "bba", element: <BbaHome /> },

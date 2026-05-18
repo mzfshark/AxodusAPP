@@ -140,11 +140,14 @@ Current priority: Governance Operations Center, createProposal observability, an
 
 ## Academy Tasks
 
-- Create Course listing — 5%
-- Create Learning dashboard — 5%
-- Create Certification interface — 4%
-- Create Reward visibility — 5%
-- Create Learn-to-Win UI — 4%
+- Create Course listing — 55%; `/academy/courses` is mock-driven with filters for category, level, reward class, access type, and language.
+- Create Course detail page — 52%; `/academy/courses/:courseSlug` exposes PoK requirement, constitutional standing, reward model, tutor, lessons, prerequisites, and supported chains.
+- Create Learning dashboard — 50%; `/academy/dashboard` exposes progress, certification, reward, governance, and tutor telemetry.
+- Create Progress Engine — 55%; `/academy/progress` exposes level, trust score, Locked $NEURONS, Unlocked $NEURONS, next unlocks, ACS eligibility, Marketplace eligibility, PoK readiness, and constitutional standing.
+- Create Certification interface — 48%; `/academy/certifications` previews mock certificates, proof hashes, governance validation, and NFT compatibility without issuing credentials.
+- Create Reward visibility — 55%; `/academy/rewards` explicitly separates Locked Rewards from Unlocked Rewards and shows reward source, utility, transferability status, and governance control.
+- Create Academy Governance Review — 48%; `/academy/governance-review` exposes constitutional, treasury, reward, certification, and ACS review visibility without implying direct user governance validation.
+- Create Learn-to-Win UI — 45%; learning paths, reward classes, and progression states are visible with mock data only.
 
 ---
 
