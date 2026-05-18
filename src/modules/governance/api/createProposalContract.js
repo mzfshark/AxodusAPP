@@ -122,6 +122,7 @@ export function getCreateProposalIntegrationStatus() {
     submissionMode: backendCreateProposalEnabled ? createProposalSubmissionModes.BACKEND : createProposalSubmissionModes.MOCK_REVIEW,
     backendEnabled: backendCreateProposalEnabled,
     endpoint: createProposalEndpoint,
+    reviewRequestsEndpoint: createProposalEndpoint,
     reasonCodes: backendCreateProposalEnabled
       ? []
       : [
@@ -135,6 +136,22 @@ export function getCreateProposalIntegrationStatus() {
     boundary:
       'AxodusAPP forwards or renders create-proposal state only. Constitutional validity, permissions, sanctions, execution and indexing truth must come from governance data sources.',
   };
+}
+
+function createReviewRequestsUrl(filters = {}) {
+  const url = new URL(createProposalEndpoint, window.location.origin);
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      url.searchParams.set(key, String(value));
+    }
+  });
+
+  if (createProposalEndpoint.startsWith('/')) {
+    return `${url.pathname}${url.search}`;
+  }
+
+  return url.toString();
 }
 
 function normalizeCreateProposalReceipt(response, request) {
@@ -226,6 +243,49 @@ export async function createGovernanceProposal({ request, signal, fetchImpl = fe
   }
 
   return normalizeCreateProposalReceipt(await response.json(), request);
+}
+
+export async function listCreateProposalReviewRequests({ filters = {}, signal, fetchImpl = fetch } = {}) {
+  if (!backendCreateProposalEnabled) {
+    return {
+      items: [],
+      count: 0,
+      source: 'frontend-disabled',
+      endpoint: createProposalEndpoint,
+      reasonCodes: [
+        createReason(
+          'CREATE_PROPOSAL_BACKEND_NOT_ENABLED',
+          'info',
+          'frontend submission boundary',
+          'Create proposal review request listing is disabled while backend submission is disabled.',
+        ),
+      ],
+    };
+  }
+
+  const endpoint = createReviewRequestsUrl(filters);
+  const response = await fetchImpl(endpoint, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+    signal,
+  });
+
+  if (!response.ok) {
+    throw createProposalSubmissionError(response, await readCreateProposalError(response));
+  }
+
+  const payload = await response.json();
+  const items = Array.isArray(payload?.items) ? payload.items : [];
+
+  return {
+    items,
+    count: Number.isFinite(payload?.count) ? payload.count : items.length,
+    source: payload?.source ?? 'CreateProposalRequest',
+    endpoint,
+    reasonCodes: payload?.reasonCodes ?? [],
+  };
 }
 
 export async function submitCreateProposal({ draft, request, signal, fetchImpl } = {}) {

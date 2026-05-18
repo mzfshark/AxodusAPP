@@ -30,6 +30,7 @@ function draftStatusLabel(submissionState) {
   if (submissionState === 'submitting') return 'Submitting';
   if (submissionState === 'mock-submitted') return 'Mock submitted';
   if (submissionState === 'backend-submitted') return 'Backend submitted';
+  if (submissionState === 'backend-review-queued') return 'Backend review queued';
   return 'Submitted for review';
 }
 

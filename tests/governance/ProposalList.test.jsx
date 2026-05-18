@@ -158,6 +158,82 @@ function ProposalListFailureHarness() {
   );
 }
 
+function ProposalListBackendSuccessHarness() {
+  const [drafts, setDrafts] = useState([
+    {
+      id: 'local-draft-backend-success-test',
+      title: 'Backend accepted proposal',
+      summary: 'Validate backend review queued state.',
+      description: 'Validate backend review queued state.',
+      status: 'Ready for review',
+      submissionState: 'ready-for-review',
+      submissionReceipt: null,
+      submissionError: null,
+      dataSource: 'local-draft',
+      network: selectedChain.network,
+      chainName: selectedChain.name,
+      daoName: selectedDao.name,
+      pluginType: 'Token Voting',
+      createProposalRequest: {
+        submissionMode: 'backend',
+        dao: { name: selectedDao.name },
+        chain: { network: selectedChain.network },
+        guardrails: { reasonCodes: [] },
+      },
+      createdAt: '2026-05-16T12:00:00.000Z',
+    },
+  ]);
+
+  function submitWithBackendReviewQueued(draftId) {
+    setDrafts((current) =>
+      current.map((draft) =>
+        draft.id === draftId
+          ? {
+              ...draft,
+              status: 'Backend review queued',
+              submissionState: 'backend-review-queued',
+              submissionReceipt: {
+                id: 'backend-create-1',
+                status: 'backend-review-queued',
+                submissionMode: 'backend',
+                message: 'Create proposal request accepted by the Governance API for non-on-chain review.',
+                indexerReconciliation: {
+                  status: 'pending',
+                  reasonCode: 'INDEXER_STATE_NOT_READY',
+                  reasonSeverity: 'info',
+                },
+                reasonCodes: [
+                  {
+                    reasonCode: 'CREATE_PROPOSAL_BACKEND_REVIEW_REQUIRED',
+                    reasonSeverity: 'info',
+                    source: 'backend submission boundary',
+                    message: 'Create proposal request was accepted for backend review without wallet prompt or on-chain transaction.',
+                  },
+                ],
+              },
+            }
+          : draft,
+      ),
+    );
+  }
+
+  return (
+    <MemoryRouter>
+      <ProposalList
+        proposals={drafts}
+        selectedDao={selectedDao}
+        selectedChain={selectedChain}
+        plugins={plugins}
+        walletAddress="0xAxoD000000000000000000000000000000000001"
+        canCreateProposal
+        onCreateDraft={() => null}
+        onMarkReadyForReview={() => null}
+        onSubmitDraft={submitWithBackendReviewQueued}
+      />
+    </MemoryRouter>
+  );
+}
+
 describe('ProposalList create proposal draft flow', () => {
   test('creates a local draft and advances mock review submission state', () => {
     render(<ProposalListHarness />);
@@ -203,5 +279,19 @@ describe('ProposalList create proposal draft flow', () => {
     expect(screen.getAllByText(/http 500/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/backend submission boundary/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /retry backend/i })).toBeInTheDocument();
+  });
+
+  test('renders backend review queued receipt metadata for accepted drafts', () => {
+    render(<ProposalListBackendSuccessHarness />);
+
+    fireEvent.click(screen.getByRole('button', { name: /inspect request/i }));
+    fireEvent.click(screen.getByRole('button', { name: /submit to backend/i }));
+
+    expect(screen.getAllByText(/backend review queued/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/backend submission receipt/i)).toBeInTheDocument();
+    expect(screen.getByText('backend-create-1')).toBeInTheDocument();
+    expect(screen.getByText('CREATE_PROPOSAL_BACKEND_REVIEW_REQUIRED')).toBeInTheDocument();
+    expect(screen.getByText(/backend submission boundary/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit to backend/i })).toBeDisabled();
   });
 });

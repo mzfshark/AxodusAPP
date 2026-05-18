@@ -105,4 +105,51 @@ describe('create proposal submission contract', () => {
       details: { policyId: 'treasury-review-v1' },
     });
   });
+
+  test('lists backend create proposal review requests when backend is enabled', async () => {
+    vi.stubEnv('VITE_GOVERNANCE_CREATE_PROPOSAL_ENABLED', 'true');
+    vi.stubEnv('VITE_GOVERNANCE_API_URL', 'http://governance-api.local');
+    const { listCreateProposalReviewRequests } = await import('../../src/modules/governance/api/createProposalContract');
+    const fetchImpl = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          items: [{ id: 'backend-create-1', status: 'backend-review-queued' }],
+          count: 1,
+          source: 'CreateProposalRequest',
+        }),
+    });
+
+    const result = await listCreateProposalReviewRequests({
+      filters: {
+        network: 'ethereum-sepolia',
+        status: 'backend-review-queued',
+        limit: 5,
+      },
+      fetchImpl,
+    });
+
+    expect(fetchImpl).toHaveBeenCalledWith(
+      'http://governance-api.local/v2/proposals/create?network=ethereum-sepolia&status=backend-review-queued&limit=5',
+      expect.objectContaining({
+        method: 'GET',
+      }),
+    );
+    expect(result.items[0]).toMatchObject({ id: 'backend-create-1', status: 'backend-review-queued' });
+    expect(result.count).toBe(1);
+    expect(result.source).toBe('CreateProposalRequest');
+  });
+
+  test('does not list backend review requests when backend is disabled', async () => {
+    vi.stubEnv('VITE_GOVERNANCE_CREATE_PROPOSAL_ENABLED', 'false');
+    const { listCreateProposalReviewRequests } = await import('../../src/modules/governance/api/createProposalContract');
+    const fetchImpl = vi.fn();
+
+    const result = await listCreateProposalReviewRequests({ fetchImpl });
+
+    expect(fetchImpl).not.toHaveBeenCalled();
+    expect(result.items).toEqual([]);
+    expect(result.source).toBe('frontend-disabled');
+    expect(result.reasonCodes[0].reasonCode).toBe('CREATE_PROPOSAL_BACKEND_NOT_ENABLED');
+  });
 });
