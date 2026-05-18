@@ -1,0 +1,33 @@
+import MarketplacePageHeader from '../components/MarketplacePageHeader';
+import MarketplaceMetricCard from '../components/MarketplaceMetricCard';
+import MarketplaceBadge from '../components/MarketplaceBadge';
+import { useMarketplaceData } from '../hooks/useMarketplaceData';
+
+export default function MarketplaceDashboard() {
+  const marketplace = useMarketplaceData();
+  return (
+    <main className="app-view-shell space-y-8">
+      <MarketplacePageHeader title="Marketplace Dashboard" description="Mock operational telemetry for listings, sellers, governance alerts, royalties, and integration boundaries." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <MarketplaceMetricCard label="Listings" value={marketplace.metrics.activeListings} detail="Mock fixed and auction listings." />
+        <MarketplaceMetricCard label="Verified sellers" value={marketplace.metrics.verifiedSellers} detail="Governance standing verified." />
+        <MarketplaceMetricCard label="NFT-bound" value={marketplace.metrics.nftBoundProducts} detail="ERC721/1155 assets." />
+        <MarketplaceMetricCard label="Royalty preview" value={`${marketplace.metrics.royaltyPreview} USDC`} detail="No settlement executed." />
+      </section>
+      <section className="rounded-lg border border-white/10 bg-surface-container-low p-5">
+        <h2 className="text-xl font-bold text-on-surface">Integration boundaries</h2>
+        <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {marketplace.boundaries.map((boundary) => (
+            <article key={boundary.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-bold text-on-surface">{boundary.label}</h3>
+                <MarketplaceBadge value={boundary.status} />
+              </div>
+              <p className="mt-2 text-sm leading-5 text-outline">{boundary.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}

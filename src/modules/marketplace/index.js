@@ -1,0 +1,9 @@
+export { default as MarketplaceHome } from './pages/MarketplaceHome';
+export { default as MarketplaceExplore } from './pages/MarketplaceExplore';
+export { default as MarketplaceProductDetail } from './pages/MarketplaceProductDetail';
+export { default as MarketplaceCreateSell } from './pages/MarketplaceCreateSell';
+export { default as MarketplaceGovernance } from './pages/MarketplaceGovernance';
+export { default as MarketplaceLicenses } from './pages/MarketplaceLicenses';
+export { default as MarketplaceDashboard } from './pages/MarketplaceDashboard';
+export { default as MarketplaceSellerProfile } from './pages/MarketplaceSellerProfile';
+export { default as MarketplaceLegacyItem } from './pages/MarketplaceLegacyItem';

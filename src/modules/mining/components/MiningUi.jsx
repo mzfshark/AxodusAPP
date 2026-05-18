@@ -1,0 +1,141 @@
+import { NavLink } from 'react-router-dom';
+import { BarChart3, Boxes, ClipboardCheck, FileText, Landmark, Pickaxe, ShieldAlert, Vault } from 'lucide-react';
+import { diligenceTone, governanceTone, riskTone } from '../utils/miningUtils';
+
+export const miningNavItems = [
+  { to: '/mining', label: 'Overview', icon: BarChart3, end: true },
+  { to: '/mining/providers', label: 'Providers', icon: Pickaxe },
+  { to: '/mining/hash-tokens', label: 'Hash Tokens', icon: Boxes },
+  { to: '/mining/vaults', label: 'Vaults', icon: Vault },
+  { to: '/mining/allocations', label: 'Allocations', icon: BarChart3 },
+  { to: '/mining/treasury', label: 'Treasury', icon: Landmark },
+  { to: '/mining/risk', label: 'Risk', icon: ShieldAlert },
+  { to: '/mining/governance', label: 'Governance', icon: ClipboardCheck },
+  { to: '/mining/reports', label: 'Reports', icon: FileText }
+];
+
+export function MiningHeader({ title, description }) {
+  return (
+    <header className="space-y-5">
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">Axodus Mining</p>
+        <h1 className="mt-2 text-3xl font-black tracking-tight text-on-surface md:text-4xl">{title}</h1>
+        <p className="mt-3 max-w-4xl text-sm leading-6 text-outline md:text-base">{description}</p>
+      </div>
+      <nav className="flex gap-2 overflow-x-auto pb-2">
+        {miningNavItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            className={({ isActive }) =>
+              `inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition ${
+                isActive
+                  ? 'border-primary/50 bg-primary/15 text-primary'
+                  : 'border-white/10 bg-surface-container-low text-outline hover:border-primary/30 hover:text-on-surface'
+              }`
+            }
+          >
+            <item.icon className="h-4 w-4" aria-hidden="true" />
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
+    </header>
+  );
+}
+
+export function MetricCard({ label, value, detail, icon: Icon }) {
+  return (
+    <article className="rounded-lg border border-white/10 bg-surface-container-low p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-outline">{label}</p>
+          <p className="mt-2 text-3xl font-black tracking-tight text-on-surface">{value}</p>
+        </div>
+        {Icon ? <Icon className="h-5 w-5 text-primary" aria-hidden="true" /> : null}
+      </div>
+      <p className="mt-4 text-sm leading-6 text-outline">{detail}</p>
+    </article>
+  );
+}
+
+export function Panel({ title, description, children, action }) {
+  return (
+    <section className="rounded-lg border border-white/10 bg-surface-container-low p-5">
+      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-on-surface">{title}</h2>
+          {description ? <p className="mt-1 text-sm leading-6 text-outline">{description}</p> : null}
+        </div>
+        {action}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+export function Badge({ children, tone = 'neutral' }) {
+  const toneClass = tone === 'neutral' ? 'border-white/10 bg-surface-container text-outline' : tone;
+  return <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-bold ${toneClass}`}>{children}</span>;
+}
+
+export function RiskBadge({ level }) {
+  return <Badge tone={riskTone[level] || riskTone.medium}>{level}</Badge>;
+}
+
+export function DiligenceBadge({ status }) {
+  return <Badge tone={diligenceTone[status] || diligenceTone.required}>{status}</Badge>;
+}
+
+export function GovernanceBadge({ standing }) {
+  return <Badge tone={governanceTone[standing] || governanceTone['under-review']}>{standing}</Badge>;
+}
+
+export function ProviderTable({ providers, riskProfiles }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-white/10 text-left text-sm">
+        <thead>
+          <tr className="text-xs uppercase tracking-widest text-outline">
+            <th className="px-3 py-3">Provider</th>
+            <th className="px-3 py-3">Asset</th>
+            <th className="px-3 py-3">Diligence</th>
+            <th className="px-3 py-3">Governance</th>
+            <th className="px-3 py-3">Risk</th>
+            <th className="px-3 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-white/10">
+          {providers.map((provider) => {
+            const risk = riskProfiles.find((item) => item.providerId === provider.id);
+            return (
+              <tr key={provider.id} className="align-top">
+                <td className="px-3 py-4">
+                  <NavLink className="font-bold text-primary hover:underline" to={`/mining/providers/${provider.slug}`}>
+                    {provider.name}
+                  </NavLink>
+                  <p className="mt-1 max-w-lg text-xs leading-5 text-outline">{provider.description}</p>
+                </td>
+                <td className="px-3 py-4 font-bold text-on-surface">{provider.primaryAsset}</td>
+                <td className="px-3 py-4"><DiligenceBadge status={provider.dueDiligenceStatus} /></td>
+                <td className="px-3 py-4"><GovernanceBadge standing={provider.governanceStanding} /></td>
+                <td className="px-3 py-4">{risk ? <RiskBadge level={risk.riskLevel} /> : null}</td>
+                <td className="px-3 py-4"><Badge>{provider.status}</Badge></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export function LoadingState() {
+  return <div className="rounded-lg border border-white/10 bg-surface-container-low p-8 text-sm text-outline">Loading Mining mock data...</div>;
+}
+
+export function EmptyState({ message }) {
+  return <div className="rounded-lg border border-white/10 bg-surface-container-low p-8 text-sm text-outline">{message}</div>;
+}
+

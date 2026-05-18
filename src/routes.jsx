@@ -10,8 +10,29 @@ import ConnectWalletPage from "./pages/ConnectWalletPage";
 import Business from "./pages/Business";
 
 // Importações dos novos componentes estáticos
-import Mining from "./pages/Mining";
-import Marketplace from "./pages/Marketplace";
+import {
+  MiningAllocations,
+  MiningGovernance,
+  MiningHashTokens,
+  MiningOverview,
+  MiningProviderDetails,
+  MiningProviders,
+  MiningReports,
+  MiningRisk,
+  MiningTreasury,
+  MiningVaults,
+} from "./modules/mining";
+import {
+  MarketplaceCreateSell,
+  MarketplaceDashboard,
+  MarketplaceExplore,
+  MarketplaceGovernance,
+  MarketplaceHome,
+  MarketplaceLegacyItem,
+  MarketplaceLicenses,
+  MarketplaceProductDetail,
+  MarketplaceSellerProfile,
+} from "./modules/marketplace";
 import Academy from "./pages/Academy";
 import Dex from "./pages/Dex";
 import Lottery from "./pages/Lottery";
@@ -35,8 +56,26 @@ const router = createBrowserRouter([
       { path: "governance/console", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
       { path: "governance/proposals/:proposalId", element: <ProtectedRoute><ProposalDetail /></ProtectedRoute> },
       { path: "dao", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
-      { path: "mining", element: <Mining /> },
-      { path: "marketplace", element: <Marketplace /> },
+      { path: "mining", element: <MiningOverview /> },
+      { path: "mining/providers", element: <MiningProviders /> },
+      { path: "mining/providers/:providerSlug", element: <MiningProviderDetails /> },
+      { path: "mining/hash-tokens", element: <MiningHashTokens /> },
+      { path: "mining/vaults", element: <MiningVaults /> },
+      { path: "mining/allocations", element: <MiningAllocations /> },
+      { path: "mining/treasury", element: <MiningTreasury /> },
+      { path: "mining/risk", element: <MiningRisk /> },
+      { path: "mining/governance", element: <MiningGovernance /> },
+      { path: "mining/reports", element: <MiningReports /> },
+      { path: "marketplace", element: <MarketplaceHome /> },
+      { path: "marketplace/explore", element: <MarketplaceExplore /> },
+      { path: "marketplace/create", element: <MarketplaceCreateSell /> },
+      { path: "marketplace/sell", element: <MarketplaceCreateSell /> },
+      { path: "marketplace/products/:slug", element: <MarketplaceProductDetail /> },
+      { path: "marketplace/sellers/:sellerId", element: <MarketplaceSellerProfile /> },
+      { path: "marketplace/governance", element: <MarketplaceGovernance /> },
+      { path: "marketplace/licenses", element: <MarketplaceLicenses /> },
+      { path: "marketplace/dashboard", element: <MarketplaceDashboard /> },
+      { path: "item/:chain/:contract/:id", element: <MarketplaceLegacyItem /> },
       { path: "academy", element: <Academy /> },
       { path: "dex", element: <Dex /> },
       { path: "lottery", element: <Lottery /> },

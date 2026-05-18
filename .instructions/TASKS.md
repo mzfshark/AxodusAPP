@@ -126,11 +126,15 @@ Current priority: Governance Operations Center, createProposal observability, an
 
 ## Marketplace Tasks
 
-- Create Product listing — 5%
-- Create Product detail page — 5%
-- Create Subscription management — 4%
-- Create Billing interface — 4%
-- Create Asset gallery — 5%
+- Create Product listing — 55%; integrated governance-aware NFT marketplace module under `/marketplace` with mock ERC721/1155 listings, fixed listings, auctions, filters, and seller standing.
+- Create Product detail page — 55%; `/marketplace/products/:slug` renders NFT metadata, royalty previews, Greenfield delivery, LayerZero readiness, seller standing, and buy-now/bid preview modal.
+- Create Create/Sell preview — 45%; `/marketplace/create` and `/marketplace/sell` generate mock listing adapter payloads without minting, signing, settlement, bridge execution, or treasury routing.
+- Create Governance validation view — 45%; `/marketplace/governance` exposes product standing and ACS moderation workflows.
+- Create License registry — 45%; `/marketplace/licenses` exposes NFT access, DAO, enterprise, and subscription license models.
+- Create Marketplace dashboard — 45%; `/marketplace/dashboard` exposes mock operational telemetry and Phase 2 integration boundaries.
+- Create Subscription management — 8%
+- Create Billing interface — 8%
+- Create Asset gallery — 35%; product cards and item detail pages now consume centralized mock marketplace data.
 
 ---
 
