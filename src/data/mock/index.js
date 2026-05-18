@@ -7,6 +7,7 @@ export { marketplaceMock } from './marketplace.mock';
 export { miningMock } from './mining.mock';
 export { dexMock } from './dex.mock';
 export { lotteryMock } from './lottery.mock';
+export { bbaMock } from './bba.mock';
 export { mcpsMock } from './mcps.mock';
 export { settingsMock } from './settings.mock';
 export { walletMock } from './wallet.mock';

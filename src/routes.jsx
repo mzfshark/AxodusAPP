@@ -17,6 +17,7 @@ import Dex from "./pages/Dex";
 import Lottery from "./pages/Lottery";
 import Mcps from "./pages/Mcps";
 import { GovernanceDashboard, GovernanceLanding, ProposalDetail } from "./modules/governance";
+import { BbaCampaigns, BbaGovernance, BbaHome, BbaPartnerships, BbaPortfolio, BbaServices } from "./modules/bba";
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,12 @@ const router = createBrowserRouter([
       { path: "academy", element: <Academy /> },
       { path: "dex", element: <Dex /> },
       { path: "lottery", element: <Lottery /> },
+      { path: "bba", element: <BbaHome /> },
+      { path: "bba/services", element: <BbaServices /> },
+      { path: "bba/portfolio", element: <BbaPortfolio /> },
+      { path: "bba/campaigns", element: <BbaCampaigns /> },
+      { path: "bba/partnerships", element: <BbaPartnerships /> },
+      { path: "bba/governance", element: <BbaGovernance /> },
       { path: "mcps", element: <Mcps /> },
     ],
   },

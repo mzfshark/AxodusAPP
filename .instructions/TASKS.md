@@ -4,9 +4,9 @@
 
 Last updated: 2026-05-18
 
-Overall AxodusAPP completion: 32%
+Overall AxodusAPP completion: 35%
 
-Current priority: Governance Operations Center and createProposal observability.
+Current priority: Governance Operations Center, createProposal observability, and BBA MVP visual QA.
 
 ### Module Progress
 
@@ -28,7 +28,7 @@ Current priority: Governance Operations Center and createProposal observability.
 - Trading module: 5%
 - Mining module: 5%
 - Lottery module: 5%
-- BBA module: 5%
+- BBA module: 42%
 
 ### Active Governance Priorities
 
@@ -186,11 +186,18 @@ Current priority: Governance Operations Center and createProposal observability.
 
 ## BBA Tasks
 
-- Create Campaign dashboard — 5%
-- Create Content manager — 4%
-- Create Media analytics UI — 4%
-- Create Growth reporting — 4%
-- Create Brand asset explorer — 4%
+- Create BBA routing — 100%; `/bba`, `/bba/services`, `/bba/portfolio`, `/bba/campaigns`, `/bba/partnerships`, and `/bba/governance` are registered in the app shell with BBA section navigation
+- Create BBA home — 70%; renders strategic institutional agency positioning, MVP boundaries, metrics, brand asset inventory, channel matrix, proposal pipeline, and ACS workflow visibility from mock data
+- Create Services Explorer — 68%; mock-driven service catalog with category, governance, institutional category, reputation risk, and search filters
+- Create Portfolio Showcase — 62%; mock case studies, brand assets, and deliverable tracker are visible without live execution
+- Create Campaign dashboard — 66%; campaign metrics, filters, compliance risks, deliverables, and embedded ACS workflow status are visible
+- Create DAO Partnership View — 60%; client/partner cards, partnership filters, proposal pipeline, and institutional channels are visible
+- Create Governance Validation — 64%; lightweight constitutional compatibility, treasury-safe messaging, communication risk, and public reputation risk review are visible without replacing Governance
+- Create BBA mock data layer — 76%; `src/data/mock/bba.mock.js` covers Service, Campaign, ClientPartner, Proposal, Workflow, BrandAsset, InstitutionalChannel, Deliverable, portfolio, and governance review data
+- Create BBA service/filter helpers — 70%; module data access runs through BBA service helpers rather than hardcoded component data
+- Create BBA frontend tests — 52%; BBA mock shape, filters, and home render are covered by Vitest
+- Add BBA backend/domain contracts — 58%; BBA-Agency contains TypeScript and Zod contract files for future API alignment
+- Next BBA task: run browser/mobile visual QA on all six BBA routes and tighten layout/spacing issues before deeper Phase 2 integrations
 
 ---
 

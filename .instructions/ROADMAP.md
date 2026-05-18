@@ -137,9 +137,13 @@
 - Lottery campaign UI
 - Draw history
 - Randomness proof page
+- BBA strategic agency home
+- BBA services explorer
 - BBA campaign dashboard
-- Content dashboard
-- Growth analytics
+- BBA portfolio showcase
+- BBA DAO partnership view
+- BBA governance validation
+- Embedded ACS workflow and institutional reporting panels
 
 ---
 

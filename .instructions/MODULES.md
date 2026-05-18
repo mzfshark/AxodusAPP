@@ -257,20 +257,32 @@ Initial pages:
 
 Purpose:
 
-- brand systems
-- campaigns
-- content
-- media analytics
-- growth reporting
+- strategic institutional agency nucleus
+- brand systems and identity governance
+- institutional communication
+- campaign strategy visibility
+- client acquisition and partnerships
+- product positioning
+- governance-aware public reputation risk review
+- commercial interface with Business, Marketplace, Academy, Governance, and ACS
 
 Initial pages:
 
-- BBA Dashboard
-- Campaigns
-- Content
-- Brand Assets
-- Media
-- Growth
+- BBA Home
+- Services Explorer
+- Portfolio Showcase
+- Campaign Dashboard
+- DAO Partnership View
+- Governance Validation
+
+MVP boundaries:
+
+- mock-first and read-only
+- no billing
+- no live campaign execution
+- no treasury routing
+- no Marketplace checkout
+- ACS workflow and institutional reports are embedded panels, not standalone routes
 
 ---
 
