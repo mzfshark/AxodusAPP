@@ -1,70 +1,130 @@
 // src/components/Sidebar.jsx
 
 import React, { useState } from 'react';
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
-  Banknote,
-  BookOpen,
-  BriefcaseBusiness,
-  Building2,
-  Building,
-  Coins,
-  Gauge,
-  Landmark,
+  ChevronLeft,
+  ChevronRight,
   Menu,
   Moon,
   MonitorCog,
-  Pickaxe,
-  ShoppingCart,
   Sun,
-  Ticket,
   X,
 } from 'lucide-react';
 import useDarkMode from '../hooks/useDarkMode';
-
-const primaryNavItems = [
-  { to: "/dashboard", icon: Gauge, label: "Overview" },
-  { to: "/mining", icon: Pickaxe, label: "Mining" },
-  { to: "/defi", icon: Banknote, label: "Treasury & Defi" },
-  { to: "/governance", icon: Landmark, label: "Governance" },
-  { to: "/account", icon: BriefcaseBusiness, label: "Business" },
-  { to: "/marketplace", icon: ShoppingCart, label: "Marketplace" },
-  { to: "/bba", icon: Building, label: "BBA Agency" },
-  { to: "/academy", icon: BookOpen, label: "Academy" },
-  { to: "/dex", icon: Coins, label: "DEX" },
-  { to: "/lottery", icon: Ticket, label: "Lottery" },
-];
-
-const secondaryNavItems = [
-  { to: "/mcps", icon: Building2, label: "MCP Servers" },
-];
+import { appShellNav } from '../config/appShell';
 
 const navLinkClass = ({ isActive }) =>
-  `flex items-center gap-3 px-3 py-2.5 rounded-lg ${
+  `app-sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg ${
     isActive
       ? 'active-nav-item shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] active:translate-x-1 transition-transform'
       : 'text-slate-500 hover:text-slate-300 hover:bg-surface-container-low transition-all duration-300'
   }`;
 
-function NavItems({ onNavigate }) {
+const subNavClass = ({ isActive }) =>
+  `app-sidebar-sub-link flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+    isActive
+      ? 'active-nav-item'
+      : 'border-white/10 bg-surface-container-low text-outline hover:border-white/20 hover:text-on-surface'
+  }`;
+
+function NavItems({ activeShellItem, isCollapsed, onNavigate }) {
   return (
     <>
-      {primaryNavItems.map((item) => (
-        <NavLink key={item.to} to={item.to} onClick={onNavigate} className={navLinkClass}>
+      {appShellNav.primary.map((item) => (
+        <NavLink
+          key={item.id}
+          to={item.routeBase}
+          onClick={onNavigate}
+          className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
+          data-nav-nucleus={item.id}
+          title={isCollapsed ? item.label : undefined}
+        >
           <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-          <span>{item.label}</span>
+          <span className="app-sidebar-link-label">{item.label}</span>
         </NavLink>
       ))}
 
-      <div className="h-px bg-white/5 my-4"></div>
-
-      {secondaryNavItems.map((item) => (
-        <NavLink key={item.to} to={item.to} onClick={onNavigate} className={navLinkClass}>
+      {appShellNav.secondary.map((item) => (
+        <NavLink
+          key={item.id}
+          to={item.routeBase}
+          onClick={onNavigate}
+          className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
+          data-nav-nucleus={item.id}
+          title={isCollapsed ? item.label : undefined}
+        >
           <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-          <span>{item.label}</span>
+          <span className="app-sidebar-link-label">{item.label}</span>
         </NavLink>
       ))}
     </>
+  );
+}
+
+function isFilterActive(location, target) {
+  const [pathname, rawSearch = ''] = target.split('?');
+  if (location.pathname !== pathname) return false;
+  if (!rawSearch) return false;
+
+  const targetParams = new URLSearchParams(rawSearch);
+  const currentParams = new URLSearchParams(location.search);
+
+  return [...targetParams.entries()].every(([key, value]) => currentParams.get(key) === value);
+}
+
+function NucleusSecondaryLayer({ activeShellItem, onNavigate }) {
+  const location = useLocation();
+  const sections = activeShellItem?.sections ?? [];
+  const filterGroups = activeShellItem?.filterGroups ?? [];
+
+  if (!sections.length && !filterGroups.length) return null;
+
+  return (
+    <section className="app-sidebar-secondary" aria-label={`${activeShellItem.label} navigation`}>
+      <div className="app-sidebar-secondary-header">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Nucleus</p>
+        <h2>{activeShellItem.label}</h2>
+        <p>{activeShellItem.summary}</p>
+      </div>
+
+      {sections.length ? (
+        <nav className="app-sidebar-secondary-section" aria-label={`${activeShellItem.label} sections`}>
+          <p className="app-sidebar-section-label">Navigation</p>
+          {sections.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              onClick={onNavigate}
+              className={subNavClass}
+            >
+              <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+      ) : null}
+
+      {filterGroups.map((group) => (
+        <div key={group.label} className="app-sidebar-secondary-section">
+          <p className="app-sidebar-section-label">{group.label}</p>
+          {group.items.map((item) => {
+            const active = isFilterActive(location, item.to);
+            return (
+              <Link
+                key={`${group.label}-${item.label}`}
+                to={item.to}
+                onClick={onNavigate}
+                className={subNavClass({ isActive: active })}
+              >
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      ))}
+    </section>
   );
 }
 
@@ -96,9 +156,10 @@ function ThemeToggle({ theme, setTheme }) {
   );
 }
 
-export default function Sidebar() {
+export default function Sidebar({ activeShellItem }) {
   const [theme, setTheme] = useDarkMode();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <>
@@ -120,12 +181,13 @@ export default function Sidebar() {
             onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Close navigation menu"
           />
-          <aside className="app-sidebar-panel absolute left-0 top-0 h-full w-[min(20rem,85vw)] py-6 px-4 flex flex-col gap-y-1 overflow-y-auto border-r font-['Inter'] font-medium text-sm shadow-2xl">
-            <div className="px-2 mb-6 flex items-start justify-between gap-4">
-              <div>
-                <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
-                <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
-              </div>
+          <aside className="app-sidebar-panel app-sidebar-mobile absolute left-0 top-0 h-full overflow-y-auto border-r font-['Inter'] font-medium text-sm shadow-2xl">
+            <div className="app-sidebar-primary">
+              <div className="px-2 mb-6 flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
+                  <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
+                </div>
               <button
                 type="button"
                 className="h-9 w-9 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-surface-container-low flex items-center justify-center"
@@ -136,26 +198,45 @@ export default function Sidebar() {
               </button>
             </div>
             <nav className="flex flex-col gap-1">
-              <NavItems onNavigate={() => setIsMobileMenuOpen(false)} />
+                <NavItems activeShellItem={activeShellItem} onNavigate={() => setIsMobileMenuOpen(false)} />
             </nav>
             <div className="mt-auto pt-6 px-2">
               <ThemeToggle theme={theme} setTheme={setTheme} />
             </div>
+            </div>
+            <NucleusSecondaryLayer activeShellItem={activeShellItem} onNavigate={() => setIsMobileMenuOpen(false)} />
           </aside>
         </div>
       )}
 
-      <aside className="app-sidebar-panel hidden md:flex flex-col h-full w-64 py-6 px-4 gap-y-1 overflow-y-auto border-r font-['Inter'] font-medium text-sm">
-        <div className="px-2 mb-6">
-          <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
-          <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
+      <aside
+        className="app-sidebar-panel hidden md:flex h-full overflow-hidden border-r font-['Inter'] font-medium text-sm"
+        data-collapsed={isCollapsed}
+      >
+        <div className="app-sidebar-primary">
+          <div className="app-sidebar-primary-header">
+            <div className="app-sidebar-brand-text">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
+              <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
+            </div>
+            <button
+              type="button"
+              className="app-sidebar-collapse-button"
+              onClick={() => setIsCollapsed((value) => !value)}
+              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              aria-expanded={!isCollapsed}
+            >
+              {isCollapsed ? <ChevronRight className="h-4 w-4" aria-hidden="true" /> : <ChevronLeft className="h-4 w-4" aria-hidden="true" />}
+            </button>
+          </div>
+          <nav className="flex flex-col gap-1">
+            <NavItems activeShellItem={activeShellItem} isCollapsed={isCollapsed} />
+          </nav>
+          <div className="mt-auto pt-6 px-2">
+            <ThemeToggle theme={theme} setTheme={setTheme} />
+          </div>
         </div>
-        <nav className="flex flex-col gap-1">
-          <NavItems />
-        </nav>
-        <div className="mt-auto pt-6 px-2">
-          <ThemeToggle theme={theme} setTheme={setTheme} />
-        </div>
+        {!isCollapsed ? <NucleusSecondaryLayer activeShellItem={activeShellItem} /> : null}
       </aside>
     </>
   );

@@ -34,7 +34,7 @@ const footerGroups = [
   },
 ];
 
-const Footer = () => {
+const Footer = ({ activeShellItem }) => {
   return (
     <footer className="app-footer mt-24 border-t">
       <div className="page-shell grid grid-cols-1 md:grid-cols-[1.2fr_2fr] gap-10">
@@ -44,8 +44,13 @@ const Footer = () => {
             <span className="font-bold text-xl text-on-surface">Axodus</span>
           </Link>
           <p className="card-description max-w-sm">
-            Modular dashboard for Axodus ecosystem products, infrastructure and market intelligence.
+            Global Axodus shell for modular products, governance-aware operations and nucleus-specific workflows.
           </p>
+          {activeShellItem ? (
+            <p className="app-footer-context">
+              Active nucleus: <span>{activeShellItem.label}</span>
+            </p>
+          ) : null}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
