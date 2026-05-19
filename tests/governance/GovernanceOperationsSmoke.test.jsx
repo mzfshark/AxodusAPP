@@ -71,6 +71,27 @@ const selectedDao = {
   constitutionalStanding: { status: 'compliant', reasonCodes: [], reasonSeverity: null },
 };
 
+const selectedTenant = {
+  id: 'tenant-executive-dao',
+  daoId: selectedDao.id,
+  name: 'Axodus Executive DAO',
+  legalOrPublicName: 'Axodus Executive DAO',
+  tenantType: 'internal',
+  federationTier: 'partner',
+  constitutionalStanding: 'compliant',
+  governanceStatus: 'compliant',
+  constitutionalAuthority: { source: 'Axodus Constitution', layer: 'Constitutional Governance', authorityModel: 'federated-execution-tenant' },
+  localGovernanceModel: '$Neurons token voting',
+  treasury: { address: selectedDao.address, chainId: 11155111, assets: [], policyStatus: 'review-required' },
+  members: { total: 3, roles: ['executor', 'treasury-reviewer'] },
+  productsEnabled: ['Governance', 'Treasury', 'ACS'],
+  agentsAssigned: ['proposal-review-agent'],
+  activeProposals: 1,
+  pendingOperations: 2,
+  executionReceipts: 1,
+  reasonCodes: [{ reasonCode: 'TREASURY_POLICY_REQUIRES_REVIEW', reasonSeverity: 'constitutional', source: 'treasury policy' }],
+};
+
 const governancePlugin = {
   id: 'token-voting-plugin',
   name: 'Token Voting',
@@ -93,6 +114,9 @@ vi.mock('../../src/modules/governance/hooks/useGovernanceConsole', () => ({
   useGovernanceConsole: () => ({
     daos: [selectedDao],
     selectedDao,
+    selectedTenant,
+    tenants: [selectedTenant],
+    tenantSource: 'test-fixture',
     selectedDaoId: selectedDao.id,
     setSelectedDaoId: vi.fn(),
     selectedChain: executionChain,
@@ -150,7 +174,11 @@ describe('Governance Operations Center smoke', () => {
   test('renders the Governance Operations Center with scoped createProposal observability', async () => {
     await renderDashboard();
 
-    expect(screen.getByRole('heading', { name: /governance operations center/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /dao tenant operations center/i })).toBeInTheDocument();
+    expect(screen.getByText(/dao tenant account/i)).toBeInTheDocument();
+    expect(screen.getByText(/products enabled/i)).toBeInTheDocument();
+    expect(screen.getByText(/agents assigned/i)).toBeInTheDocument();
+    expect(screen.getByText(/treasury status/i)).toBeInTheDocument();
     expect(screen.getByText(/operations readiness/i)).toBeInTheDocument();
     expect(screen.getByText(/create proposal integration status/i)).toBeInTheDocument();
     expect(screen.getByText(/DAO: Axodus Executive DAO/i)).toBeInTheDocument();

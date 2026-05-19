@@ -176,6 +176,101 @@ function ObservabilityPanel({ summary }) {
   );
 }
 
+function TenantMetric({ label, value, detail }) {
+  return (
+    <div className="rounded-md bg-surface-container-high p-3">
+      <div className="text-[10px] font-black uppercase text-slate-500">{label}</div>
+      <div className="mt-1 text-lg font-black text-on-surface">{value}</div>
+      {detail ? <div className="mt-1 text-xs text-on-surface-variant">{detail}</div> : null}
+    </div>
+  );
+}
+
+function TenantPills({ items = [], emptyLabel }) {
+  if (!items.length) {
+    return <div className="text-xs text-on-surface-variant">{emptyLabel}</div>;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <span key={item} className="rounded-md border border-white/10 bg-surface-container-high px-2 py-1 text-[11px] font-bold text-slate-300">
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function DaoTenantOperationsCenter({ tenant, selectedDao, selectedChain, tenantSource }) {
+  if (!tenant) {
+    return (
+      <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
+        <h2 className="text-lg font-bold text-on-surface">DAO Tenant Operations Center</h2>
+        <p className="mt-2 text-sm text-on-surface-variant">No DAO tenant account is selected.</p>
+      </section>
+    );
+  }
+
+  const standing = typeof tenant.constitutionalStanding === 'string' ? tenant.constitutionalStanding : tenant.constitutionalStanding?.status;
+
+  return (
+    <section className="rounded-lg border border-cyan-300/15 bg-surface-container-highest">
+      <div className="flex flex-col gap-4 border-b border-white/5 px-5 py-5 xl:flex-row xl:items-start xl:justify-between">
+        <div>
+          <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-200">DAO Tenant Account</span>
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">{tenant.name}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-on-surface-variant">
+            Operational business account governed under Axodus constitutional authority. Registry, standing, guardrails, products, agents,
+            proposals and receipts are rendered as tenant context.
+          </p>
+        </div>
+        <div className="grid min-w-0 gap-2 text-xs sm:grid-cols-2 xl:w-[360px]">
+          <TenantMetric label="Tenant type" value={tenant.tenantType} detail={tenant.legalOrPublicName} />
+          <TenantMetric label="Source" value={tenantSource ?? tenant.source ?? 'observed'} detail="rendered state only" />
+        </div>
+      </div>
+
+      <div className="grid gap-4 p-5 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid gap-3 md:grid-cols-2">
+          <TenantMetric label="Constitutional standing" value={standing ?? 'under-review'} detail={`Governance status: ${tenant.governanceStatus}`} />
+          <TenantMetric label="Federation tier" value={tenant.federationTier} detail={tenant.constitutionalAuthority?.authorityModel} />
+          <TenantMetric label="Local governance model" value={tenant.localGovernanceModel ?? selectedDao?.votingType ?? 'Not indexed'} detail={tenant.constitutionalAuthority?.layer} />
+          <TenantMetric
+            label="Treasury status"
+            value={tenant.treasury?.policyStatus ?? 'not-configured'}
+            detail={tenant.treasury?.address ? `${tenant.treasury.address.slice(0, 8)}...${tenant.treasury.address.slice(-6)}` : 'No treasury address indexed'}
+          />
+          <TenantMetric label="Members / roles" value={tenant.members?.total ?? 0} detail={(tenant.members?.roles ?? []).join(', ') || 'No roles indexed'} />
+          <TenantMetric label="Execution context" value={selectedChain?.name ?? 'No chain'} detail={selectedChain?.network ?? selectedDao?.network} />
+        </div>
+
+        <div className="grid gap-3">
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-xs font-black uppercase text-slate-500">Products enabled</div>
+            <div className="mt-3">
+              <TenantPills items={tenant.productsEnabled} emptyLabel="No products indexed for this tenant." />
+            </div>
+          </div>
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-xs font-black uppercase text-slate-500">Agents assigned</div>
+            <div className="mt-3">
+              <TenantPills items={tenant.agentsAssigned} emptyLabel="No agents assigned to this tenant." />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-3 border-t border-white/5 p-5 md:grid-cols-4">
+        <TenantMetric label="Active proposals" value={tenant.activeProposals} />
+        <TenantMetric label="Pending operations" value={tenant.pendingOperations} />
+        <TenantMetric label="Execution receipts" value={tenant.executionReceipts} />
+        <TenantMetric label="Guardrail reasons" value={(tenant.reasonCodes ?? []).length} />
+      </div>
+    </section>
+  );
+}
+
 function readinessTone(status) {
   if (status === 'ready') return 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100';
   if (status === 'dev') return 'border-cyan-300/20 bg-cyan-950/20 text-cyan-100';
@@ -335,9 +430,9 @@ export default function GovernanceDashboard() {
         <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Governance</span>
-            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">Governance Operations Center</h1>
+            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">DAO Tenant Operations Center</h1>
             <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
-              Connected observability surface for constitutional governance, federation state, local governance and multichain execution readiness.
+              Governed business-unit control room for tenant DAOs, constitutional authority, treasury state, products, agents, proposals and execution receipts.
             </p>
           </div>
         </header>
@@ -350,6 +445,13 @@ export default function GovernanceDashboard() {
           onSelect={governanceConsole.setSelectedDaoId}
           selectedChain={governanceConsole.selectedChain}
           status={governanceConsole.status}
+        />
+
+        <DaoTenantOperationsCenter
+          tenant={governanceConsole.selectedTenant}
+          selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+          tenantSource={governanceConsole.tenantSource}
         />
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">

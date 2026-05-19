@@ -144,6 +144,7 @@ Responsible for:
 Responsible for:
 
 - selected DAO
+- selected DAO tenant account
 - DAO permissions
 - DAO treasury context
 - DAO modules enabled
@@ -168,6 +169,22 @@ Local autonomy is allowed, but all local governance must remain constitutionally
 Do not represent governance restrictions as opaque exclusion lists.
 
 Represent restrictions as Constitutional Guardrails with transparent reason codes.
+
+The Governance Console must present the selected DAO as an operational tenant account, not only as a governance metadata record.
+
+Each tenant should expose:
+
+- tenant profile
+- constitutional standing
+- local governance model
+- treasury status
+- enabled products/modules
+- assigned agents
+- active proposals and pending operations
+- execution receipts
+- governance reason codes
+
+The frontend renders tenant state only. It must not infer constitutional validity, sanctions, treasury restrictions, or execution authority.
 
 ---
 
