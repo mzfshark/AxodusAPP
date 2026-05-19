@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const executionChain = {
@@ -71,6 +71,27 @@ const selectedDao = {
   constitutionalStanding: { status: 'compliant', reasonCodes: [], reasonSeverity: null },
 };
 
+const selectedTenant = {
+  id: 'tenant-executive-dao',
+  daoId: selectedDao.id,
+  name: 'Axodus Executive DAO',
+  legalOrPublicName: 'Axodus Executive DAO',
+  tenantType: 'internal',
+  federationTier: 'partner',
+  constitutionalStanding: 'compliant',
+  governanceStatus: 'compliant',
+  constitutionalAuthority: { source: 'Axodus Constitution', layer: 'Constitutional Governance', authorityModel: 'federated-execution-tenant' },
+  localGovernanceModel: '$Neurons token voting',
+  treasury: { address: selectedDao.address, chainId: 11155111, assets: [], policyStatus: 'review-required' },
+  members: { total: 3, roles: ['executor', 'treasury-reviewer'] },
+  productsEnabled: ['Governance', 'Treasury', 'ACS'],
+  agentsAssigned: ['proposal-review-agent'],
+  activeProposals: 1,
+  pendingOperations: 2,
+  executionReceipts: 1,
+  reasonCodes: [{ reasonCode: 'TREASURY_POLICY_REQUIRES_REVIEW', reasonSeverity: 'constitutional', source: 'treasury policy' }],
+};
+
 const governancePlugin = {
   id: 'token-voting-plugin',
   name: 'Token Voting',
@@ -78,6 +99,19 @@ const governancePlugin = {
   status: 'installed',
   address: '0x2222222222222222222222222222222222222222',
 };
+
+const walletMock = vi.hoisted(() => ({
+  state: {
+    address: null,
+    isConnected: false,
+    chain: null,
+    disconnect: vi.fn(),
+  },
+}));
+
+vi.mock('@/hooks/useWallet', () => ({
+  useWallet: () => walletMock.state,
+}));
 
 vi.mock('../../src/modules/governance/hooks/useChainRegistry', () => ({
   useChainRegistry: () => ({
@@ -93,6 +127,9 @@ vi.mock('../../src/modules/governance/hooks/useGovernanceConsole', () => ({
   useGovernanceConsole: () => ({
     daos: [selectedDao],
     selectedDao,
+    selectedTenant,
+    tenants: [selectedTenant],
+    tenantSource: 'test-fixture',
     selectedDaoId: selectedDao.id,
     setSelectedDaoId: vi.fn(),
     selectedChain: executionChain,
@@ -126,8 +163,34 @@ async function renderDashboard() {
   );
 }
 
+async function renderTenantDetail(tenantId = 'dao-tenant-trading-alpha') {
+  const { default: DaoTenantDetail } = await import('../../src/modules/governance/pages/DaoTenantDetail');
+  render(
+    <MemoryRouter initialEntries={[`/governance/dao/${tenantId}`]}>
+      <Routes>
+        <Route path="/governance/dao/:daoId" element={<DaoTenantDetail />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+async function renderTenants() {
+  const { default: GovernanceTenants } = await import('../../src/modules/governance/pages/GovernanceTenants');
+  render(
+    <MemoryRouter initialEntries={['/governance/tenants']}>
+      <GovernanceTenants />
+    </MemoryRouter>,
+  );
+}
+
 describe('Governance Operations Center smoke', () => {
   beforeEach(() => {
+    walletMock.state = {
+      address: null,
+      isConnected: false,
+      chain: null,
+      disconnect: vi.fn(),
+    };
     window.localStorage.clear();
   });
 
@@ -136,21 +199,62 @@ describe('Governance Operations Center smoke', () => {
     window.localStorage.clear();
   });
 
-  test('renders the public governance landing with topology and Constitutional Layer', async () => {
+  test('renders the Governance Overview with executive summary and three featured tenants', async () => {
     await renderLanding();
 
-    expect(screen.getByRole('heading', { name: /federated dao governance/i })).toBeInTheDocument();
-    expect(screen.getByText('Axodus Constitution')).toBeInTheDocument();
-    expect(screen.getByText('Federation Registry')).toBeInTheDocument();
-    expect(screen.getByText(/constitutional governance layer/i)).toBeInTheDocument();
-    expect(screen.getByText(/local governance layer/i)).toBeInTheDocument();
-    expect(screen.getAllByText('Ethereum Sepolia').length).toBeGreaterThan(0);
-  });
+    expect(screen.getByRole('heading', { name: /executive summary of axodus federated governance/i })).toBeInTheDocument();
+    expect(screen.getByText(/total tvl/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/dao tenants/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/axodus core apr/i)).toBeInTheDocument();
+    expect(screen.getByText(/open proposals/i)).toBeInTheDocument();
+    expect(screen.getByText(/recently finalized/i)).toBeInTheDocument();
+    expect(screen.getByText(/featured dao tenants/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus trading alpha dao/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus ai infrastructure dao/i)).toBeInTheDocument();
+    expect(screen.queryByText(/axodus academy dao/i)).not.toBeInTheDocument();
+    expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
+  }, 10000);
+
+  test('filters DAO Tenants by multiple risk and investment selections', async () => {
+    await renderTenants();
+
+    expect(screen.getByRole('heading', { name: /discover governed economic organizations/i })).toBeInTheDocument();
+    expect(screen.getByText(/8 DAO Tenants/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /^low$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^moderate$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^mining$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^defi$/i }));
+
+    expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus defi stability dao/i)).toBeInTheDocument();
+    expect(screen.queryByText(/axodus trading alpha dao/i)).not.toBeInTheDocument();
+  }, 10000);
+
+  test('renders a DAO tenant detail page with economic and constitutional context', async () => {
+    await renderTenantDetail();
+
+    expect(screen.getByRole('heading', { name: /axodus trading alpha dao/i })).toBeInTheDocument();
+    expect(screen.getByText(/governed trading allocation/i)).toBeInTheDocument();
+    expect(screen.getByText(/treasury allocation/i)).toBeInTheDocument();
+    expect(screen.getByText(/APR & Performance/i)).toBeInTheDocument();
+    expect(screen.getByText(/trade-risk-agent/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/does not infer compliance/i)).toBeInTheDocument();
+  }, 10000);
 
   test('renders the Governance Operations Center with scoped createProposal observability', async () => {
     await renderDashboard();
 
-    expect(screen.getByRole('heading', { name: /governance operations center/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /dao tenant operations center/i })).toBeInTheDocument();
+    expect(screen.getByText(/dao tenant account/i)).toBeInTheDocument();
+    expect(screen.getByText(/products enabled/i)).toBeInTheDocument();
+    expect(screen.getByText(/agents assigned/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/treasury status/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/governance health/i)).toBeInTheDocument();
+    expect(screen.getByText(/treasury execution/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/proposal activity/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/operations readiness/i)).toBeInTheDocument();
     expect(screen.getByText(/create proposal integration status/i)).toBeInTheDocument();
     expect(screen.getByText(/DAO: Axodus Executive DAO/i)).toBeInTheDocument();

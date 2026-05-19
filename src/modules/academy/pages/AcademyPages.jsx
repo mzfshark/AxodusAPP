@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Award, BookOpenCheck, Brain, Coins, Gauge, ShieldCheck, Store, UserCheck } from 'lucide-react';
 import {
   AcademyBadge,
@@ -91,11 +91,18 @@ export function AcademyHome() {
 
 export function AcademyCourses() {
   const academy = useAcademyData();
-  const [category, setCategory] = useState('');
-  const [level, setLevel] = useState('');
-  const [rewardType, setRewardType] = useState('');
-  const [accessType, setAccessType] = useState('');
-  const [language, setLanguage] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get('category') ?? '';
+  const level = searchParams.get('level') ?? '';
+  const rewardType = searchParams.get('rewardType') ?? '';
+  const accessType = searchParams.get('accessType') ?? '';
+  const language = searchParams.get('language') ?? '';
+  const setFilter = (key, value) => {
+    const next = new URLSearchParams(searchParams);
+    if (value) next.set(key, value);
+    else next.delete(key);
+    setSearchParams(next);
+  };
 
   const filteredCourses = useMemo(() => academy.courses.filter((course) => {
     if (category && course.category !== category) return false;
@@ -113,11 +120,11 @@ export function AcademyCourses() {
       <AcademyHeader title="Course Explorer" description="Discover courses by governance standing, access type, PoK requirement, reward class, language, and level." />
       <AcademyPanel title="Discovery filters" description="All data is mock-driven from the Academy module data layer.">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3 xl:grid-cols-5">
-          <Select label="Category" value={category} onChange={setCategory} options={unique(academy.courses.map((course) => course.category))} />
-          <Select label="Level" value={level} onChange={setLevel} options={unique(academy.courses.map((course) => course.level))} />
-          <Select label="Reward" value={rewardType} onChange={setRewardType} options={unique(academy.courses.map((course) => course.rewardType))} />
-          <Select label="Access" value={accessType} onChange={setAccessType} options={unique(academy.courses.map((course) => course.accessType))} />
-          <Select label="Language" value={language} onChange={setLanguage} options={unique(academy.courses.map((course) => course.language))} />
+          <Select label="Category" value={category} onChange={(value) => setFilter('category', value)} options={unique(academy.courses.map((course) => course.category))} />
+          <Select label="Level" value={level} onChange={(value) => setFilter('level', value)} options={unique(academy.courses.map((course) => course.level))} />
+          <Select label="Reward" value={rewardType} onChange={(value) => setFilter('rewardType', value)} options={unique(academy.courses.map((course) => course.rewardType))} />
+          <Select label="Access" value={accessType} onChange={(value) => setFilter('accessType', value)} options={unique(academy.courses.map((course) => course.accessType))} />
+          <Select label="Language" value={language} onChange={(value) => setFilter('language', value)} options={unique(academy.courses.map((course) => course.language))} />
         </div>
       </AcademyPanel>
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">

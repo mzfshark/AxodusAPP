@@ -1,5 +1,6 @@
 export { ecosystemMock } from './ecosystem.mock';
 export { governanceMock } from './governance.mock';
+export { governanceTenantsMock } from './governance-tenants.mock';
 export { acsMock } from './acs.mock';
 export { defiMock } from './defi.mock';
 export { academyMock } from './academy.mock';

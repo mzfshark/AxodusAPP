@@ -3,6 +3,7 @@ import {
   getMockGovernanceProposal,
   getMockGovernanceProposalActions,
   getMockGovernanceProposals,
+  getMockGovernanceTenants,
 } from './mockGovernanceData';
 
 const governanceApiBase = import.meta.env.VITE_GOVERNANCE_API_URL || '/governance-api';
@@ -64,6 +65,24 @@ export async function fetchGovernanceDaos({ memberAddress, signal } = {}) {
   const path = memberAddress ? `/daos/member/${memberAddress}?${query}` : `/daos?${query}`;
   const response = await requestJson(path, { signal });
   return normalizePaginated(response);
+}
+
+export async function fetchGovernanceTenants({ signal } = {}) {
+  try {
+    const response = await requestJson('/governance/tenants', { signal });
+    const normalized = normalizePaginated(response);
+    return {
+      ...normalized,
+      source: response?.metadata?.source ?? 'governance-api',
+    };
+  } catch (error) {
+    return {
+      items: getMockGovernanceTenants(),
+      metadata: null,
+      source: 'frontend-dev-fixture',
+      error,
+    };
+  }
 }
 
 export async function fetchGovernanceProposals({ daoId, signal } = {}) {
