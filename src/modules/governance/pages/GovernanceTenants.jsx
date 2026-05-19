@@ -1,23 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { APRComparisonBadge, FederationStatusBadge, RiskIndicator } from '../components/TenantDiscoveryCards';
+import { TenantDiscoveryCard } from '../components/cards';
 import { governanceTenantsMock } from '@/data/mock';
 
 const riskFilters = ['low', 'moderate', 'balanced', 'high', 'experimental'];
 const investmentTypeFilters = ['Mining', 'Trading', 'DeFi', 'Staking', 'Yield', 'AI Infrastructure', 'Compute', 'Marketplace', 'Education', 'Treasury', 'Venture'];
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-    notation: value >= 1000000 ? 'compact' : 'standard',
-  }).format(value ?? 0);
-}
-
-function formatPercent(value) {
-  return `${Number(value ?? 0).toFixed(2)}%`;
-}
 
 function toggleSelection(current, value) {
   return current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
@@ -34,73 +21,6 @@ function FilterButton({ active, children, onClick }) {
     >
       {children}
     </button>
-  );
-}
-
-function TenantListingCard({ tenant, coreApr }) {
-  return (
-    <article className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
-      <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[11px] font-black uppercase text-cyan-200">{tenant.symbol}</span>
-            {tenant.featured ? (
-              <span className="rounded-md border border-cyan-300/20 bg-cyan-950/20 px-2 py-1 text-[10px] font-black uppercase text-cyan-100">
-                Featured
-              </span>
-            ) : null}
-          </div>
-          <h2 className="mt-2 text-xl font-black text-on-surface">{tenant.name}</h2>
-          <p className="mt-1 text-xs font-bold text-on-surface-variant">{tenant.category}</p>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-on-surface-variant">{tenant.description}</p>
-        </div>
-        <div className="flex flex-wrap gap-2 xl:justify-end">
-          <RiskIndicator riskLevel={tenant.riskLevel} />
-          <FederationStatusBadge status={tenant.governanceStatus} tier={tenant.federationTier} />
-        </div>
-      </div>
-
-      <div className="mt-5 grid gap-3 md:grid-cols-5">
-        <div className="rounded-md bg-surface-container-high p-3">
-          <div className="text-[10px] font-black uppercase text-slate-500">APR</div>
-          <div className="mt-1 font-mono text-sm font-black text-on-surface">{formatPercent(tenant.apr)}</div>
-        </div>
-        <div className="rounded-md bg-surface-container-high p-3 md:col-span-2">
-          <div className="text-[10px] font-black uppercase text-slate-500">APR vs CORE</div>
-          <div className="mt-1">
-            <APRComparisonBadge tenantApr={tenant.apr} coreApr={coreApr} />
-          </div>
-        </div>
-        <div className="rounded-md bg-surface-container-high p-3">
-          <div className="text-[10px] font-black uppercase text-slate-500">TVL</div>
-          <div className="mt-1 font-mono text-sm font-black text-on-surface">{formatCurrency(tenant.tvl)}</div>
-        </div>
-        <div className="rounded-md bg-surface-container-high p-3">
-          <div className="text-[10px] font-black uppercase text-slate-500">Members</div>
-          <div className="mt-1 font-mono text-sm font-black text-on-surface">{tenant.members.toLocaleString('en-US')}</div>
-        </div>
-      </div>
-
-      <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
-        <div>
-          <div className="text-[10px] font-black uppercase text-slate-500">Investment types</div>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {tenant.investmentTypes.map((type) => (
-              <span key={type} className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
-                {type}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div>
-          <div className="text-[10px] font-black uppercase text-slate-500">Chains</div>
-          <div className="mt-2 font-mono text-[11px] leading-5 text-on-surface-variant">{tenant.chains.join(' / ')}</div>
-        </div>
-        <Link to={tenant.route} className="rounded-lg border border-white/10 bg-surface-container-high px-4 py-2 text-center text-sm font-black text-on-surface">
-          View Details
-        </Link>
-      </div>
-    </article>
   );
 }
 
@@ -192,7 +112,7 @@ export default function GovernanceTenants() {
               <p className="mt-1 text-xs text-on-surface-variant">Filters support multiple risk levels and investment types at the same time.</p>
             </div>
             {filteredTenants.map((tenant) => (
-              <TenantListingCard key={tenant.id} tenant={tenant} coreApr={coreMetrics.apr} />
+              <TenantDiscoveryCard key={tenant.id} tenant={tenant} coreApr={coreMetrics.apr} />
             ))}
             {!filteredTenants.length ? (
               <div className="rounded-lg border border-white/5 bg-surface-container-highest p-8 text-center">
