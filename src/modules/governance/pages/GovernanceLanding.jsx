@@ -2,7 +2,10 @@ import { Link } from 'react-router-dom';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
 import { GovernanceLayerCard, GovernanceStandingSummary } from '../components/GovernanceStanding';
+import { DAOAllocationCard, TenantCard, TenantTreasuryWidget } from '../components/TenantDiscoveryCards';
 import { useChainRegistry } from '../hooks/useChainRegistry';
+import { useWallet } from '@/hooks/useWallet';
+import { governanceTenantsMock } from '@/data/mock';
 
 function PublicMetric({ label, value, detail }) {
   return (
@@ -27,6 +30,19 @@ function GovernanceStatusBar({ executionChain, summary, source }) {
         <PublicMetric label="Active alerts" value={activeAlerts} detail={`Registry source: ${source}`} />
       </div>
     </section>
+  );
+}
+
+function SectionHeader({ eyebrow, title, description, action }) {
+  return (
+    <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-200">{eyebrow}</span>
+        <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">{title}</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-on-surface-variant">{description}</p>
+      </div>
+      {action ? <div className="shrink-0">{action}</div> : null}
+    </div>
   );
 }
 
@@ -73,6 +89,67 @@ function RootDaoOverview({ executionChain, summary }) {
   );
 }
 
+function FeaturedDaoTenantsSection({ tenants, coreMetrics }) {
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
+      <SectionHeader
+        eyebrow="DAO Federation Marketplace"
+        title="Featured DAO Tenants"
+        description="Discover governed economic organizations by strategy, treasury size, risk, federation standing and APR relative to Axodus CORE."
+        action={
+          <Link to="/governance/console" className="inline-flex items-center justify-center rounded-lg border border-white/10 px-3 py-2 text-sm font-black text-on-surface">
+            Open operating console
+          </Link>
+        }
+      />
+      <div className="mt-5 grid gap-4 xl:grid-cols-4">
+        {tenants.map((tenant) => (
+          <TenantCard key={tenant.id} tenant={tenant} coreApr={coreMetrics.apr} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MyDaoTenantsSection({ tenants, allocations, coreMetrics }) {
+  const allocatedTenantIds = new Set(allocations.map((allocation) => allocation.tenantId));
+  const allocatedTenants = tenants.filter((tenant) => allocatedTenantIds.has(tenant.id));
+
+  return (
+    <section className="rounded-lg border border-cyan-300/15 bg-surface-container-highest p-5">
+      <SectionHeader
+        eyebrow="My DAO Tenants"
+        title="Multi-DAO Allocation Workspace"
+        description="Authenticated users can monitor capital, rewards, APR, voting power and treasury exposure across multiple governed tenant DAOs."
+      />
+      <div className="mt-5 grid gap-4">
+        {allocatedTenants.map((tenant) => {
+          const allocation = allocations.find((item) => item.tenantId === tenant.id);
+          return <DAOAllocationCard key={tenant.id} tenant={tenant} allocation={allocation} coreApr={coreMetrics.apr} />;
+        })}
+        <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+          <div className="text-sm font-black text-on-surface">Federal CORE-only allocation remains available</div>
+          <p className="mt-2 text-xs leading-5 text-on-surface-variant">
+            Users may choose no tenant allocation and stay fully exposed to the Axodus Federal DAO / CORE Treasury baseline.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FederationStatsStrip({ stats }) {
+  return (
+    <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+      <PublicMetric label="DAO tenants" value={stats.tenantCount} detail="Federated economic organizations" />
+      <PublicMetric label="Tenant TVL" value={`$${(stats.totalTreasuryTvl / 1000000).toFixed(1)}M`} detail="Mock treasury footprint" />
+      <PublicMetric label="Average tenant APR" value={`${stats.averageTenantApr.toFixed(2)}%`} detail="Tenant marketplace baseline" />
+      <PublicMetric label="Active members" value={stats.activeMembers.toLocaleString('en-US')} detail="Across tenant workspaces" />
+      <PublicMetric label="Execution queues" value={stats.executionQueues} detail="Pending tenant operations" />
+    </section>
+  );
+}
+
 function DaoFederationMap() {
   const layers = [
     { title: 'Axodus Constitution', detail: 'Federal standards and guardrails' },
@@ -111,7 +188,9 @@ function DaoFederationMap() {
 
 export default function GovernanceLanding() {
   const { chains, summary, source } = useChainRegistry();
+  const { isConnected } = useWallet();
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
+  const { tenants, coreMetrics, federationStats, userAllocations, treasuryMetrics } = governanceTenantsMock;
   const publicRegistryChains = chains.filter((chain) => !chain.legacyHarmonyAdapter);
   const publicChains = publicRegistryChains.slice(0, 5);
   const publicRoleCounts = publicRegistryChains.reduce(
@@ -129,32 +208,31 @@ export default function GovernanceLanding() {
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
         <GovernanceStatusBar executionChain={executionChain} summary={summary} source={source} />
 
+        {isConnected ? <MyDaoTenantsSection tenants={tenants} allocations={userAllocations} coreMetrics={coreMetrics} /> : null}
+
+        <FeaturedDaoTenantsSection tenants={tenants} coreMetrics={coreMetrics} />
+
+        <TenantTreasuryWidget coreMetrics={coreMetrics} treasuryMetrics={treasuryMetrics} />
+
+        <FederationStatsStrip stats={federationStats} />
+
         <RootDaoOverview executionChain={executionChain} summary={summary} />
 
         <DaoFederationMap />
 
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-          <div>
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-start">
+          <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
             <span className="mb-3 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Axodus Governance</span>
             <h1 className="max-w-4xl text-3xl font-black tracking-tight text-on-surface md:text-4xl">
               Federated DAO governance for multichain economic execution.
             </h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-on-surface-variant">
-              Axodus Governance coordinates DAO federation, proposal lifecycle, chain capabilities, plugin access and execution
-              visibility across the ecosystem. Public information is available here; operational actions require wallet connection.
+              Axodus Governance is the public gateway into governed economic organizations. Users can stay allocated to CORE,
+              join multiple DAO tenants, compare strategy APR, and follow constitutional execution transparency across the federation.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to="/governance/console"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-black text-on-primary shadow-lg shadow-primary/20"
-              >
-                <span className="material-symbols-outlined text-[18px]">account_balance_wallet</span>
-                Open Governance Console
-              </Link>
-            </div>
-          </div>
+          </section>
 
-          <div className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
+          <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-500">Current execution chain</div>
@@ -176,7 +254,7 @@ export default function GovernanceLanding() {
             <div className="mt-4">
               <GovernanceStandingSummary chain={executionChain} compact />
             </div>
-          </div>
+          </section>
         </section>
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">

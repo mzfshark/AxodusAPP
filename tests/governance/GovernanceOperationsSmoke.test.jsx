@@ -100,6 +100,19 @@ const governancePlugin = {
   address: '0x2222222222222222222222222222222222222222',
 };
 
+const walletMock = vi.hoisted(() => ({
+  state: {
+    address: null,
+    isConnected: false,
+    chain: null,
+    disconnect: vi.fn(),
+  },
+}));
+
+vi.mock('@/hooks/useWallet', () => ({
+  useWallet: () => walletMock.state,
+}));
+
 vi.mock('../../src/modules/governance/hooks/useChainRegistry', () => ({
   useChainRegistry: () => ({
     chains: [executionChain],
@@ -152,6 +165,12 @@ async function renderDashboard() {
 
 describe('Governance Operations Center smoke', () => {
   beforeEach(() => {
+    walletMock.state = {
+      address: null,
+      isConnected: false,
+      chain: null,
+      disconnect: vi.fn(),
+    };
     window.localStorage.clear();
   });
 
@@ -164,11 +183,33 @@ describe('Governance Operations Center smoke', () => {
     await renderLanding();
 
     expect(screen.getByRole('heading', { name: /federated dao governance/i })).toBeInTheDocument();
+    expect(screen.getByText(/featured dao tenants/i)).toBeInTheDocument();
+    expect(screen.getByText(/dao federation marketplace/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus trading alpha dao/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Axodus CORE baseline/i)).toBeInTheDocument();
     expect(screen.getByText('Axodus Constitution')).toBeInTheDocument();
     expect(screen.getByText('Federation Registry')).toBeInTheDocument();
     expect(screen.getByText(/constitutional governance layer/i)).toBeInTheDocument();
     expect(screen.getByText(/local governance layer/i)).toBeInTheDocument();
     expect(screen.getAllByText('Ethereum Sepolia').length).toBeGreaterThan(0);
+  });
+
+  test('prioritizes user DAO tenant allocations when wallet is connected', async () => {
+    walletMock.state = {
+      address: '0xAxoD000000000000000000000000000000000001',
+      isConnected: true,
+      chain: 11155111,
+      disconnect: vi.fn(),
+    };
+
+    await renderLanding();
+
+    expect(screen.getByText(/my dao tenants/i)).toBeInTheDocument();
+    expect(screen.getByText(/multi-DAO allocation workspace/i)).toBeInTheDocument();
+    expect(screen.getByText(/federal CORE-only allocation remains available/i)).toBeInTheDocument();
+    expect(screen.getByText(/12,840 vNEURONS/i)).toBeInTheDocument();
+    expect(screen.getByText(/4.10%/i)).toBeInTheDocument();
   });
 
   test('renders the Governance Operations Center with scoped createProposal observability', async () => {
