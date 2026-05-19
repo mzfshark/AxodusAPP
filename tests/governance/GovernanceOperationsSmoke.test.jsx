@@ -174,10 +174,10 @@ async function renderTenantDetail(tenantId = 'dao-tenant-trading-alpha') {
   );
 }
 
-async function renderTenants() {
+async function renderTenants(initialEntry = '/governance/tenants') {
   const { default: GovernanceTenants } = await import('../../src/modules/governance/pages/GovernanceTenants');
   render(
-    <MemoryRouter initialEntries={['/governance/tenants']}>
+    <MemoryRouter initialEntries={[initialEntry]}>
       <GovernanceTenants />
     </MemoryRouter>,
   );
@@ -217,15 +217,11 @@ describe('Governance Operations Center smoke', () => {
   }, 10000);
 
   test('filters DAO Tenants by multiple risk and investment selections', async () => {
-    await renderTenants();
+    await renderTenants('/governance/tenants?risk=low&risk=moderate&type=Mining&type=DeFi');
 
     expect(screen.getByRole('heading', { name: /discover governed economic organizations/i })).toBeInTheDocument();
-    expect(screen.getByText(/8 DAO Tenants/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: /^low$/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^moderate$/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^mining$/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^defi$/i }));
+    expect(screen.getByText(/2 DAO Tenants/i)).toBeInTheDocument();
+    expect(screen.getByText(/4 active filters/i)).toBeInTheDocument();
 
     expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
     expect(screen.getByText(/axodus defi stability dao/i)).toBeInTheDocument();
