@@ -1,8 +1,9 @@
 // src/components/Sidebar.jsx
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from "react-router-dom";
 import {
+  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   Menu,
@@ -28,6 +29,10 @@ const subNavClass = ({ isActive }) =>
       : 'border-white/10 bg-surface-container-low text-outline hover:border-white/20 hover:text-on-surface'
   }`;
 
+function hasNucleusNavigation(item) {
+  return Boolean((item?.sections?.length ?? 0) || (item?.filterGroups?.length ?? 0));
+}
+
 function NavItems({ activeShellItem, isCollapsed, onNavigate }) {
   return (
     <>
@@ -35,7 +40,7 @@ function NavItems({ activeShellItem, isCollapsed, onNavigate }) {
         <NavLink
           key={item.id}
           to={item.routeBase}
-          onClick={onNavigate}
+          onClick={() => onNavigate?.(item)}
           className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
           data-nav-nucleus={item.id}
           title={isCollapsed ? item.label : undefined}
@@ -49,7 +54,7 @@ function NavItems({ activeShellItem, isCollapsed, onNavigate }) {
         <NavLink
           key={item.id}
           to={item.routeBase}
-          onClick={onNavigate}
+          onClick={() => onNavigate?.(item)}
           className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
           data-nav-nucleus={item.id}
           title={isCollapsed ? item.label : undefined}
@@ -73,7 +78,7 @@ function isFilterActive(location, target) {
   return [...targetParams.entries()].every(([key, value]) => currentParams.get(key) === value);
 }
 
-function NucleusSecondaryLayer({ activeShellItem, onNavigate }) {
+function NucleusNavigation({ activeShellItem, isCollapsed, onBack, onNavigate }) {
   const location = useLocation();
   const sections = activeShellItem?.sections ?? [];
   const filterGroups = activeShellItem?.filterGroups ?? [];
@@ -82,6 +87,17 @@ function NucleusSecondaryLayer({ activeShellItem, onNavigate }) {
 
   return (
     <section className="app-sidebar-secondary" aria-label={`${activeShellItem.label} navigation`}>
+      <button
+        type="button"
+        className="app-sidebar-back-button"
+        onClick={onBack}
+        aria-label="Return to ecosystem navigation"
+        title={isCollapsed ? 'Ecosystem navigation' : undefined}
+      >
+        <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+        <span className="app-sidebar-link-label">Ecosystem</span>
+      </button>
+
       <div className="app-sidebar-secondary-header">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Nucleus</p>
         <h2>{activeShellItem.label}</h2>
@@ -98,15 +114,16 @@ function NucleusSecondaryLayer({ activeShellItem, onNavigate }) {
               end={item.end}
               onClick={onNavigate}
               className={subNavClass}
+              title={isCollapsed ? item.label : undefined}
             >
               <item.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <span>{item.label}</span>
+              <span className="app-sidebar-link-label">{item.label}</span>
             </NavLink>
           ))}
         </nav>
       ) : null}
 
-      {filterGroups.map((group) => (
+      {!isCollapsed && filterGroups.map((group) => (
         <div key={group.label} className="app-sidebar-secondary-section">
           <p className="app-sidebar-section-label">{group.label}</p>
           {group.items.map((item) => {
@@ -117,8 +134,9 @@ function NucleusSecondaryLayer({ activeShellItem, onNavigate }) {
                 to={item.to}
                 onClick={onNavigate}
                 className={subNavClass({ isActive: active })}
+                title={isCollapsed ? item.label : undefined}
               >
-                <span>{item.label}</span>
+                <span className="app-sidebar-link-label">{item.label}</span>
               </Link>
             );
           })}
@@ -160,6 +178,21 @@ export default function Sidebar({ activeShellItem }) {
   const [theme, setTheme] = useDarkMode();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [viewMode, setViewMode] = useState(() => (hasNucleusNavigation(activeShellItem) ? 'nucleus' : 'global'));
+  const isNucleusView = viewMode === 'nucleus' && hasNucleusNavigation(activeShellItem);
+
+  useEffect(() => {
+    setViewMode(hasNucleusNavigation(activeShellItem) ? 'nucleus' : 'global');
+  }, [activeShellItem]);
+
+  const handleGlobalNavigate = (item) => {
+    if (hasNucleusNavigation(item)) setViewMode('nucleus');
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleNucleusNavigate = () => {
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -185,26 +218,35 @@ export default function Sidebar({ activeShellItem }) {
             <div className="app-sidebar-primary">
               <div className="px-2 mb-6 flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
-                  <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
+                  <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">{isNucleusView ? activeShellItem.label : 'Ecosystem'}</div>
+                  <div className="text-on-surface/50 text-[10px]">{isNucleusView ? 'Nucleus navigation' : 'v2.4.0 Obsidian'}</div>
                 </div>
-              <button
-                type="button"
-                className="h-9 w-9 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-surface-container-low flex items-center justify-center"
-                onClick={() => setIsMobileMenuOpen(false)}
-                aria-label="Close navigation menu"
-              >
-                <X className="h-5 w-5" aria-hidden="true" />
-              </button>
+                <button
+                  type="button"
+                  className="h-9 w-9 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-surface-container-low flex items-center justify-center"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Close navigation menu"
+                >
+                  <X className="h-5 w-5" aria-hidden="true" />
+                </button>
+              </div>
+              {isNucleusView ? (
+                <NucleusNavigation
+                  activeShellItem={activeShellItem}
+                  onBack={() => setViewMode('global')}
+                  onNavigate={handleNucleusNavigate}
+                />
+              ) : (
+                <>
+                  <nav className="flex flex-col gap-1">
+                    <NavItems activeShellItem={activeShellItem} onNavigate={handleGlobalNavigate} />
+                  </nav>
+                  <div className="mt-auto pt-6 px-2">
+                    <ThemeToggle theme={theme} setTheme={setTheme} />
+                  </div>
+                </>
+              )}
             </div>
-            <nav className="flex flex-col gap-1">
-                <NavItems activeShellItem={activeShellItem} onNavigate={() => setIsMobileMenuOpen(false)} />
-            </nav>
-            <div className="mt-auto pt-6 px-2">
-              <ThemeToggle theme={theme} setTheme={setTheme} />
-            </div>
-            </div>
-            <NucleusSecondaryLayer activeShellItem={activeShellItem} onNavigate={() => setIsMobileMenuOpen(false)} />
           </aside>
         </div>
       )}
@@ -216,8 +258,8 @@ export default function Sidebar({ activeShellItem }) {
         <div className="app-sidebar-primary">
           <div className="app-sidebar-primary-header">
             <div className="app-sidebar-brand-text">
-              <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">Ecosystem</div>
-              <div className="text-on-surface/50 text-[10px]">v2.4.0 Obsidian</div>
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-1">{isNucleusView ? activeShellItem.label : 'Ecosystem'}</div>
+              <div className="text-on-surface/50 text-[10px]">{isNucleusView ? 'Nucleus navigation' : 'v2.4.0 Obsidian'}</div>
             </div>
             <button
               type="button"
@@ -229,14 +271,23 @@ export default function Sidebar({ activeShellItem }) {
               {isCollapsed ? <ChevronRight className="h-4 w-4" aria-hidden="true" /> : <ChevronLeft className="h-4 w-4" aria-hidden="true" />}
             </button>
           </div>
-          <nav className="flex flex-col gap-1">
-            <NavItems activeShellItem={activeShellItem} isCollapsed={isCollapsed} />
-          </nav>
-          <div className="mt-auto pt-6 px-2">
-            <ThemeToggle theme={theme} setTheme={setTheme} />
-          </div>
+          {isNucleusView ? (
+            <NucleusNavigation
+              activeShellItem={activeShellItem}
+              isCollapsed={isCollapsed}
+              onBack={() => setViewMode('global')}
+            />
+          ) : (
+            <>
+              <nav className="flex flex-col gap-1">
+                <NavItems activeShellItem={activeShellItem} isCollapsed={isCollapsed} onNavigate={handleGlobalNavigate} />
+              </nav>
+              <div className="mt-auto pt-6 px-2">
+                <ThemeToggle theme={theme} setTheme={setTheme} />
+              </div>
+            </>
+          )}
         </div>
-        {!isCollapsed ? <NucleusSecondaryLayer activeShellItem={activeShellItem} /> : null}
       </aside>
     </>
   );

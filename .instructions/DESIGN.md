@@ -142,9 +142,10 @@ Global shell responsibilities:
 - identify the active nucleus from the current route
 - expose the active nucleus through layout metadata and CSS attributes
 - render consistent ecosystem navigation
-- render a retractable two-layer sidebar:
-  - primary layer for global nucleus navigation
-  - secondary layer for active nucleus navigation, filters, sections and workflow shortcuts
+- render a retractable sidebar with two navigational modes sharing the same layout slot:
+  - global mode for ecosystem nucleus navigation
+  - nucleus mode for active nucleus navigation, filters, sections and workflow shortcuts
+  - nucleus mode must include a return control back to global mode
 - provide stable responsive behavior for desktop and mobile
 - keep wallet, notification, search and settings surfaces globally available
 - provide the content viewport where each nucleus renders its own pages
@@ -162,6 +163,7 @@ Implementation rule:
 
 - shared shell code belongs in `src/layouts`, `src/components`, `src/config` and `src/styles`
 - nucleus-specific UI belongs in `src/modules/<nucleus>`
+- the active nucleus navigation must replace the global sidebar content, not add a second permanent sidebar column
 - the global shell may add a light contextual tone for the active nucleus, but it must not replace the nucleus UI language
 - pages should render inside the global content viewport using shared wrappers such as `app-view-shell` or nucleus-specific shell components
 
@@ -172,15 +174,16 @@ Implementation rule:
 | Nucleus | Design File | Status |
 | --- | --- | --- |
 | Governance | `.instructions/design/governance/DESIGN.md` | Active |
-| Defi | `.instructions/design/defi/DESIGN.md` | Pending |
+| Defi | `.instructions/design/defi/DESIGN.md` | Active |
 | ACS | `.instructions/design/acs/DESIGN.md` | Pending |
-| Academy | `.instructions/design/academy/DESIGN.md` | Pending |
-| Marketplace | `.instructions/design/marketplace/DESIGN.md` | Pending |
-| Mining | `.instructions/design/mining/DESIGN.md` | Pending |
-| Dex | `.instructions/design/dex/DESIGN.md` | Pending |
+| Academy | `.instructions/design/academy/DESIGN.md` | Active |
+| Business | `.instructions/design/business/DESIGN.md` | Active |
+| Marketplace | `.instructions/design/marketplace/DESIGN.md` | Active |
+| Mining | `.instructions/design/mining/DESIGN.md` | Active |
+| Dex | `.instructions/design/dex/DESIGN.md` | Active |
 | Trading | `.instructions/design/trading/DESIGN.md` | Pending |
-| Lottery | `.instructions/design/lottery/DESIGN.md` | Pending |
-| BBA | `.instructions/design/bba/DESIGN.md` | Pending |
+| Lottery | `.instructions/design/lottery/DESIGN.md` | Active |
+| BBA | `.instructions/design/bba/DESIGN.md` | Active |
 
 ---
 

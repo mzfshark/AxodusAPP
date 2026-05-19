@@ -515,10 +515,9 @@ body {
 
 .app-shell {
   --app-header-height: 3.75rem;
-  --app-sidebar-primary-width: 15rem;
-  --app-sidebar-secondary-width: 15rem;
+  --app-sidebar-expanded-width: 15rem;
   --app-sidebar-collapsed-width: 4.75rem;
-  --app-sidebar-width: calc(var(--app-sidebar-primary-width) + var(--app-sidebar-secondary-width));
+  --app-sidebar-width: var(--app-sidebar-expanded-width);
   --nucleus-accent: var(--color-accent);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--nucleus-accent) 4%, transparent), transparent 18rem),
@@ -666,7 +665,7 @@ body {
 }
 
 .app-sidebar-panel.absolute {
-  width: min(28rem, 92vw);
+  width: min(20rem, 88vw);
 }
 
 .app-sidebar-panel[data-collapsed="true"] {
@@ -675,12 +674,11 @@ body {
 
 .app-sidebar-primary {
   display: flex;
-  flex: 0 0 var(--app-sidebar-primary-width);
+  flex: 0 0 var(--app-sidebar-width);
   min-width: 0;
   flex-direction: column;
   gap: var(--space-xs);
   overflow-y: auto;
-  border-right: 1px solid var(--color-border-muted);
   padding: var(--space-lg) var(--space-md);
 }
 
@@ -739,8 +737,7 @@ body {
 }
 
 .app-sidebar-mobile {
-  display: grid;
-  grid-template-columns: minmax(13rem, 0.9fr) minmax(13rem, 1fr);
+  display: block;
 }
 
 .app-sidebar-mobile .app-sidebar-primary {
@@ -749,13 +746,44 @@ body {
 
 .app-sidebar-secondary {
   display: flex;
-  flex: 0 0 var(--app-sidebar-secondary-width);
   min-width: 0;
   flex-direction: column;
   gap: var(--space-lg);
-  overflow-y: auto;
-  padding: var(--space-lg) var(--space-md);
-  background: color-mix(in srgb, var(--color-bg-soft) 64%, var(--color-bg));
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+}
+
+.app-sidebar-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  min-height: 2.5rem;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  background: var(--color-surface-primary);
+  padding: 0 var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.app-sidebar-back-button:hover {
+  color: var(--nucleus-accent, var(--color-accent));
+  border-color: color-mix(in srgb, var(--nucleus-accent, var(--color-accent)) 34%, var(--color-border-muted));
+}
+
+.app-sidebar-panel[data-collapsed="true"] .app-sidebar-back-button {
+  justify-content: center;
+  width: 2.75rem;
+  padding-inline: 0;
+}
+
+.app-sidebar-panel[data-collapsed="true"] .app-sidebar-secondary-header,
+.app-sidebar-panel[data-collapsed="true"] .app-sidebar-section-label {
+  display: none;
 }
 
 .app-sidebar-secondary-header h2 {
