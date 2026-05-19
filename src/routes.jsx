@@ -46,10 +46,20 @@ import {
   MarketplaceSellerProfile,
 } from "./modules/marketplace";
 import Dex from "./pages/Dex";
-import Lottery from "./pages/Lottery";
 import Mcps from "./pages/Mcps";
 import { GovernanceDashboard, GovernanceLanding, ProposalDetail } from "./modules/governance";
 import { BbaCampaigns, BbaGovernance, BbaHome, BbaPartnerships, BbaPortfolio, BbaServices } from "./modules/bba";
+import {
+  LotteryDashboard,
+  LotteryDrawDetails,
+  LotteryDrawHistory,
+  LotteryDraws,
+  LotteryGameModels,
+  LotteryGovernance,
+  LotteryPrizePools,
+  LotteryRandomness,
+  LotteryTickets,
+} from "./modules/lottery";
 
 
 const router = createBrowserRouter([
@@ -98,7 +108,15 @@ const router = createBrowserRouter([
       { path: "academy/governance-review", element: <AcademyGovernanceReview /> },
       { path: "academy/paths/:pathId", element: <AcademyPathViewer /> },
       { path: "dex", element: <Dex /> },
-      { path: "lottery", element: <Lottery /> },
+      { path: "lottery", element: <LotteryDashboard /> },
+      { path: "lottery/draws", element: <LotteryDraws /> },
+      { path: "lottery/draws/:slug", element: <LotteryDrawDetails /> },
+      { path: "lottery/game-models", element: <LotteryGameModels /> },
+      { path: "lottery/tickets", element: <LotteryTickets /> },
+      { path: "lottery/prizes", element: <LotteryPrizePools /> },
+      { path: "lottery/governance", element: <LotteryGovernance /> },
+      { path: "lottery/randomness", element: <LotteryRandomness /> },
+      { path: "lottery/history", element: <LotteryDrawHistory /> },
       { path: "bba", element: <BbaHome /> },
       { path: "bba/services", element: <BbaServices /> },
       { path: "bba/portfolio", element: <BbaPortfolio /> },

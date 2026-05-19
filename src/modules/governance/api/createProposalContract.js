@@ -1,3 +1,5 @@
+import { buildCreateProposalPluginPayload } from './createProposalPluginAdapters';
+
 export const createProposalSubmissionModes = {
   MOCK_REVIEW: 'mock-review',
   BACKEND: 'backend',
@@ -17,7 +19,11 @@ function createReason(reasonCode, reasonSeverity, source, message) {
   };
 }
 
-function buildCreateProposalReasonCodes({ draft, walletAddress, plugin }) {
+function createLayerReason(reasonCode, reasonSeverity, source) {
+  return createReason(reasonCode, reasonSeverity ?? 'constitutional', source, 'Observed Constitutional Layer reason code attached to this create-proposal request.');
+}
+
+function buildCreateProposalReasonCodes({ draft, walletAddress, plugin, constitutionalLayer }) {
   const reasons = [];
 
   if (!backendCreateProposalEnabled) {
@@ -57,7 +63,90 @@ function buildCreateProposalReasonCodes({ draft, walletAddress, plugin }) {
     );
   }
 
-  return reasons;
+  const layerReasons = [
+    ...(constitutionalLayer?.executionModel?.reasonCodes ?? []).map((reasonCode) =>
+      createLayerReason(reasonCode, constitutionalLayer?.executionModel?.reasonSeverity, 'constitutional execution model'),
+    ),
+    ...(constitutionalLayer?.conditions ?? []).flatMap((condition) =>
+      (condition.reasonCodes ?? []).map((reasonCode) => createLayerReason(reasonCode, condition.reasonSeverity, condition.source ?? 'Constitutional Governance')),
+    ),
+  ];
+
+  return Array.from(
+    new Map([...reasons, ...layerReasons].map((reason) => [reason.reasonCode, reason])).values(),
+  );
+}
+
+function resolvePluginType(plugin, draft) {
+  return plugin?.interfaceType ?? plugin?.pluginType ?? draft?.pluginId ?? null;
+}
+
+function buildObservedGovernanceContext({ draft, selectedDao, selectedChain, plugin, pluginPayload, constitutionalLayer }) {
+  const pluginType = resolvePluginType(plugin, draft);
+  const chainPluginCapability = pluginType ? selectedChain?.capabilities?.pluginCapabilities?.[pluginType] : null;
+  const treasuryReviewRequired =
+    draft.actionType === 'treasury-review' ||
+    pluginPayload.adapterFamily === 'treasury-policy' ||
+    constitutionalLayer?.executionModel?.treasuryReviewRequired === true;
+
+  const sources = {
+    registry: {
+      source: 'chain registry',
+      observed: Boolean(selectedChain),
+      network: selectedChain?.network ?? selectedChain?.slug ?? selectedDao?.network ?? null,
+      governanceStatus: selectedChain?.governanceStatus ?? null,
+      federationMember: selectedChain?.federationMember ?? null,
+      federationTier: selectedChain?.federationTier ?? null,
+      constitutionalStanding: selectedChain?.constitutionalStanding ?? selectedChain?.capabilities?.constitutionalStanding ?? null,
+      constitutionalLayerAvailable: Boolean(constitutionalLayer),
+    },
+    dao: {
+      source: 'DAO registry',
+      observed: Boolean(selectedDao),
+      id: selectedDao?.id ?? null,
+      address: selectedDao?.address ?? null,
+      name: selectedDao?.name ?? null,
+      governanceStatus: selectedDao?.governanceStatus ?? null,
+      federationMember: selectedDao?.federationMember ?? null,
+      federationTier: selectedDao?.federationTier ?? null,
+      constitutionalStanding: selectedDao?.constitutionalStanding ?? selectedDao?.constitutionalCompliance ?? selectedDao?.constitutionalCompatibility ?? null,
+    },
+    plugin: {
+      source: chainPluginCapability ? 'chain plugin capability registry' : 'observed plugin selection',
+      observed: Boolean(plugin),
+      id: plugin?.id ?? draft.pluginId ?? null,
+      address: plugin?.address ?? null,
+      interfaceType: pluginType,
+      label: plugin?.name ?? plugin?.label ?? draft.pluginLabel ?? pluginType ?? null,
+      capability: chainPluginCapability,
+      createProposalAdapter: {
+        family: pluginPayload.adapterFamily,
+        status: pluginPayload.adapterStatus,
+        expectedBackendAdapter: pluginPayload.expectedBackendAdapter,
+        executionIntent: pluginPayload.executionIntent,
+      },
+    },
+    treasuryPolicy: {
+      source: 'treasury policy',
+      observed: treasuryReviewRequired,
+      reviewRequired: treasuryReviewRequired,
+      actionType: draft.actionType,
+      reasonCodes: treasuryReviewRequired ? ['TREASURY_POLICY_REQUIRES_REVIEW'] : [],
+      reasonSeverity: treasuryReviewRequired ? 'constitutional' : null,
+      boundary: 'Treasury policy visibility is request metadata only. Backend policy engines and governance sources must determine final restrictions.',
+    },
+  };
+
+  return {
+    ...sources,
+    observedSources: Object.entries(sources)
+      .filter(([, value]) => value.observed)
+      .map(([key, value]) => ({
+        key,
+        source: value.source,
+        status: key === 'treasuryPolicy' ? (value.reviewRequired ? 'requires-review' : 'not-required') : 'observed',
+      })),
+  };
 }
 
 export function buildCreateProposalRequest({
@@ -68,7 +157,24 @@ export function buildCreateProposalRequest({
   plugin,
   submissionMode = backendCreateProposalEnabled ? createProposalSubmissionModes.BACKEND : createProposalSubmissionModes.MOCK_REVIEW,
 }) {
-  const reasonCodes = buildCreateProposalReasonCodes({ draft, walletAddress, plugin });
+  const constitutionalLayer = selectedChain?.constitutionalLayer ?? selectedChain?.capabilities?.constitutionalLayer ?? null;
+  const pluginPayload = buildCreateProposalPluginPayload({ draft, selectedDao, selectedChain, walletAddress, plugin });
+  const observedGovernanceContext = buildObservedGovernanceContext({
+    draft,
+    selectedDao,
+    selectedChain,
+    plugin,
+    pluginPayload,
+    constitutionalLayer,
+  });
+  const reasonCodes = Array.from(
+    new Map(
+      [...buildCreateProposalReasonCodes({ draft, walletAddress, plugin, constitutionalLayer }), ...(pluginPayload.reasonCodes ?? [])].map((reason) => [
+        reason.reasonCode,
+        reason,
+      ]),
+    ).values(),
+  );
 
   return {
     submissionMode,
@@ -84,6 +190,11 @@ export function buildCreateProposalRequest({
       chainId: selectedChain?.chainId ?? null,
       name: selectedChain?.name ?? null,
       role: selectedChain?.roles?.includes('execution') ? 'execution' : selectedChain?.roles?.[0] ?? null,
+      governanceStatus: selectedChain?.governanceStatus ?? null,
+      federationMember: selectedChain?.federationMember ?? null,
+      federationTier: selectedChain?.federationTier ?? null,
+      constitutionalStanding: selectedChain?.constitutionalStanding ?? selectedChain?.capabilities?.constitutionalStanding ?? null,
+      constitutionalLayer,
     },
     creator: {
       walletAddress: walletAddress ?? null,
@@ -93,6 +204,12 @@ export function buildCreateProposalRequest({
       address: plugin?.address ?? null,
       interfaceType: plugin?.interfaceType ?? plugin?.pluginType ?? null,
       label: plugin?.name ?? plugin?.interfaceType ?? plugin?.pluginType ?? draft.pluginLabel ?? null,
+      createProposalAdapter: {
+        family: pluginPayload.adapterFamily,
+        status: pluginPayload.adapterStatus,
+        expectedBackendAdapter: pluginPayload.expectedBackendAdapter,
+        executionIntent: pluginPayload.executionIntent,
+      },
     },
     proposal: {
       title: draft.title,
@@ -102,6 +219,23 @@ export function buildCreateProposalRequest({
       votingEnd: draft.endDate || null,
       rationale: draft.rationale || null,
     },
+    governanceContext: {
+      constitutionalLayer,
+      authorityModel: constitutionalLayer?.authorityModel ?? null,
+      federationModel: constitutionalLayer?.federationModel ?? null,
+      executionModel: constitutionalLayer?.executionModel ?? null,
+      observedSources: observedGovernanceContext.observedSources,
+      sources: {
+        registry: observedGovernanceContext.registry,
+        dao: observedGovernanceContext.dao,
+        plugin: observedGovernanceContext.plugin,
+        treasuryPolicy: observedGovernanceContext.treasuryPolicy,
+      },
+      source: 'registry-observed-state',
+      boundary:
+        'Create-proposal requests carry observed Constitutional Layer state only. The frontend does not infer constitutional validity, sanctions or execution authority.',
+    },
+    adapterPayload: pluginPayload,
     guardrails: {
       frontendBoundary:
         'UI-generated proposal request preview only. Constitutional validity, permissions, sanctions and execution must be evaluated by governance data sources.',
@@ -155,11 +289,22 @@ function createReviewRequestsUrl(filters = {}) {
 }
 
 function normalizeCreateProposalReceipt(response, request) {
+  const storageMode = response?.storageMode ?? response?.storage?.mode ?? 'unknown';
+  const source = response?.source ?? response?.storage?.source ?? 'CreateProposalRequest';
+
   return {
     id: response?.id ?? response?.receiptId ?? response?.proposalId ?? null,
     proposalDraftId: response?.proposalDraftId ?? null,
     status: response?.status ?? 'backend-submitted',
     submissionMode: createProposalSubmissionModes.BACKEND,
+    storageMode,
+    source,
+    storage: response?.storage ?? {
+      mode: storageMode,
+      source,
+      persisted: storageMode === 'mongo',
+      message: 'Create proposal storage metadata was not returned by the backend.',
+    },
     submittedAt: response?.submittedAt ?? new Date().toISOString(),
     message: response?.message ?? 'Create proposal request accepted by the Governance API.',
     indexerReconciliation: response?.indexerReconciliation ?? {
@@ -211,6 +356,14 @@ export function submitCreateProposalMock({ draft, request } = {}) {
     proposalDraftId: draft?.id ?? null,
     status: 'mock-submitted',
     submissionMode: createProposalSubmissionModes.MOCK_REVIEW,
+    storageMode: 'local-only',
+    source: 'browser-local-draft',
+    storage: {
+      mode: 'local-only',
+      source: 'browser-local-draft',
+      persisted: false,
+      message: 'Local mock receipt is stored only in this browser context.',
+    },
     submittedAt,
     message: 'Local mock submission accepted for frontend review. No backend write, wallet prompt or on-chain transaction was submitted.',
     indexerReconciliation: {
@@ -283,6 +436,7 @@ export async function listCreateProposalReviewRequests({ filters = {}, signal, f
     items,
     count: Number.isFinite(payload?.count) ? payload.count : items.length,
     source: payload?.source ?? 'CreateProposalRequest',
+    storageMode: payload?.storageMode ?? items[0]?.storageMode ?? items[0]?.storage?.mode ?? null,
     endpoint,
     reasonCodes: payload?.reasonCodes ?? [],
   };

@@ -1,5 +1,6 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
+import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
@@ -365,6 +366,8 @@ export default function GovernanceDashboard() {
 
         <ObservabilityPanel summary={summary} />
 
+        <ConstitutionalLayerPanel chain={governanceConsole.selectedChain ?? executionChain} />
+
         <GovernanceReadinessPanel
           registryStatus={status}
           registrySource={source}
@@ -376,7 +379,11 @@ export default function GovernanceDashboard() {
           canCreateProposal={governanceConsole.canCreateProposal}
         />
 
-        <CreateProposalIntegrationStatus proposalDrafts={proposalDrafts.drafts} />
+        <CreateProposalIntegrationStatus
+          proposalDrafts={proposalDrafts.drafts}
+          selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+        />
 
         <ConstitutionalGuardrailsPanel reasons={summary.guardrailReasons} />
 

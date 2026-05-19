@@ -2,23 +2,23 @@
 
 ## Progress Snapshot
 
-Last updated: 2026-05-18
+Last updated: 2026-05-19
 
 Overall AxodusAPP completion: 35%
 
-Current priority: Governance Operations Center, createProposal observability, and BBA MVP visual QA.
+Current priority: Governance Operations Center, createProposal indexer reconciliation readiness, indexed Constitutional Layer source records, and BBA MVP visual QA.
 
 ### Module Progress
 
-- Governance module: 80%
-- Governance createProposal flow: 72%
+- Governance module: 86%
+- Governance createProposal flow: 86%
 - Governance proposal detail/execution UI: 74%
-- Governance registry/standing/guardrail observability: 82%
+- Governance registry/standing/guardrail observability: 89%
 - Wallet integration surface: 65%
 - Layout/app shell foundation: 58%
 - Shared UI foundation: 36%
 - State architecture: 38%
-- Testing foundation: 42%
+- Testing foundation: 45%
 - Security UX foundation: 48%
 - Defi module: 8%
 - ACS module: 6%
@@ -32,12 +32,9 @@ Current priority: Governance Operations Center, createProposal observability, an
 
 ### Active Governance Priorities
 
-1. Backend HTTP smoke for `POST /v2/proposals/create`, `GET /v2/proposals/create/:id`, and `GET /v2/proposals/create`.
-2. Move backend work off detached `HEAD` into a sprint branch before staging.
-3. Add `storageMode` or equivalent source metadata to individual createProposal receipts.
-4. Filter backend review receipts by selected DAO/chain in the Operations Center.
-5. Add browser/e2e smoke for `/governance`, `/governance/console`, and create proposal modal flow.
-6. Prepare plugin-specific createProposal adapters after backend execution/contracts are ready.
+1. Add real indexer reconciliation for createProposal after on-chain/plugin adapters are connected.
+2. Connect observed Constitutional Layer source metadata to indexed DAO, plugin deployment and treasury policy records.
+3. Move remaining backend work into a non-detached sprint branch before staging.
 
 ---
 
@@ -81,26 +78,26 @@ Current priority: Governance Operations Center, createProposal observability, an
 
 ## Governance Tasks
 
-- Create Governance public landing — 78%; `/governance` exposes public registry/governance information without wallet requirement
-- Create Governance dashboard — 82%; protected `/governance/console` consumes backend chain registry with fallback PoC data
+- Create Governance public landing — 83%; `/governance` exposes public registry/governance information, topology and Constitutional Layer without wallet requirement, with route smoke coverage
+- Create Governance dashboard — 87%; protected `/governance/console` consumes backend chain registry with fallback PoC data and renders the normalized Constitutional Layer for selected governance context, with Operations Center smoke coverage
 - Create Governance DAO context selector — 76%; console models Axodus Constitutional Governance plus Local Governance contexts for indexed sub-DAOs
-- Create DAO explorer — 72%; console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins and proposal readiness
+- Create DAO explorer — 74%; console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins, proposal readiness and selected DAO Constitutional Layer state
 - Create proposal list shell — 80%; console shows real indexed proposals when available, links rows into proposal detail, and keeps an explicit empty state otherwise
 - Add governance dev proposal fixtures — 88%; development-only mock proposals allow proposal detail, guardrail observability and transaction preview testing before live proposals are indexed
-- Create proposal list — 82%; supports search, status filters, proposal metadata, dev mock labels, direct links into proposal detail, local proposal drafts, request inspection, review/submit states, local mock receipts, backend review-queued receipts, backend submission error/retry display with backend reason metadata, mode-aware submit labels, modal-level integration state, and env-gated backend createProposal submission
-- Create proposal detail page — 78%; protected `/governance/proposals/:proposalId` reads backend proposal detail/actions and composes operational state, adapter preview, voting, execution, permission check, guardrail, receipt, execution action, governance context and wallet history panels
-- Create governance transaction adapter — 72%; isolates vote/execute preparation by plugin type and chain capability, with TokenVoting/Multisig ABI calldata binding, guarded wagmi write submission, and wallet network switching
+- Create proposal list — 90%; supports search, status filters, proposal metadata, dev mock labels, direct links into proposal detail, local proposal drafts, request inspection, review/submit states, local mock receipts, backend review-queued receipts, selected DAO/chain scoped backend review receipt visibility, backend storage/source metadata, backend submission error/retry display with backend reason metadata, mode-aware submit labels, modal-level integration state, plugin-specific createProposal adapter metadata, createProposal Constitutional Layer context, observed governance sources for registry/DAO/plugin/treasury policy, env-gated backend submission, and smoke-tested modal draft generation
+- Create proposal detail page — 81%; protected `/governance/proposals/:proposalId` reads backend proposal detail/actions and composes operational state, adapter preview, voting, execution, permission check, guardrail, receipt, execution action, governance context, Constitutional Layer and wallet history panels
+- Create governance transaction adapter — 75%; isolates vote/execute preparation by plugin type and chain capability, with TokenVoting/Multisig ABI calldata binding, guarded wagmi write submission, wallet network switching, and createProposal request adapter/source metadata for EVM voting, multisig, treasury policy and Harmony legacy surfaces
 - Create voting UI — 70%; proposal detail exposes adapter-ready vote option selection and wallet action readiness
 - Create execution receipt UI — 72%; proposal detail exposes indexed remote receipts, local wallet transaction receipt tracking, and governance indexer reconciliation status
 - Create local governance operation history — 76%; proposal detail persists recent wallet operations by wallet/proposal while backend indexing catches up
 - Create governance transaction confirmation preview — 74%; proposal detail requires explicit review of action, chain, plugin contract, calldata, fee source and governance impact before opening wallet prompt
 - Create governance action permission guards — 80%; vote/execute operations run wallet, backend chain capability, action-level plugin capability, indexing readiness and lifecycle checks before wallet submission
-- Add governance nuclei model — 84%; chain registry and frontend fallback distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities
-- Add Constitutional Guardrail reason codes — 82%; backend registry/indexer status, createProposal boundaries and frontend permission guards expose transparent guardrail codes across UI/API flows
-- Add governance standing model — 82%; frontend registry normalization maps legacy constitutional compatibility payloads into constitutional standing, governance status, federation tier and reason severity for rendering only
-- Evolve Governance Operations Center — 80%; `/governance/console` is positioned as a federation observability surface with operations readiness visibility for registry, selected context, proposals, plugins, local drafts, proposal creation state, backend createProposal review receipt listing and reusable createProposal integration status panel
-- Add Constitutional Guardrail observability — 78%; registry summary exposes active reason codes with severity, source, scope and network for console rendering
-- Add selected governance context guardrails — 72%; console exposes reason codes affecting selected DAO and chain context separately from global registry guardrails
+- Add governance nuclei model — 87%; chain registry and frontend fallback distinguish Constitutional Governance powered by `$Neurons` from Local Governance controlled by federated entities, including authority/federation/execution boundaries
+- Add Constitutional Guardrail reason codes — 87%; backend registry/indexer status, createProposal boundaries, Constitutional Layer execution models and frontend permission guards expose transparent guardrail codes across UI/API flows
+- Add governance standing model — 86%; frontend registry normalization maps legacy constitutional compatibility payloads into constitutional standing, governance status, federation tier, Constitutional Layer and reason severity for rendering only
+- Evolve Governance Operations Center — 89%; `/governance/console` is positioned as a federation observability surface with operations readiness visibility for registry, selected context, Constitutional Layer, proposals, plugins, local drafts, proposal creation state, selected-context backend createProposal review receipt listing with storage mode/source metadata, reusable createProposal integration status panel, observed source metadata, and smoke-tested route/modal flow
+- Add Constitutional Guardrail observability — 86%; registry summary exposes active reason codes with severity, source, scope, network, createProposal request context, observed registry/DAO/plugin/treasury policy sources, and constitutional execution model metadata for console rendering
+- Add selected governance context guardrails — 74%; console exposes reason codes and observed source metadata affecting selected DAO and chain context separately from global registry guardrails
 
 ---
 
@@ -236,7 +233,7 @@ Current priority: Governance Operations Center, createProposal observability, an
 
 - Configure unit testing — 56%
 - Configure component testing — 48%
-- Configure e2e testing — 12%
+- Configure e2e testing — 18%; Governance route/modal smoke coverage added with Vitest/RTL while Playwright is not yet configured
 - Configure accessibility testing — 8%
 - Configure visual regression testing — 6%
 

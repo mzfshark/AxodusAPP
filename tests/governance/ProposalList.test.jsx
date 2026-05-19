@@ -196,11 +196,21 @@ function ProposalListBackendSuccessHarness() {
                 id: 'backend-create-1',
                 status: 'backend-review-queued',
                 submissionMode: 'backend',
+                storageMode: 'mongo',
+                source: 'CreateProposalRequest',
+                storage: {
+                  mode: 'mongo',
+                  source: 'CreateProposalRequest',
+                  persisted: true,
+                  message: 'Create proposal review receipt is persisted in Mongo for backend observability.',
+                },
                 message: 'Create proposal request accepted by the Governance API for non-on-chain review.',
                 indexerReconciliation: {
                   status: 'pending',
                   reasonCode: 'INDEXER_STATE_NOT_READY',
                   reasonSeverity: 'info',
+                  storageMode: 'mongo',
+                  observedRequestId: 'backend-create-1',
                 },
                 reasonCodes: [
                   {
@@ -252,6 +262,10 @@ describe('ProposalList create proposal draft flow', () => {
     fireEvent.click(screen.getByRole('button', { name: /inspect request/i }));
     expect(screen.getByText(/create proposal request preview/i)).toBeInTheDocument();
     expect(screen.getAllByText(/mock-review/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/observed governance sources/i)).toBeInTheDocument();
+    expect(screen.getByText(/registry: observed/i)).toBeInTheDocument();
+    expect(screen.getByText(/dao: observed/i)).toBeInTheDocument();
+    expect(screen.getByText(/plugin: observed/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /ready for review/i }));
     expect(screen.getAllByText(/ready for review/i).length).toBeGreaterThan(0);
@@ -289,7 +303,9 @@ describe('ProposalList create proposal draft flow', () => {
 
     expect(screen.getAllByText(/backend review queued/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/backend submission receipt/i)).toBeInTheDocument();
-    expect(screen.getByText('backend-create-1')).toBeInTheDocument();
+    expect(screen.getAllByText('backend-create-1').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('mongo').length).toBeGreaterThan(0);
+    expect(screen.getByText('CreateProposalRequest')).toBeInTheDocument();
     expect(screen.getByText('CREATE_PROPOSAL_BACKEND_REVIEW_REQUIRED')).toBeInTheDocument();
     expect(screen.getByText(/backend submission boundary/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit to backend/i })).toBeDisabled();

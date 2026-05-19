@@ -74,6 +74,13 @@ export function useProposalDrafts({ selectedDao, selectedChain, walletAddress } 
         submissionMode: draftInput.createProposalRequest?.submissionMode ?? 'mock-review',
         submissionState: 'draft',
         createProposalRequest: draftInput.createProposalRequest ?? null,
+        constitutionalLayer:
+          draftInput.createProposalRequest?.governanceContext?.constitutionalLayer ??
+          draftInput.createProposalRequest?.chain?.constitutionalLayer ??
+          selectedChain?.constitutionalLayer ??
+          selectedChain?.capabilities?.constitutionalLayer ??
+          null,
+        governanceContext: draftInput.createProposalRequest?.governanceContext ?? null,
         executionPreview: 'Local draft only. No backend write, wallet prompt or on-chain transaction has been submitted.',
       };
 

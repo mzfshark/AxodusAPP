@@ -24,6 +24,113 @@ const evmPluginTypes = [
 
 const compatible = { status: 'compatible', reasonCodes: [] };
 
+const uniqueReasonCodes = (...groups) => Array.from(new Set(groups.flat().filter(Boolean)));
+
+function normalizeReasonCodeList(reasonCodes = [], reasonSeverity) {
+  return reasonCodes.map((reasonCode) => ({
+    reasonCode,
+    reasonSeverity: normalizeReasonSeverity(reasonCode, reasonSeverity),
+  }));
+}
+
+function normalizeConstitutionalLayer(layer, chain, capabilities, constitutionalStanding) {
+  const roles = chain.roles ?? [];
+  const executionChainAuthorized = roles.includes('execution');
+  const legacyReasonCodes = chain.legacyHarmonyAdapter ? ['REMOTE_EXECUTION_GUARDRAIL_ACTIVE'] : [];
+  const executionReasonCodes = executionChainAuthorized ? [] : ['EXECUTION_CHAIN_NOT_AUTHORIZED'];
+  const reasonCodes = uniqueReasonCodes(executionReasonCodes, legacyReasonCodes, constitutionalStanding?.reasonCodes ?? []);
+  const reasonSeverity = reasonCodes.length ? (constitutionalStanding?.reasonSeverity ?? 'constitutional') : null;
+  const fallbackExecutionModes = [
+    ...(executionChainAuthorized ? ['direct', 'federal'] : []),
+    ...(capabilities.remoteExecution ? ['remote'] : []),
+    ...(chain.legacyHarmonyAdapter ? ['legacy-adapter'] : []),
+  ];
+
+  const normalizedLayer = layer ?? {
+    capabilities: [
+      { key: 'federal-standards', label: 'Federal standards', enabled: Boolean(capabilities.governance), source: 'Constitutional Governance', reasonCodes: [], reasonSeverity: null },
+      { key: 'chain-capabilities', label: 'Chain capabilities', enabled: true, source: 'Constitutional Governance', reasonCodes: [], reasonSeverity: null },
+      { key: 'plugin-capabilities', label: 'Plugin capabilities', enabled: Boolean(capabilities.governance), source: 'Constitutional Governance', reasonCodes: [], reasonSeverity: null },
+      {
+        key: 'constitutional-conditions',
+        label: 'Constitutional conditions',
+        enabled: Boolean(capabilities.constitutionalConditions),
+        source: 'Constitutional Governance',
+        reasonCodes: capabilities.constitutionalConditions ? [] : reasonCodes,
+        reasonSeverity,
+      },
+      { key: 'ecosystem-guardrails', label: 'Ecosystem guardrails', enabled: true, source: 'Constitutional Governance', reasonCodes: constitutionalStanding?.reasonCodes ?? [], reasonSeverity: constitutionalStanding?.reasonSeverity ?? null },
+      {
+        key: 'treasury-constraints',
+        label: 'Treasury constraints',
+        enabled: Boolean(capabilities.treasury),
+        source: 'Constitutional Governance',
+        reasonCodes: capabilities.treasury ? ['TREASURY_POLICY_REQUIRES_REVIEW'] : [],
+        reasonSeverity: capabilities.treasury ? 'warning' : null,
+      },
+      { key: 'federation-requirements', label: 'Federation requirements', enabled: chain.federationMember !== false, source: 'Constitutional Governance', reasonCodes: [], reasonSeverity: null },
+      { key: 'cross-chain-legitimacy', label: 'Cross-chain legitimacy', enabled: Boolean(capabilities.voting || capabilities.remoteExecution), source: 'Constitutional Governance', reasonCodes: legacyReasonCodes, reasonSeverity: legacyReasonCodes.length ? 'constitutional' : null },
+      { key: 'agent-execution-boundaries', label: 'Agent execution boundaries', enabled: true, source: 'Constitutional Governance', reasonCodes: ['AGENT_PERMISSION_SCOPE_EXCEEDED'], reasonSeverity: 'info' },
+      { key: 'transparent-reason-codes', label: 'Transparent reason codes', enabled: true, source: 'Constitutional Governance', reasonCodes: [], reasonSeverity: null },
+    ],
+    conditions: [
+      { key: 'chain-constitutionally-enabled', label: 'Chain constitutionally enabled', status: capabilities.governance ? 'satisfied' : 'restricted', source: 'Constitutional Governance', reasonCodes: capabilities.governance ? [] : ['CHAIN_NOT_CONSTITUTIONALLY_ENABLED'], reasonSeverity: capabilities.governance ? null : 'constitutional' },
+      { key: 'execution-chain-authorized', label: 'Execution chain authorization', status: executionChainAuthorized ? 'satisfied' : 'restricted', source: 'Constitutional Governance', reasonCodes: executionReasonCodes, reasonSeverity: executionReasonCodes.length ? 'constitutional' : null },
+      { key: 'plugin-capability-registered', label: 'Plugin capability registered', status: capabilities.governance ? 'satisfied' : 'requires-review', source: 'Constitutional Governance', reasonCodes: capabilities.governance ? [] : ['PLUGIN_CAPABILITY_NOT_REGISTERED'], reasonSeverity: capabilities.governance ? null : 'warning' },
+      { key: 'local-governance-standing-required', label: 'Local governance standing required', status: constitutionalStanding?.status === 'compliant' ? 'satisfied' : 'requires-review', source: 'Constitutional Governance', reasonCodes: constitutionalStanding?.reasonCodes ?? [], reasonSeverity: constitutionalStanding?.reasonSeverity ?? null },
+      { key: 'treasury-policy-review-required', label: 'Treasury policy review required', status: capabilities.treasury ? 'requires-review' : 'not-applicable', source: 'Constitutional Governance', reasonCodes: capabilities.treasury ? ['TREASURY_POLICY_REQUIRES_REVIEW'] : [], reasonSeverity: capabilities.treasury ? 'warning' : null },
+      { key: 'agent-permission-scope-required', label: 'Agent permission scope required', status: 'requires-review', source: 'Constitutional Governance', reasonCodes: ['AGENT_PERMISSION_SCOPE_EXCEEDED'], reasonSeverity: 'info' },
+    ],
+    authorityModel: {
+      authoritySources: ['$Neurons', 'federation-registry', 'constitutional-condition-registry', 'treasury-policy-registry', 'guardrail-registry'],
+      constitutionalAsset: '$Neurons',
+      localAuthorityPreserved: true,
+      localAuthorityBoundary: 'Local governance controls local operations only while constitutional standing remains observable and valid.',
+      treasuryAuthorityBoundary: 'Treasury-sensitive actions require policy review and transparent reason metadata before execution.',
+      agentAuthorityBoundary: 'AI and agent execution is bounded by explicit permission scopes and cannot become hidden governance authority.',
+    },
+    federationModel: {
+      federationMember: chain.federationMember !== false,
+      federationTier: chain.federationTier,
+      federationRoles: roles,
+      membershipSource: 'federation-registry',
+      localAutonomy: 'constitutionally-bounded',
+      requirements: ['chain-constitutionally-enabled', 'plugin-capability-registered', 'local-governance-standing-required'],
+    },
+    executionModel: {
+      executionAuthority: executionChainAuthorized ? 'constitutional-root' : chain.legacyHarmonyAdapter ? 'legacy-voting-adapter' : capabilities.remoteExecution ? 'federated-spoke' : 'not-authorized',
+      executionChainAuthorized,
+      executionModes: fallbackExecutionModes,
+      remoteExecutionGuardrail: Boolean(capabilities.remoteExecution && !executionChainAuthorized),
+      treasuryReviewRequired: Boolean(capabilities.treasury),
+      reasonCodes,
+      reasonSeverity,
+    },
+  };
+
+  return {
+    ...normalizedLayer,
+    capabilities: (normalizedLayer.capabilities ?? []).map((capability) => ({
+      ...capability,
+      reasonSeverity: capability.reasonSeverity ?? (capability.reasonCodes?.[0] ? normalizeReasonSeverity(capability.reasonCodes[0]) : null),
+    })),
+    conditions: (normalizedLayer.conditions ?? []).map((condition) => ({
+      ...condition,
+      reasonSeverity: condition.reasonSeverity ?? (condition.reasonCodes?.[0] ? normalizeReasonSeverity(condition.reasonCodes[0], undefined, condition.status === 'restricted' ? 'blocked' : 'warning') : null),
+    })),
+    executionModel: {
+      ...normalizedLayer.executionModel,
+      reasonCodes: uniqueReasonCodes(normalizedLayer.executionModel?.reasonCodes ?? []),
+      reasonSeverity: normalizedLayer.executionModel?.reasonSeverity ?? reasonSeverity,
+    },
+    guardrailReasons: [
+      ...normalizeReasonCodeList(normalizedLayer.executionModel?.reasonCodes ?? [], normalizedLayer.executionModel?.reasonSeverity),
+      ...(normalizedLayer.conditions ?? []).flatMap((condition) => normalizeReasonCodeList(condition.reasonCodes, condition.reasonSeverity)),
+      ...(normalizedLayer.capabilities ?? []).flatMap((capability) => normalizeReasonCodeList(capability.reasonCodes, capability.reasonSeverity)),
+    ],
+  };
+}
+
 function normalizePluginCapability(capability, { useFallbackDefaults = false } = {}) {
   if (!capability) return capability;
   const constitutionalStanding = getConstitutionalStanding(
@@ -57,6 +164,7 @@ export function normalizeChainGovernanceState(chain, { useFallbackDefaults = fal
   const federationTier =
     chain.federationTier ??
     (useFallbackDefaults ? (chain.roles?.includes('execution') ? 'root' : chain.legacyHarmonyAdapter ? 'observer' : 'partner') : undefined);
+  const constitutionalLayer = normalizeConstitutionalLayer(chain.constitutionalLayer ?? capabilities.constitutionalLayer, { ...chain, federationMember, federationTier }, capabilities, constitutionalStanding);
 
   return {
     ...chain,
@@ -64,11 +172,13 @@ export function normalizeChainGovernanceState(chain, { useFallbackDefaults = fal
     federationMember,
     federationTier,
     constitutionalStanding,
+    constitutionalLayer,
     guardrailReasons: Array.isArray(chain.guardrailReasons) ? chain.guardrailReasons.map(normalizeGuardrailReason).filter(Boolean) : chain.guardrailReasons,
     capabilities: {
       ...capabilities,
       governanceStatus,
       constitutionalStanding,
+      constitutionalLayer,
       pluginCapabilities: normalizePluginCapabilities(capabilities.pluginCapabilities, { useFallbackDefaults }),
     },
     indexingStatus: chain.indexingStatus

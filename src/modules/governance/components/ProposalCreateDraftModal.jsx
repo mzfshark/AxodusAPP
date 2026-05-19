@@ -119,6 +119,10 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
                 <ContextItem label="Plugins" value={plugins.length ? `${plugins.length} observed` : 'No plugin state'} />
                 <ContextItem label="Create state" value={canCreateProposal ? 'Draft enabled' : 'Read-only'} />
                 <ContextItem label="Submit mode" value={integration.submissionMode} />
+                <ContextItem
+                  label="Execution authority"
+                  value={selectedChain?.constitutionalLayer?.executionModel?.executionAuthority ?? selectedChain?.capabilities?.constitutionalLayer?.executionModel?.executionAuthority}
+                />
               </div>
             </div>
 
@@ -247,6 +251,28 @@ export default function ProposalCreateDraftModal({ open, onClose, selectedDao, s
                   <div>
                     <span className="font-black uppercase text-cyan-200">Submission interface</span>
                     <p className="mt-1">{preview.createProposalRequest?.submissionMode ?? 'mock-review'} · backend validation required</p>
+                  </div>
+                  <div>
+                    <span className="font-black uppercase text-cyan-200">Plugin adapter</span>
+                    <p className="mt-1">
+                      {preview.createProposalRequest?.plugin?.createProposalAdapter?.family ?? 'Not indexed'} ·{' '}
+                      {preview.createProposalRequest?.plugin?.createProposalAdapter?.executionIntent ?? 'backend adapter pending'}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-black uppercase text-cyan-200">Governance sources</span>
+                    <p className="mt-1">
+                      {(preview.createProposalRequest?.governanceContext?.observedSources ?? [])
+                        .map((source) => `${source.key}:${source.status}`)
+                        .join(', ') || 'No observed governance sources'}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-black uppercase text-cyan-200">Constitutional execution</span>
+                    <p className="mt-1">
+                      {preview.createProposalRequest?.governanceContext?.executionModel?.executionAuthority ?? 'Not indexed'} ·{' '}
+                      {preview.createProposalRequest?.governanceContext?.executionModel?.executionChainAuthorized ? 'execution chain authorized' : 'execution chain not authorized'}
+                    </p>
                   </div>
                   <div>
                     <span className="font-black uppercase text-cyan-200">Reason codes</span>
