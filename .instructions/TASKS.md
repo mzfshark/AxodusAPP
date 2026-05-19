@@ -4,13 +4,13 @@
 
 Last updated: 2026-05-19
 
-Overall AxodusAPP completion: 35%
+Overall AxodusAPP completion: 36%
 
-Current priority: DAO Tenant Operations Center, createProposal indexer reconciliation readiness, indexed Constitutional Layer source records, and BBA MVP visual QA.
+Current priority: DAO Federation Marketplace landing, DAO Tenant Operations Center, createProposal indexer reconciliation readiness, indexed Constitutional Layer source records, and BBA MVP visual QA.
 
 ### Module Progress
 
-- Governance module: 87%
+- Governance module: 89%
 - Governance createProposal flow: 86%
 - Governance proposal detail/execution UI: 74%
 - Governance registry/standing/guardrail observability: 90%
@@ -78,7 +78,7 @@ Current priority: DAO Tenant Operations Center, createProposal indexer reconcili
 
 ## Governance Tasks
 
-- Create Governance public landing — 85%; `/governance` exposes public registry/governance information, compact governance status, Root DAO overview, DAO federation map, topology and Constitutional Layer without wallet requirement, with route smoke coverage
+- Create Governance public landing — 91%; `/governance` now behaves as a DAO Federation Marketplace and public economic onboarding layer with Featured DAO Tenants, CORE APR baseline, APR-vs-CORE comparison, treasury TVL, risk, supported products, chains, federation status, authenticated My DAO Tenants allocation visibility, compact governance status, Root DAO overview, DAO federation map, topology and Constitutional Layer without wallet requirement, with route smoke coverage
 - Create Governance dashboard — 89%; protected `/governance/console` consumes backend chain registry with fallback PoC data and renders the selected DAO as a tenant operations account with Constitutional Layer, governance health, treasury execution, proposal activity, products, agents, operations and receipts context
 - Create Governance DAO context selector — 76%; console models Axodus Constitutional Governance plus Local Governance contexts for indexed sub-DAOs
 - Create DAO explorer — 74%; console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins, proposal readiness and selected DAO Constitutional Layer state
@@ -98,9 +98,9 @@ Current priority: DAO Tenant Operations Center, createProposal indexer reconcili
 - Evolve Governance Operations Center — 91%; `/governance/console` is repositioned as a DAO Tenant Operations Center with operations readiness visibility for registry, selected tenant context, Constitutional Layer, governance health, treasury execution, proposal activity, treasury status, enabled products, assigned agents, proposals, plugins, local drafts, proposal creation state, selected-context backend createProposal review receipt listing with storage mode/source metadata, reusable createProposal integration status panel, observed source metadata, and smoke-tested route/modal flow
 - Add Constitutional Guardrail observability — 86%; registry summary exposes active reason codes with severity, source, scope, network, createProposal request context, observed registry/DAO/plugin/treasury policy sources, and constitutional execution model metadata for console rendering
 - Add selected governance context guardrails — 74%; console exposes reason codes and observed source metadata affecting selected DAO and chain context separately from global registry guardrails
-- Add DAO tenant account model — 46%; `/governance/console` now renders selected SubDAO/root DAO as an operational tenant account with profile, standing, local governance model, treasury policy status, products, agents, active proposals, pending operations, execution receipts and tenant reason codes; backend exposes `/v2/governance/tenants` and now attempts to derive tenant accounts from indexed DAO registry records before falling back to bootstrap tenant fixtures
+- Add DAO tenant account model — 52%; `/governance/console` now renders selected SubDAO/root DAO as an operational tenant account with profile, standing, local governance model, treasury policy status, products, agents, active proposals, pending operations, execution receipts and tenant reason codes; `/governance` now exposes tenant DAOs as discoverable economic organizations with mock-driven treasury/APR/allocation metadata; backend exposes `/v2/governance/tenants` and now attempts to derive tenant accounts from indexed DAO registry records before falling back to bootstrap tenant fixtures
 - Add nucleus design instruction architecture — 40%; `.instructions/DESIGN.md` now defines the shared AxodusAPP design index and `.instructions/design/<nucleus>/DESIGN.md` stores nucleus-specific design direction, starting with Governance
-- Add Governance design and information architecture — 42%; `.instructions/design/governance/DESIGN.md` defines Governance as an Economic Infrastructure Control Plane and DAO Tenant Operations Center, and initial `/governance` plus `/governance/console` layout adjustments now apply compact operational status, Root DAO overview, federation topology, governance health, treasury execution and proposal activity sections
+- Add Governance design and information architecture — 50%; `.instructions/design/governance/DESIGN.md` defines Governance as an Economic Infrastructure Control Plane, DAO Tenant Operations Center and federated DAO operating workspace; `/governance` now applies the DAO Federation Marketplace direction with Featured DAO Tenants, CORE baseline, My DAO Tenants and treasury allocation visibility, while `/governance/console` applies compact operational status, tenant account context, federation topology, governance health, treasury execution and proposal activity sections
 
 ---
 
