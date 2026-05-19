@@ -14,6 +14,22 @@ function PublicMetric({ label, value, detail }) {
   );
 }
 
+function GovernanceStatusBar({ executionChain, summary, source }) {
+  const activeAlerts = summary.guardrailReasons?.length ?? 0;
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest px-4 py-3">
+      <div className="grid gap-3 md:grid-cols-5">
+        <PublicMetric label="Root authority" value="Axodus Root DAO" detail="Constitutional governance" />
+        <PublicMetric label="Standing" value="compliant" detail="Registry-rendered status" />
+        <PublicMetric label="Treasury policy" value="review-required" detail="Execution safety boundary" />
+        <PublicMetric label="Execution health" value={executionChain?.name ?? 'Pending'} detail={executionChain?.network ?? 'No execution chain'} />
+        <PublicMetric label="Active alerts" value={activeAlerts} detail={`Registry source: ${source}`} />
+      </div>
+    </section>
+  );
+}
+
 function GovernanceLayer({ icon, title, description }) {
   return (
     <div className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
@@ -24,23 +40,64 @@ function GovernanceLayer({ icon, title, description }) {
   );
 }
 
-function GovernanceTopology() {
-  const layers = ['Axodus Constitution', 'Federation Registry', 'Partner DAO', 'Local Governance', 'Plugins / Treasury / Products'];
+function RootDaoOverview({ executionChain, summary }) {
+  return (
+    <section className="rounded-lg border border-cyan-300/15 bg-surface-container-highest">
+      <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="border-b border-white/5 p-5 lg:border-b-0 lg:border-r">
+          <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-200">Constitutional Authority</span>
+          <h2 className="mt-3 text-2xl font-black tracking-tight text-on-surface">Axodus Root DAO</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-on-surface-variant">
+            Root governance context for federation standing, treasury constraints, execution authorization and ecosystem-wide guardrails.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <span className="rounded-md border border-emerald-300/20 bg-emerald-950/20 px-2 py-1 text-[11px] font-black uppercase text-emerald-100">
+              compliant
+            </span>
+            <span className="rounded-md border border-cyan-300/20 bg-cyan-950/20 px-2 py-1 text-[11px] font-black uppercase text-cyan-100">
+              federation root
+            </span>
+            <span className="rounded-md border border-amber-300/20 bg-amber-950/20 px-2 py-1 text-[11px] font-black uppercase text-amber-100">
+              treasury review
+            </span>
+          </div>
+        </div>
+        <div className="grid gap-3 p-5 sm:grid-cols-2">
+          <PublicMetric label="Active chains" value={summary.totalChains} detail={`${summary.evmCount} EVM core networks`} />
+          <PublicMetric label="DAO count" value="tenant source" detail="Root + indexed tenant DAOs" />
+          <PublicMetric label="Execution queues" value={summary.guardrailReasons?.length ?? 0} detail="Guardrail-bound operations" />
+          <PublicMetric label="Execution chain" value={executionChain?.name ?? 'Pending'} detail={executionChain?.network ?? 'Registry pending'} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DaoFederationMap() {
+  const layers = [
+    { title: 'Axodus Constitution', detail: 'Federal standards and guardrails' },
+    { title: 'Federation Registry', detail: 'Membership, tiers and tenant standing' },
+    { title: 'Axodus Root DAO', detail: 'Constitutional execution authority' },
+    { title: 'Product DAOs', detail: 'Product-specific governance workspaces' },
+    { title: 'Partner DAOs', detail: 'Federated operating organizations' },
+    { title: 'Client / Tenant DAOs', detail: 'Business-unit accounts and local operations' },
+  ];
 
   return (
     <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-on-surface">Governance Topology</h2>
-          <p className="mt-1 text-xs text-on-surface-variant">Sovereignty layers rendered from governance registry state.</p>
+          <h2 className="text-lg font-bold text-on-surface">DAO Federation Map</h2>
+          <p className="mt-1 text-xs text-on-surface-variant">Operational topology of constitutional authority, federation and tenant DAO workspaces.</p>
         </div>
         <span className="material-symbols-outlined text-cyan-200">account_tree</span>
       </div>
-      <div className="grid gap-3 md:grid-cols-5">
+      <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
         {layers.map((layer, index) => (
-          <div key={layer} className="flex items-center gap-3 md:flex-col">
-            <div className="w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-3 text-center text-sm font-black text-on-surface">
-              {layer}
+          <div key={layer.title} className="flex items-center gap-3 md:flex-col">
+            <div className="min-h-[104px] w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-3 text-center">
+              <div className="text-sm font-black text-on-surface">{layer.title}</div>
+              <div className="mt-2 text-[11px] leading-4 text-on-surface-variant">{layer.detail}</div>
             </div>
             {index < layers.length - 1 ? (
               <span className="material-symbols-outlined rotate-90 text-cyan-200 md:rotate-0">arrow_downward</span>
@@ -69,11 +126,17 @@ export default function GovernanceLanding() {
 
   return (
     <main className="min-h-full bg-background p-4 md:p-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8">
-        <section className="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6">
+        <GovernanceStatusBar executionChain={executionChain} summary={summary} source={source} />
+
+        <RootDaoOverview executionChain={executionChain} summary={summary} />
+
+        <DaoFederationMap />
+
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <span className="mb-3 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Axodus Governance</span>
-            <h1 className="max-w-4xl text-4xl font-black tracking-tight text-on-surface md:text-6xl">
+            <h1 className="max-w-4xl text-3xl font-black tracking-tight text-on-surface md:text-4xl">
               Federated DAO governance for multichain economic execution.
             </h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-on-surface-variant">
@@ -140,8 +203,6 @@ export default function GovernanceLanding() {
             description="Each sub-DAO represents an ecosystem company or investment agency with scoped strategy and accountable operations."
           />
         </section>
-
-        <GovernanceTopology />
 
         <ConstitutionalLayerPanel chain={executionChain} />
 

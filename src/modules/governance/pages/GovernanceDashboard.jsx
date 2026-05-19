@@ -271,6 +271,68 @@ function DaoTenantOperationsCenter({ tenant, selectedDao, selectedChain, tenantS
   );
 }
 
+function GovernanceHealthPanel({ tenant, selectedChain, proposals, plugins, guardrailReasons }) {
+  const standing = typeof tenant?.constitutionalStanding === 'string' ? tenant.constitutionalStanding : tenant?.constitutionalStanding?.status;
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="border-b border-white/5 px-5 py-4">
+        <h2 className="text-lg font-bold text-on-surface">Governance Health</h2>
+        <p className="mt-1 text-xs text-on-surface-variant">Compact operational health for the selected DAO tenant workspace.</p>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-5">
+        <TenantMetric label="Standing" value={standing ?? 'under-review'} detail={tenant?.constitutionalAuthority?.authorityModel} />
+        <TenantMetric label="Governance uptime" value="observed" detail={tenant?.source ?? 'tenant source'} />
+        <TenantMetric label="Execution status" value={selectedChain?.capabilities?.execution ? 'available' : 'restricted'} detail={selectedChain?.name ?? 'No chain'} />
+        <TenantMetric label="Proposal activity" value={proposals.length} detail="active/indexed + local" />
+        <TenantMetric label="Guardrail reasons" value={guardrailReasons.length} detail={`${plugins.length} plugin sources`} />
+      </div>
+    </section>
+  );
+}
+
+function TreasuryExecutionPanel({ tenant, selectedChain }) {
+  const pendingExecutions = tenant?.pendingOperations ?? 0;
+  const receipts = tenant?.executionReceipts ?? 0;
+  const treasury = tenant?.treasury ?? {};
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="border-b border-white/5 px-5 py-4">
+        <h2 className="text-lg font-bold text-on-surface">Treasury Execution</h2>
+        <p className="mt-1 text-xs text-on-surface-variant">Treasury status, execution queue and receipt visibility for the selected tenant.</p>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-4">
+        <TenantMetric label="Treasury health" value={treasury.policyStatus ?? 'not-configured'} detail="policy status" />
+        <TenantMetric label="Pending executions" value={pendingExecutions} detail="tenant operations" />
+        <TenantMetric label="Execution receipts" value={receipts} detail="indexed or observed" />
+        <TenantMetric label="Execution chain" value={selectedChain?.name ?? 'Not indexed'} detail={treasury.chainId ? `chainId ${treasury.chainId}` : selectedChain?.network} />
+      </div>
+    </section>
+  );
+}
+
+function ProposalActivityPanel({ proposals }) {
+  const active = proposals.filter((proposal) => ['active', 'under review', 'ready for review', 'local draft'].includes(String(proposal.status ?? '').toLowerCase())).length;
+  const treasuryImpact = proposals.filter((proposal) => String(proposal.category ?? proposal.actionType ?? '').toLowerCase().includes('treasury')).length;
+  const withReasonCodes = proposals.filter((proposal) => (proposal.reasonCodes ?? proposal.createProposalRequest?.guardrails?.reasonCodes ?? []).length > 0).length;
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="border-b border-white/5 px-5 py-4">
+        <h2 className="text-lg font-bold text-on-surface">Proposal Activity</h2>
+        <p className="mt-1 text-xs text-on-surface-variant">Operational proposal state with treasury and guardrail context.</p>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-4">
+        <TenantMetric label="Active proposals" value={active} detail={`${proposals.length} total visible`} />
+        <TenantMetric label="Treasury impact" value={treasuryImpact} detail="category/action metadata" />
+        <TenantMetric label="Reason-coded" value={withReasonCodes} detail="guardrail visible" />
+        <TenantMetric label="Execution ETA" value="indexer-bound" detail="requires proposal receipts" />
+      </div>
+    </section>
+  );
+}
+
 function readinessTone(status) {
   if (status === 'ready') return 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100';
   if (status === 'dev') return 'border-cyan-300/20 bg-cyan-950/20 text-cyan-100';
@@ -453,6 +515,19 @@ export default function GovernanceDashboard() {
           selectedChain={governanceConsole.selectedChain}
           tenantSource={governanceConsole.tenantSource}
         />
+
+        <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1fr]">
+          <GovernanceHealthPanel
+            tenant={governanceConsole.selectedTenant}
+            selectedChain={governanceConsole.selectedChain}
+            proposals={visibleProposals}
+            plugins={governanceConsole.plugins}
+            guardrailReasons={governanceConsole.selectedGuardrailReasons}
+          />
+          <TreasuryExecutionPanel tenant={governanceConsole.selectedTenant} selectedChain={governanceConsole.selectedChain} />
+        </section>
+
+        <ProposalActivityPanel proposals={visibleProposals} />
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard icon="lan" label="Registered chains" value={summary.totalChains} detail={`${summary.evmCount} EVM core networks`} />

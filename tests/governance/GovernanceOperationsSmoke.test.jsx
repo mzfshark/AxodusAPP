@@ -178,7 +178,10 @@ describe('Governance Operations Center smoke', () => {
     expect(screen.getByText(/dao tenant account/i)).toBeInTheDocument();
     expect(screen.getByText(/products enabled/i)).toBeInTheDocument();
     expect(screen.getByText(/agents assigned/i)).toBeInTheDocument();
-    expect(screen.getByText(/treasury status/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/treasury status/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/governance health/i)).toBeInTheDocument();
+    expect(screen.getByText(/treasury execution/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/proposal activity/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/operations readiness/i)).toBeInTheDocument();
     expect(screen.getByText(/create proposal integration status/i)).toBeInTheDocument();
     expect(screen.getByText(/DAO: Axodus Executive DAO/i)).toBeInTheDocument();
