@@ -174,6 +174,15 @@ async function renderTenantDetail(tenantId = 'dao-tenant-trading-alpha') {
   );
 }
 
+async function renderTenants() {
+  const { default: GovernanceTenants } = await import('../../src/modules/governance/pages/GovernanceTenants');
+  render(
+    <MemoryRouter initialEntries={['/governance/tenants']}>
+      <GovernanceTenants />
+    </MemoryRouter>,
+  );
+}
+
 describe('Governance Operations Center smoke', () => {
   beforeEach(() => {
     walletMock.state = {
@@ -190,38 +199,38 @@ describe('Governance Operations Center smoke', () => {
     window.localStorage.clear();
   });
 
-  test('renders the public governance landing with topology and Constitutional Layer', async () => {
+  test('renders the Governance Overview with executive summary and three featured tenants', async () => {
     await renderLanding();
 
-    expect(screen.getByRole('heading', { name: /federated dao governance/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /executive summary of axodus federated governance/i })).toBeInTheDocument();
+    expect(screen.getByText(/total tvl/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/dao tenants/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/axodus core apr/i)).toBeInTheDocument();
+    expect(screen.getByText(/open proposals/i)).toBeInTheDocument();
+    expect(screen.getByText(/recently finalized/i)).toBeInTheDocument();
     expect(screen.getByText(/featured dao tenants/i)).toBeInTheDocument();
-    expect(screen.getByText(/dao federation marketplace/i)).toBeInTheDocument();
     expect(screen.getByText(/axodus trading alpha dao/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus ai infrastructure dao/i)).toBeInTheDocument();
+    expect(screen.queryByText(/axodus academy dao/i)).not.toBeInTheDocument();
     expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Axodus CORE baseline/i)).toBeInTheDocument();
-    expect(screen.getByText('Axodus Constitution')).toBeInTheDocument();
-    expect(screen.getByText('Federation Registry')).toBeInTheDocument();
-    expect(screen.getByText(/constitutional governance layer/i)).toBeInTheDocument();
-    expect(screen.getByText(/local governance layer/i)).toBeInTheDocument();
-    expect(screen.getAllByText('Ethereum Sepolia').length).toBeGreaterThan(0);
   }, 10000);
 
-  test('prioritizes user DAO tenant allocations when wallet is connected', async () => {
-    walletMock.state = {
-      address: '0xAxoD000000000000000000000000000000000001',
-      isConnected: true,
-      chain: 11155111,
-      disconnect: vi.fn(),
-    };
+  test('filters DAO Tenants by multiple risk and investment selections', async () => {
+    await renderTenants();
 
-    await renderLanding();
+    expect(screen.getByRole('heading', { name: /discover governed economic organizations/i })).toBeInTheDocument();
+    expect(screen.getByText(/8 DAO Tenants/i)).toBeInTheDocument();
 
-    expect(screen.getByText(/my dao tenants/i)).toBeInTheDocument();
-    expect(screen.getByText(/multi-DAO allocation workspace/i)).toBeInTheDocument();
-    expect(screen.getByText(/federal CORE-only allocation remains available/i)).toBeInTheDocument();
-    expect(screen.getByText(/12,840 vNEURONS/i)).toBeInTheDocument();
-    expect(screen.getByText(/4.10%/i)).toBeInTheDocument();
-  });
+    fireEvent.click(screen.getByRole('button', { name: /^low$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^moderate$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^mining$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^defi$/i }));
+
+    expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
+    expect(screen.getByText(/axodus defi stability dao/i)).toBeInTheDocument();
+    expect(screen.queryByText(/axodus trading alpha dao/i)).not.toBeInTheDocument();
+  }, 10000);
 
   test('renders a DAO tenant detail page with economic and constitutional context', async () => {
     await renderTenantDetail();

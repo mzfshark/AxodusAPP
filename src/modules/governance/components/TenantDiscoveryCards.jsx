@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function formatCurrency(value) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -49,14 +51,17 @@ export function FederationStatusBadge({ status, tier }) {
 }
 
 export function RiskIndicator({ riskLevel }) {
+  const normalizedRisk = riskLevel === 'medium' ? 'moderate' : riskLevel;
   const tone =
-    riskLevel === 'high'
+    normalizedRisk === 'experimental'
+      ? 'border-fuchsia-300/20 bg-fuchsia-950/20 text-fuchsia-100'
+      : normalizedRisk === 'high'
       ? 'border-rose-300/20 bg-rose-950/20 text-rose-100'
-      : riskLevel === 'medium'
+      : normalizedRisk === 'moderate' || normalizedRisk === 'balanced'
         ? 'border-amber-300/20 bg-amber-950/20 text-amber-100'
         : 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100';
 
-  return <span className={`rounded-md border px-2 py-1 text-[11px] font-black uppercase ${tone}`}>{riskLevel} risk</span>;
+  return <span className={`rounded-md border px-2 py-1 text-[11px] font-black uppercase ${tone}`}>{normalizedRisk} risk</span>;
 }
 
 function TenantMetric({ label, value, mono = false }) {
@@ -97,7 +102,7 @@ export function TenantCard({ tenant, coreApr }) {
       <div className="mt-4">
         <div className="text-[10px] font-black uppercase text-slate-500">Supported products</div>
         <div className="mt-2 flex flex-wrap gap-2">
-          {tenant.supportedProducts.map((product) => (
+          {(tenant.supportedProducts ?? tenant.productsEnabled ?? []).map((product) => (
             <span key={product} className="rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
               {product}
             </span>
@@ -169,4 +174,3 @@ export function TenantTreasuryWidget({ coreMetrics, treasuryMetrics }) {
     </section>
   );
 }
-import { Link } from 'react-router-dom';

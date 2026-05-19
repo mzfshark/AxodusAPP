@@ -20,6 +20,7 @@ import {
   Tags,
   Ticket,
   WalletCards,
+  UsersRound,
 } from 'lucide-react';
 
 const nuclei = [
@@ -84,7 +85,8 @@ const nuclei = [
     tone: 'constitutional',
     summary: 'DAO tenant operations and constitutional execution',
     sections: [
-      { to: '/governance', label: 'Landing', icon: LayoutDashboard, end: true },
+      { to: '/governance', label: 'Overview', icon: LayoutDashboard, end: true },
+      { to: '/governance/tenants', label: 'DAO Tenants', icon: UsersRound },
       { to: '/governance/console', label: 'Console', icon: Landmark },
       { to: '/dao', label: 'DAO Context', icon: ShieldCheck },
     ],
