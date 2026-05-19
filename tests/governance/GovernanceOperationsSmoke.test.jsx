@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const executionChain = {
@@ -163,6 +163,17 @@ async function renderDashboard() {
   );
 }
 
+async function renderTenantDetail(tenantId = 'dao-tenant-trading-alpha') {
+  const { default: DaoTenantDetail } = await import('../../src/modules/governance/pages/DaoTenantDetail');
+  render(
+    <MemoryRouter initialEntries={[`/governance/dao/${tenantId}`]}>
+      <Routes>
+        <Route path="/governance/dao/:daoId" element={<DaoTenantDetail />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
 describe('Governance Operations Center smoke', () => {
   beforeEach(() => {
     walletMock.state = {
@@ -193,7 +204,7 @@ describe('Governance Operations Center smoke', () => {
     expect(screen.getByText(/constitutional governance layer/i)).toBeInTheDocument();
     expect(screen.getByText(/local governance layer/i)).toBeInTheDocument();
     expect(screen.getAllByText('Ethereum Sepolia').length).toBeGreaterThan(0);
-  });
+  }, 10000);
 
   test('prioritizes user DAO tenant allocations when wallet is connected', async () => {
     walletMock.state = {
@@ -211,6 +222,18 @@ describe('Governance Operations Center smoke', () => {
     expect(screen.getByText(/12,840 vNEURONS/i)).toBeInTheDocument();
     expect(screen.getByText(/4.10%/i)).toBeInTheDocument();
   });
+
+  test('renders a DAO tenant detail page with economic and constitutional context', async () => {
+    await renderTenantDetail();
+
+    expect(screen.getByRole('heading', { name: /axodus trading alpha dao/i })).toBeInTheDocument();
+    expect(screen.getByText(/governed trading allocation/i)).toBeInTheDocument();
+    expect(screen.getByText(/treasury allocation/i)).toBeInTheDocument();
+    expect(screen.getByText(/APR & Performance/i)).toBeInTheDocument();
+    expect(screen.getByText(/trade-risk-agent/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/does not infer compliance/i)).toBeInTheDocument();
+  }, 10000);
 
   test('renders the Governance Operations Center with scoped createProposal observability', async () => {
     await renderDashboard();

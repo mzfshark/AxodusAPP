@@ -111,13 +111,13 @@ export function TenantCard({ tenant, coreApr }) {
       </div>
 
       <div className="mt-auto pt-5">
-        <button
-          type="button"
-          className="w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-2 text-sm font-black text-on-surface"
+        <Link
+          to={`/governance/dao/${encodeURIComponent(tenant.id)}`}
+          className="block w-full rounded-lg border border-white/10 bg-surface-container-high px-3 py-2 text-center text-sm font-black text-on-surface"
           aria-label={`View ${tenant.name} tenant details`}
         >
           View DAO Tenant
-        </button>
+        </Link>
       </div>
     </article>
   );
@@ -169,3 +169,4 @@ export function TenantTreasuryWidget({ coreMetrics, treasuryMetrics }) {
     </section>
   );
 }
+import { Link } from 'react-router-dom';
