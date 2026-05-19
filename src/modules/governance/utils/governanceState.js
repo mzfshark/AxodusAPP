@@ -94,5 +94,19 @@ export function collectGovernanceGuardrailReasons(chain) {
     });
   });
 
-  return reasons;
+  const constitutionalLayer = chain.constitutionalLayer ?? chain.capabilities?.constitutionalLayer;
+
+  (constitutionalLayer?.executionModel?.reasonCodes ?? []).forEach((reasonCode) => {
+    reasons.push({
+      reasonCode,
+      reasonSeverity: constitutionalLayer.executionModel.reasonSeverity ?? 'constitutional',
+      source: 'constitutional execution model',
+      scope: chain.name,
+      network: chain.network,
+    });
+  });
+
+  return Array.from(
+    new Map(reasons.map((reason) => [`${reason.network}-${reason.source}-${reason.scope}-${reason.reasonCode}`, reason])).values(),
+  );
 }

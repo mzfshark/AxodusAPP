@@ -70,6 +70,8 @@ describe('ProposalCreateDraftModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /generate local draft/i }));
 
     expect(onCreateDraft).toHaveBeenCalledWith(expect.objectContaining({ createProposalRequest: expect.objectContaining({ submissionMode: 'mock-review' }) }));
+    expect(screen.getByText(/evm-voting · vote-only/i)).toBeInTheDocument();
+    expect(screen.getByText(/registry:observed, dao:observed, plugin:observed/i)).toBeInTheDocument();
     expect(screen.getByText(/create_proposal_backend_not_enabled/i)).toBeInTheDocument();
   });
 
@@ -93,6 +95,8 @@ describe('ProposalCreateDraftModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /generate local draft/i }));
 
     expect(onCreateDraft).toHaveBeenCalledWith(expect.objectContaining({ createProposalRequest: expect.objectContaining({ submissionMode: 'backend' }) }));
+    expect(screen.getByText(/evm-voting · vote-only/i)).toBeInTheDocument();
+    expect(screen.getByText(/registry:observed, dao:observed, plugin:observed/i)).toBeInTheDocument();
     expect(screen.getByText(/no active reason codes/i)).toBeInTheDocument();
   });
 });

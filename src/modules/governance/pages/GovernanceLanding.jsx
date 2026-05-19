@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import ChainRoleBadge from '../components/ChainRoleBadge';
+import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
 import { GovernanceLayerCard, GovernanceStandingSummary } from '../components/GovernanceStanding';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 
@@ -141,6 +142,8 @@ export default function GovernanceLanding() {
         </section>
 
         <GovernanceTopology />
+
+        <ConstitutionalLayerPanel chain={executionChain} />
 
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <GovernanceLayerCard

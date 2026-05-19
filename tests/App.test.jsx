@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
-import App from '../src/App';
+import { describe, expect, test } from 'vitest';
+import { bbaMock, ecosystemMock } from '../src/data/mock';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+describe('mock data exports', () => {
+  test('exports Axodus ecosystem and BBA data', () => {
+    expect(ecosystemMock.overview).toBeDefined();
+    expect(bbaMock.summary.nucleus).toBe('Blockchain Business & Advertising');
+  });
 });

@@ -1,0 +1,130 @@
+import { Link, NavLink } from 'react-router-dom';
+import { Award, BookOpen, ClipboardCheck, Coins, Gauge, GraduationCap, LayoutDashboard, Route, ShieldCheck } from 'lucide-react';
+import { academyStatusClass, formatNeurons, getAcademyTutor } from '../services/academyService';
+
+export function AcademyBadge({ value }) {
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] ${academyStatusClass(value)}`}>
+      {value}
+    </span>
+  );
+}
+
+export function AcademyPanel({ title, description, action, children }) {
+  return (
+    <section className="rounded-lg border border-white/10 bg-surface-container-low p-5 shadow-[0_18px_60px_rgba(0,0,0,.16)]">
+      {(title || description || action) && (
+        <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            {title && <h2 className="text-xl font-black text-on-surface">{title}</h2>}
+            {description && <p className="mt-2 max-w-3xl text-sm leading-6 text-outline">{description}</p>}
+          </div>
+          {action}
+        </div>
+      )}
+      {children}
+    </section>
+  );
+}
+
+export function AcademyMetricCard({ icon: Icon, label, value, detail }) {
+  return (
+    <article className="rounded-lg border border-white/10 bg-surface-container-low p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-outline">{label}</p>
+          <p className="mt-2 text-2xl font-black text-on-surface">{value}</p>
+        </div>
+        {Icon && <Icon className="h-5 w-5 text-primary" aria-hidden="true" />}
+      </div>
+      {detail && <p className="mt-3 text-sm leading-5 text-outline">{detail}</p>}
+    </article>
+  );
+}
+
+export function AcademyProgressBar({ value, label }) {
+  const safeValue = Math.max(0, Math.min(100, Number(value || 0)));
+  return (
+    <div>
+      {label && (
+        <div className="mb-2 flex items-center justify-between gap-3 text-sm">
+          <span className="font-bold text-on-surface">{label}</span>
+          <span className="text-outline">{safeValue}%</span>
+        </div>
+      )}
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${safeValue}%` }} />
+      </div>
+    </div>
+  );
+}
+
+const academyNav = [
+  { to: '/academy', label: 'Home', icon: GraduationCap, end: true },
+  { to: '/academy/courses', label: 'Courses', icon: BookOpen },
+  { to: '/academy/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/academy/progress', label: 'Progress Engine', icon: Gauge },
+  { to: '/academy/certifications', label: 'Certifications', icon: Award },
+  { to: '/academy/rewards', label: 'Rewards', icon: Coins },
+  { to: '/academy/governance-review', label: 'Academy Governance Review', icon: ClipboardCheck },
+  { to: '/academy/paths/path-governance-operator', label: 'Learning Path', icon: Route },
+];
+
+export function AcademyHeader({ title, description }) {
+  return (
+    <header className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
+        <div>
+          <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Axodus Academy</span>
+          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-on-surface md:text-4xl">{title}</h1>
+          {description && <p className="mt-3 max-w-4xl text-sm leading-6 text-outline">{description}</p>}
+        </div>
+        <div className="flex max-w-xl items-start gap-3 rounded-lg border border-sky-400/20 bg-sky-500/10 px-4 py-3 text-sm leading-6 text-sky-100">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          <span>Academy is mock-only inside AxodusAPP. No minting, transfer, wallet reward distribution, or certification contract write is executed.</span>
+        </div>
+      </div>
+      <nav className="flex gap-2 overflow-x-auto pb-1">
+        {academyNav.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) => `inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] transition ${isActive ? 'border-primary/50 bg-primary/20 text-on-surface' : 'border-white/10 bg-surface-container-low text-outline hover:text-on-surface'}`}
+            >
+              <Icon className="h-4 w-4" aria-hidden="true" />
+              {item.label}
+            </NavLink>
+          );
+        })}
+      </nav>
+    </header>
+  );
+}
+
+export function AcademyCourseCard({ course }) {
+  const tutor = getAcademyTutor(course.tutorId);
+  return (
+    <article className="overflow-hidden rounded-lg border border-white/10 bg-surface-container-low transition hover:border-primary/40">
+      <img className="h-40 w-full object-cover" src={course.thumbnail} alt="" />
+      <div className="space-y-4 p-5">
+        <div className="flex flex-wrap gap-2">
+          <AcademyBadge value={course.constitutionalStanding} />
+          <AcademyBadge value={course.accessType === 'free' ? 'Free Course' : 'Paid Course'} />
+        </div>
+        <div>
+          <Link to={`/academy/courses/${course.slug}`} className="text-lg font-black text-on-surface hover:text-primary">{course.title}</Link>
+          <p className="mt-2 line-clamp-2 text-sm leading-6 text-outline">{course.shortDescription}</p>
+        </div>
+        <div className="grid gap-1 text-sm text-outline">
+          <span>{course.category} / {course.level}</span>
+          <span>{tutor?.name || 'Academy tutor'}</span>
+          <span className="font-bold text-on-surface">{formatNeurons(course.rewardAmount)} as {course.rewardType}</span>
+        </div>
+        <AcademyProgressBar value={course.progress} label="Progress" />
+      </div>
+    </article>
+  );
+}
