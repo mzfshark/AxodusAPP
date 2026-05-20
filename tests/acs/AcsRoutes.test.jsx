@@ -9,6 +9,7 @@ import {
   AcsPolicy,
   AcsProducts,
   AcsReadiness,
+  AcsStatus,
   AcsTenantServices
 } from '../../src/modules/acs';
 
@@ -69,6 +70,8 @@ describe('AxodusAPP ACS routes', () => {
     expect(await screen.findByRole('heading', { name: /Operational Intelligence/i })).toBeInTheDocument();
     expect(screen.getByText(/Using ACS mock fallback/i)).toBeInTheDocument();
     expect(screen.getByText(/autonomous execution blocked/i)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /^Capabilities$/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /^Readiness$/i })).not.toBeInTheDocument();
   });
 
   test('renders capability explorer from ACS responses', async () => {
@@ -104,5 +107,12 @@ describe('AxodusAPP ACS routes', () => {
     expect(screen.getByText(/Wallet connected/i)).toBeInTheDocument();
     expect(screen.getByText(/Exchange API withdrawals disabled/i)).toBeInTheDocument();
   });
-});
 
+  test('renders operational status without content navigation duplication', async () => {
+    renderAcsRoute('/acs/status', '/acs/status', <AcsStatus />);
+
+    expect(await screen.findByRole('heading', { name: /Operational Status/i })).toBeInTheDocument();
+    expect(screen.getByText(/No real execution, CEX API or automation is enabled/i)).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /^Products$/i })).not.toBeInTheDocument();
+  });
+});
