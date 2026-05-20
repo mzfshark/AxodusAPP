@@ -7,6 +7,7 @@ import {
   AcsCapabilities,
   AcsOverview,
   AcsPolicy,
+  AcsPolicyDebug,
   AcsProducts,
   AcsReadiness,
   AcsStatus,
@@ -59,6 +60,7 @@ describe('AxodusAPP ACS routes', () => {
       '/acs/services',
       '/acs/products',
       '/acs/policy',
+      '/acs/debug',
       '/acs/status',
       '/acs/readiness'
     ]));
@@ -108,6 +110,18 @@ describe('AxodusAPP ACS routes', () => {
     expect(await screen.findByRole('heading', { name: /Readiness Dashboard/i })).toBeInTheDocument();
     expect(screen.getByText(/Wallet connected/i)).toBeInTheDocument();
     expect(screen.getByText(/Exchange API withdrawals disabled/i)).toBeInTheDocument();
+  });
+
+  test('renders ACS policy debug without exposing secrets', async () => {
+    renderAcsRoute('/acs/debug', '/acs/debug', <AcsPolicyDebug />);
+
+    expect(await screen.findByRole('heading', { name: /Policy Debug/i })).toBeInTheDocument();
+    expect(screen.getByText(/Raw Policy Decision Context/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/emergency_stop_active/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/license_expired/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Correlation/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/No secrets, API keys, OAuth tokens or CEX credentials/i)).toBeInTheDocument();
+    expect(screen.queryByText(/raw-secret/i)).not.toBeInTheDocument();
   });
 
   test('renders operational status without content navigation duplication', async () => {

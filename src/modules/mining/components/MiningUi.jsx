@@ -19,6 +19,16 @@ export function MiningHeader({ title, description }) {
           {meta.message}
         </div>
       ) : null}
+      {meta ? (
+        <div className="flex flex-wrap gap-2 text-xs">
+          <Badge tone={meta.source === 'api' ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100' : 'border-amber-400/30 bg-amber-400/10 text-amber-100'}>
+            {meta.source === 'api' ? 'API online' : 'fallback active'}
+          </Badge>
+          <Badge>mock/read-only</Badge>
+          <Badge>{meta.version}</Badge>
+          <Badge>{meta.generatedAt ? `generated ${new Date(meta.generatedAt).toLocaleString()}` : 'timestamp unavailable'}</Badge>
+        </div>
+      ) : null}
     </header>
   );
 }

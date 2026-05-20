@@ -44,10 +44,38 @@ export function useMiningGovernance() {
   return useQuery({ queryKey: ['mining', 'governance'], queryFn: miningServiceAdapter.getGovernanceValidations });
 }
 
+export function useMiningGovernanceActions() {
+  return useQuery({ queryKey: ['mining', 'governance-actions'], queryFn: miningServiceAdapter.getGovernanceActions });
+}
+
+export function useMiningProposalIntents() {
+  return useQuery({ queryKey: ['mining', 'proposal-intents'], queryFn: miningServiceAdapter.getProposalIntents });
+}
+
 export function useMiningDiligence() {
   return useQuery({ queryKey: ['mining', 'diligence'], queryFn: miningServiceAdapter.getProviderDueDiligence });
 }
 
 export function useMiningReports() {
   return useQuery({ queryKey: ['mining', 'reports'], queryFn: miningServiceAdapter.getReports });
+}
+
+export function useMiningProviderTelemetry() {
+  return useQuery({ queryKey: ['mining', 'provider-telemetry'], queryFn: miningServiceAdapter.getProviderTelemetry });
+}
+
+export function useMiningTreasuryPolicies() {
+  return useQuery({ queryKey: ['mining', 'treasury-policies'], queryFn: miningServiceAdapter.getTreasuryPolicies });
+}
+
+export function useMiningTreasuryPolicyEvaluation() {
+  return useQuery({ queryKey: ['mining', 'treasury-policy-evaluation'], queryFn: miningServiceAdapter.getTreasuryPolicyEvaluation });
+}
+
+export function useMiningAccounting() {
+  return useQuery({ queryKey: ['mining', 'accounting'], queryFn: miningServiceAdapter.getAccounting });
+}
+
+export function useMiningReconciliation() {
+  return useQuery({ queryKey: ['mining', 'reconciliation'], queryFn: miningServiceAdapter.getReconciliation });
 }

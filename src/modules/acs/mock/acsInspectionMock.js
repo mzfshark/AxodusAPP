@@ -184,5 +184,28 @@ export const acsInspectionMock = {
       'Recommend disabling withdrawal permissions and using IP permission/allowlist.'
     ],
     warnings: ['No real secret persistence is enabled.', 'No real CEX API integration is enabled.']
+  },
+  observabilityStatus: {
+    mode: 'inspection',
+    correlationId: {
+      enabled: true,
+      acceptedHeaders: ['x-correlation-id', 'x-request-id'],
+      generatedWhenMissing: true
+    },
+    responseEnvelope: {
+      enabled: true,
+      includes: ['success', 'version', 'correlationId', 'timestamp', 'data', 'error', 'warnings']
+    },
+    telemetry: {
+      runtimeTelemetryEnabled: true,
+      httpTelemetryEnabled: false,
+      externalExporterEnabled: false
+    },
+    audit: {
+      receiptsSupported: true,
+      secretsRedacted: true,
+      tenantScopedReceiptsSupported: true
+    },
+    warnings: ['HTTP observability is contract-only in this phase.']
   }
 };

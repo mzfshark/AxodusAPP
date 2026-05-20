@@ -3,6 +3,7 @@ import {
   useAcsCapabilities,
   useAcsEmergencyStops,
   useAcsHealth,
+  useAcsObservabilityStatus,
   useAcsOperationalState,
   useAcsPolicyCheck,
   useAcsPolicyMatrix,
@@ -15,6 +16,7 @@ import {
   useAcsTenantServices,
   useAcsUserStatus
 } from '../hooks/useAcsData';
+import { getAcsMeta } from '../services/acsApi';
 
 const demoWallet = '0xlicensed';
 const demoTenant = 'dao-alpha';
@@ -320,5 +322,87 @@ export function AcsReadiness() {
         <ReadinessPipeline checks={readiness.data?.checks || []} />
       </AcsPanel>
     </AcsPageShell>
+  );
+}
+
+export function AcsPolicyDebug() {
+  const health = useAcsHealth();
+  const allowedPolicy = useAcsPolicyCheck(tradingIgnition, demoTenant);
+  const blockedPolicy = useAcsPolicyCheck(tradingIgnition, null, '0xstopped');
+  const licenseLoss = useAcsUserStatus('0xexpired', { tenantId: demoTenant, productId: tradingIgnition });
+  const emergencyStops = useAcsEmergencyStops();
+  const secretStorage = useAcsSecretStorageStatus();
+  const observability = useAcsObservabilityStatus();
+
+  if (health.isLoading || allowedPolicy.isLoading || blockedPolicy.isLoading || licenseLoss.isLoading || emergencyStops.isLoading || secretStorage.isLoading || observability.isLoading) return <LoadingState />;
+  const failed = queryFailed(health, allowedPolicy, blockedPolicy, licenseLoss, emergencyStops, secretStorage, observability);
+  if (failed) return <ErrorState message={failed.error?.message || 'ACS debug data unavailable'} />;
+
+  const meta = getAcsMeta(health.data);
+  const activeStop = (emergencyStops.data?.stops || []).find((stop) => stop.active);
+
+  return (
+    <AcsPageShell title="Policy Debug" description="Read-only operator visibility for ACS policy decisions, context, blocked reasons and integration metadata." query={health}>
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+        <AcsMetric icon={acsIcons.ShieldCheck} label="Allowed state" value={allowedPolicy.data?.allowed ? 'Allowed' : 'Blocked'} detail={allowedPolicy.data?.automationLevel || 'ACS policy decision'} />
+        <AcsMetric icon={acsIcons.Activity} label="Blocked state" value={blockedPolicy.data?.blockedReason || 'none'} detail={blockedPolicy.data?.policyContext?.source || 'policy context source'} />
+        <AcsMetric icon={acsIcons.BadgeCheck} label="License loss" value={licenseLoss.data?.license?.blockedReason || 'none'} detail={licenseLoss.data?.operationalState || 'operational state'} />
+        <AcsMetric icon={acsIcons.Network} label="Correlation" value={meta?.correlationId || 'fallback'} detail={meta?.source || 'ACS response metadata'} />
+      </section>
+
+      <AcsPanel title="Raw Policy Decision Context" description="Frontend renders ACS decisions; it does not infer permissions locally.">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <DebugBlock title="Allowed policy" value={allowedPolicy.data} />
+          <DebugBlock title="Blocked policy" value={blockedPolicy.data} />
+        </div>
+      </AcsPanel>
+
+      <AcsPanel title="Decision Flags" description="Approval, telemetry and receipt requirements from ACS.">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {[
+            ['consumption level', allowedPolicy.data?.consumptionLevel],
+            ['tenantId', allowedPolicy.data?.tenantId || allowedPolicy.data?.policyContext?.tenantId],
+            ['capabilityId', allowedPolicy.data?.capabilityId],
+            ['automation', allowedPolicy.data?.automationLevel],
+            ['governance approval', allowedPolicy.data?.requiresGovernanceApproval ? 'required' : 'not required'],
+            ['tenant approval', allowedPolicy.data?.requiresTenantApproval ? 'required' : 'not required'],
+            ['user license', allowedPolicy.data?.requiresUserLicense ? 'required' : 'not required'],
+            ['telemetry', allowedPolicy.data?.telemetryRequired ? 'required' : 'optional'],
+            ['receipts', allowedPolicy.data?.receiptsRequired ? 'required' : 'optional'],
+          ].map(([label, value]) => (
+            <div key={label} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-outline">{label}</p>
+              <p className="mt-2 break-words text-sm font-bold text-on-surface">{String(value ?? 'n/a')}</p>
+            </div>
+          ))}
+        </div>
+      </AcsPanel>
+
+      <AcsPanel title="Emergency Stop Impact" description="Emergency stop blocks policy inspection decisions and is not a frontend override.">
+        <div className="flex flex-wrap gap-2">
+          <AcsBadge tone={activeStop ? 'blocked' : 'allowed'}>{activeStop ? 'active' : 'inactive'}</AcsBadge>
+          <AcsBadge tone="warning">{activeStop?.reason || 'no active emergency stop'}</AcsBadge>
+          <AcsBadge tone="policy">{emergencyStops.data?.executionImpact || 'inspection'}</AcsBadge>
+        </div>
+      </AcsPanel>
+
+      <AcsPanel title="Integration Metadata" description="Auth/rate-limit metadata is placeholder/mock-capable and must never include secrets.">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+          <DebugBlock title="Response meta" value={meta || { source: 'fallback' }} />
+          <DebugBlock title="Observability" value={observability.data} />
+          <DebugBlock title="Secret safety" value={secretStorage.data} />
+        </div>
+        <p className="mt-4 text-sm font-semibold text-outline">No secrets, API keys, OAuth tokens or CEX credentials are rendered on this page.</p>
+      </AcsPanel>
+    </AcsPageShell>
+  );
+}
+
+function DebugBlock({ title, value }) {
+  return (
+    <article className="rounded-lg border border-white/10 bg-surface-container p-4">
+      <h3 className="text-sm font-bold text-on-surface">{title}</h3>
+      <pre className="mt-3 max-h-96 overflow-auto whitespace-pre-wrap break-words rounded-md bg-black/20 p-3 text-xs leading-5 text-outline">{JSON.stringify(value, null, 2)}</pre>
+    </article>
   );
 }

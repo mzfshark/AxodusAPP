@@ -7,10 +7,17 @@ import {
   miningReportSchema,
   miningSummarySchema,
   miningVaultSchema,
+  miningAccountingSchema,
+  miningGovernanceActionSchema,
+  miningProposalIntentSchema,
   providerAdapterDefinitionSchema,
   providerDetailsSchema,
   providerDueDiligenceSchema,
+  providerTelemetrySchema,
+  reconciliationRunSchema,
   riskSummarySchema,
+  treasuryPolicyEvaluationSchema,
+  treasuryPolicySchema,
   treasurySummarySchema
 } from '../contracts/miningContracts';
 import { miningFallback } from './miningFallback';
@@ -126,6 +133,16 @@ function fallbackService() {
     getProviderDueDiligence: () => miningFallback.providerDueDiligence,
     getProviderAdapters: () => miningFallback.providerAdapters,
     getProviderAdapterBySlug: (slug) => miningFallback.providerAdapters.find((adapter) => adapter.providerSlug === slug) || null,
+    getProviderTelemetry: () => miningFallback.providerTelemetry,
+    getProviderTelemetryBySlug: (slug) => miningFallback.providerTelemetry.find((item) => item.providerSlug === slug) || null,
+    getTreasuryPolicies: () => miningFallback.treasuryPolicies,
+    getTreasuryPolicyEvaluation: () => miningFallback.treasuryPolicyEvaluation,
+    getAccounting: () => miningFallback.accounting,
+    getReconciliation: () => miningFallback.reconciliation,
+    getReconciliationByRunId: (runId) => miningFallback.reconciliation.find((run) => run.id === runId) || null,
+    getGovernanceActions: () => miningFallback.governanceActions,
+    getGovernanceActionById: (actionId) => miningFallback.governanceActions.find((action) => action.id === actionId) || null,
+    getProposalIntents: () => miningFallback.proposalIntents,
     getReports: () => miningFallback.reports
   };
 }
@@ -183,5 +200,15 @@ export const miningServiceAdapter = {
   getProviderDueDiligence: () => requestMining('/api/mining/provider-due-diligence', providerDueDiligenceSchema.array(), fallback.getProviderDueDiligence),
   getProviderAdapters: () => requestMining('/api/mining/provider-adapters', providerAdapterDefinitionSchema.array(), fallback.getProviderAdapters),
   getProviderAdapterBySlug: (slug) => requestMining(`/api/mining/provider-adapters/${slug}`, providerAdapterDefinitionSchema, () => fallback.getProviderAdapterBySlug(slug), { nullOnNotFound: true }),
+  getProviderTelemetry: () => requestMining('/api/mining/provider-telemetry', providerTelemetrySchema.array(), fallback.getProviderTelemetry),
+  getProviderTelemetryBySlug: (slug) => requestMining(`/api/mining/provider-telemetry/${slug}`, providerTelemetrySchema, () => fallback.getProviderTelemetryBySlug(slug), { nullOnNotFound: true }),
+  getTreasuryPolicies: () => requestMining('/api/mining/treasury-policies', treasuryPolicySchema.array(), fallback.getTreasuryPolicies),
+  getTreasuryPolicyEvaluation: () => requestMining('/api/mining/treasury-policy-evaluation', treasuryPolicyEvaluationSchema, fallback.getTreasuryPolicyEvaluation),
+  getAccounting: () => requestMining('/api/mining/accounting', miningAccountingSchema, fallback.getAccounting),
+  getReconciliation: () => requestMining('/api/mining/reconciliation', reconciliationRunSchema.array(), fallback.getReconciliation),
+  getReconciliationByRunId: (runId) => requestMining(`/api/mining/reconciliation/${runId}`, reconciliationRunSchema, () => fallback.getReconciliationByRunId(runId), { nullOnNotFound: true }),
+  getGovernanceActions: () => requestMining('/api/mining/governance-actions', miningGovernanceActionSchema.array(), fallback.getGovernanceActions),
+  getGovernanceActionById: (actionId) => requestMining(`/api/mining/governance-actions/${actionId}`, miningGovernanceActionSchema, () => fallback.getGovernanceActionById(actionId), { nullOnNotFound: true }),
+  getProposalIntents: () => requestMining('/api/mining/proposal-intents', miningProposalIntentSchema.array(), fallback.getProposalIntents),
   getReports: () => requestMining('/api/mining/reports', miningReportSchema.array(), fallback.getReports)
 };

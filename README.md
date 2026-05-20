@@ -149,11 +149,18 @@ Contract:
 - `meta.source` is `mining-api`, `meta.version` is `v1`, `meta.mock` is `true`, and `meta.generatedAt` is an ISO timestamp.
 - AxodusAPP reads Mining through `src/modules/mining/services/miningServiceAdapter.js`; pages should not depend on raw API envelopes.
 - Provider adapter contracts are available at `GET /api/mining/provider-adapters` and must remain mock/read-only with execution, wallet, minting, staking, treasury movement, and smart contract actions blocked.
+- Observability endpoints are available for provider telemetry, treasury policy evaluation, accounting, and reconciliation:
+  - `GET /api/mining/provider-telemetry`
+  - `GET /api/mining/treasury-policies`
+  - `GET /api/mining/treasury-policy-evaluation`
+  - `GET /api/mining/accounting`
+  - `GET /api/mining/reconciliation`
 - The local fallback is intentionally minimal and only supports safe offline visibility.
 
 Verification:
 - Open `/mining` to confirm the unified Mining overview loads from the Mining API.
 - Open `/mining/providers/luxor` to confirm provider detail data resolves through the backend.
+- Open `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation` to confirm observability views render inside AxodusAPP.
 - Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
 - Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
 

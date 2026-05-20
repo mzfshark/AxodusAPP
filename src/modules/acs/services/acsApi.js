@@ -67,8 +67,28 @@ function fallbackFor(path) {
   if (path.startsWith('/acs/policy-check')) {
     const url = new URL(`${API_BASE}${path}`);
     const capabilityId = url.searchParams.get('capabilityId') || 'product.trading-ignition';
+    const wallet = url.searchParams.get('wallet');
+    const tenantId = url.searchParams.get('tenantId');
     const capability = acsInspectionMock.capabilities.find((item) => item.id === capabilityId) || acsInspectionMock.capabilities[0];
-    return mockEnvelope({ ...capability, capabilityId, allowed: capability.automationLevel !== 'blocked', warnings: [] });
+    const emergencyStopped = wallet === '0xstopped';
+    return mockEnvelope({
+      ...capability,
+      capabilityId,
+      ...(tenantId ? { tenantId } : {}),
+      ...(wallet ? { wallet } : {}),
+      policyContext: {
+        capabilityId,
+        ...(tenantId ? { tenantId } : {}),
+        ...(wallet ? { wallet } : {}),
+        source: emergencyStopped ? 'emergency-stop' : 'capability-registry',
+        decisionSurface: 'inspection',
+        executionTriggered: false
+      },
+      allowed: emergencyStopped ? false : capability.automationLevel !== 'blocked',
+      blockedReason: emergencyStopped ? 'emergency_stop_active' : undefined,
+      automationLevel: emergencyStopped ? 'blocked' : capability.automationLevel,
+      warnings: emergencyStopped ? ['emergency stop active for requested policy context'] : []
+    });
   }
 
   if (path.startsWith('/acs/user-status/')) {
@@ -94,6 +114,10 @@ function fallbackFor(path) {
 
   if (path === '/acs/secret-storage/status') {
     return mockEnvelope(acsInspectionMock.secretStorageStatus);
+  }
+
+  if (path === '/acs/observability/status') {
+    return mockEnvelope(acsInspectionMock.observabilityStatus);
   }
 
   if (path.startsWith('/acs/status/')) {
@@ -150,6 +174,8 @@ async function requestAcs(path) {
       correlationId: envelope.correlationId,
       timestamp: envelope.timestamp,
       version: envelope.version,
+      auth: envelope.meta?.auth,
+      rateLimit: envelope.meta?.rateLimit,
       warnings: envelope.warnings || []
     });
   } catch (error) {
@@ -196,5 +222,6 @@ export const acsApi = {
   getPerformanceRecords: () => requestAcs('/acs/performance-records'),
   getReceipts: () => requestAcs('/acs/receipts'),
   getEmergencyStops: () => requestAcs('/acs/emergency-stops'),
-  getSecretStorageStatus: () => requestAcs('/acs/secret-storage/status')
+  getSecretStorageStatus: () => requestAcs('/acs/secret-storage/status'),
+  getObservabilityStatus: () => requestAcs('/acs/observability/status')
 };

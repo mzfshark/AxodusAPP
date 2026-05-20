@@ -1,6 +1,12 @@
 import { describe, expect, test, vi, afterEach } from 'vitest';
 import { getMiningMeta, miningApi } from '../../src/modules/mining/services/miningApi';
-import { apiEnvelopeSchema, miningSummarySchema, providerAdapterDefinitionSchema } from '../../src/modules/mining/contracts/miningContracts';
+import {
+  apiEnvelopeSchema,
+  miningSummarySchema,
+  providerAdapterDefinitionSchema,
+  providerTelemetrySchema,
+  treasuryPolicyEvaluationSchema
+} from '../../src/modules/mining/contracts/miningContracts';
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -177,5 +183,72 @@ describe('Mining API client', () => {
       source: 'fallback',
       message: 'Using local mock fallback — Mining API unavailable.'
     });
+  });
+
+  test('loads normalized provider telemetry and treasury policy evaluation contracts', async () => {
+    const responses = {
+      '/api/mining/provider-telemetry': {
+        data: [{
+          id: 'telemetry-luxor',
+          providerId: 'provider-luxor',
+          providerSlug: 'luxor',
+          providerName: 'Luxor',
+          reportedHashExposure: 225,
+          tokenizedHashUnit: 'pool TH/s reporting reference',
+          normalizedHashrateThs: 225,
+          underlyingAsset: 'BTC pool exposure',
+          estimatedMinedAsset: 'BTC',
+          lastProviderUpdate: '2026-05-20T09:45:00.000Z',
+          dataFreshnessStatus: 'fresh',
+          liquiditySnapshot: 'moderate',
+          priceNavReference: 'provider statement NAV reference',
+          rewardAccountingStatus: 'reconciled',
+          providerServiceHealth: 'healthy',
+          uptimeStatus: 'online',
+          apiAvailability: 'partner',
+          telemetryConfidenceLevel: 'high',
+          sourceType: 'api-ready',
+          normalized: {
+            hashExposureThs: 225,
+            minedAssetSymbol: 'BTC',
+            liquidityLabel: 'moderate',
+            serviceHealthLabel: 'healthy',
+            freshnessLabel: 'fresh',
+            adapterReadiness: 'mock-ready',
+            rewardAccountingLabel: 'reconciled',
+            confidenceScore: 90
+          },
+          notes: 'Mock telemetry.'
+        }]
+      },
+      '/api/mining/treasury-policy-evaluation': {
+        data: {
+          policyId: 'policy-mining-treasury-v1',
+          status: 'violation',
+          providerConcentrationWarnings: ['provider warning'],
+          riskLevelConcentrationWarnings: [],
+          restrictedProviderExposureWarnings: ['restricted warning'],
+          reserveRatioStatus: 'compliant',
+          rebalanceRecommendation: 'Reduce restricted exposure.',
+          governanceActionRequired: true,
+          evaluatedAt: '2026-05-20T00:00:00.000Z'
+        }
+      }
+    };
+
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      const path = new URL(url).pathname;
+      return new Response(JSON.stringify({
+        ...responses[path],
+        meta: { source: 'mining-api', version: 'v1', generatedAt: '2026-05-20T00:00:00.000Z', mock: true },
+        errors: []
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }));
+
+    const telemetry = await miningApi.getProviderTelemetry();
+    const evaluation = await miningApi.getTreasuryPolicyEvaluation();
+
+    expect(providerTelemetrySchema.array().parse(telemetry)[0].normalized.confidenceScore).toBe(90);
+    expect(treasuryPolicyEvaluationSchema.parse(evaluation).governanceActionRequired).toBe(true);
   });
 });

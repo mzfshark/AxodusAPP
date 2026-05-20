@@ -139,6 +139,8 @@ Service contract:
 - `errors` must always be an array, including provider-not-found responses.
 - AxodusAPP components consume normalized adapter output from `src/modules/mining/services/miningServiceAdapter.js`, never raw envelopes.
 - Provider adapter contracts are exposed through `/api/mining/provider-adapters` and remain read-only/mock. They must explicitly block provider execution, hashpower purchase, treasury movement, wallet claim, minting, staking, and smart contract execution.
+- Mining observability endpoints include `/api/mining/provider-telemetry`, `/api/mining/treasury-policies`, `/api/mining/treasury-policy-evaluation`, `/api/mining/accounting`, and `/api/mining/reconciliation`.
+- AxodusAPP surfaces observability through `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation`, plus treasury policy status inside `/mining/treasury`.
 
 Fallback behavior:
 
@@ -155,6 +157,7 @@ Boundaries:
 - Do not duplicate large Mining mock objects in AxodusAPP; fallback must stay minimal and clearly stale.
 - Do not add wallet claims, minting, staking, provider execution, treasury movement, or smart contract execution to the Mining UI during the read-only MVP.
 - Do not frame Mining as farming, staking, generic emissions, or APY-first yield.
+- Telemetry, policy, accounting, and reconciliation states are advisory mock visibility only.
 
 ---
 

@@ -21,11 +21,16 @@ import {
   useMiningGovernance,
   useMiningHashTokens,
   useMiningProvider,
+  useMiningProviderTelemetry,
   useMiningProviders,
+  useMiningAccounting,
+  useMiningReconciliation,
   useMiningReports,
   useMiningRisk,
   useMiningSummary,
   useMiningTreasury,
+  useMiningTreasuryPolicies,
+  useMiningTreasuryPolicyEvaluation,
   useMiningVaults
 } from '../hooks/useMiningData';
 import { formatUsd, sumNotional } from '../utils/miningUtils';
@@ -135,6 +140,7 @@ export function MiningProviderDetails() {
     allocations = [],
     dueDiligence,
     governanceValidations = [],
+    normalizedTelemetry,
     telemetry
   } = details.data;
 
@@ -182,6 +188,13 @@ export function MiningProviderDetails() {
           <div className="space-y-3 text-sm leading-6 text-outline">
             <p><strong className="text-on-surface">Reporting:</strong> {telemetry?.reportingStatus || 'manual mock reporting'}</p>
             <p><strong className="text-on-surface">Latest signal:</strong> {telemetry?.latestMockSignal || 'provider observable'}</p>
+            {normalizedTelemetry ? (
+              <>
+                <p><strong className="text-on-surface">Normalized hash exposure:</strong> {normalizedTelemetry.normalized?.hashExposureThs ?? normalizedTelemetry.normalizedHashrateThs} TH/s</p>
+                <p><strong className="text-on-surface">Freshness/confidence:</strong> {normalizedTelemetry.dataFreshnessStatus} / {normalizedTelemetry.telemetryConfidenceLevel}</p>
+                <p><strong className="text-on-surface">Reward accounting:</strong> {normalizedTelemetry.rewardAccountingStatus}</p>
+              </>
+            ) : null}
             <p><strong className="text-on-surface">Supported assets:</strong> {(provider.supportedAssets || []).join(' / ') || provider.primaryAsset}</p>
             <p><strong className="text-on-surface">Chains:</strong> {(provider.supportedChains || []).join(' / ') || 'not specified'}</p>
           </div>
@@ -342,8 +355,10 @@ export function MiningAllocations() {
 export function MiningTreasury() {
   const treasury = useMiningTreasury();
   const providers = useMiningProviders();
-  if (treasury.isLoading || providers.isLoading) return <LoadingState />;
-  if (treasury.isError || providers.isError) return <ErrorState message="Mining treasury data is unavailable." />;
+  const policies = useMiningTreasuryPolicies();
+  const policyEvaluation = useMiningTreasuryPolicyEvaluation();
+  if (treasury.isLoading || providers.isLoading || policies.isLoading || policyEvaluation.isLoading) return <LoadingState />;
+  if (treasury.isError || providers.isError || policies.isError || policyEvaluation.isError) return <ErrorState message="Mining treasury data is unavailable." />;
   const totalExposure = treasury.data.totalExposureUsd ?? sumNotional(treasury.data.exposures || []);
   const groupedRisk = Object.entries(treasury.data.exposureByRiskLevel || {});
   const groupedAssets = Object.entries(treasury.data.exposureByAsset || {});
@@ -356,6 +371,18 @@ export function MiningTreasury() {
         <MetricCard label="Providers" value={String(treasury.data.diversification?.providerCount || 0)} detail="Diversification is calculated by provider exposure route." />
         <MetricCard label="Largest route" value={`${treasury.data.diversification?.largestProviderExposurePct || 0}%`} detail="Mock concentration guardrail for treasury allocation." />
       </section>
+      <Panel title="Treasury Policy Evaluation" description="Read-only policy check against mock provider, asset, custody, risk, and reserve limits.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <MetricCard label="Policy status" value={policyEvaluation.data.status} detail={policyEvaluation.data.rebalanceRecommendation} />
+          <MetricCard label="Reserve ratio" value={policyEvaluation.data.reserveRatioStatus} detail="Minimum reserve policy is evaluated against treasury-eligible vaults." />
+          <MetricCard label="Governance action" value={policyEvaluation.data.governanceActionRequired ? 'Required' : 'Not required'} detail={(policies.data || [])[0]?.requiredGovernanceApprovalLevel || 'treasury-council'} />
+        </div>
+        <div className="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {[...(policyEvaluation.data.providerConcentrationWarnings || []), ...(policyEvaluation.data.riskLevelConcentrationWarnings || []), ...(policyEvaluation.data.restrictedProviderExposureWarnings || [])].map((warning) => (
+            <div key={warning} className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-sm text-amber-100">{warning}</div>
+          ))}
+        </div>
+      </Panel>
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Panel title="By Risk Level">
           <div className="space-y-2">{groupedRisk.map(([level, value]) => <div key={level} className="flex items-center justify-between text-sm"><RiskBadge level={level} /><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
@@ -373,6 +400,105 @@ export function MiningTreasury() {
             const provider = providers.data.find((item) => item.id === exposure.providerId);
             return <article key={exposure.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm text-outline">{exposure.treasuryRoute}</p></div><DiligenceBadge status={exposure.reviewStatus} /></div><div className="mt-4 flex flex-wrap gap-2"><Badge>{exposure.exposurePct}% exposure</Badge><Badge>{exposure.reserveImpact} reserve impact</Badge><Badge>{exposure.approvedByGovernance ? 'governance approved' : 'not approved'}</Badge></div><p className="mt-4 text-2xl font-black text-on-surface">{formatUsd(exposure.notionalUsd)}</p></article>;
           })}
+        </div>
+      </Panel>
+    </main>
+  );
+}
+
+export function MiningTelemetry() {
+  const telemetry = useMiningProviderTelemetry();
+  if (telemetry.isLoading) return <LoadingState />;
+  if (telemetry.isError) return <ErrorState message="Mining provider telemetry is unavailable." />;
+  const rows = telemetry.data || [];
+  return (
+    <main className="app-view-shell space-y-8">
+      <MiningHeader title="Provider Telemetry" description="Normalized mock telemetry compares provider freshness, hash exposure, liquidity, service health, accounting state, and confidence." />
+      <Panel title="Telemetry Health Matrix">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {rows.length ? rows.map((item) => (
+            <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <h2 className="text-lg font-bold text-on-surface">{item.providerName || item.providerId}</h2>
+                  <p className="mt-1 text-sm text-outline">{item.notes}</p>
+                </div>
+                <Badge>{item.dataFreshnessStatus}</Badge>
+              </div>
+              <div className="mt-5 grid grid-cols-1 gap-3 text-sm md:grid-cols-3">
+                <div><p className="text-xs font-bold uppercase text-outline">Hash exposure</p><p className="mt-1 font-bold text-on-surface">{item.normalized?.hashExposureThs ?? item.normalizedHashrateThs} TH/s</p></div>
+                <div><p className="text-xs font-bold uppercase text-outline">Mined asset</p><p className="mt-1 font-bold text-on-surface">{item.estimatedMinedAsset}</p></div>
+                <div><p className="text-xs font-bold uppercase text-outline">Confidence</p><p className="mt-1 font-bold text-on-surface">{item.telemetryConfidenceLevel}</p></div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Badge>{item.providerServiceHealth}</Badge>
+                <Badge>{item.uptimeStatus}</Badge>
+                <Badge>{item.apiAvailability}</Badge>
+                <Badge>{item.rewardAccountingStatus}</Badge>
+                <Badge>{item.sourceType}</Badge>
+              </div>
+              <p className="mt-4 text-xs text-outline">Last provider update: {new Date(item.lastProviderUpdate).toLocaleString()}</p>
+            </article>
+          )) : <EmptyState message="No provider telemetry is available from the Mining service." />}
+        </div>
+      </Panel>
+    </main>
+  );
+}
+
+export function MiningAccounting() {
+  const accounting = useMiningAccounting();
+  if (accounting.isLoading) return <LoadingState />;
+  if (accounting.isError) return <ErrorState message="Mining accounting data is unavailable." />;
+  const data = accounting.data;
+  return (
+    <main className="app-view-shell space-y-8">
+      <MiningHeader title="Accounting" description="Read-only accounting periods, reward accruals, provider statements, and treasury ledger visibility. No claim or payout flow exists." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <MetricCard label="Expected rewards" value={formatUsd(data.summary.totalExpectedRewardUsd)} detail="Mock expected provider rewards for open accounting visibility." />
+        <MetricCard label="Reported rewards" value={formatUsd(data.summary.totalReportedRewardUsd)} detail="Provider-reported reward statements in the mock layer." />
+        <MetricCard label="Variance" value={formatUsd(data.summary.totalVarianceUsd)} detail={`${data.summary.pendingAccruals} pending, ${data.summary.varianceWatchAccruals} under variance watch.`} />
+      </section>
+      <Panel title="Accounting Periods">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {(data.periods || []).map((period) => (
+            <article key={period.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex items-start justify-between gap-4"><h2 className="font-bold text-on-surface">{period.label}</h2><Badge>{period.status}</Badge></div>
+              <p className="mt-3 text-sm text-outline">{period.auditNotes}</p>
+              <div className="mt-4 grid grid-cols-3 gap-3 text-sm"><strong>{formatUsd(period.expectedRewardUsd)}</strong><strong>{formatUsd(period.reportedRewardUsd)}</strong><strong>{period.variancePct}%</strong></div>
+            </article>
+          ))}
+        </div>
+      </Panel>
+      <Panel title="Reward Accruals">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-white/10 text-left text-sm">
+            <thead><tr className="text-xs uppercase tracking-widest text-outline"><th className="px-3 py-3">Provider</th><th className="px-3 py-3">Expected</th><th className="px-3 py-3">Reported</th><th className="px-3 py-3">Variance</th><th className="px-3 py-3">Status</th></tr></thead>
+            <tbody className="divide-y divide-white/10">{(data.rewardAccruals || []).map((item) => <tr key={item.id}><td className="px-3 py-4 text-outline">{item.providerId}</td><td className="px-3 py-4 font-bold text-on-surface">{formatUsd(item.expectedRewardUsd)}</td><td className="px-3 py-4 font-bold text-on-surface">{formatUsd(item.reportedRewardUsd)}</td><td className="px-3 py-4 text-outline">{formatUsd(item.varianceUsd)}</td><td className="px-3 py-4"><Badge>{item.status}</Badge></td></tr>)}</tbody>
+          </table>
+        </div>
+      </Panel>
+    </main>
+  );
+}
+
+export function MiningReconciliation() {
+  const reconciliation = useMiningReconciliation();
+  if (reconciliation.isLoading) return <LoadingState />;
+  if (reconciliation.isError) return <ErrorState message="Mining reconciliation data is unavailable." />;
+  const runs = reconciliation.data || [];
+  return (
+    <main className="app-view-shell space-y-8">
+      <MiningHeader title="Reconciliation" description="Read-only reconciliation runs compare expected rewards, provider statements, ledger entries, variance, materiality, and audit findings." />
+      <Panel title="Reconciliation Runs">
+        <div className="space-y-4">
+          {runs.length ? runs.map((run) => (
+            <article key={run.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><h2 className="font-bold text-on-surface">{run.id}</h2><p className="mt-2 text-sm leading-6 text-outline">{run.auditSummary}</p></div><Badge>{run.status}</Badge></div>
+              <div className="mt-5 grid grid-cols-1 gap-3 text-sm md:grid-cols-4"><div>Expected <strong className="block text-on-surface">{formatUsd(run.expectedRewardUsd)}</strong></div><div>Reported <strong className="block text-on-surface">{formatUsd(run.reportedRewardUsd)}</strong></div><div>Variance <strong className="block text-on-surface">{formatUsd(run.varianceUsd)}</strong></div><div>Materiality <strong className="block text-on-surface">{run.materialityThresholdPct}%</strong></div></div>
+              <div className="mt-4 space-y-2">{(run.findings || []).map((finding) => <div key={finding.id} className="rounded-md border border-white/10 bg-surface-container-low p-3 text-sm text-outline"><strong className="text-on-surface">{finding.findingType}</strong>: {finding.auditNotes}</div>)}</div>
+            </article>
+          )) : <EmptyState message="No reconciliation runs are available from the Mining service." />}
         </div>
       </Panel>
     </main>

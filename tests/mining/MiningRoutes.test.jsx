@@ -4,12 +4,15 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { appShellNav } from '../../src/config/appShell';
 import {
+  MiningAccounting,
   MiningGovernance,
   MiningOverview,
   MiningProviderDetails,
   MiningProviders,
+  MiningReconciliation,
   MiningReports,
   MiningRisk,
+  MiningTelemetry,
   MiningTreasury,
   MiningVaults
 } from '../../src/modules/mining';
@@ -57,7 +60,10 @@ describe('AxodusAPP Mining routes', () => {
     expect(miningEntry.sections.map((section) => section.to)).toEqual(expect.arrayContaining([
       '/mining',
       '/mining/providers',
+      '/mining/telemetry',
       '/mining/treasury',
+      '/mining/accounting',
+      '/mining/reconciliation',
       '/mining/risk',
       '/mining/governance',
       '/mining/reports'
@@ -88,6 +94,7 @@ describe('AxodusAPP Mining routes', () => {
   test('renders treasury, risk, vault, governance, and report institutional surfaces', async () => {
     renderMiningRoute('/mining/treasury', '/mining/treasury', <MiningTreasury />);
     expect(await screen.findByRole('heading', { name: /Treasury Routing/i })).toBeInTheDocument();
+    expect(screen.getByText(/Treasury Policy Evaluation/i)).toBeInTheDocument();
     expect(screen.getByText(/By Risk Level/i)).toBeInTheDocument();
 
     renderMiningRoute('/mining/risk', '/mining/risk', <MiningRisk />);
@@ -105,5 +112,19 @@ describe('AxodusAPP Mining routes', () => {
     renderMiningRoute('/mining/reports', '/mining/reports', <MiningReports />);
     expect(await screen.findByRole('heading', { level: 1, name: /Reports/i })).toBeInTheDocument();
     expect(screen.getAllByText(/Mining/i).length).toBeGreaterThan(0);
+  });
+
+  test('renders telemetry, accounting, and reconciliation observability pages', async () => {
+    renderMiningRoute('/mining/telemetry', '/mining/telemetry', <MiningTelemetry />);
+    expect(await screen.findByRole('heading', { name: /Provider Telemetry/i })).toBeInTheDocument();
+    expect(screen.getByText(/Telemetry Health Matrix/i)).toBeInTheDocument();
+
+    renderMiningRoute('/mining/accounting', '/mining/accounting', <MiningAccounting />);
+    expect(await screen.findByRole('heading', { level: 1, name: /Accounting/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Reward Accruals/i })).toBeInTheDocument();
+
+    renderMiningRoute('/mining/reconciliation', '/mining/reconciliation', <MiningReconciliation />);
+    expect(await screen.findByRole('heading', { level: 1, name: /Reconciliation/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Reconciliation Runs/i })).toBeInTheDocument();
   });
 });

@@ -21,10 +21,10 @@ export function useAcsPolicyMatrix() {
   return useQuery({ queryKey: ['acs', 'policy-matrix'], queryFn: acsApi.getPolicyMatrix });
 }
 
-export function useAcsPolicyCheck(capabilityId, tenantId) {
+export function useAcsPolicyCheck(capabilityId, tenantId, walletAddress) {
   return useQuery({
-    queryKey: ['acs', 'policy-check', capabilityId || 'none', tenantId || 'none'],
-    queryFn: () => acsApi.getPolicyCheck({ capabilityId, tenantId }),
+    queryKey: ['acs', 'policy-check', capabilityId || 'none', tenantId || 'none', walletAddress || 'none'],
+    queryFn: () => acsApi.getPolicyCheck({ capabilityId, tenantId, walletAddress }),
     enabled: Boolean(capabilityId)
   });
 }
@@ -50,6 +50,10 @@ export function useAcsEmergencyStops() {
 
 export function useAcsSecretStorageStatus() {
   return useQuery({ queryKey: ['acs', 'secret-storage-status'], queryFn: acsApi.getSecretStorageStatus });
+}
+
+export function useAcsObservabilityStatus() {
+  return useQuery({ queryKey: ['acs', 'observability-status'], queryFn: acsApi.getObservabilityStatus });
 }
 
 export function useAcsStatus(walletAddress) {

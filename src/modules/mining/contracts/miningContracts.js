@@ -270,3 +270,140 @@ export const providerAdapterDefinitionSchema = z.object({
   lifecycleStage: z.string(),
   governanceNotes: z.string()
 }).passthrough();
+
+export const providerTelemetrySchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  providerSlug: z.string().optional(),
+  providerName: z.string().optional(),
+  reportedHashExposure: z.number(),
+  tokenizedHashUnit: z.string(),
+  normalizedHashrateThs: z.number(),
+  underlyingAsset: z.string(),
+  estimatedMinedAsset: z.string(),
+  lastProviderUpdate: z.string(),
+  dataFreshnessStatus: z.string(),
+  liquiditySnapshot: z.string(),
+  priceNavReference: z.string(),
+  rewardAccountingStatus: z.string(),
+  providerServiceHealth: z.string(),
+  uptimeStatus: z.string(),
+  apiAvailability: z.string(),
+  telemetryConfidenceLevel: z.string(),
+  sourceType: z.string(),
+  normalized: z.object({
+    hashExposureThs: z.number(),
+    minedAssetSymbol: z.string(),
+    liquidityLabel: z.string(),
+    serviceHealthLabel: z.string(),
+    freshnessLabel: z.string(),
+    adapterReadiness: z.string(),
+    rewardAccountingLabel: z.string(),
+    confidenceScore: z.number()
+  }).passthrough(),
+  notes: z.string()
+}).passthrough();
+
+export const treasuryPolicySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  status: z.string(),
+  maxAllocationPerProviderPct: z.number(),
+  maxAllocationPerRiskLevelPct: z.record(z.string(), z.number()).default({}),
+  maxAllocationPerCustodyModelPct: z.record(z.string(), z.number()).default({}),
+  maxAllocationPerAssetPct: z.record(z.string(), z.number()).default({}),
+  reserveRatioMinimumPct: z.number(),
+  experimentalProviderCapPct: z.number(),
+  restrictedProviderHandling: z.string(),
+  emergencyPauseRules: z.array(z.string()).default([]),
+  requiredGovernanceApprovalLevel: z.string(),
+  rebalanceRecommendationRules: z.array(z.string()).default([]),
+  notes: z.string()
+}).passthrough();
+
+export const treasuryPolicyEvaluationSchema = z.object({
+  policyId: z.string(),
+  status: z.string(),
+  providerConcentrationWarnings: z.array(z.string()).default([]),
+  riskLevelConcentrationWarnings: z.array(z.string()).default([]),
+  restrictedProviderExposureWarnings: z.array(z.string()).default([]),
+  reserveRatioStatus: z.string(),
+  rebalanceRecommendation: z.string(),
+  governanceActionRequired: z.boolean(),
+  evaluatedAt: z.string()
+}).passthrough();
+
+export const miningAccountingSchema = z.object({
+  periods: z.array(z.unknown()).default([]),
+  rewardAccruals: z.array(z.unknown()).default([]),
+  providerStatements: z.array(z.unknown()).default([]),
+  treasuryLedger: z.array(z.unknown()).default([]),
+  summary: z.object({
+    openPeriods: z.number(),
+    pendingAccruals: z.number(),
+    varianceWatchAccruals: z.number(),
+    totalExpectedRewardUsd: z.number(),
+    totalReportedRewardUsd: z.number(),
+    totalVarianceUsd: z.number()
+  }).passthrough()
+}).passthrough();
+
+export const reconciliationRunSchema = z.object({
+  id: z.string(),
+  periodId: z.string(),
+  status: z.string(),
+  startedAt: z.string(),
+  completedAt: z.string().nullable(),
+  expectedRewardUsd: z.number(),
+  reportedRewardUsd: z.number(),
+  varianceUsd: z.number(),
+  variancePct: z.number(),
+  materialityThresholdPct: z.number(),
+  governanceActionRequired: z.boolean(),
+  auditSummary: z.string(),
+  findings: z.array(z.unknown()).default([])
+}).passthrough();
+
+export const miningGovernanceActionSchema = z.object({
+  id: z.string(),
+  actionType: z.string(),
+  sourceSignal: z.string(),
+  providerId: z.string().optional(),
+  providerSlug: z.string().optional(),
+  providerName: z.string().optional(),
+  vaultId: z.string().optional(),
+  treasuryScope: z.string().optional(),
+  severity: z.string(),
+  reasonSeverity: z.string(),
+  recommendedAction: z.string(),
+  requiredApprovalLevel: z.string(),
+  governanceStatus: z.string(),
+  constitutionalStanding: governanceStandingSchema,
+  federationMember: z.boolean(),
+  federationTier: z.string(),
+  reasonCodes: z.array(z.string()).default([]),
+  constitutionalFlags: z.array(z.string()).default([]),
+  expectedImpact: z.string(),
+  executionReadiness: z.string(),
+  mockOnlyDisclaimer: z.string()
+}).passthrough();
+
+export const miningProposalIntentSchema = z.object({
+  id: z.string(),
+  actionId: z.string(),
+  intentType: z.string(),
+  title: z.string(),
+  summary: z.string(),
+  scope: z.object({
+    providerId: z.string().optional(),
+    providerSlug: z.string().optional(),
+    vaultId: z.string().optional(),
+    treasuryScope: z.string().optional()
+  }).passthrough(),
+  preconditions: z.array(z.string()).default([]),
+  expectedImpact: z.string(),
+  riskNotes: z.array(z.string()).default([]),
+  requiredGovernanceBody: z.string(),
+  mockExecutionPayloadPreview: z.record(z.string(), z.unknown()).default({}),
+  executionBlockedReason: z.string()
+}).passthrough();

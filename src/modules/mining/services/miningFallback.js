@@ -172,6 +172,115 @@ const providerAdapters = providers.map((provider) => ({
   governanceNotes: provider.complianceNotes
 }));
 
+const providerTelemetry = providers.map((provider) => ({
+  id: `telemetry-${provider.slug}`,
+  providerId: provider.id,
+  providerSlug: provider.slug,
+  providerName: provider.name,
+  reportedHashExposure: provider.slug === 'luxor' ? 225 : 164,
+  tokenizedHashUnit: `${provider.primaryAsset} fallback unit`,
+  normalizedHashrateThs: provider.slug === 'luxor' ? 225 : 164,
+  underlyingAsset: provider.primaryAsset,
+  estimatedMinedAsset: 'BTC',
+  lastProviderUpdate: provider.updatedAt,
+  dataFreshnessStatus: 'stale',
+  liquiditySnapshot: provider.slug === 'luxor' ? 'moderate' : 'deep',
+  priceNavReference: 'fallback reference only',
+  rewardAccountingStatus: 'pending-reconciliation',
+  providerServiceHealth: 'watch',
+  uptimeStatus: 'manual-review',
+  apiAvailability: provider.apiAvailability,
+  telemetryConfidenceLevel: 'low',
+  sourceType: 'mock',
+  normalized: {
+    hashExposureThs: provider.slug === 'luxor' ? 225 : 164,
+    minedAssetSymbol: 'BTC',
+    liquidityLabel: provider.slug === 'luxor' ? 'moderate' : 'deep',
+    serviceHealthLabel: 'watch',
+    freshnessLabel: 'stale',
+    adapterReadiness: provider.integrationReadiness,
+    rewardAccountingLabel: 'pending-reconciliation',
+    confidenceScore: 35
+  },
+  notes: 'Fallback telemetry only; Mining API is authoritative.'
+}));
+
+const treasuryPolicies = [{
+  id: 'policy-fallback',
+  name: 'Fallback Mining Treasury Policy',
+  status: 'active-mock',
+  maxAllocationPerProviderPct: 18,
+  maxAllocationPerRiskLevelPct: { low: 45, medium: 35, high: 0, critical: 0 },
+  maxAllocationPerCustodyModelPct: { 'provider relationship': 35, 'provider registry plus market custody': 20 },
+  maxAllocationPerAssetPct: { BTC: 35, GOMINING: 14 },
+  reserveRatioMinimumPct: 75,
+  experimentalProviderCapPct: 0,
+  restrictedProviderHandling: 'Fallback policy blocks restricted provider exposure.',
+  emergencyPauseRules: ['backend unavailable', 'telemetry stale'],
+  requiredGovernanceApprovalLevel: 'treasury-council',
+  rebalanceRecommendationRules: ['reconnect Mining API for authoritative evaluation'],
+  notes: 'Fallback policy for offline UI only.'
+}];
+
+const treasuryPolicyEvaluation = {
+  policyId: 'policy-fallback',
+  status: 'warning',
+  providerConcentrationWarnings: ['Fallback evaluation is stale until Mining API reconnects.'],
+  riskLevelConcentrationWarnings: [],
+  restrictedProviderExposureWarnings: [],
+  reserveRatioStatus: 'compliant',
+  rebalanceRecommendation: 'Reconnect Mining API before acting on treasury exposure.',
+  governanceActionRequired: false,
+  evaluatedAt: '2026-05-20T00:00:00.000Z'
+};
+
+const accounting = {
+  periods: [{ id: 'period-fallback', label: 'Fallback period', startDate: '2026-05-01', endDate: '2026-05-31', status: 'open', expectedRewardUsd: 8200, reportedRewardUsd: 8100, varianceUsd: -100, variancePct: -1.22, auditNotes: 'Fallback accounting only.' }],
+  rewardAccruals: [{ id: 'accrual-fallback-luxor', periodId: 'period-fallback', providerId: 'provider-luxor', vaultId: 'vault-fallback-conservative', expectedRewardAsset: 'BTC', expectedRewardAmount: 0.082, expectedRewardUsd: 8200, reportedRewardAmount: 0.081, reportedRewardUsd: 8100, varianceUsd: -100, status: 'pending' }],
+  providerStatements: [],
+  treasuryLedger: [],
+  summary: { openPeriods: 1, pendingAccruals: 1, varianceWatchAccruals: 0, totalExpectedRewardUsd: 8200, totalReportedRewardUsd: 8100, totalVarianceUsd: -100 }
+};
+
+const reconciliation = [{ id: 'recon-fallback', periodId: 'period-fallback', status: 'pending', startedAt: '2026-05-20T00:00:00.000Z', completedAt: null, expectedRewardUsd: 8200, reportedRewardUsd: 8100, varianceUsd: -100, variancePct: -1.22, materialityThresholdPct: 5, governanceActionRequired: false, auditSummary: 'Fallback reconciliation only.', findings: [] }];
+
+const governanceActions = [{
+  id: 'action-fallback-telemetry-review',
+  actionType: 'provider-review',
+  sourceSignal: 'fallback-api-unavailable',
+  providerId: 'provider-luxor',
+  providerSlug: 'luxor',
+  providerName: 'Luxor',
+  severity: 'warning',
+  reasonSeverity: 'warning',
+  recommendedAction: 'Review Mining API availability before governance decisions.',
+  requiredApprovalLevel: 'operator',
+  governanceStatus: 'blocked',
+  constitutionalStanding: 'under-review',
+  federationMember: true,
+  federationTier: 'core',
+  reasonCodes: ['FALLBACK_DATA', 'API_UNAVAILABLE'],
+  constitutionalFlags: [],
+  expectedImpact: 'Prevents stale fallback telemetry from being treated as authoritative.',
+  executionReadiness: 'blocked-missing-data',
+  mockOnlyDisclaimer: 'Mock governance action candidate only. No proposal execution, treasury movement, provider execution, wallet claim, minting, staking, or smart contract call is enabled.'
+}];
+
+const proposalIntents = [{
+  id: 'intent-action-fallback-telemetry-review',
+  actionId: 'action-fallback-telemetry-review',
+  intentType: 'request-provider-due-diligence',
+  title: 'Mining governance intent: Review fallback data state',
+  summary: 'Fallback mode generated a governance candidate to prevent stale data use.',
+  scope: { providerId: 'provider-luxor', providerSlug: 'luxor' },
+  preconditions: ['Reconnect Mining API', 'Revalidate provider telemetry'],
+  expectedImpact: 'Keeps governance review tied to authoritative Mining API data.',
+  riskNotes: ['FALLBACK_DATA', 'API_UNAVAILABLE'],
+  requiredGovernanceBody: 'operator',
+  mockExecutionPayloadPreview: { actionId: 'action-fallback-telemetry-review', readOnly: true, executionEnabled: false },
+  executionBlockedReason: 'Read-only MVP. Proposal execution, treasury movement, provider execution, wallet claim, minting, staking, and smart contract calls are disabled.'
+}];
+
 export const miningFallback = {
   summary: {
     totalProviders: providers.length,
@@ -193,6 +302,13 @@ export const miningFallback = {
   governanceValidations,
   providerDueDiligence,
   providerAdapters,
+  providerTelemetry,
+  treasuryPolicies,
+  treasuryPolicyEvaluation,
+  accounting,
+  reconciliation,
+  governanceActions,
+  proposalIntents,
   reports: [
     { id: 'report-fallback', title: 'Fallback Mining Status', reportType: 'risk', period: 'offline', status: 'draft', summary: 'Mining API is unavailable; AxodusAPP is showing minimal emergency fallback data.', sections: [{ title: 'Fallback state', findings: ['Backend API is required for authoritative Mining data.', 'No execution, claim, mint, stake, or treasury movement is available.'] }], nextActions: ['Restart Mining API on localhost:8787', 'Verify /health and /api/mining/summary'] }
   ]
