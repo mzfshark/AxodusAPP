@@ -141,6 +141,8 @@ Service contract:
 - Provider adapter contracts are exposed through `/api/mining/provider-adapters` and remain read-only/mock. They must explicitly block provider execution, hashpower purchase, treasury movement, wallet claim, minting, staking, and smart contract execution.
 - Mining observability endpoints include `/api/mining/provider-telemetry`, `/api/mining/treasury-policies`, `/api/mining/treasury-policy-evaluation`, `/api/mining/accounting`, and `/api/mining/reconciliation`.
 - AxodusAPP surfaces observability through `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation`, plus treasury policy status inside `/mining/treasury`.
+- Mining governance readiness endpoints include `/api/mining/governance-actions` and `/api/mining/proposal-intents`.
+- AxodusAPP surfaces governance action readiness through `/mining/governance`, `/mining/actions`, and provider detail action sections.
 
 Fallback behavior:
 
@@ -158,6 +160,7 @@ Boundaries:
 - Do not add wallet claims, minting, staking, provider execution, treasury movement, or smart contract execution to the Mining UI during the read-only MVP.
 - Do not frame Mining as farming, staking, generic emissions, or APY-first yield.
 - Telemetry, policy, accounting, and reconciliation states are advisory mock visibility only.
+- Governance actions and proposal intents are advisory previews only; Governance nucleus must own any future proposal execution path.
 
 ---
 

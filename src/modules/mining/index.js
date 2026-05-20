@@ -1,5 +1,6 @@
 export {
   MiningAllocations,
+  MiningActions,
   MiningGovernance,
   MiningHashTokens,
   MiningAccounting,

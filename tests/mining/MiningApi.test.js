@@ -3,6 +3,8 @@ import { getMiningMeta, miningApi } from '../../src/modules/mining/services/mini
 import {
   apiEnvelopeSchema,
   miningSummarySchema,
+  miningGovernanceActionSchema,
+  miningProposalIntentSchema,
   providerAdapterDefinitionSchema,
   providerTelemetrySchema,
   treasuryPolicyEvaluationSchema
@@ -250,5 +252,65 @@ describe('Mining API client', () => {
 
     expect(providerTelemetrySchema.array().parse(telemetry)[0].normalized.confidenceScore).toBe(90);
     expect(treasuryPolicyEvaluationSchema.parse(evaluation).governanceActionRequired).toBe(true);
+  });
+
+  test('loads governance action candidates and proposal intents as non-executable previews', async () => {
+    const responses = {
+      '/api/mining/governance-actions': {
+        data: [{
+          id: 'action-treasury-policy-rebalance',
+          actionType: 'treasury-policy',
+          sourceSignal: 'treasury-policy-evaluation',
+          treasuryScope: 'mining-treasury-exposure',
+          severity: 'high',
+          reasonSeverity: 'high',
+          recommendedAction: 'Open governance review.',
+          requiredApprovalLevel: 'treasury-council',
+          governanceStatus: 'ready-for-review',
+          constitutionalStanding: 'under-review',
+          federationMember: false,
+          federationTier: 'candidate',
+          reasonCodes: ['TREASURY_POLICY_DRIFT'],
+          constitutionalFlags: ['TREASURY_POLICY_VIOLATION'],
+          expectedImpact: 'Rebalance exposure.',
+          executionReadiness: 'proposal-ready',
+          mockOnlyDisclaimer: 'Mock governance action candidate only. No proposal execution is enabled.'
+        }]
+      },
+      '/api/mining/proposal-intents': {
+        data: [{
+          id: 'intent-action-treasury-policy-rebalance',
+          actionId: 'action-treasury-policy-rebalance',
+          intentType: 'rebalance-vault',
+          title: 'Mining governance intent: rebalance',
+          summary: 'Policy drift generated a governance candidate.',
+          scope: { treasuryScope: 'mining-treasury-exposure' },
+          preconditions: ['review signal'],
+          expectedImpact: 'Rebalance exposure.',
+          riskNotes: ['TREASURY_POLICY_DRIFT'],
+          requiredGovernanceBody: 'treasury-council',
+          mockExecutionPayloadPreview: { readOnly: true, executionEnabled: false },
+          executionBlockedReason: 'Read-only MVP.'
+        }]
+      }
+    };
+
+    vi.stubGlobal('fetch', vi.fn(async (url) => {
+      const path = new URL(url).pathname;
+      return new Response(JSON.stringify({
+        ...responses[path],
+        meta: { source: 'mining-api', version: 'v1', generatedAt: '2026-05-20T00:00:00.000Z', mock: true },
+        errors: []
+      }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }));
+
+    const actions = await miningApi.getGovernanceActions();
+    const intents = await miningApi.getProposalIntents();
+
+    expect(miningGovernanceActionSchema.array().parse(actions)[0]).toMatchObject({
+      governanceStatus: 'ready-for-review',
+      executionReadiness: 'proposal-ready'
+    });
+    expect(miningProposalIntentSchema.array().parse(intents)[0].mockExecutionPayloadPreview.executionEnabled).toBe(false);
   });
 });

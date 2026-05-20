@@ -26,6 +26,7 @@ import {
 } from "./modules/academy";
 import {
   MiningAllocations,
+  MiningActions,
   MiningAccounting,
   MiningGovernance,
   MiningHashTokens,
@@ -113,6 +114,7 @@ const router = createBrowserRouter([
       { path: "mining/reconciliation", element: <MiningReconciliation /> },
       { path: "mining/risk", element: <MiningRisk /> },
       { path: "mining/governance", element: <MiningGovernance /> },
+      { path: "mining/actions", element: <MiningActions /> },
       { path: "mining/reports", element: <MiningReports /> },
       { path: "marketplace", element: <MarketplaceHome /> },
       { path: "marketplace/explore", element: <MarketplaceExplore /> },

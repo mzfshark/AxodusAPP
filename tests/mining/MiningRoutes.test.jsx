@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { appShellNav } from '../../src/config/appShell';
 import {
+  MiningActions,
   MiningAccounting,
   MiningGovernance,
   MiningOverview,
@@ -66,6 +67,7 @@ describe('AxodusAPP Mining routes', () => {
       '/mining/reconciliation',
       '/mining/risk',
       '/mining/governance',
+      '/mining/actions',
       '/mining/reports'
     ]));
   });
@@ -107,7 +109,13 @@ describe('AxodusAPP Mining routes', () => {
 
     renderMiningRoute('/mining/governance', '/mining/governance', <MiningGovernance />);
     expect(await screen.findByRole('heading', { name: /Governance Validation/i })).toBeInTheDocument();
+    expect(screen.getByText(/Governance Actions/i)).toBeInTheDocument();
+    expect(screen.getByText(/Proposal Intent Preview/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Reason codes/i).length).toBeGreaterThan(0);
+
+    renderMiningRoute('/mining/actions', '/mining/actions', <MiningActions />);
+    expect(await screen.findByRole('heading', { name: /Governance Validation/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Action candidates/i).length).toBeGreaterThan(0);
 
     renderMiningRoute('/mining/reports', '/mining/reports', <MiningReports />);
     expect(await screen.findByRole('heading', { level: 1, name: /Reports/i })).toBeInTheDocument();

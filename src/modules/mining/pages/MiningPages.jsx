@@ -19,11 +19,13 @@ import {
   useMiningAllocations,
   useMiningDiligence,
   useMiningGovernance,
+  useMiningGovernanceActions,
   useMiningHashTokens,
   useMiningProvider,
   useMiningProviderTelemetry,
   useMiningProviders,
   useMiningAccounting,
+  useMiningProposalIntents,
   useMiningReconciliation,
   useMiningReports,
   useMiningRisk,
@@ -140,6 +142,8 @@ export function MiningProviderDetails() {
     allocations = [],
     dueDiligence,
     governanceValidations = [],
+    governanceActions = [],
+    proposalIntents = [],
     normalizedTelemetry,
     telemetry
   } = details.data;
@@ -252,6 +256,30 @@ export function MiningProviderDetails() {
               <p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>
             </article>
           )) : <EmptyState message="No provider-specific governance validation was returned." />}
+        </div>
+      </Panel>
+      <Panel title="Governance Action Readiness" description="Action candidates and proposal intents are mock-only and cannot execute from this surface.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {governanceActions.length ? governanceActions.map((action) => (
+            <article key={action.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-outline">{action.actionType} / {action.sourceSignal}</p>
+                  <h2 className="mt-2 font-bold text-on-surface">{action.recommendedAction}</h2>
+                </div>
+                <Badge>{action.severity}</Badge>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-outline">{action.expectedImpact}</p>
+              <div className="mt-4 flex flex-wrap gap-2"><Badge>{action.governanceStatus}</Badge><Badge>{action.requiredApprovalLevel}</Badge><Badge>{action.executionReadiness}</Badge></div>
+            </article>
+          )) : <EmptyState message="No provider-specific governance actions are active." />}
+          {proposalIntents.length ? proposalIntents.map((intent) => (
+            <article key={intent.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <p className="text-xs font-bold uppercase tracking-widest text-outline">{intent.intentType}</p>
+              <h2 className="mt-2 font-bold text-on-surface">{intent.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-outline">{intent.executionBlockedReason}</p>
+            </article>
+          )) : null}
         </div>
       </Panel>
     </main>
@@ -529,17 +557,61 @@ export function MiningRisk() {
 
 export function MiningGovernance() {
   const validations = useMiningGovernance();
-  if (validations.isLoading) return <LoadingState />;
-  if (validations.isError) return <ErrorState message="Mining governance validations are unavailable." />;
+  const actions = useMiningGovernanceActions();
+  const intents = useMiningProposalIntents();
+  if (validations.isLoading || actions.isLoading || intents.isLoading) return <LoadingState />;
+  if (validations.isError || actions.isError || intents.isError) return <ErrorState message="Mining governance validations are unavailable." />;
   const validationList = validations.data || [];
+  const actionList = actions.data || [];
+  const intentList = intents.data || [];
   return (
     <main className="app-view-shell space-y-8">
-      <MiningHeader title="Governance Validation" description="Mining provider exposure remains subordinate to governance review, treasury limits, and constitutional controls." />
+      <MiningHeader title="Governance Validation" description="Mining provider exposure remains subordinate to governance review, treasury limits, constitutional controls, and mock-only proposal intent generation." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <MetricCard label="Action candidates" value={String(actionList.length)} detail="Generated from policy, telemetry, due diligence, reconciliation, and emergency pause signals." />
+        <MetricCard label="Proposal intents" value={String(intentList.length)} detail="Preview only; no DAO proposal execution exists in this MVP." />
+        <MetricCard label="Ready for review" value={String(actionList.filter((action) => action.governanceStatus === 'ready-for-review').length)} detail="Candidates with enough mock data for governance review." />
+      </section>
+      <Panel title="Governance Actions" description="Action candidates translate observability signals into DAO-reviewable decisions. Execution is blocked.">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {actionList.length ? actionList.map((action) => (
+            <article key={action.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-outline">{action.actionType} / {action.sourceSignal}</p>
+                  <h2 className="mt-2 font-bold text-on-surface">{action.recommendedAction}</h2>
+                </div>
+                <Badge>{action.severity}</Badge>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-outline">{action.expectedImpact}</p>
+              <div className="mt-4 flex flex-wrap gap-2"><Badge>{action.governanceStatus}</Badge><Badge>{action.requiredApprovalLevel}</Badge><Badge>{action.constitutionalStanding}</Badge><Badge>{action.executionReadiness}</Badge></div>
+              <p className="mt-3 text-xs text-outline">Reason codes: {(action.reasonCodes || []).join(' / ') || 'none'}</p>
+              <p className="mt-2 text-xs text-outline">{action.mockOnlyDisclaimer}</p>
+            </article>
+          )) : <EmptyState message="No governance action candidates are currently generated." />}
+        </div>
+      </Panel>
+      <Panel title="Proposal Intent Preview" description="Read-only proposal drafts that can later map to DAO proposal workflows after the Governance nucleus owns execution.">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {intentList.length ? intentList.map((intent) => (
+            <article key={intent.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex items-start justify-between gap-4"><h2 className="font-bold text-on-surface">{intent.title}</h2><Badge>{intent.intentType}</Badge></div>
+              <p className="mt-3 text-sm leading-6 text-outline">{intent.summary}</p>
+              <p className="mt-3 text-sm leading-6 text-outline">{intent.expectedImpact}</p>
+              <p className="mt-3 text-xs text-outline">Blocked: {intent.executionBlockedReason}</p>
+            </article>
+          )) : <EmptyState message="No proposal intents are currently available." />}
+        </div>
+      </Panel>
       <Panel title="Validation Queue">
         <div className="space-y-3">{validationList.length ? validationList.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div><div className="mt-4 grid grid-cols-1 gap-3 text-sm md:grid-cols-3"><Badge>{validation.providerWhitelistingStatus}</Badge><Badge>{validation.treasuryAllocationApprovalStatus}</Badge><Badge>pause {validation.emergencyPauseRecommendation}</Badge></div><p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>{validation.restrictionReasons?.length ? <p className="mt-2 text-xs text-outline">Restrictions: {validation.restrictionReasons.join(' / ')}</p> : null}</article>) : <EmptyState message="No governance validations are available from the Mining service." />}</div>
       </Panel>
     </main>
   );
+}
+
+export function MiningActions() {
+  return <MiningGovernance />;
 }
 
 export function MiningReports() {

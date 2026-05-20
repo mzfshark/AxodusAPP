@@ -210,6 +210,9 @@ export const providerDetailsSchema = z.object({
   allocations: z.array(hashAllocationSchema).default([]),
   dueDiligence: providerDueDiligenceSchema.optional(),
   governanceValidations: z.array(governanceValidationSchema).default([]),
+  normalizedTelemetry: z.unknown().nullable().optional(),
+  governanceActions: z.array(z.unknown()).default([]),
+  proposalIntents: z.array(z.unknown()).default([]),
   telemetry: z.object({
     reportingStatus: z.string(),
     apiAvailability: z.string(),

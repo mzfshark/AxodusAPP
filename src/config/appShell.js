@@ -60,6 +60,7 @@ const nuclei = [
       { to: '/mining/reconciliation', label: 'Reconciliation', icon: ListChecks },
       { to: '/mining/risk', label: 'Risk', icon: ShieldCheck },
       { to: '/mining/governance', label: 'Governance', icon: ShieldCheck },
+      { to: '/mining/actions', label: 'Actions', icon: ListChecks },
       { to: '/mining/reports', label: 'Reports', icon: LibraryBig },
     ],
   },

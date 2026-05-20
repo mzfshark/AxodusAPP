@@ -155,12 +155,16 @@ Contract:
   - `GET /api/mining/treasury-policy-evaluation`
   - `GET /api/mining/accounting`
   - `GET /api/mining/reconciliation`
+- Governance readiness endpoints are available for action candidates and proposal intent previews:
+  - `GET /api/mining/governance-actions`
+  - `GET /api/mining/proposal-intents`
 - The local fallback is intentionally minimal and only supports safe offline visibility.
 
 Verification:
 - Open `/mining` to confirm the unified Mining overview loads from the Mining API.
 - Open `/mining/providers/luxor` to confirm provider detail data resolves through the backend.
 - Open `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation` to confirm observability views render inside AxodusAPP.
+- Open `/mining/governance` or `/mining/actions` to confirm governance action candidates and proposal intent previews render as non-executable decision surfaces.
 - Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
 - Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
 
