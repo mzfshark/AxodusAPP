@@ -198,3 +198,23 @@ The Governance Operations Center needs a stable UI and integration contract befo
 Implementation note:
 
 The create-proposal submission contract may call the Governance API only when `VITE_GOVERNANCE_CREATE_PROPOSAL_ENABLED=true`. Otherwise, AxodusAPP must keep using explicit local mock receipts so development state cannot be confused with indexed or on-chain proposals.
+
+---
+
+## Decision 15 — Academy MVP Remains Mock-Only Until Governance and Treasury Contracts Are Ready
+
+The Academy nucleus in AxodusAPP is approved as a polished prototype-ready, frontend-first, mock-driven surface.
+
+It must communicate Academy as the constitutional Proof-of-Knowledge, qualification, and `$NEURONS` distribution layer rather than a generic LMS.
+
+Required boundaries:
+
+- Free courses issue mock `Locked $NEURONS`.
+- Paid courses issue mock `Unlocked $NEURONS`.
+- Reward, certification, PoK, ACS, treasury, and future-contract data must remain read-model metadata until real integrations are approved.
+- The UI must expose empty, loading, error, restricted, pending-validation, claimable, and blocked states without implying live minting, withdrawals, certification issuance, or contract writes.
+- Future compatibility entities such as `PoKMinter`, `LockedNeuronsVault`, `RewardPolicy`, and `TreasuryEmissionBudget` may appear only as mock/read-model metadata.
+
+Reasoning:
+
+The Academy MVP is validating navigation, educational legitimacy, reward doctrine, trust, ACS readiness, governance eligibility, treasury control, and proof visibility before production blockchain or certification execution is enabled.

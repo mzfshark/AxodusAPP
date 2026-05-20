@@ -6,8 +6,10 @@ import {
   AcademyCertifications,
   AcademyCourseDetails,
   AcademyCourses,
+  AcademyDashboard,
   AcademyGovernanceEligibility,
   AcademyGovernanceReview,
+  AcademyHome,
   AcademyLearningWorkspace,
   AcademyProgressEngine,
   AcademyRewards,
@@ -30,6 +32,8 @@ describe('Academy module', () => {
 
     expect(freeCourses.length).toBeGreaterThan(0);
     expect(paidCourses.length).toBeGreaterThan(0);
+    expect(academyMock.courses.length).toBeGreaterThanOrEqual(6);
+    expect(academyMock.courses.some((course) => course.governanceStatus === 'restricted')).toBe(true);
     expect(freeCourses.every((course) => course.rewardType === 'Locked $NEURONS')).toBe(true);
     expect(paidCourses.every((course) => course.rewardType === 'Unlocked $NEURONS')).toBe(true);
     expect(academyMock.futureContracts.map((contract) => contract.name)).toEqual(
@@ -50,6 +54,17 @@ describe('Academy module', () => {
     expect(screen.queryByText(/Marketplace Activation and Tutor Monetization/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Certification-enabled results/i)).toBeInTheDocument();
     expect(screen.getByText(/Future wallet-compatible model/i)).toBeInTheDocument();
+  });
+
+  test('renders MVP flow coverage from free course through ACS readiness', () => {
+    renderWithRoute('/academy', '/academy', <AcademyHome />);
+
+    expect(screen.getByRole('heading', { name: /MVP flow coverage/i })).toBeInTheDocument();
+    expect(screen.getByText(/Free course to Locked \$NEURONS/i)).toBeInTheDocument();
+    expect(screen.getByText(/Paid course to Unlocked \$NEURONS/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lesson progress to quiz to reward visibility/i)).toBeInTheDocument();
+    expect(screen.getByText(/ACS readiness preview/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/prototype-covered/i).length).toBeGreaterThanOrEqual(7);
   });
 
   test('renders course detail operational profile and treasury-backed checkpoints', () => {
@@ -78,6 +93,16 @@ describe('Academy module', () => {
     expect(screen.getByRole('heading', { name: /Pending milestones/i })).toBeInTheDocument();
     expect(screen.getByText(/No withdrawal, no transfer, no swap/i)).toBeInTheDocument();
     expect(screen.getByText(/Future direct wallet distribution after approval/i)).toBeInTheDocument();
+    expect(screen.getByText(/Future wallet distribution blocked by governance status/i)).toBeInTheDocument();
+  });
+
+  test('renders reusable mock loading and error states on the dashboard', () => {
+    renderWithRoute('/academy/dashboard', '/academy/dashboard', <AcademyDashboard />);
+
+    expect(screen.getByRole('heading', { name: /Mock loading state/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Mock error state/i })).toBeInTheDocument();
+    expect(screen.getByText(/No network or contract request is executed/i)).toBeInTheDocument();
+    expect(screen.getByText(/failed validation/i)).toBeInTheDocument();
   });
 
   test('renders the learning workspace with PoK, certification, and reward context', () => {
@@ -135,6 +160,8 @@ describe('Academy module', () => {
     expect(screen.getByText(/Axodus Governance Faculty/i)).toBeInTheDocument();
     expect(screen.getAllByText(/introductory governance participation/i).length).toBeGreaterThan(1);
     expect(screen.getByText(/root-dao-recognized/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/pending-validation/i).length).toBeGreaterThan(1);
+    expect(screen.getByText(/ACS Integrity Desk/i)).toBeInTheDocument();
     expect(screen.getByText(/governance literacy recognized/i)).toBeInTheDocument();
     expect(screen.getByText(/\/academy\/certifications\/cert-constitutional-literacy/i)).toBeInTheDocument();
   });

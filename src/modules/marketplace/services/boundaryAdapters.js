@@ -50,6 +50,10 @@ export const MarketplaceContractAdapter = {
         listingType: input.listingType,
         chain: input.chain,
         currency: input.currency,
+        quantity: Number(input.quantity || 1),
+        metadataUri: input.metadataUri,
+        reservePrice: input.listingType === 'fixed' ? null : Number(input.reservePrice || input.price),
+        durationDays: input.listingType === 'fixed' ? null : Number(input.durationDays || 7),
         settlementEnabled: false,
       },
     },
@@ -82,6 +86,20 @@ export const RoyaltyService = {
 export const AuctionService = {
   canBid: (product) => Boolean(product.auction && product.auction.status === 'active' && product.governanceStatus !== 'suspended'),
   minimumBid: (product) => (product.auction ? Math.max(product.auction.reservePrice, (product.auction.highestBid ?? 0) + 1) : null),
+  previewForListingInput: (input) => {
+    const isAuction = input.listingType === 'english-auction' || input.listingType === 'dutch-auction';
+    return {
+      service: 'AuctionService',
+      listingType: input.listingType,
+      auctionEnabled: isAuction,
+      reservePrice: isAuction ? Number(input.reservePrice || input.price) : null,
+      minimumBid: input.listingType === 'english-auction' ? Number(input.reservePrice || input.price) : null,
+      startPrice: input.listingType === 'dutch-auction' ? Number(input.price) : null,
+      durationDays: isAuction ? Number(input.durationDays || 7) : null,
+      bidEnabled: false,
+      settlementEnabled: false,
+    };
+  },
   getAuctionState: (product) => ({
     service: 'AuctionService',
     listingType: product.listingType,
@@ -95,6 +113,47 @@ export const AuctionService = {
     endsAt: product.auction?.endsAt ?? null,
     settlementEnabled: false,
   }),
+};
+
+export const ListingDraftService = {
+  getDraftReadiness: (input) => {
+    const quantity = Number(input.quantity || 1);
+    const price = Number(input.price || 0);
+    const royaltyBps = Number(input.royaltyBps || 0);
+    const reservePrice = Number(input.reservePrice || 0);
+    const durationDays = Number(input.durationDays || 0);
+    const isAuction = input.listingType === 'english-auction' || input.listingType === 'dutch-auction';
+    const blockers = [
+      input.title?.trim() ? null : 'title-required',
+      input.description?.trim() ? null : 'description-required',
+      input.metadataUri?.trim() ? null : 'metadata-uri-required',
+      price > 0 ? null : 'price-required',
+      royaltyBps >= 0 && royaltyBps <= 1000 ? null : 'royalty-bps-out-of-policy',
+      input.tokenStandard === 'ERC721' && quantity !== 1 ? 'erc721-quantity-must-be-one' : null,
+      input.tokenStandard === 'ERC1155' && quantity < 1 ? 'erc1155-quantity-required' : null,
+      isAuction && reservePrice <= 0 ? 'auction-reserve-required' : null,
+      isAuction && durationDays < 1 ? 'auction-duration-required' : null,
+    ].filter(Boolean);
+
+    const requiredReviews = [
+      input.governanceReviewRequired ? 'constitutional-review' : null,
+      'treasury-route-review',
+      isAuction ? 'auction-parameter-review' : null,
+      input.deliveryType === 'MCP Runtime' ? 'plugin-compatibility-review' : null,
+      ['Greenfield', 'Signed URL'].includes(input.deliveryType) ? 'storage-access-review' : null,
+      'metadata-review',
+    ].filter(Boolean);
+
+    return {
+      service: 'ListingDraftService',
+      draftStatus: blockers.length ? 'blocked' : input.governanceReviewRequired ? 'requires-governance-review' : 'draft-created',
+      publishEnabled: false,
+      contractWriteEnabled: false,
+      metadataReady: Boolean(input.metadataUri?.trim()),
+      requiredReviews,
+      blockers,
+    };
+  },
 };
 
 export const StorageAccessService = {
