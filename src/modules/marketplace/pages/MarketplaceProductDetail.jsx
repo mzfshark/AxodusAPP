@@ -8,10 +8,13 @@ import {
   AuctionService,
   LayerZeroBridgeService,
   MarketplaceContractAdapter,
-  RoyaltyService,
   StorageAccessService,
 } from '../services/boundaryAdapters';
+import { getListingRuntimeState, getBidRuntimePreview } from '../services/listingRuntime';
 import { getMarketplaceProduct, getMarketplaceProductContext } from '../services/marketplaceService';
+import { getNftOwnershipRuntime } from '../services/nftOwnershipRuntime';
+import { getRoyaltyRuntimePreview } from '../services/royaltyRuntime';
+import { evaluateWalletActionReadiness, getMarketplaceWalletRuntime } from '../services/walletRuntime';
 import {
   GovernanceValidationLifecycle,
   ProductLifecycle,
@@ -27,10 +30,15 @@ export default function MarketplaceProductDetail() {
   const seller = context.seller;
   const tenant = context.tenant;
   const executionBoundary = product ? MarketplaceContractAdapter.getExecutionBoundary(product) : null;
-  const royaltyPreview = product ? RoyaltyService.previewForProduct(product) : null;
+  const royaltyPreview = product ? getRoyaltyRuntimePreview(product) : null;
   const auctionState = product ? AuctionService.getAuctionState(product) : null;
   const storageAccess = product ? StorageAccessService.getAccessModel(product) : null;
   const bridgeReadiness = product ? LayerZeroBridgeService.getReadiness(product) : null;
+  const walletRuntime = product ? getMarketplaceWalletRuntime({ chain: product.bridgeReadiness?.sourceChain ?? product.supportedChains?.[0] }) : null;
+  const ownershipRuntime = product ? getNftOwnershipRuntime({ product, wallet: walletRuntime }) : null;
+  const listingRuntime = product ? getListingRuntimeState(product) : null;
+  const bidRuntime = product ? getBidRuntimePreview(product, product.auction ? Math.max(product.auction.reservePrice ?? 0, (product.auction.highestBid ?? 0) + 1) : product.pricing.amount) : null;
+  const walletActionReadiness = product ? evaluateWalletActionReadiness({ wallet: walletRuntime, product, action: product.auction ? 'preview-bid' : 'preview-buy-now' }) : null;
   const productLifecycle = product ? getProductLifecycle(product) : null;
   const governanceLifecycle = product ? getGovernanceLifecycle(product) : null;
   const [purchaseOpen, setPurchaseOpen] = useState(false);
@@ -55,6 +63,8 @@ export default function MarketplaceProductDetail() {
             <MarketplaceBadge value={product.listingType} />
             <MarketplaceBadge value={product.constitutionalStanding} />
             <MarketplaceBadge value={productLifecycle} />
+            <MarketplaceBadge value={walletRuntime.lifecycle} label="wallet" />
+            <MarketplaceBadge value={listingRuntime.lifecycle} label="listing" />
           </div>
           <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
             <Info label="Price" value={`${product.pricing.amount} ${product.pricing.currency}`} />
@@ -106,6 +116,38 @@ export default function MarketplaceProductDetail() {
           <p>Minimum bid: {auctionState.minimumBid ?? 'not applicable'}</p>
           <p>Bridge or settlement execution: disabled</p>
         </Panel>
+        <Panel title="Wallet runtime">
+          <p>Adapter: {walletRuntime.adapter}</p>
+          <p>Lifecycle: {walletRuntime.lifecycle}</p>
+          <p>Wallet chain: {walletRuntime.chain ?? 'disconnected'}</p>
+          <p>Action ready: {walletActionReadiness.eligible ? 'preview eligible' : 'preview blocked'}</p>
+          <p>No signature. No wallet transaction. No chain write.</p>
+          <BadgeRow values={walletActionReadiness.reasonCodes} />
+        </Panel>
+        <Panel title="Ownership readiness">
+          <p>Status: {ownershipRuntime.status}</p>
+          <p>Model: {ownershipRuntime.nftModel} / {ownershipRuntime.tokenStandard}</p>
+          <p>Supported chain: {ownershipRuntime.supportedChain ? 'yes' : 'no'}</p>
+          <p>Ownership read enabled: {ownershipRuntime.ownershipReadEnabled ? 'yes' : 'no'}</p>
+          <p>Verification enabled: {ownershipRuntime.ownershipVerificationEnabled ? 'yes' : 'no'}</p>
+          <BadgeRow values={ownershipRuntime.reasonCodes} />
+        </Panel>
+        <Panel title="Listing runtime">
+          <p>Lifecycle: {listingRuntime.lifecycle}</p>
+          <p>Type: {listingRuntime.listingType}</p>
+          <p>Bid lifecycle: {bidRuntime.lifecycle}</p>
+          <p>Settlement enabled: {listingRuntime.settlementEnabled ? 'yes' : 'no'}</p>
+          <p>Contract write: {listingRuntime.contractWriteEnabled ? 'enabled' : 'disabled'}</p>
+          <BadgeRow values={listingRuntime.reasonCodes} />
+        </Panel>
+        <Panel title="Royalty runtime">
+          <p>EIP-2981 read prepared: {royaltyPreview.eip2981ReadPrepared ? 'yes' : 'no'}</p>
+          <p>EIP-2981 read enabled: {royaltyPreview.eip2981ReadEnabled ? 'yes' : 'no'}</p>
+          <p>Creator split: {royaltyPreview.creatorSplitPreview.amount} {royaltyPreview.currency}</p>
+          <p>Treasury preview: {royaltyPreview.treasurySplitPreview.amount} {royaltyPreview.currency}</p>
+          <p>Royalty settlement: {royaltyPreview.royaltySettlementEnabled ? 'enabled' : 'disabled'}</p>
+          <BadgeRow values={royaltyPreview.reasonCodes} />
+        </Panel>
         <Panel title="Greenfield delivery">
           <p>Bucket: {storageAccess.greenfieldBucket ?? 'not required'}</p>
           <p>Delivery: {storageAccess.deliveryType}</p>
@@ -145,5 +187,13 @@ function Panel({ title, children }) {
       <h2 className="mb-3 text-lg font-bold text-on-surface">{title}</h2>
       {children}
     </article>
+  );
+}
+
+function BadgeRow({ values }) {
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {values.slice(0, 5).map((value) => <MarketplaceBadge key={value} value={value} />)}
+    </div>
   );
 }

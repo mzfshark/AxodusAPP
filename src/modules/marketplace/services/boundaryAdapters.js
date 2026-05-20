@@ -1,5 +1,8 @@
 import { marketplaceMock } from '@/data/mock';
 import { createDraftListingPreview, issueMockPurchase } from './marketplaceService';
+import { getListingRuntimeState } from './listingRuntime';
+import { getRoyaltyAccountingSummary } from './royaltyRuntime';
+import { getWalletRuntimeSummary } from './walletRuntime';
 
 export const reownWalletStateMock = {
   connected: true,
@@ -324,6 +327,24 @@ export const getMarketplaceBoundaryReadiness = () => {
       label: 'ReownWalletAdapter',
       status: 'mocked',
       detail: 'Wallet state and signature previews return mock-only responses',
+    },
+    {
+      id: 'wallet-runtime-service',
+      label: 'WalletRuntimeService',
+      status: 'ready-boundary',
+      detail: `${getWalletRuntimeSummary().supportedChains.length} wallet chains modeled, no signatures or writes`,
+    },
+    {
+      id: 'listing-runtime-service',
+      label: 'ListingRuntimeService',
+      status: 'ready-boundary',
+      detail: `${products.filter((product) => getListingRuntimeState(product).lifecycle === 'active').length} active listing runtime previews`,
+    },
+    {
+      id: 'royalty-runtime-service',
+      label: 'RoyaltyRuntimeService',
+      status: 'ready-boundary',
+      detail: `${getRoyaltyAccountingSummary(products).eip2981PreparedCount} EIP-2981 read previews prepared, no settlement`,
     },
     {
       id: 'treasury-settlement-adapter',
