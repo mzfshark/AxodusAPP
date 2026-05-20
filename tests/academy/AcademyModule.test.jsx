@@ -60,8 +60,8 @@ describe('Academy module', () => {
     renderWithRoute('/academy', '/academy', <AcademyHome />);
 
     expect(screen.getByRole('heading', { name: /MVP flow coverage/i })).toBeInTheDocument();
-    expect(screen.getByText(/Free course to Locked \$NEURONS/i)).toBeInTheDocument();
-    expect(screen.getByText(/Paid course to Unlocked \$NEURONS/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Free course to Locked \$NEURONS/i).length).toBeGreaterThan(1);
+    expect(screen.getAllByText(/Paid course to Unlocked \$NEURONS/i).length).toBeGreaterThan(1);
     expect(screen.getByText(/Lesson progress to quiz to reward visibility/i)).toBeInTheDocument();
     expect(screen.getByText(/ACS readiness preview/i)).toBeInTheDocument();
     expect(screen.getAllByText(/prototype-covered/i).length).toBeGreaterThanOrEqual(7);

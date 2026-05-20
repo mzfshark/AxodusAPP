@@ -8,6 +8,24 @@ export const reownWalletStateMock = {
   networkMode: 'mock',
 };
 
+export const ReownWalletAdapter = {
+  getWalletState: async () => ({
+    adapter: 'ReownWalletAdapter',
+    ...reownWalletStateMock,
+    signatureEnabled: false,
+    transactionEnabled: false,
+    disclaimer: 'Preview only. No wallet transaction.',
+  }),
+  requestSignaturePreview: async (payload) => ({
+    adapter: 'ReownWalletAdapter',
+    mode: 'mock-only',
+    payload,
+    signature: null,
+    status: 'preview-issued',
+    disclaimer: 'No wallet signature requested.',
+  }),
+};
+
 export const MarketplaceContractAdapter = {
   getSupportedListingTypes: () => ['fixed', 'english-auction', 'dutch-auction'],
   getSupportedTokenStandards: () => ['ERC721', 'ERC1155'],
@@ -115,6 +133,27 @@ export const AuctionService = {
   }),
 };
 
+export const AuctionAdapter = {
+  createAuctionPreview: async (input) => ({
+    adapter: 'AuctionAdapter',
+    mode: 'mock-only',
+    auction: AuctionService.previewForListingInput(input),
+    contractWriteEnabled: false,
+    settlementEnabled: false,
+    disclaimer: 'Preview only. No auction settlement.',
+  }),
+  placeBidPreview: async (product, amount) => ({
+    adapter: 'AuctionAdapter',
+    mode: 'mock-only',
+    productId: product.id,
+    amount,
+    minimumBid: AuctionService.minimumBid(product),
+    eligible: AuctionService.canBid(product) && Number(amount) >= (AuctionService.minimumBid(product) ?? 0),
+    contractWriteEnabled: false,
+    disclaimer: 'No contract write. No bid placement.',
+  }),
+};
+
 export const ListingDraftService = {
   getDraftReadiness: (input) => {
     const quantity = Number(input.quantity || 1);
@@ -172,6 +211,17 @@ export const StorageAccessService = {
   },
 };
 
+export const GreenfieldAccessAdapter = {
+  requestSignedUrlPreview: async (product, purchase) => ({
+    adapter: 'GreenfieldAccessAdapter',
+    mode: 'mock-only',
+    productId: product.id,
+    signedUrl: StorageAccessService.createSignedUrlPreview(product, purchase),
+    productionDeliveryEnabled: false,
+    disclaimer: 'Preview only. No production Greenfield delivery.',
+  }),
+};
+
 export const LayerZeroBridgeService = {
   getReadiness: (product) => ({
     service: 'LayerZeroBridgeService',
@@ -182,6 +232,58 @@ export const LayerZeroBridgeService = {
     bridgeExecutionEnabled: false,
   }),
   getSupportedChains: () => [...new Set(marketplaceMock.products.flatMap((product) => product.supportedChains))],
+};
+
+export const LayerZeroBridgeAdapter = {
+  getBridgePreview: async (product, destinationChain) => ({
+    adapter: 'LayerZeroBridgeAdapter',
+    mode: 'mock-only',
+    productId: product.id,
+    sourceChain: product.bridgeReadiness?.sourceChain ?? product.supportedChains?.[0] ?? null,
+    destinationChain,
+    supported: Boolean(product.bridgeReadiness?.destinationChains?.includes(destinationChain)),
+    bridgeExecutionEnabled: false,
+    disclaimer: 'No LayerZero message or bridge execution.',
+  }),
+};
+
+export const RoyaltyAdapter = {
+  previewRoyalty: async (productOrInput) => ({
+    adapter: 'RoyaltyAdapter',
+    mode: 'mock-only',
+    royalty: productOrInput.royaltyModel
+      ? RoyaltyService.previewForProduct(productOrInput)
+      : RoyaltyService.previewForListingInput(productOrInput),
+    settlementEnabled: false,
+    disclaimer: 'No royalty settlement.',
+  }),
+};
+
+export const TreasurySettlementAdapter = {
+  previewRoute: async ({ destination, amount, currency }) => ({
+    adapter: 'TreasurySettlementAdapter',
+    mode: 'mock-only',
+    destination,
+    amount,
+    currency,
+    treasuryExecutionEnabled: false,
+    disclaimer: 'No treasury execution.',
+  }),
+};
+
+export const BillingProviderAdapter = {
+  createInvoicePreview: async ({ productId, buyer, amount, currency }) => ({
+    adapter: 'BillingProviderAdapter',
+    mode: 'mock-only',
+    invoiceId: `invoice-preview-${productId}-${Date.now()}`,
+    productId,
+    buyer,
+    amount,
+    currency,
+    paymentExecutionEnabled: false,
+    status: 'invoice-preview',
+    disclaimer: 'No settlement. No payment provider call.',
+  }),
 };
 
 export const getMarketplaceBoundaryReadiness = () => {

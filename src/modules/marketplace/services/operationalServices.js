@@ -1,6 +1,17 @@
 import { marketplaceMock } from '@/data/mock';
 import { getMarketplaceProductById, getMarketplaceSeller } from './marketplaceService';
 import { RoyaltyService, StorageAccessService } from './boundaryAdapters';
+import {
+  BillingLifecycle,
+  LicenseLifecycle,
+  PurchaseLifecycle,
+  SubscriptionLifecycle,
+  getBillingLifecycle,
+  getLicenseLifecycle,
+  getPurchaseLifecycle,
+  getSubscriptionLifecycle,
+  buildLifecycleTimeline,
+} from '../utils/stateMachines';
 
 const protocolFeeBps = 250;
 
@@ -26,6 +37,12 @@ export const BillingPreviewService = {
       service: 'BillingPreviewService',
       orderId: order.id,
       product,
+      purchaseLifecycle: getPurchaseLifecycle(order),
+      purchaseTimeline: buildLifecycleTimeline(Object.values(PurchaseLifecycle), getPurchaseLifecycle(order)),
+      billingLifecycle: getBillingLifecycle(order),
+      billingTimeline: buildLifecycleTimeline(Object.values(BillingLifecycle), getBillingLifecycle(order)),
+      licenseLifecycle: getLicenseLifecycle(order),
+      licenseTimeline: buildLifecycleTimeline(Object.values(LicenseLifecycle), getLicenseLifecycle(order)),
       settlementEnabled: false,
       settlementMode: order.settlementMode,
       amount: order.amount,
@@ -35,8 +52,10 @@ export const BillingPreviewService = {
       royaltyAmount,
       sellerNet,
       treasuryDestination: order.treasuryDestination,
+      acceptedCurrencies: product?.acceptedCurrencies ?? [order.currency],
       status: blockedReasons.length ? 'review-required' : 'mock-clear',
       blockedReasons,
+      disclaimer: 'Invoice preview only. No settlement, no wallet transaction, no treasury execution.',
     };
   },
   getTreasuryRoutePreview: (route) => ({
@@ -68,12 +87,19 @@ export const SubscriptionLifecycleService = {
       subscriptionId: subscription.id,
       product,
       storage,
+      subscriptionLifecycle: getSubscriptionLifecycle(subscription),
+      subscriptionTimeline: buildLifecycleTimeline(Object.values(SubscriptionLifecycle), getSubscriptionLifecycle(subscription)),
+      billingLifecycle: getBillingLifecycle(subscription),
+      licenseLifecycle: getLicenseLifecycle(subscription),
       daysToReview,
       renewalEnabled: false,
+      pausePreviewEnabled: true,
+      cancellationPreviewEnabled: true,
       revocationPreviewEnabled: true,
       accessPreviewEnabled: Boolean(storage?.signedUrlPreviewAvailable && subscription.status !== 'restricted'),
       status: blockedReasons.length ? 'review-required' : 'mock-clear',
       blockedReasons,
+      disclaimer: 'Subscription lifecycle preview only. No recurring billing execution.',
     };
   },
 };

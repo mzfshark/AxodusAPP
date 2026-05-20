@@ -1,5 +1,12 @@
 import { marketplaceMock } from '@/data/mock';
 import { getMarketplaceLicenseForProduct, getMarketplaceProductById, getMarketplaceSeller } from './marketplaceService';
+import {
+  GovernanceValidationLifecycle,
+  ProductLifecycle,
+  buildLifecycleTimeline,
+  getGovernanceLifecycle,
+  getProductLifecycle,
+} from '../utils/stateMachines';
 
 const reviewLabels = {
   constitutional: 'Constitutional review',
@@ -40,6 +47,10 @@ export const GovernanceValidationService = {
       service: 'GovernanceValidationService',
       productId: product.id,
       seller,
+      productLifecycle: getProductLifecycle(product),
+      productTimeline: buildLifecycleTimeline(Object.values(ProductLifecycle), getProductLifecycle(product)),
+      governanceLifecycle: getGovernanceLifecycle(product),
+      governanceTimeline: buildLifecycleTimeline(Object.values(GovernanceValidationLifecycle), getGovernanceLifecycle(product)),
       standing: blockers.length ? 'review-required' : product.governanceStatus,
       activationEnabled: false,
       settlementAllowed: blockers.length === 0 && product.governanceStatus === 'compliant',
