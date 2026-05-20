@@ -96,7 +96,7 @@ describe('AxodusAPP Mining routes', () => {
 
     renderMiningRoute('/mining/vaults', '/mining/vaults', <MiningVaults />);
     expect(await screen.findByRole('heading', { name: /Mining Vaults/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/Core Treasury Hash Vault/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Fallback Conservative Mining Vault/i).length).toBeGreaterThan(0);
 
     renderMiningRoute('/mining/governance', '/mining/governance', <MiningGovernance />);
     expect(await screen.findByRole('heading', { name: /Governance Validation/i })).toBeInTheDocument();

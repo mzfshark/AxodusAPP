@@ -6,10 +6,13 @@ import {
   useAcsOperationalState,
   useAcsPolicyCheck,
   useAcsPolicyMatrix,
+  useAcsPerformanceRecords,
   useAcsProductAccess,
   useAcsReadiness,
+  useAcsReceipts,
   useAcsStatus,
-  useAcsTenantServices
+  useAcsTenantServices,
+  useAcsUserStatus
 } from '../hooks/useAcsData';
 
 const demoWallet = '0xlicensed';
@@ -114,8 +117,9 @@ export function AcsTenantServices() {
 
 export function AcsProducts() {
   const products = useAcsProductAccess(demoWallet);
-  if (products.isLoading) return <LoadingState />;
-  if (products.isError) return <ErrorState message={products.error?.message || 'Product access unavailable'} />;
+  const userStatus = useAcsUserStatus('0xexpired', { tenantId: demoTenant, productId: tradingIgnition });
+  if (products.isLoading || userStatus.isLoading) return <LoadingState />;
+  if (products.isError || userStatus.isError) return <ErrorState message="Product access unavailable" />;
 
   return (
     <AcsPageShell title="Product Access" description="Product eligibility, license requirements, blocked reasons and readiness state are read from ACS." query={products}>
@@ -138,6 +142,13 @@ export function AcsProducts() {
               <p className="mt-4 text-sm leading-6 text-outline">{product.blockedReason || 'Access is currently allowed by ACS mock policy.'}</p>
             </article>
           ))}
+        </div>
+      </AcsPanel>
+      <AcsPanel title="License Loss State" description="Blocked access is rendered from ACS user-status policy output.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <AcsMetric icon={acsIcons.BadgeCheck} label="License" value={userStatus.data?.license?.valid ? 'Valid' : 'Blocked'} detail={userStatus.data?.license?.blockedReason || 'License state supplied by ACS.'} />
+          <AcsMetric icon={acsIcons.Activity} label="Operational state" value={userStatus.data?.operationalState || 'unknown'} detail="State reflects readiness, license and policy context." />
+          <AcsMetric icon={acsIcons.ShieldCheck} label="Policy" value={userStatus.data?.policy?.allowed ? 'Allowed' : 'Blocked'} detail={userStatus.data?.policy?.blockedReason || userStatus.data?.policy?.automationLevel || 'Policy decision supplied by ACS.'} />
         </div>
       </AcsPanel>
     </AcsPageShell>
@@ -185,8 +196,15 @@ export function AcsPolicy() {
 export function AcsStatus() {
   const status = useAcsStatus(demoWallet);
   const operationalState = useAcsOperationalState(demoWallet);
-  if (status.isLoading || operationalState.isLoading) return <LoadingState />;
-  if (status.isError || operationalState.isError) return <ErrorState message="ACS status unavailable" />;
+  const userStatus = useAcsUserStatus(demoWallet, { tenantId: demoTenant, productId: tradingIgnition });
+  const stoppedStatus = useAcsUserStatus('0xstopped', { tenantId: demoTenant, productId: tradingIgnition });
+  const performance = useAcsPerformanceRecords();
+  const receipts = useAcsReceipts();
+  if (status.isLoading || operationalState.isLoading || userStatus.isLoading || stoppedStatus.isLoading || performance.isLoading || receipts.isLoading) return <LoadingState />;
+  if (status.isError || operationalState.isError || userStatus.isError || stoppedStatus.isError || performance.isError || receipts.isError) return <ErrorState message="ACS status unavailable" />;
+
+  const performanceRecords = performance.data?.records || [];
+  const receiptItems = receipts.data?.receipts || [];
 
   return (
     <AcsPageShell title="Operational Status" description="Operational state, mock environment and coordination notices are provided by ACS." query={status}>
@@ -198,6 +216,71 @@ export function AcsStatus() {
       <AcsPanel title="Notices">
         <div className="space-y-2">
           {(status.data?.notices || []).map((notice) => <p key={notice} className="text-sm text-outline">{notice}</p>)}
+        </div>
+      </AcsPanel>
+      <AcsPanel title="User Status Summary" description="A single ACS object for product readiness, license, API safety, risk, policy and emergency stop state.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <AcsMetric icon={acsIcons.BadgeCheck} label="License" value={userStatus.data?.license?.valid ? 'Valid' : 'Blocked'} detail={userStatus.data?.license?.licenseId || userStatus.data?.license?.blockedReason || 'License state from ACS.'} />
+          <AcsMetric icon={acsIcons.ShieldCheck} label="API safety" value={userStatus.data?.apiSafety?.status || 'unknown'} detail={(userStatus.data?.apiSafety?.warnings || [])[0] || 'Withdrawal disabled and IP permission expected.'} />
+          <AcsMetric icon={acsIcons.Gauge} label="Risk preset" value={userStatus.data?.risk?.preset || 'unknown'} detail={(userStatus.data?.risk?.warnings || [])[0] || 'Risk state from ACS.'} />
+        </div>
+      </AcsPanel>
+      <AcsPanel title="Emergency Stop Status" description="Emergency stop state is an ACS policy blocker, not a frontend override.">
+        <div className="flex flex-wrap gap-2">
+          <AcsBadge tone={stoppedStatus.data?.emergencyStop?.active ? 'blocked' : 'allowed'}>{stoppedStatus.data?.emergencyStop?.active ? 'emergency_stop_active' : 'no active stop'}</AcsBadge>
+          <AcsBadge tone="policy">{stoppedStatus.data?.policy?.automationLevel || 'blocked'}</AcsBadge>
+          <AcsBadge tone="warning">{stoppedStatus.data?.emergencyStop?.reason || 'mock emergency stop inspection'}</AcsBadge>
+        </div>
+      </AcsPanel>
+      <AcsPanel title="Performance Records" description="Mock/internal-validation records only. No return claim or live trading metric is represented.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {performanceRecords.map((record) => (
+            <article key={record.recordId} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold text-on-surface">{record.capabilityId}</p>
+                  <p className="mt-1 text-xs text-outline">{record.recordId}</p>
+                </div>
+                <AcsBadge tone="warning">{record.mode}</AcsBadge>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-outline">
+                <span>Trades: {record.tradeCount ?? 0}</span>
+                <span>Drawdown: {record.drawdown ?? 0}</span>
+                <span>Emergency stops: {record.emergencyStops ?? 0}</span>
+                <span>Preset: {record.preset || 'n/a'}</span>
+              </div>
+              <p className="mt-4 text-sm text-outline">{record.warnings?.[0]}</p>
+            </article>
+          ))}
+        </div>
+      </AcsPanel>
+      <AcsPanel title="Receipt Audit Preview" description="Receipts expose correlation, tenant, wallet, policy and telemetry metadata without secrets.">
+        <div className="space-y-3">
+          {receiptItems.map((receipt) => (
+            <article key={receipt.receiptId} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="text-sm font-bold text-on-surface">{receipt.actionType}</p>
+                  <p className="mt-1 text-xs text-outline">{receipt.receiptId} / {receipt.correlationId}</p>
+                </div>
+                <AcsBadge tone={receipt.policyDecision?.allowed ? 'allowed' : 'blocked'}>{receipt.policyDecision?.allowed ? 'allowed' : 'blocked'}</AcsBadge>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <AcsBadge>{receipt.consumptionLevel}</AcsBadge>
+                <AcsBadge>{receipt.tenantId || 'core'}</AcsBadge>
+                <AcsBadge>{receipt.wallet || 'no wallet'}</AcsBadge>
+                <AcsBadge tone="policy">{receipt.policyDecision?.automationLevel}</AcsBadge>
+              </div>
+            </article>
+          ))}
+        </div>
+      </AcsPanel>
+      <AcsPanel title="API Secret Safety" description="AxodusAPP must never receive, store or display exchange API secrets.">
+        <div className="flex flex-wrap gap-2">
+          <AcsBadge tone="blocked">no frontend secrets</AcsBadge>
+          <AcsBadge tone="warning">disable withdrawal</AcsBadge>
+          <AcsBadge tone="warning">use IP permission</AcsBadge>
+          <AcsBadge tone="policy">secretRef only</AcsBadge>
         </div>
       </AcsPanel>
     </AcsPageShell>
@@ -217,4 +300,3 @@ export function AcsReadiness() {
     </AcsPageShell>
   );
 }
-

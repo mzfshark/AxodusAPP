@@ -130,9 +130,18 @@ Default local API:
 
 - `VITE_MINING_API_URL=http://localhost:8787`
 
+Service contract:
+
+- Mining API responses must use the v1 envelope `{ data, meta, errors }`.
+- `meta.source` must be `mining-api`.
+- `meta.version` must be `v1`.
+- `meta.mock` must remain `true` while the MVP is read-only/mock-first.
+- `errors` must always be an array, including provider-not-found responses.
+- AxodusAPP components consume normalized adapter output from `src/modules/mining/services/miningServiceAdapter.js`, never raw envelopes.
+
 Fallback behavior:
 
-- Local Mining mock data may be used only when the API is unavailable or `VITE_MINING_USE_MOCKS=true`.
+- Minimal local Mining fallback data may be used only when the API is unavailable or `VITE_MINING_USE_MOCKS=true`.
 - When fallback is active, the UI must clearly show: `Using local mock fallback — Mining API unavailable.`
 
 Data ownership:
@@ -142,7 +151,7 @@ Data ownership:
 
 Boundaries:
 
-- Do not duplicate large Mining mock objects in AxodusAPP unless they are emergency fallback data.
+- Do not duplicate large Mining mock objects in AxodusAPP; fallback must stay minimal and clearly stale.
 - Do not add wallet claims, minting, staking, provider execution, treasury movement, or smart contract execution to the Mining UI during the read-only MVP.
 - Do not frame Mining as farming, staking, generic emissions, or APY-first yield.
 

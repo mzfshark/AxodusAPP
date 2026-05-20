@@ -94,6 +94,8 @@ describe('AxodusAPP ACS routes', () => {
     renderAcsRoute('/acs/products', '/acs/products', <AcsProducts />);
     expect(await screen.findByRole('heading', { name: /Product Access/i })).toBeInTheDocument();
     expect(screen.getByText(/product.trading-ignition/i)).toBeInTheDocument();
+    expect(screen.getByText(/License Loss State/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/license_expired/i).length).toBeGreaterThan(0);
 
     renderAcsRoute('/acs/policy', '/acs/policy', <AcsPolicy />);
     expect(await screen.findByRole('heading', { name: /Policy Visibility/i })).toBeInTheDocument();
@@ -113,6 +115,13 @@ describe('AxodusAPP ACS routes', () => {
 
     expect(await screen.findByRole('heading', { name: /Operational Status/i })).toBeInTheDocument();
     expect(screen.getByText(/No real execution, CEX API or automation is enabled/i)).toBeInTheDocument();
+    expect(screen.getByText(/User Status Summary/i)).toBeInTheDocument();
+    expect(screen.getByText(/Emergency Stop Status/i)).toBeInTheDocument();
+    expect(screen.getByText(/Performance Records/i)).toBeInTheDocument();
+    expect(screen.getByText(/Receipt Audit Preview/i)).toBeInTheDocument();
+    expect(screen.getByText(/API Secret Safety/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/disable withdrawal/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/use IP permission/i)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /^Products$/i })).not.toBeInTheDocument();
   });
 });

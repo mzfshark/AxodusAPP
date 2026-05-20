@@ -23,6 +23,7 @@ describe('ACS API client', () => {
       ok: true,
       json: async () => ({
         success: true,
+        correlationId: 'corr-test',
         timestamp: '2026-05-20T00:00:00.000Z',
         version: '0.1.0',
         data: {
@@ -45,7 +46,24 @@ describe('ACS API client', () => {
       allowed: false,
       blockedReason: 'license required'
     });
-    expect(getAcsMeta(result)).toMatchObject({ source: 'api', version: '0.1.0' });
+    expect(getAcsMeta(result)).toMatchObject({ source: 'api', version: '0.1.0', correlationId: 'corr-test' });
+  });
+
+  test('consumes user status summary and structured ACS errors', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        success: false,
+        correlationId: 'corr-error',
+        timestamp: '2026-05-20T00:00:00.000Z',
+        version: '0.1.0',
+        error: { code: 'bad_request', message: 'unknown ACS capability: product.unknown' }
+      })
+    })));
+
+    const result = await acsApi.getUserStatus('0xexpired', { tenantId: 'dao-alpha', productId: 'product.trading-ignition' });
+
+    expect(result.policy).toMatchObject({ allowed: false, blockedReason: 'license_expired' });
+    expect(getAcsMeta(result)).toMatchObject({ source: 'fallback' });
   });
 });
-

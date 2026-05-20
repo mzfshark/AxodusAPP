@@ -19,6 +19,7 @@ function attachMeta(data, meta) {
 function mockEnvelope(data) {
   return {
     success: true,
+    correlationId: 'corr_mock_frontend',
     timestamp: new Date().toISOString(),
     version: 'mock',
     data
@@ -70,6 +71,23 @@ function fallbackFor(path) {
     return mockEnvelope({ ...capability, capabilityId, allowed: capability.automationLevel !== 'blocked', warnings: [] });
   }
 
+  if (path.startsWith('/acs/user-status/')) {
+    const url = new URL(`${API_BASE}${path}`);
+    const wallet = decodeURIComponent(url.pathname.split('/').filter(Boolean)[2] || '0xunlicensed');
+    const productId = url.searchParams.get('productId') || 'product.trading-ignition';
+    const tenantId = url.searchParams.get('tenantId') || 'dao-alpha';
+    const base = wallet === '0xexpired' ? acsInspectionMock.blockedUserStatus : acsInspectionMock.userStatus;
+    return mockEnvelope({ ...base, wallet, tenantId, productId });
+  }
+
+  if (path === '/acs/performance-records') {
+    return mockEnvelope({ records: acsInspectionMock.performanceRecords });
+  }
+
+  if (path === '/acs/receipts') {
+    return mockEnvelope({ receipts: acsInspectionMock.receipts });
+  }
+
   if (path.startsWith('/acs/status/')) {
     return mockEnvelope({
       walletAddress: decodeURIComponent(path.split('/').pop()),
@@ -115,12 +133,13 @@ async function requestAcs(path) {
 
     const envelope = await response.json();
     if (!envelope.success) {
-      throw new Error(envelope.blockedReason || `ACS API rejected ${path}`);
+      throw new Error(envelope.error?.message || envelope.blockedReason || `ACS API rejected ${path}`);
     }
 
     return attachMeta(envelope.data, {
       source: 'api',
       apiBase: API_BASE,
+      correlationId: envelope.correlationId,
       timestamp: envelope.timestamp,
       version: envelope.version,
       warnings: envelope.warnings || []
@@ -149,14 +168,23 @@ export const acsApi = {
     return requestAcs(`/acs/product-access/${encodeURIComponent(walletAddress)}${productId ? `/${encodeURIComponent(productId)}` : ''}`);
   },
   getPolicyMatrix: () => requestAcs('/acs/policy-matrix'),
-  getPolicyCheck: ({ capabilityId, tenantId } = {}) => {
+  getPolicyCheck: ({ capabilityId, tenantId, walletAddress } = {}) => {
     const params = new URLSearchParams();
     if (capabilityId) params.set('capabilityId', capabilityId);
     if (tenantId) params.set('tenantId', tenantId);
+    if (walletAddress) params.set('wallet', walletAddress);
     return requestAcs(`/acs/policy-check?${params.toString()}`);
   },
   getStatus: (walletAddress) => requestAcs(`/acs/status/${encodeURIComponent(walletAddress || '0xunlicensed')}`),
   getReadiness: (walletAddress) => requestAcs(`/acs/readiness/${encodeURIComponent(walletAddress || '0xunlicensed')}`),
-  getOperationalState: (walletAddress) => requestAcs(`/acs/operational-state/${encodeURIComponent(walletAddress || '0xunlicensed')}`)
+  getOperationalState: (walletAddress) => requestAcs(`/acs/operational-state/${encodeURIComponent(walletAddress || '0xunlicensed')}`),
+  getUserStatus: (walletAddress, { tenantId, productId } = {}) => {
+    const params = new URLSearchParams();
+    if (tenantId) params.set('tenantId', tenantId);
+    if (productId) params.set('productId', productId);
+    const query = params.toString();
+    return requestAcs(`/acs/user-status/${encodeURIComponent(walletAddress || '0xunlicensed')}${query ? `?${query}` : ''}`);
+  },
+  getPerformanceRecords: () => requestAcs('/acs/performance-records'),
+  getReceipts: () => requestAcs('/acs/receipts')
 };
-

@@ -29,6 +29,21 @@ export function useAcsPolicyCheck(capabilityId, tenantId) {
   });
 }
 
+export function useAcsUserStatus(walletAddress, options = {}) {
+  return useQuery({
+    queryKey: ['acs', 'user-status', walletAddress || 'none', options.tenantId || 'none', options.productId || 'none'],
+    queryFn: () => acsApi.getUserStatus(walletAddress, options)
+  });
+}
+
+export function useAcsPerformanceRecords() {
+  return useQuery({ queryKey: ['acs', 'performance-records'], queryFn: acsApi.getPerformanceRecords });
+}
+
+export function useAcsReceipts() {
+  return useQuery({ queryKey: ['acs', 'receipts'], queryFn: acsApi.getReceipts });
+}
+
 export function useAcsStatus(walletAddress) {
   return useQuery({ queryKey: ['acs', 'status', walletAddress || 'none'], queryFn: () => acsApi.getStatus(walletAddress) });
 }
@@ -40,4 +55,3 @@ export function useAcsReadiness(walletAddress) {
 export function useAcsOperationalState(walletAddress) {
   return useQuery({ queryKey: ['acs', 'operational-state', walletAddress || 'none'], queryFn: () => acsApi.getOperationalState(walletAddress) });
 }
-

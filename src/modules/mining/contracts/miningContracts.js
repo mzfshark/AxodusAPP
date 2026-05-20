@@ -1,0 +1,243 @@
+import { z } from 'zod';
+
+export const MINING_API_VERSION = 'v1';
+
+export const apiErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+  path: z.string().optional(),
+  detail: z.unknown().optional()
+});
+
+export const apiMetaSchema = z.object({
+  source: z.literal('mining-api'),
+  version: z.literal(MINING_API_VERSION),
+  generatedAt: z.string(),
+  mock: z.literal(true)
+});
+
+export const apiEnvelopeSchema = (dataSchema) => z.object({
+  data: dataSchema,
+  meta: apiMetaSchema,
+  errors: z.array(apiErrorSchema)
+});
+
+const riskLevelSchema = z.enum(['low', 'medium', 'high', 'critical']);
+const governanceStandingSchema = z.enum([
+  'compliant',
+  'under-review',
+  'restricted',
+  'sanctioned',
+  'suspended',
+  'eligible',
+  'not-eligible',
+  'future-only'
+]);
+const dueDiligenceStatusSchema = z.enum(['approved', 'conditional', 'in-review', 'required', 'future-review']);
+
+export const miningSummarySchema = z.object({
+  totalProviders: z.number(),
+  activeMockProviders: z.number(),
+  treasuryExposureUsd: z.number(),
+  approvedProviders: z.number(),
+  highRiskProviders: z.number(),
+  nativeHashStatus: z.string()
+});
+
+export const miningProviderSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  providerType: z.string(),
+  primaryAsset: z.string(),
+  status: z.string(),
+  governanceStanding: governanceStandingSchema,
+  dueDiligenceStatus: dueDiligenceStatusSchema,
+  treasuryCompatible: z.boolean(),
+  supportedChains: z.array(z.string()).default([]),
+  supportedAssets: z.array(z.string()).default([]),
+  tokenizedHashModel: z.string().optional(),
+  custodyModel: z.string().optional(),
+  liquidityProfile: z.string().optional(),
+  operationalMaturity: z.string().optional(),
+  integrationReadiness: z.string().optional(),
+  apiAvailability: z.string().optional(),
+  complianceNotes: z.string().optional(),
+  publicStatus: z.string().optional(),
+  recommendedAllocationLimitPct: z.number().optional(),
+  allocationMode: z.string().optional(),
+  custodyAssumption: z.string().optional(),
+  rewardAccounting: z.string().optional(),
+  strategicNotes: z.string().optional(),
+  description: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional()
+}).passthrough();
+
+export const providerRiskProfileSchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  compositeScore: z.number().optional(),
+  riskLevel: riskLevelSchema,
+  counterpartyRisk: riskLevelSchema.optional(),
+  custodyRisk: riskLevelSchema,
+  liquidityRisk: riskLevelSchema,
+  operationalRisk: riskLevelSchema,
+  regulatoryRisk: riskLevelSchema.optional(),
+  transparencyRisk: riskLevelSchema.optional(),
+  smartContractRisk: riskLevelSchema.optional(),
+  marketVolatilityRisk: riskLevelSchema.optional(),
+  concentrationRisk: riskLevelSchema.optional(),
+  treasuryExposureLimitPct: z.number(),
+  warningFlags: z.array(z.string()).default([]),
+  governanceRecommendation: z.string().optional(),
+  explanation: z.string().optional(),
+  notes: z.string().optional()
+}).passthrough();
+
+export const providerLiquiditySchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  liquidityStatus: z.string(),
+  redemptionWindow: z.string(),
+  settlementAsset: z.string(),
+  marketAccess: z.string(),
+  liquidityNotes: z.string()
+}).passthrough();
+
+export const hashTokenSchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  symbol: z.string(),
+  name: z.string(),
+  chain: z.string(),
+  tokenStandard: z.string(),
+  status: z.string(),
+  transferability: z.string(),
+  treasuryEligible: z.boolean(),
+  notes: z.string()
+}).passthrough();
+
+export const hashAllocationSchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  vaultId: z.string(),
+  allocationName: z.string(),
+  allocationPct: z.number(),
+  notionalUsd: z.number(),
+  route: z.string(),
+  governanceStanding: governanceStandingSchema,
+  riskLevel: riskLevelSchema,
+  status: z.string()
+}).passthrough();
+
+export const miningVaultSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  slug: z.string(),
+  vaultType: z.string(),
+  targetExposureUsd: z.number(),
+  currentExposureUsd: z.number(),
+  reserveRatioPct: z.number().optional(),
+  maxProviderConcentrationPct: z.number(),
+  governanceStanding: governanceStandingSchema,
+  riskPolicy: z.string(),
+  description: z.string()
+}).passthrough();
+
+export const treasuryExposureSchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  vaultId: z.string(),
+  notionalUsd: z.number(),
+  exposurePct: z.number(),
+  reserveImpact: z.string(),
+  treasuryRoute: z.string(),
+  assetSymbol: z.string().optional(),
+  custodyModel: z.string().optional(),
+  approvedByGovernance: z.boolean(),
+  reviewStatus: dueDiligenceStatusSchema
+}).passthrough();
+
+export const governanceValidationSchema = z.object({
+  id: z.string(),
+  targetType: z.string(),
+  targetId: z.string(),
+  validationType: z.string(),
+  status: governanceStandingSchema,
+  reviewer: z.string(),
+  summary: z.string(),
+  reasonCodes: z.array(z.string()).default([]),
+  restrictionReasons: z.array(z.string()).default([])
+}).passthrough();
+
+export const providerDueDiligenceSchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  status: dueDiligenceStatusSchema,
+  legalReview: dueDiligenceStatusSchema,
+  technicalReview: dueDiligenceStatusSchema,
+  treasuryReview: dueDiligenceStatusSchema,
+  operationalReview: dueDiligenceStatusSchema,
+  documents: z.array(z.string()).default([]),
+  checklist: z.array(z.object({
+    item: z.string(),
+    status: dueDiligenceStatusSchema,
+    notes: z.string()
+  })).default([]),
+  blockerSummary: z.string()
+}).passthrough();
+
+export const miningReportSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  reportType: z.string(),
+  period: z.string(),
+  status: z.string(),
+  summary: z.string(),
+  sections: z.array(z.object({
+    title: z.string(),
+    findings: z.array(z.string())
+  })).default([]),
+  nextActions: z.array(z.string()).default([])
+}).passthrough();
+
+export const providerDetailsSchema = z.object({
+  provider: miningProviderSchema,
+  riskProfile: providerRiskProfileSchema.optional(),
+  liquidity: providerLiquiditySchema.optional(),
+  hashTokens: z.array(hashTokenSchema).default([]),
+  allocations: z.array(hashAllocationSchema).default([]),
+  dueDiligence: providerDueDiligenceSchema.optional(),
+  governanceValidations: z.array(governanceValidationSchema).default([]),
+  telemetry: z.object({
+    reportingStatus: z.string(),
+    apiAvailability: z.string(),
+    operationalMaturity: z.string(),
+    latestMockSignal: z.string()
+  }).passthrough()
+});
+
+export const treasurySummarySchema = z.object({
+  summary: miningSummarySchema,
+  totalExposureUsd: z.number(),
+  exposureByRiskLevel: z.record(z.string(), z.number()).default({}),
+  exposureByAsset: z.record(z.string(), z.number()).default({}),
+  exposureByCustodyModel: z.record(z.string(), z.number()).default({}),
+  diversification: z.object({
+    providerCount: z.number(),
+    largestProviderExposurePct: z.number(),
+    reserveRatioRange: z.array(z.object({
+      vaultId: z.string(),
+      reserveRatioPct: z.number()
+    })).default([])
+  }),
+  exposures: z.array(treasuryExposureSchema).default([]),
+  vaults: z.array(miningVaultSchema).default([])
+});
+
+export const riskSummarySchema = z.object({
+  riskProfiles: z.array(providerRiskProfileSchema).default([]),
+  liquidity: z.array(providerLiquiditySchema).default([]),
+  providerRiskMatrix: z.array(z.unknown()).default([])
+});

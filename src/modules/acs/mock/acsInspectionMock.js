@@ -1,5 +1,18 @@
 export const acsInspectionMock = {
-  health: { status: 'ok', mode: 'inspection', automation: 'disabled' },
+  health: {
+    status: 'ok',
+    mode: 'inspection',
+    automation: 'disabled',
+    hardening: {
+      apiVersioning: 'enabled',
+      responseEnvelope: 'enabled',
+      requestCorrelation: 'enabled',
+      schemaValidation: 'placeholder',
+      rateLimit: 'placeholder',
+      tenantAuth: 'placeholder',
+      observability: 'placeholder'
+    }
+  },
   capabilities: [
     { id: 'core.tenant-health-monitoring', name: 'Tenant Health Monitoring', category: 'governance', consumptionLevel: 'core', automationLevel: 'assisted', requiresGovernanceApproval: false, requiresTenantApproval: false, requiresUserLicense: false, telemetryRequired: true, receiptsRequired: true, tenantAccessAllowed: false, productAccessAllowed: false, coreOnly: true },
     { id: 'core.governance-alignment', name: 'Governance Alignment Check', category: 'governance', consumptionLevel: 'core', automationLevel: 'assisted', requiresGovernanceApproval: false, requiresTenantApproval: false, requiresUserLicense: false, telemetryRequired: true, receiptsRequired: true, tenantAccessAllowed: false, productAccessAllowed: false, coreOnly: true },
@@ -53,6 +66,89 @@ export const acsInspectionMock = {
     state: 'CERTIFIED',
     availableStates: ['UNINITIALIZED', 'LEARNING', 'CERTIFIED', 'LICENSED', 'API_PENDING', 'API_VALIDATED', 'RISK_RESTRICTED', 'READY', 'ACTIVE', 'PAUSED', 'EMERGENCY_STOP', 'SUSPENDED', 'REVOKED'],
     mode: 'mock'
-  }
+  },
+  userStatus: {
+    wallet: '0xlicensed',
+    tenantId: 'dao-alpha',
+    productId: 'product.trading-ignition',
+    operationalState: 'READY',
+    readiness: {
+      completed: ['wallet.connected', 'academy.completed', 'proof.validated', 'license.attached', 'risk.acknowledged', 'api.withdrawals.disabled'],
+      pending: [],
+      blocked: []
+    },
+    license: { valid: true, licenseId: 'mock-license-trading-ignition' },
+    apiSafety: {
+      status: 'warning',
+      warnings: ['Disable withdrawal permissions on the exchange API key.', 'Use IP permission/allowlist whenever the exchange supports it.']
+    },
+    risk: {
+      preset: 'conservative',
+      warnings: ['restricted/mock mode only', 'No real trading execution is enabled.']
+    },
+    policy: { allowed: true, automationLevel: 'manual_approval' },
+    emergencyStop: { active: false },
+    updatedAt: '2026-05-20T00:00:00.000Z'
+  },
+  blockedUserStatus: {
+    wallet: '0xexpired',
+    tenantId: 'dao-alpha',
+    productId: 'product.trading-ignition',
+    operationalState: 'RISK_RESTRICTED',
+    readiness: {
+      completed: ['wallet.connected'],
+      pending: ['academy.completed', 'proof.validated', 'license.attached'],
+      blocked: ['license_expired']
+    },
+    license: { valid: false, blockedReason: 'license_expired' },
+    apiSafety: {
+      status: 'warning',
+      warnings: ['Disable withdrawal permissions on the exchange API key.', 'Use IP permission/allowlist whenever the exchange supports it.']
+    },
+    risk: { preset: 'conservative', warnings: ['restricted/mock mode only'] },
+    policy: { allowed: false, blockedReason: 'license_expired', automationLevel: 'blocked' },
+    emergencyStop: { active: false },
+    updatedAt: '2026-05-20T00:00:00.000Z'
+  },
+  performanceRecords: [
+    {
+      recordId: 'perf_mock_trading_ignition_001',
+      tenantId: 'dao-alpha',
+      wallet: '0xlicensed',
+      capabilityId: 'product.trading-ignition',
+      strategyId: 'mock-grid-risk-check',
+      exchange: 'mock-exchange',
+      mode: 'internal-validation',
+      capitalUsed: 0,
+      realizedPnl: 0,
+      unrealizedPnl: 0,
+      drawdown: 0,
+      tradeCount: 0,
+      emergencyStops: 0,
+      preset: 'conservative',
+      warnings: ['mock record for UI validation only', 'no real trading execution or return claim is represented'],
+      createdAt: '2026-01-01T00:00:00.000Z'
+    }
+  ],
+  receipts: [
+    {
+      receiptId: 'receipt_mock_policy_check_001',
+      correlationId: 'corr_mock_policy_check_001',
+      tenantId: 'dao-alpha',
+      wallet: '0xlicensed',
+      consumptionLevel: 'product',
+      capabilityId: 'product.trading-ignition',
+      actionType: 'policy_check',
+      actor: { type: 'system', id: 'acs.inspection' },
+      policyDecision: {
+        allowed: true,
+        automationLevel: 'manual_approval',
+        requiresGovernanceApproval: true,
+        requiresUserLicense: true
+      },
+      operationalState: 'READY',
+      telemetry: { warnings: ['mock audit preview only'], riskFlags: [] },
+      createdAt: '2026-01-01T00:00:00.000Z'
+    }
+  ]
 };
-

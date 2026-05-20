@@ -128,11 +128,30 @@ pnpm dev
 
 AxodusAPP runs on `http://localhost:5174` by default and reads `VITE_MINING_API_URL=http://localhost:8787`.
 
+Required env:
+
+```bash
+VITE_MINING_API_URL=http://localhost:8787
+VITE_MINING_USE_MOCKS=false
+```
+
+Contract:
+- Mining API responses use the v1 envelope: `{ data, meta, errors }`.
+- `meta.source` is `mining-api`, `meta.version` is `v1`, `meta.mock` is `true`, and `meta.generatedAt` is an ISO timestamp.
+- AxodusAPP reads Mining through `src/modules/mining/services/miningServiceAdapter.js`; pages should not depend on raw API envelopes.
+- The local fallback is intentionally minimal and only supports safe offline visibility.
+
 Verification:
 - Open `/mining` to confirm the unified Mining overview loads from the Mining API.
 - Open `/mining/providers/luxor` to confirm provider detail data resolves through the backend.
 - Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
 - Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
+
+Troubleshooting:
+- Healthcheck: `curl http://localhost:8787/health`
+- Summary contract: `curl http://localhost:8787/api/mining/summary`
+- CORS must allow AxodusAPP local origin `http://localhost:5174`; add extra origins in Mining with `MINING_CORS_ORIGINS` when needed.
+- If the UI shows fallback, confirm the Mining backend is running before debugging frontend routes.
 
 ### ACS Operational Intelligence Integration
 

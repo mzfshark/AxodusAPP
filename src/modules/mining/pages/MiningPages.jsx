@@ -6,6 +6,7 @@ import {
   Badge,
   DiligenceBadge,
   EmptyState,
+  ErrorState,
   GovernanceBadge,
   LoadingState,
   MetricCard,
@@ -36,6 +37,7 @@ export function MiningOverview() {
   const allocations = useMiningAllocations();
 
   if (summary.isLoading || providers.isLoading || risk.isLoading || allocations.isLoading) return <LoadingState />;
+  if (summary.isError || providers.isError || risk.isError || allocations.isError) return <ErrorState message="Mining overview data is unavailable." />;
 
   const chartData = (allocations.data || []).map((allocation) => ({
     name: allocation.allocationName,
@@ -87,6 +89,7 @@ export function MiningProviders() {
   const risk = useMiningRisk();
 
   if (providers.isLoading || risk.isLoading) return <LoadingState />;
+  if (providers.isError || risk.isError) return <ErrorState message="Mining provider registry is unavailable." />;
 
   const selectClass = 'rounded-lg border border-white/10 bg-surface-container-low px-3 py-2 text-sm text-on-surface';
 
@@ -121,6 +124,7 @@ export function MiningProviderDetails() {
   const details = useMiningProvider(providerSlug);
 
   if (details.isLoading) return <LoadingState />;
+  if (details.isError) return <ErrorState message="Mining provider details are unavailable." />;
   if (!details.data) return <EmptyState message="Provider was not found in the Mining registry." />;
 
   const {
@@ -245,13 +249,15 @@ export function MiningHashTokens() {
   const tokens = useMiningHashTokens();
   const providers = useMiningProviders();
   if (tokens.isLoading || providers.isLoading) return <LoadingState />;
+  if (tokens.isError || providers.isError) return <ErrorState message="Mining hash token registry is unavailable." />;
+  const tokenList = tokens.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Hash Tokens" description="Observable tokenized hash products. No production contract addresses or execution flows are configured." />
       <Panel title="Tokenized Hash Registry">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {tokens.data.map((token) => {
-            const provider = providers.data.find((item) => item.id === token.providerId);
+          {tokenList.length ? tokenList.map((token) => {
+            const provider = (providers.data || []).find((item) => item.id === token.providerId);
             return (
               <article key={token.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
                 <div className="flex items-start justify-between gap-4">
@@ -266,7 +272,7 @@ export function MiningHashTokens() {
                 <p className="mt-4 text-xs leading-5 text-outline">{token.notes}</p>
               </article>
             );
-          })}
+          }) : <EmptyState message="No hash tokens are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -276,12 +282,14 @@ export function MiningHashTokens() {
 export function MiningVaults() {
   const vaults = useMiningVaults();
   if (vaults.isLoading) return <LoadingState />;
+  if (vaults.isError) return <ErrorState message="Mining vault data is unavailable." />;
+  const vaultList = vaults.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Mining Vaults" description="Vaults define mock allocation boundaries, concentration limits, and governance standing." />
       <Panel title="Vault Registry">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {vaults.data.map((vault) => (
+          {vaultList.length ? vaultList.map((vault) => (
             <article key={vault.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div><h2 className="text-lg font-bold text-on-surface">{vault.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{vault.description}</p></div>
@@ -294,7 +302,7 @@ export function MiningVaults() {
               </div>
               <p className="mt-4 text-xs leading-5 text-outline">{vault.riskPolicy}</p>
             </article>
-          ))}
+          )) : <EmptyState message="No Mining vaults are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -306,22 +314,26 @@ export function MiningAllocations() {
   const providers = useMiningProviders();
   const vaults = useMiningVaults();
   if (allocations.isLoading || providers.isLoading || vaults.isLoading) return <LoadingState />;
+  if (allocations.isError || providers.isError || vaults.isError) return <ErrorState message="Mining allocation data is unavailable." />;
+  const allocationList = allocations.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Allocations" description="Read-only mock allocation routes by provider, vault, governance standing, and risk level." />
-      <Panel title="Allocation Ledger" description={`Total mock notional: ${formatUsd(sumNotional(allocations.data))}`}>
+      <Panel title="Allocation Ledger" description={`Total mock notional: ${formatUsd(sumNotional(allocationList))}`}>
+        {allocationList.length ? (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-white/10 text-left text-sm">
             <thead><tr className="text-xs uppercase tracking-widest text-outline"><th className="px-3 py-3">Allocation</th><th className="px-3 py-3">Provider</th><th className="px-3 py-3">Vault</th><th className="px-3 py-3">Notional</th><th className="px-3 py-3">Governance</th><th className="px-3 py-3">Risk</th><th className="px-3 py-3">Status</th></tr></thead>
             <tbody className="divide-y divide-white/10">
-              {allocations.data.map((allocation) => {
-                const provider = providers.data.find((item) => item.id === allocation.providerId);
-                const vault = vaults.data.find((item) => item.id === allocation.vaultId);
+              {allocationList.map((allocation) => {
+                const provider = (providers.data || []).find((item) => item.id === allocation.providerId);
+                const vault = (vaults.data || []).find((item) => item.id === allocation.vaultId);
                 return <tr key={allocation.id}><td className="px-3 py-4 font-bold text-on-surface">{allocation.allocationName}</td><td className="px-3 py-4 text-outline">{provider?.name}</td><td className="px-3 py-4 text-outline">{vault?.name}</td><td className="px-3 py-4 font-bold text-on-surface">{formatUsd(allocation.notionalUsd)}</td><td className="px-3 py-4"><GovernanceBadge standing={allocation.governanceStanding} /></td><td className="px-3 py-4"><RiskBadge level={allocation.riskLevel} /></td><td className="px-3 py-4"><Badge>{allocation.status}</Badge></td></tr>;
               })}
             </tbody>
           </table>
         </div>
+        ) : <EmptyState message="No Mining allocations are available from the Mining service." />}
       </Panel>
     </main>
   );
@@ -331,6 +343,7 @@ export function MiningTreasury() {
   const treasury = useMiningTreasury();
   const providers = useMiningProviders();
   if (treasury.isLoading || providers.isLoading) return <LoadingState />;
+  if (treasury.isError || providers.isError) return <ErrorState message="Mining treasury data is unavailable." />;
   const totalExposure = treasury.data.totalExposureUsd ?? sumNotional(treasury.data.exposures || []);
   const groupedRisk = Object.entries(treasury.data.exposureByRiskLevel || {});
   const groupedAssets = Object.entries(treasury.data.exposureByAsset || {});
@@ -370,16 +383,18 @@ export function MiningRisk() {
   const risk = useMiningRisk();
   const providers = useMiningProviders();
   if (risk.isLoading || providers.isLoading) return <LoadingState />;
+  if (risk.isError || providers.isError) return <ErrorState message="Mining risk data is unavailable." />;
+  const riskProfiles = risk.data?.riskProfiles || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Risk Console" description="Provider risk is shown across counterparty, liquidity, custody, operational, regulatory, transparency, smart contract, volatility, and concentration dimensions." />
       <Panel title="Provider Risk Profiles">
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-          {risk.data.riskProfiles.map((profile) => {
-            const provider = providers.data.find((item) => item.id === profile.providerId);
-            const liquidity = risk.data.liquidity.find((item) => item.providerId === profile.providerId);
+          {riskProfiles.length ? riskProfiles.map((profile) => {
+            const provider = (providers.data || []).find((item) => item.id === profile.providerId);
+            const liquidity = (risk.data?.liquidity || []).find((item) => item.providerId === profile.providerId);
             return <article key={profile.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{profile.explanation || profile.notes}</p></div><RiskBadge level={profile.riskLevel} /></div><div className="mt-5 grid grid-cols-1 gap-2 text-sm md:grid-cols-3"><Badge>counterparty {profile.counterpartyRisk}</Badge><Badge>custody {profile.custodyRisk}</Badge><Badge>liquidity {profile.liquidityRisk}</Badge><Badge>operations {profile.operationalRisk}</Badge><Badge>regulatory {profile.regulatoryRisk}</Badge><Badge>transparency {profile.transparencyRisk}</Badge><Badge>contract {profile.smartContractRisk}</Badge><Badge>volatility {profile.marketVolatilityRisk}</Badge><Badge>concentration {profile.concentrationRisk}</Badge></div><p className="mt-4 text-sm text-outline">Score: <strong className="text-on-surface">{profile.compositeScore}</strong>. Treasury limit: <strong className="text-on-surface">{profile.treasuryExposureLimitPct}%</strong>. Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus}</strong>.</p><p className="mt-3 text-sm text-outline">{profile.governanceRecommendation}</p></article>;
-          })}
+          }) : <EmptyState message="No Mining risk profiles are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -389,11 +404,13 @@ export function MiningRisk() {
 export function MiningGovernance() {
   const validations = useMiningGovernance();
   if (validations.isLoading) return <LoadingState />;
+  if (validations.isError) return <ErrorState message="Mining governance validations are unavailable." />;
+  const validationList = validations.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Governance Validation" description="Mining provider exposure remains subordinate to governance review, treasury limits, and constitutional controls." />
       <Panel title="Validation Queue">
-        <div className="space-y-3">{validations.data.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div><div className="mt-4 grid grid-cols-1 gap-3 text-sm md:grid-cols-3"><Badge>{validation.providerWhitelistingStatus}</Badge><Badge>{validation.treasuryAllocationApprovalStatus}</Badge><Badge>pause {validation.emergencyPauseRecommendation}</Badge></div><p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>{validation.restrictionReasons?.length ? <p className="mt-2 text-xs text-outline">Restrictions: {validation.restrictionReasons.join(' / ')}</p> : null}</article>)}</div>
+        <div className="space-y-3">{validationList.length ? validationList.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div><div className="mt-4 grid grid-cols-1 gap-3 text-sm md:grid-cols-3"><Badge>{validation.providerWhitelistingStatus}</Badge><Badge>{validation.treasuryAllocationApprovalStatus}</Badge><Badge>pause {validation.emergencyPauseRecommendation}</Badge></div><p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>{validation.restrictionReasons?.length ? <p className="mt-2 text-xs text-outline">Restrictions: {validation.restrictionReasons.join(' / ')}</p> : null}</article>) : <EmptyState message="No governance validations are available from the Mining service." />}</div>
       </Panel>
     </main>
   );
@@ -403,15 +420,18 @@ export function MiningReports() {
   const reports = useMiningReports();
   const diligence = useMiningDiligence();
   if (reports.isLoading || diligence.isLoading) return <LoadingState />;
+  if (reports.isError || diligence.isError) return <ErrorState message="Mining reports are unavailable." />;
+  const reportList = reports.data || [];
+  const diligenceList = diligence.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Reports" description="Reporting focuses on treasury exposure, provider review, governance queues, and due diligence blockers." />
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Panel title="Mining Reports">
-          <div className="space-y-3">{reports.data.map((report) => <article key={report.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{report.title}</h2><p className="mt-1 text-sm leading-6 text-outline">{report.summary}</p></div><Badge>{report.status}</Badge></div><p className="mt-3 text-xs font-bold uppercase tracking-widest text-outline">{report.reportType} / {report.period}</p><div className="mt-4 space-y-3">{(report.sections || []).map((section) => <div key={section.title} className="rounded-md border border-white/10 bg-surface-container-low p-3"><p className="font-bold text-on-surface">{section.title}</p><ul className="mt-2 space-y-1 text-xs leading-5 text-outline">{(section.findings || []).map((finding) => <li key={finding}>{finding}</li>)}</ul></div>)}</div>{report.nextActions?.length ? <p className="mt-3 text-xs text-outline">Next actions: {report.nextActions.join(' / ')}</p> : null}</article>)}</div>
+          <div className="space-y-3">{reportList.length ? reportList.map((report) => <article key={report.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{report.title}</h2><p className="mt-1 text-sm leading-6 text-outline">{report.summary}</p></div><Badge>{report.status}</Badge></div><p className="mt-3 text-xs font-bold uppercase tracking-widest text-outline">{report.reportType} / {report.period}</p><div className="mt-4 space-y-3">{(report.sections || []).map((section) => <div key={section.title} className="rounded-md border border-white/10 bg-surface-container-low p-3"><p className="font-bold text-on-surface">{section.title}</p><ul className="mt-2 space-y-1 text-xs leading-5 text-outline">{(section.findings || []).map((finding) => <li key={finding}>{finding}</li>)}</ul></div>)}</div>{report.nextActions?.length ? <p className="mt-3 text-xs text-outline">Next actions: {report.nextActions.join(' / ')}</p> : null}</article>) : <EmptyState message="No Mining reports are available from the Mining service." />}</div>
         </Panel>
         <Panel title="Due Diligence Blockers">
-          <div className="space-y-3">{diligence.data.map((item) => <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><p className="font-bold text-on-surface">{item.providerId}</p><DiligenceBadge status={item.status} /></div><p className="mt-2 text-sm leading-6 text-outline">{item.blockerSummary}</p><p className="mt-3 text-xs text-outline">Documents: {item.documents.length ? item.documents.join(' / ') : 'not provided'}</p></article>)}</div>
+          <div className="space-y-3">{diligenceList.length ? diligenceList.map((item) => <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><p className="font-bold text-on-surface">{item.providerId}</p><DiligenceBadge status={item.status} /></div><p className="mt-2 text-sm leading-6 text-outline">{item.blockerSummary}</p><p className="mt-3 text-xs text-outline">Documents: {item.documents.length ? item.documents.join(' / ') : 'not provided'}</p></article>) : <EmptyState message="No due diligence records are available from the Mining service." />}</div>
         </Panel>
       </section>
     </main>
