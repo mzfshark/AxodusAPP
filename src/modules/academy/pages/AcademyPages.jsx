@@ -8,6 +8,7 @@ import {
   AcademyMetricCard,
   AcademyPanel,
   AcademyProgressBar,
+  AcademyStatePanel,
 } from '../components/AcademyUi';
 import { useAcademyCourse, useAcademyData, useAcademyPath } from '../hooks/useAcademyData';
 import { formatNeurons, getAcademyCourseTitle, getAcademyTutor } from '../services/academyService';
@@ -66,6 +67,30 @@ export function AcademyHome() {
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metrics.map((metric) => <AcademyMetricCard key={metric.label} {...metric} />)}
       </section>
+      <AcademyPanel title="MVP flow coverage" description="End-to-end mock flows that must remain clear before production contracts, treasury execution, or credential issuance are enabled.">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-white/10 text-left text-sm">
+            <thead>
+              <tr className="text-xs uppercase tracking-[0.16em] text-outline">
+                <th className="px-3 py-3">Flow</th>
+                <th className="px-3 py-3">Status</th>
+                <th className="px-3 py-3">Route</th>
+                <th className="px-3 py-3">Evidence</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {academy.flowCoverage.map((flow) => (
+                <tr key={flow.id}>
+                  <td className="px-3 py-4 font-bold text-on-surface">{flow.flow}</td>
+                  <td className="px-3 py-4"><AcademyBadge value={flow.status} /></td>
+                  <td className="px-3 py-4"><Link to={flow.route} className="font-mono text-xs text-primary hover:text-on-surface">{flow.route}</Link></td>
+                  <td className="px-3 py-4 text-outline">{flow.evidence}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </AcademyPanel>
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_1fr]">
         <AcademyPanel title="Featured courses">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -151,7 +176,14 @@ export function AcademyCourses() {
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {filteredCourses.map((course) => <AcademyCourseCard key={course.id} course={course} />)}
       </section>
-      {!filteredCourses.length && <AcademyEmptyState message="No Academy courses match the active filters. Clear filters or use the contextual sidebar to broaden discovery." />}
+      {!filteredCourses.length && (
+        <AcademyStatePanel
+          state="empty"
+          title="No courses found"
+          message={academy.uiStates.noCourses}
+          action={<Link to="/academy/courses" className="rounded-lg bg-primary px-4 py-2 text-sm font-bold text-on-primary">Clear filters</Link>}
+        />
+      )}
     </main>
   );
 }
@@ -162,7 +194,7 @@ export function AcademyCourseDetails() {
   const academy = useAcademyData();
 
   if (!details) {
-    return <AcademyEmpty title="Course not found" message="This course is not present in the Academy mock registry." />;
+    return <AcademyEmpty title="Course unavailable" message="This course is not present in the Academy mock registry or is unavailable in this MVP preview." />;
   }
 
   const { course, tutor, lessons, rewards } = details;
@@ -442,6 +474,10 @@ export function AcademyDashboard() {
           </div>
         </AcademyPanel>
       </section>
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <AcademyStatePanel state="loading" title="Mock loading state" message={academy.uiStates.mockLoading} />
+        <AcademyStatePanel state="error" title="Mock error state" message={academy.uiStates.mockError} />
+      </section>
     </main>
   );
 }
@@ -606,6 +642,7 @@ export function AcademyRewards() {
           <Info label="Treasury-backed incentives" value={academy.rewardTreasury.treasuryBackedIncentives} />
         </dl>
       </AcademyPanel>
+      {!academy.rewards.length && <AcademyStatePanel state="empty" title="No rewards yet" message={academy.uiStates.noRewards} />}
       <RewardClass title="Locked Rewards" description="Free Course to Locked $NEURONS. Internal ecosystem utility only." rewards={lockedRewards} />
       <RewardClass title="Unlocked Rewards" description="Paid Course to Unlocked $NEURONS. Future wallet-compatible distribution after approvals." rewards={unlockedRewards} />
       <AcademyPanel title="Pending milestones" description="Pending reward milestones remain blocked until progress, PoK, ACS, treasury, or governance conditions are satisfied.">
@@ -631,6 +668,7 @@ export function AcademyCertifications() {
   return (
     <main className="app-view-shell space-y-8">
       <AcademyHeader title="Certification Viewer" description="Mock credentials with PoK proof hash and governance validation visibility. No NFT credential is issued." />
+      {!academy.certificates.length && <AcademyStatePanel state="empty" title="No certifications yet" message={academy.uiStates.noCertifications} />}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {academy.certificates.map((certificate) => (
           <AcademyPanel key={certificate.id}>
@@ -834,14 +872,6 @@ function RewardClass({ title, description, rewards }) {
         ))}
       </div>
     </AcademyPanel>
-  );
-}
-
-function AcademyEmptyState({ message }) {
-  return (
-    <section className="rounded-lg border border-dashed border-white/15 bg-surface-container-low p-6 text-sm leading-6 text-outline">
-      {message}
-    </section>
   );
 }
 

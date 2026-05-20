@@ -37,7 +37,12 @@ describe('Marketplace operational services', () => {
     expect(readiness.service).toBe('PublisherReadinessService');
     expect(readiness.publishEnabled).toBe(false);
     expect(readiness.mockReady).toBe(false);
-    expect(readiness.blockedReasons).toEqual(expect.arrayContaining(['seller-warning', 'seller-treasury-not-linked']));
+    expect(readiness.targetRegistry).toBe('DAO plugin license registry');
+    expect(readiness.escalationTarget).toBe('ACS Plugin Audit');
+    expect(readiness.checklist.map((item) => item.label)).toEqual(
+      expect.arrayContaining(['Metadata package', 'Seller standing', 'Treasury link', 'Product standing', 'Publish execution']),
+    );
+    expect(readiness.blockedReasons).toEqual(expect.arrayContaining(['seller-warning', 'seller-treasury-not-linked', 'product-restricted']));
   });
 
   test('summarizes billing, subscription, treasury, and publisher review queues', () => {
@@ -46,6 +51,8 @@ describe('Marketplace operational services', () => {
     expect(summary.billingReviewRequired).toBeGreaterThan(0);
     expect(summary.subscriptionsReviewRequired).toBeGreaterThan(0);
     expect(summary.publisherBlocked).toBeGreaterThan(0);
+    expect(summary.publisherReady).toBeGreaterThan(0);
+    expect(summary.publisherChecklistItems).toBe(marketplaceMock.publisherQueue.length * 5);
     expect(summary.treasuryReviewRequired).toBeGreaterThan(0);
   });
 });

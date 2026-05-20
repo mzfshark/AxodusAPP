@@ -81,18 +81,59 @@ export const SubscriptionLifecycleService = {
 export const PublisherReadinessService = {
   getTaskReadiness: (task) => {
     const seller = getMarketplaceSeller(task.sellerId);
+    const product = getMarketplaceProductById(task.productId);
     const blockedReasons = [
       task.blocker,
+      product?.governanceStatus === 'restricted' ? 'product-restricted' : null,
+      product?.acsValidationState !== 'validated' ? `acs-${product?.acsValidationState}` : null,
       seller?.governanceStanding !== 'verified' ? `seller-${seller?.governanceStanding}` : null,
       seller?.treasuryLinked ? null : 'seller-treasury-not-linked',
     ].filter(Boolean);
+    const checklist = [
+      {
+        id: `${task.id}-metadata`,
+        label: 'Metadata package',
+        status: task.metadataState === 'ready' ? 'mock-clear' : 'pending-validation',
+        detail: task.metadataState,
+      },
+      {
+        id: `${task.id}-seller`,
+        label: 'Seller standing',
+        status: seller?.governanceStanding === 'verified' ? 'mock-clear' : 'review-required',
+        detail: seller?.governanceStanding ?? 'unknown',
+      },
+      {
+        id: `${task.id}-treasury`,
+        label: 'Treasury link',
+        status: seller?.treasuryLinked ? 'mock-clear' : 'review-required',
+        detail: seller?.treasuryLinked ? 'linked' : 'not linked',
+      },
+      {
+        id: `${task.id}-product`,
+        label: 'Product standing',
+        status: product?.governanceStatus === 'compliant' ? 'mock-clear' : 'review-required',
+        detail: product?.governanceStatus ?? 'unknown',
+      },
+      {
+        id: `${task.id}-execution`,
+        label: 'Publish execution',
+        status: 'deferred',
+        detail: 'disabled in MVP',
+      },
+    ];
 
     return {
       service: 'PublisherReadinessService',
       taskId: task.id,
       seller,
+      product,
       publishEnabled: false,
       mockReady: blockedReasons.length === 0,
+      targetRegistry: task.targetRegistry,
+      publishingScope: task.publishingScope,
+      escalationTarget: task.escalationTarget,
+      metadataState: task.metadataState,
+      checklist,
       requiredReviews: task.requiredReviews.map((review) => ({
         id: `${task.id}-${review}`,
         label: review,
@@ -117,6 +158,8 @@ export function getMarketplaceOperationalSummary() {
     billingReviewRequired: orderPreviews.filter((preview) => preview.status === 'review-required').length,
     subscriptionsReviewRequired: subscriptionPreviews.filter((preview) => preview.status === 'review-required').length,
     publisherBlocked: publisherPreviews.filter((preview) => preview.blockedReasons.length > 0).length,
+    publisherReady: publisherPreviews.filter((preview) => preview.mockReady).length,
+    publisherChecklistItems: publisherPreviews.reduce((sum, preview) => sum + preview.checklist.length, 0),
     treasuryReviewRequired: treasuryPreviews.filter((preview) => preview.status === 'review-required').length,
   };
 }

@@ -23,6 +23,8 @@ export const marketplaceTone = {
   'mock-issued': 'border-emerald-400/25 bg-emerald-500/10 text-emerald-100',
   'mock-clear': 'border-emerald-400/25 bg-emerald-500/10 text-emerald-100',
   'review-required': 'border-yellow-400/25 bg-yellow-500/10 text-yellow-100',
+  'draft-created': 'border-emerald-400/25 bg-emerald-500/10 text-emerald-100',
+  'requires-governance-review': 'border-yellow-400/25 bg-yellow-500/10 text-yellow-100',
   blocked: 'border-red-400/25 bg-red-500/10 text-red-100',
 };
 

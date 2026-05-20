@@ -27,6 +27,27 @@ export function AcademyPanel({ title, description, action, children }) {
   );
 }
 
+export function AcademyStatePanel({ title, message, state = 'info', action }) {
+  const stateClass = {
+    empty: 'border-white/15 bg-surface-container-low text-outline',
+    loading: 'border-sky-400/20 bg-sky-500/10 text-sky-100',
+    error: 'border-rose-400/25 bg-rose-500/10 text-rose-100',
+    info: 'border-white/10 bg-surface-container-low text-outline',
+  }[state] || 'border-white/10 bg-surface-container-low text-outline';
+
+  return (
+    <section className={`rounded-lg border p-5 ${stateClass}`}>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 className="text-base font-black text-on-surface">{title}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6">{message}</p>
+        </div>
+        {action}
+      </div>
+    </section>
+  );
+}
+
 export function AcademyMetricCard({ icon: Icon, label, value, detail }) {
   return (
     <article className="rounded-lg border border-white/10 bg-surface-container-low p-5">

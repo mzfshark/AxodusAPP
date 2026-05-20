@@ -3,6 +3,7 @@ import { marketplaceMock } from '../../src/data/mock';
 import {
   AuctionService,
   LayerZeroBridgeService,
+  ListingDraftService,
   MarketplaceContractAdapter,
   RoyaltyService,
   StorageAccessService,
@@ -60,6 +61,69 @@ describe('Marketplace boundary adapters', () => {
         'AuctionService',
         'StorageAccessService',
         'LayerZeroBridgeService',
+      ]),
+    );
+  });
+
+  test('previews create/sell listing drafts with metadata, auction, and governance readiness', async () => {
+    const input = {
+      title: 'Mock ERC1155 certification bundle',
+      description: 'Mock create/sell payload for an Academy certification bundle.',
+      tokenStandard: 'ERC1155',
+      listingType: 'english-auction',
+      chain: 'Polygon',
+      price: 80,
+      currency: 'USDC',
+      royaltyBps: 700,
+      reservePrice: 60,
+      durationDays: 7,
+      quantity: 25,
+      metadataUri: 'ipfs://mock-academy-certification',
+      deliveryType: 'Greenfield',
+      treasuryDestination: 'Academy DAO / Tutor Revenue Split',
+      governanceReviewRequired: true,
+    };
+
+    const result = await MarketplaceContractAdapter.createDraftListing(input);
+    const draft = ListingDraftService.getDraftReadiness(input);
+    const auction = AuctionService.previewForListingInput(input);
+
+    expect(result.preview.contractPayload.tokenStandard).toBe('ERC1155');
+    expect(result.preview.contractPayload.quantity).toBe(25);
+    expect(result.preview.contractPayload.settlementEnabled).toBe(false);
+    expect(draft.service).toBe('ListingDraftService');
+    expect(draft.draftStatus).toBe('requires-governance-review');
+    expect(draft.contractWriteEnabled).toBe(false);
+    expect(draft.blockers).toEqual([]);
+    expect(draft.requiredReviews).toEqual(expect.arrayContaining(['constitutional-review', 'auction-parameter-review', 'storage-access-review']));
+    expect(auction.auctionEnabled).toBe(true);
+    expect(auction.reservePrice).toBe(60);
+  });
+
+  test('blocks invalid ERC721 listing drafts before publisher handoff', () => {
+    const draft = ListingDraftService.getDraftReadiness({
+      title: '',
+      description: '',
+      tokenStandard: 'ERC721',
+      listingType: 'fixed',
+      price: 0,
+      royaltyBps: 1200,
+      quantity: 3,
+      metadataUri: '',
+      deliveryType: 'Dashboard Access',
+      governanceReviewRequired: false,
+    });
+
+    expect(draft.draftStatus).toBe('blocked');
+    expect(draft.publishEnabled).toBe(false);
+    expect(draft.blockers).toEqual(
+      expect.arrayContaining([
+        'title-required',
+        'description-required',
+        'metadata-uri-required',
+        'price-required',
+        'royalty-bps-out-of-policy',
+        'erc721-quantity-must-be-one',
       ]),
     );
   });
