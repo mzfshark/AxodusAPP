@@ -38,6 +38,7 @@ import {
 } from "./modules/mining";
 import {
   MarketplaceCreateSell,
+  MarketplaceAssetGallery,
   MarketplaceDashboard,
   MarketplaceExplore,
   MarketplaceGovernance,
@@ -99,6 +100,7 @@ const router = createBrowserRouter([
       { path: "mining/reports", element: <MiningReports /> },
       { path: "marketplace", element: <MarketplaceHome /> },
       { path: "marketplace/explore", element: <MarketplaceExplore /> },
+      { path: "marketplace/assets", element: <MarketplaceAssetGallery /> },
       { path: "marketplace/listings", element: <MarketplaceListings /> },
       { path: "marketplace/create", element: <MarketplaceCreateSell /> },
       { path: "marketplace/sell", element: <MarketplaceCreateSell /> },

@@ -1,5 +1,6 @@
 export { default as MarketplaceHome } from './pages/MarketplaceHome';
 export { default as MarketplaceExplore } from './pages/MarketplaceExplore';
+export { default as MarketplaceAssetGallery } from './pages/MarketplaceAssetGallery';
 export { default as MarketplaceListings } from './pages/MarketplaceListings';
 export { default as MarketplaceProductDetail } from './pages/MarketplaceProductDetail';
 export { default as MarketplaceCreateSell } from './pages/MarketplaceCreateSell';

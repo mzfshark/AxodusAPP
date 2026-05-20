@@ -135,7 +135,7 @@ Current priority: Governance contextual sidebar controls, DAO Tenant detail work
 - Create Subscription management — 52%; `/marketplace/subscriptions` exposes mock lifecycle, renewal review, governance standing, access scope, treasury destination, SubscriptionLifecycleService readiness, revocation preview, access preview state, and blocked reasons without renewal execution.
 - Create Billing interface — 52%; `/marketplace/orders` and `/marketplace/treasury` expose BillingPreviewService settlement previews, protocol fee preview, royalty preview, seller net, accounting hooks, treasury route review, blocked reasons, and disabled execution boundaries without payment execution.
 - Create Publisher console — 50%; `/marketplace/publisher` exposes PublisherReadinessService seller task queue, required reviews, seller standing blockers, treasury link blockers, metadata/plugin blockers, and publish readiness without live publishing.
-- Create Asset gallery — 35%; product cards and item detail pages now consume centralized mock marketplace data.
+- Create Asset gallery — 58%; `/marketplace/assets` exposes an operational asset gallery for ERC721, ERC1155 and offchain license assets, with URL token-standard filtering, treasury/ACS/chain metadata, seller standing, Greenfield signed URL readiness and LayerZero bridge readiness from centralized mock marketplace data.
 
 ---
 

@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { FilePlus2, Landmark, LayoutDashboard, LibraryBig, ListChecks, PackageCheck, Repeat2, ShieldCheck, Tags, UploadCloud, WalletCards } from 'lucide-react';
+import { FilePlus2, Images, Landmark, LayoutDashboard, LibraryBig, ListChecks, PackageCheck, Repeat2, ShieldCheck, Tags, UploadCloud, WalletCards } from 'lucide-react';
 
 const items = [
   { to: '/marketplace', label: 'Home', icon: LayoutDashboard, end: true },
   { to: '/marketplace/explore', label: 'Explore', icon: Tags },
+  { to: '/marketplace/assets', label: 'Assets', icon: Images },
   { to: '/marketplace/listings', label: 'Listings', icon: ListChecks },
   { to: '/marketplace/create', label: 'Create/Sell', icon: FilePlus2 },
   { to: '/marketplace/orders', label: 'Orders', icon: PackageCheck },
