@@ -3,12 +3,24 @@ import { Link, useParams } from 'react-router-dom';
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import MarketplaceBadge from '../components/MarketplaceBadge';
 import PurchasePreviewModal from '../components/PurchasePreviewModal';
+import {
+  AuctionService,
+  LayerZeroBridgeService,
+  MarketplaceContractAdapter,
+  RoyaltyService,
+  StorageAccessService,
+} from '../services/boundaryAdapters';
 import { getMarketplaceProduct, getMarketplaceSeller } from '../services/marketplaceService';
 
 export default function MarketplaceProductDetail() {
   const { slug } = useParams();
   const product = getMarketplaceProduct(slug);
   const seller = product ? getMarketplaceSeller(product.sellerId) : null;
+  const executionBoundary = product ? MarketplaceContractAdapter.getExecutionBoundary(product) : null;
+  const royaltyPreview = product ? RoyaltyService.previewForProduct(product) : null;
+  const auctionState = product ? AuctionService.getAuctionState(product) : null;
+  const storageAccess = product ? StorageAccessService.getAccessModel(product) : null;
+  const bridgeReadiness = product ? LayerZeroBridgeService.getReadiness(product) : null;
   const [purchaseOpen, setPurchaseOpen] = useState(false);
 
   if (!product) {
@@ -36,6 +48,8 @@ export default function MarketplaceProductDetail() {
             <Info label="Royalty" value={`${product.royaltyModel.bps / 100}% ${product.royaltyModel.standard}`} />
             <Info label="Delivery" value={product.deliveryType} />
             <Info label="Access" value={product.accessModel} />
+            <Info label="DAO owner" value={product.daoOwner} />
+            <Info label="Risk" value={product.operationalRisk} />
             <Info label="Contract" value={product.contractAddress ?? 'mock offchain'} />
             <Info label="Token ID" value={product.tokenId ?? 'not minted'} />
           </dl>
@@ -49,14 +63,39 @@ export default function MarketplaceProductDetail() {
           {seller && <Link to={`/marketplace/sellers/${seller.id}`} className="font-bold text-primary">{seller.name}</Link>}
           {seller && <p className="mt-2 text-outline">Standing: {seller.governanceStanding} / reputation {seller.reputation}</p>}
         </Panel>
+        <Panel title="Treasury destination">
+          <p className="font-mono">{product.treasuryDestination}</p>
+          <p className="mt-2">Settlement mode: {product.pricing.settlementMode}</p>
+          <p>Royalty recipient: {royaltyPreview.recipient}</p>
+          <p>Royalty service: {royaltyPreview.standard} / {royaltyPreview.bps} bps</p>
+        </Panel>
+        <Panel title="ACS validation">
+          <p>State: {product.acsValidationState}</p>
+          <p>Operational risk: {product.operationalRisk}</p>
+          <p>Execution type: {product.executionType}</p>
+        </Panel>
+        <Panel title="Contract adapter">
+          <p>Adapter: {executionBoundary.adapter}</p>
+          <p>Mode: {executionBoundary.mode}</p>
+          <p>Settlement enabled: {executionBoundary.settlementEnabled ? 'yes' : 'no'}</p>
+          <p>Guardrails: {executionBoundary.guardrails.join(', ')}</p>
+        </Panel>
+        <Panel title="Auction service">
+          <p>Status: {auctionState.status}</p>
+          <p>Bid enabled: {auctionState.bidEnabled ? 'yes' : 'no'}</p>
+          <p>Minimum bid: {auctionState.minimumBid ?? 'not applicable'}</p>
+          <p>Bridge or settlement execution: disabled</p>
+        </Panel>
         <Panel title="Greenfield delivery">
-          <p>Bucket: {product.greenfieldBucket ?? 'not required'}</p>
-          <p>Signed URL preview: {product.signedUrlPreviewAvailable ? 'available after mock purchase' : 'not available'}</p>
+          <p>Bucket: {storageAccess.greenfieldBucket ?? 'not required'}</p>
+          <p>Delivery: {storageAccess.deliveryType}</p>
+          <p>Signed URL preview: {storageAccess.signedUrlPreviewAvailable ? 'available after mock purchase' : 'not available'}</p>
         </Panel>
         <Panel title="LayerZero readiness">
-          <p>Ready: {product.bridgeReadiness.layerZeroReady ? 'yes' : 'no'}</p>
-          <p>Source: {product.bridgeReadiness.sourceChain}</p>
-          <p>Destinations: {product.bridgeReadiness.destinationChains.join(', ') || 'none'}</p>
+          <p>Ready: {bridgeReadiness.ready ? 'yes' : 'no'}</p>
+          <p>Source: {bridgeReadiness.sourceChain}</p>
+          <p>Destinations: {bridgeReadiness.destinationChains.join(', ') || 'none'}</p>
+          <p>Bridge execution: {bridgeReadiness.bridgeExecutionEnabled ? 'enabled' : 'disabled'}</p>
         </Panel>
       </section>
       {purchaseOpen && <PurchasePreviewModal product={product} onClose={() => setPurchaseOpen(false)} />}

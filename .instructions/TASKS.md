@@ -6,17 +6,17 @@ Last updated: 2026-05-19
 
 Overall AxodusAPP completion: 36%
 
-Current priority: DAO Tenant detail workspace, DAO Federation Marketplace landing, DAO Tenant Operations Center, createProposal indexer reconciliation readiness, indexed Constitutional Layer source records, and BBA MVP visual QA.
+Current priority: Governance contextual sidebar controls, DAO Tenant detail workspace, DAO Tenant Operations Center, createProposal indexer reconciliation readiness, indexed Constitutional Layer source records, and BBA MVP visual QA.
 
 ### Module Progress
 
-- Governance module: 90%
+- Governance module: 95%
 - Governance createProposal flow: 86%
 - Governance proposal detail/execution UI: 74%
 - Governance registry/standing/guardrail observability: 90%
 - Wallet integration surface: 65%
-- Layout/app shell foundation: 58%
-- Shared UI foundation: 36%
+- Layout/app shell foundation: 59%
+- Shared UI foundation: 38%
 - State architecture: 38%
 - Testing foundation: 45%
 - Security UX foundation: 48%
@@ -68,7 +68,7 @@ Current priority: DAO Tenant detail workspace, DAO Federation Marketplace landin
 - Create App Shell — 70%
 - Create Public Layout — 58%
 - Create Authenticated Layout — 58%
-- Create Sidebar — 56%
+- Create Sidebar — 58%; Governance now supports contextual DAO Tenant filters below the Governance navigation only on `/governance/tenants`
 - Create Topbar — 54%
 - Create Mobile Navigation — 42%
 - Create Notification Center — 18%
@@ -78,10 +78,10 @@ Current priority: DAO Tenant detail workspace, DAO Federation Marketplace landin
 
 ## Governance Tasks
 
-- Create Governance public landing — 93%; `/governance` now behaves as a DAO Federation Marketplace and public economic onboarding layer with Featured DAO Tenants, CORE APR baseline, APR-vs-CORE comparison, treasury TVL, risk, supported products, chains, federation status, authenticated My DAO Tenants allocation visibility, clickable tenant detail entry points, compact governance status, Root DAO overview, DAO federation map, topology and Constitutional Layer without wallet requirement, with route smoke coverage
+- Create Governance public landing — 95%; `/governance` is now visually positioned as Governance Overview with executive metrics only: total TVL, DAO Tenants, CORE APR, open proposals, recently finalized proposals, federal treasury status, active chains, governance health and constitutional standing; it uses distinct metric/status/featured tenant card variants, shows only three featured tenant previews selected by mock/admin fields and links deeper discovery to `/governance/tenants`
 - Create Governance dashboard — 89%; protected `/governance/console` consumes backend chain registry with fallback PoC data and renders the selected DAO as a tenant operations account with Constitutional Layer, governance health, treasury execution, proposal activity, products, agents, operations and receipts context
 - Create Governance DAO context selector — 76%; console models Axodus Constitutional Governance plus Local Governance contexts for indexed sub-DAOs
-- Create DAO explorer — 74%; console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins, proposal readiness and selected DAO Constitutional Layer state
+- Create DAO explorer — 75%; console exposes a Sub-DAO Explorer for constitutional authority, local governance autonomy, chain roles, capabilities, plugins, proposal readiness and selected DAO Constitutional Layer state
 - Create proposal list shell — 80%; console shows real indexed proposals when available, links rows into proposal detail, and keeps an explicit empty state otherwise
 - Add governance dev proposal fixtures — 88%; development-only mock proposals allow proposal detail, guardrail observability and transaction preview testing before live proposals are indexed
 - Create proposal list — 90%; supports search, status filters, proposal metadata, dev mock labels, direct links into proposal detail, local proposal drafts, request inspection, review/submit states, local mock receipts, backend review-queued receipts, selected DAO/chain scoped backend review receipt visibility, backend storage/source metadata, backend submission error/retry display with backend reason metadata, mode-aware submit labels, modal-level integration state, plugin-specific createProposal adapter metadata, createProposal Constitutional Layer context, observed governance sources for registry/DAO/plugin/treasury policy, env-gated backend submission, and smoke-tested modal draft generation
@@ -98,9 +98,9 @@ Current priority: DAO Tenant detail workspace, DAO Federation Marketplace landin
 - Evolve Governance Operations Center — 91%; `/governance/console` is repositioned as a DAO Tenant Operations Center with operations readiness visibility for registry, selected tenant context, Constitutional Layer, governance health, treasury execution, proposal activity, treasury status, enabled products, assigned agents, proposals, plugins, local drafts, proposal creation state, selected-context backend createProposal review receipt listing with storage mode/source metadata, reusable createProposal integration status panel, observed source metadata, and smoke-tested route/modal flow
 - Add Constitutional Guardrail observability — 86%; registry summary exposes active reason codes with severity, source, scope, network, createProposal request context, observed registry/DAO/plugin/treasury policy sources, and constitutional execution model metadata for console rendering
 - Add selected governance context guardrails — 74%; console exposes reason codes and observed source metadata affecting selected DAO and chain context separately from global registry guardrails
-- Add DAO tenant account model — 58%; `/governance/console` now renders selected SubDAO/root DAO as an operational tenant account with profile, standing, local governance model, treasury policy status, products, agents, active proposals, pending operations, execution receipts and tenant reason codes; `/governance` now exposes tenant DAOs as discoverable economic organizations with mock-driven treasury/APR/allocation metadata; `/governance/dao/:daoId` exposes a public tenant detail workspace with strategy, treasury allocation, APR/performance, risk metrics, products, chains, agents and constitutional observability boundaries; backend exposes `/v2/governance/tenants` and now attempts to derive tenant accounts from indexed DAO registry records before falling back to bootstrap tenant fixtures
+- Add DAO tenant account model — 78%; `/governance/console` now renders selected SubDAO/root DAO as an operational tenant account with profile, standing, local governance model, treasury policy status, products, agents, active proposals, pending operations, execution receipts and tenant reason codes; `/governance/tenants` exposes tenant DAO discovery with contextual sidebar multi-select filters for risk, investment type, chain, federation tier, governance status and featured-only, plus comparison-optimized tenant cards, featured flags, APR-vs-CORE, TVL, members, chains, status and federation tier; `/governance/dao/:daoId` now behaves as a public tenant operations workspace with strategy, treasury allocation, user position, APR/performance, risk metrics, products, chains, agents, active proposal queue, pending operations, execution receipts, local governance model, reason codes and constitutional observability boundaries, and it resolves tenant state through a frontend source contract for `/v2/governance/tenants/:tenantId`, `/operations` and `/receipts` with local mock fallback; backend exposes `/v2/governance/tenants` and now attempts to derive tenant accounts from indexed DAO registry records before falling back to bootstrap tenant fixtures
 - Add nucleus design instruction architecture — 40%; `.instructions/DESIGN.md` now defines the shared AxodusAPP design index and `.instructions/design/<nucleus>/DESIGN.md` stores nucleus-specific design direction, starting with Governance
-- Add Governance design and information architecture — 54%; `.instructions/design/governance/DESIGN.md` defines Governance as an Economic Infrastructure Control Plane, DAO Tenant Operations Center and federated DAO operating workspace; `/governance` now applies the DAO Federation Marketplace direction with Featured DAO Tenants, CORE baseline, My DAO Tenants and treasury allocation visibility, `/governance/dao/:daoId` starts the tenant-specific workspace pattern, and `/governance/console` applies compact operational status, tenant account context, federation topology, governance health, treasury execution and proposal activity sections
+- Add Governance design and information architecture — 65%; `.instructions/design/governance/DESIGN.md` defines Governance as an Economic Infrastructure Control Plane, DAO Tenant Operations Center and federated DAO operating workspace; the IA now separates Overview as executive summary, DAO Tenants as discovery/filtering with contextual sidebar controls, DAO Detail as deep analysis, Console as operations and Proposals as governance actions, with reusable card variants for metric summaries, featured tenants, tenant discovery, user positions, APR comparison and governance status
 
 ---
 
@@ -126,28 +126,31 @@ Current priority: DAO Tenant detail workspace, DAO Federation Marketplace landin
 
 ## Marketplace Tasks
 
-- Create Product listing — 55%; integrated governance-aware NFT marketplace module under `/marketplace` with mock ERC721/1155 listings, fixed listings, auctions, filters, and seller standing.
-- Create Product detail page — 55%; `/marketplace/products/:slug` renders NFT metadata, royalty previews, Greenfield delivery, LayerZero readiness, seller standing, and buy-now/bid preview modal.
-- Create Create/Sell preview — 45%; `/marketplace/create` and `/marketplace/sell` generate mock listing adapter payloads without minting, signing, settlement, bridge execution, or treasury routing.
+- Create Product listing — 68%; integrated governance-aware NFT marketplace module under `/marketplace` with mock ERC721/1155 listings, fixed listings, auctions, URL filters, seller standing, and operational registry table.
+- Create Product detail page — 68%; `/marketplace/products/:slug` renders NFT metadata, contract adapter boundary, auction state, royalty previews, Greenfield delivery, LayerZero readiness, seller standing, treasury destination, ACS validation state, risk state, and buy-now/bid preview modal.
+- Create Create/Sell preview — 55%; `/marketplace/create` and `/marketplace/sell` generate mock listing adapter payloads, DAO owner, treasury destination, royalty service, storage access, and LayerZero boundary previews without minting, signing, settlement, bridge execution, or treasury routing.
 - Create Governance validation view — 45%; `/marketplace/governance` exposes product standing and ACS moderation workflows.
 - Create License registry — 45%; `/marketplace/licenses` exposes NFT access, DAO, enterprise, and subscription license models.
-- Create Marketplace dashboard — 45%; `/marketplace/dashboard` exposes mock operational telemetry and Phase 2 integration boundaries.
-- Create Subscription management — 8%
-- Create Billing interface — 8%
-- Create Asset gallery — 35%; product cards and item detail pages now consume centralized mock marketplace data.
+- Create Marketplace dashboard — 58%; `/marketplace/dashboard` exposes mock operational telemetry, ACS review counts, risk counts, named Phase 2 integration boundaries, and replaceable service readiness for MarketplaceContractAdapter, RoyaltyService, AuctionService, StorageAccessService, and LayerZeroBridgeService.
+- Create Subscription management — 52%; `/marketplace/subscriptions` exposes mock lifecycle, renewal review, governance standing, access scope, treasury destination, SubscriptionLifecycleService readiness, revocation preview, access preview state, and blocked reasons without renewal execution.
+- Create Billing interface — 52%; `/marketplace/orders` and `/marketplace/treasury` expose BillingPreviewService settlement previews, protocol fee preview, royalty preview, seller net, accounting hooks, treasury route review, blocked reasons, and disabled execution boundaries without payment execution.
+- Create Publisher console — 50%; `/marketplace/publisher` exposes PublisherReadinessService seller task queue, required reviews, seller standing blockers, treasury link blockers, metadata/plugin blockers, and publish readiness without live publishing.
+- Create Asset gallery — 58%; `/marketplace/assets` exposes an operational asset gallery for ERC721, ERC1155 and offchain license assets, with URL token-standard filtering, treasury/ACS/chain metadata, seller standing, Greenfield signed URL readiness and LayerZero bridge readiness from centralized mock marketplace data.
 
 ---
 
 ## Academy Tasks
 
-- Create Course listing — 55%; `/academy/courses` is mock-driven with filters for category, level, reward class, access type, and language.
-- Create Course detail page — 52%; `/academy/courses/:courseSlug` exposes PoK requirement, constitutional standing, reward model, tutor, lessons, prerequisites, and supported chains.
-- Create Learning dashboard — 50%; `/academy/dashboard` exposes progress, certification, reward, governance, and tutor telemetry.
-- Create Progress Engine — 55%; `/academy/progress` exposes level, trust score, Locked $NEURONS, Unlocked $NEURONS, next unlocks, ACS eligibility, Marketplace eligibility, PoK readiness, and constitutional standing.
-- Create Certification interface — 48%; `/academy/certifications` previews mock certificates, proof hashes, governance validation, and NFT compatibility without issuing credentials.
-- Create Reward visibility — 55%; `/academy/rewards` explicitly separates Locked Rewards from Unlocked Rewards and shows reward source, utility, transferability status, and governance control.
-- Create Academy Governance Review — 48%; `/academy/governance-review` exposes constitutional, treasury, reward, certification, and ACS review visibility without implying direct user governance validation.
-- Create Learn-to-Win UI — 45%; learning paths, reward classes, and progression states are visible with mock data only.
+- Create Course listing — 68%; `/academy/courses` is mock-driven with filters for category, level, reward class, access type, language, and governance status; cards expose operational value, certification outcome, estimated duration, reward visibility, DAO recognition, and governance unlocks.
+- Create Course detail page — 70%; `/academy/courses/:courseSlug` exposes PoK requirement, constitutional standing, reward model, tutor, lessons, prerequisites, supported chains, operational course profile, DAO recognition, governance unlocks, treasury sponsor, PoK checkpoints, and milestone impact.
+- Create Learning dashboard — 63%; `/academy/dashboard` exposes progress, certification, reward, governance alerts, review queue blockers, and tutor accountability telemetry.
+- Create Learning Workspace — 68%; `/academy/workspace/:courseSlug` exposes lesson execution, PoK checkpoint state, certification state, reward milestones, PoK validation rail, treasury source, proof references, and operational context without duplicating global navigation.
+- Create Progress Engine — 68%; `/academy/progress` exposes level, trust score, Locked $NEURONS, Unlocked $NEURONS, next unlocks, ACS eligibility, Marketplace eligibility, PoK readiness, constitutional standing, Learn-to-Win competency hierarchy, and competency signals.
+- Create Governance Eligibility — 62%; `/academy/eligibility` exposes governance level, DAO eligibility, contributor standing, DAO-aware identity, organization hierarchy, federation status, proposal readiness, validator readiness, committee eligibility, and marketplace eligibility.
+- Create Certification interface — 70%; `/academy/certifications` previews mock certificates, proof hashes, issuer, credential status, governance validation, governance eligibility, DAO verification, DAO recognition, public verification paths, operational permissions, eligibility impact, and NFT compatibility without issuing credentials.
+- Create Reward visibility — 72%; `/academy/rewards` explicitly separates Locked Rewards from Unlocked Rewards and shows reward source, utility, transferability status, treasury source, reward pool, emission budget, DAO sponsorship, educational grants, contributor allocation, vesting schedule, pending milestones, claimable state, and governance control.
+- Create Academy Governance Review — 66%; `/academy/governance-review` exposes constitutional, treasury, reward, certification, ACS review visibility, dependency scope, future contract references, and review queue blockers without implying direct user governance validation.
+- Create Learn-to-Win UI — 64%; learning paths, reward classes, competency hierarchy, DAO compatibility, federation status, and progression states are visible with mock data only.
 
 ---
 

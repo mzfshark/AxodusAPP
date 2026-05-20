@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
-import { MarketplaceContractAdapter } from '../services/boundaryAdapters';
+import {
+  LayerZeroBridgeService,
+  MarketplaceContractAdapter,
+  RoyaltyService,
+} from '../services/boundaryAdapters';
 
 const initialInput = {
   title: 'Mock ERC721 governance access pass',
@@ -11,6 +15,8 @@ const initialInput = {
   price: 100,
   currency: 'USDC',
   royaltyBps: 500,
+  daoOwner: 'Axodus DAO',
+  treasuryDestination: 'Axodus Treasury / Governance Revenue',
   deliveryType: 'Signed URL',
   governanceReviewRequired: true,
   description: 'Create/sell preview for an NFT-bound Marketplace listing.',
@@ -23,7 +29,22 @@ export default function MarketplaceCreateSell() {
   async function submitPreview(event) {
     event.preventDefault();
     const result = await MarketplaceContractAdapter.createDraftListing(input);
-    setPreview(result.preview);
+    setPreview({
+      ...result.preview,
+      royalty: RoyaltyService.previewForListingInput(input),
+      storage: {
+        service: 'StorageAccessService',
+        deliveryType: input.deliveryType,
+        signedUrlPreviewAvailable: ['Greenfield', 'Signed URL'].includes(input.deliveryType),
+        settlementEnabled: false,
+      },
+      bridge: {
+        service: 'LayerZeroBridgeService',
+        sourceChain: input.chain,
+        supportedChains: LayerZeroBridgeService.getSupportedChains(),
+        bridgeExecutionEnabled: false,
+      },
+    });
   }
 
   return (
@@ -40,6 +61,8 @@ export default function MarketplaceCreateSell() {
             <Field label="Delivery"><Select value={input.deliveryType} values={['Greenfield', 'Signed URL', 'MCP Runtime', 'Dashboard Access', 'Manual Service']} onChange={(deliveryType) => setInput({ ...input, deliveryType })} /></Field>
             <Field label="Price"><input type="number" value={input.price} onChange={(event) => setInput({ ...input, price: Number(event.target.value) })} className="marketplace-input" /></Field>
             <Field label="Royalty bps"><input type="number" value={input.royaltyBps} onChange={(event) => setInput({ ...input, royaltyBps: Number(event.target.value) })} className="marketplace-input" /></Field>
+            <Field label="DAO owner"><Select value={input.daoOwner} values={['Axodus DAO', 'Academy DAO', 'MCP Working Group', 'Business DAO']} onChange={(daoOwner) => setInput({ ...input, daoOwner })} /></Field>
+            <Field label="Treasury destination"><Select value={input.treasuryDestination} values={['Axodus Treasury / Governance Revenue', 'Academy DAO / Tutor Revenue Split', 'MCP Working Group / Review Escrow', 'Business DAO / Services Revenue']} onChange={(treasuryDestination) => setInput({ ...input, treasuryDestination })} /></Field>
           </div>
           <label className="mt-4 flex items-center gap-2 text-sm font-semibold text-outline">
             <input type="checkbox" checked={input.governanceReviewRequired} onChange={(event) => setInput({ ...input, governanceReviewRequired: event.target.checked })} />
@@ -54,7 +77,10 @@ export default function MarketplaceCreateSell() {
             <div className="mt-5 rounded-lg border border-emerald-400/25 bg-emerald-500/10 p-4 text-sm text-emerald-100">
               <p className="font-bold">{preview.status}</p>
               <p className="mt-2 break-all">Tx preview: {preview.txPreview}</p>
-              <p className="mt-2">Royalty preview: {preview.royaltyPreviewAmount} {input.currency}</p>
+              <p className="mt-2">Royalty preview: {preview.royalty.previewAmount} {preview.royalty.currency} to {preview.royalty.recipient}</p>
+              <p className="mt-2">Contract payload: {preview.contractPayload.tokenStandard} / {preview.contractPayload.listingType} / {preview.contractPayload.chain}</p>
+              <p className="mt-2">Storage boundary: {preview.storage.deliveryType}, signed URL preview {preview.storage.signedUrlPreviewAvailable ? 'available' : 'not available'}</p>
+              <p className="mt-2">LayerZero boundary: bridge execution {preview.bridge.bridgeExecutionEnabled ? 'enabled' : 'disabled'}</p>
             </div>
           )}
         </aside>

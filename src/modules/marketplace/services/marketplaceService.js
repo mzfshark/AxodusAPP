@@ -14,6 +14,10 @@ export function getMarketplaceProduct(slug) {
   return marketplaceMock.products.find((product) => product.slug === slug);
 }
 
+export function getMarketplaceProductById(productId) {
+  return marketplaceMock.products.find((product) => product.id === productId);
+}
+
 export function getMarketplaceProductByItemRef(chain, contract, tokenId) {
   return marketplaceMock.products.find((product) => (
     product.supportedChains.some((supportedChain) => normalize(supportedChain) === normalize(chain)) &&
@@ -34,8 +38,10 @@ export function filterMarketplaceProducts(filters = {}) {
     const governance = !filters.governanceStatus || product.governanceStatus === filters.governanceStatus;
     const chain = !filters.chain || product.supportedChains.includes(filters.chain);
     const listing = !filters.listingType || product.listingType === filters.listingType;
+    const risk = !filters.operationalRisk || product.operationalRisk === filters.operationalRisk;
+    const acs = !filters.acsValidationState || product.acsValidationState === filters.acsValidationState;
     const reputation = !filters.minReputation || (seller?.reputation ?? 0) >= Number(filters.minReputation);
-    return query && category && governance && chain && listing && reputation;
+    return query && category && governance && chain && listing && risk && acs && reputation;
   });
 }
 
@@ -46,8 +52,15 @@ export function getMarketplaceMetrics() {
     nftBoundProducts: products.filter((product) => product.nftBound).length,
     pendingGovernance: products.filter((product) => product.governanceStatus === 'under-review').length,
     restrictedProducts: products.filter((product) => product.governanceStatus === 'restricted').length,
+    highRiskProducts: products.filter((product) => product.operationalRisk === 'high').length,
+    acsReviewProducts: products.filter((product) => product.acsValidationState !== 'validated').length,
     verifiedSellers: marketplaceMock.sellers.filter((seller) => seller.governanceStanding === 'verified').length,
     royaltyPreview: products.reduce((sum, product) => sum + product.royaltyModel.previewAmount, 0),
+    treasuryDestinations: [...new Set(products.map((product) => product.treasuryDestination))].length,
+    ordersPendingReview: marketplaceMock.orders.filter((order) => order.status !== 'mock-issued').length,
+    subscriptionsRestricted: marketplaceMock.subscriptions.filter((subscription) => subscription.status === 'restricted').length,
+    treasuryRoutesUnderReview: marketplaceMock.treasuryRoutes.filter((route) => route.status !== 'compliant').length,
+    publisherTasksBlocked: marketplaceMock.publisherQueue.filter((task) => Boolean(task.blocker)).length,
     categories: products.reduce((acc, product) => ({ ...acc, [product.category]: (acc[product.category] ?? 0) + 1 }), {}),
   };
 }

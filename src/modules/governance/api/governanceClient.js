@@ -5,6 +5,7 @@ import {
   getMockGovernanceProposals,
   getMockGovernanceTenants,
 } from './mockGovernanceData';
+import { governanceTenantsMock } from '@/data/mock';
 
 const governanceApiBase = import.meta.env.VITE_GOVERNANCE_API_URL || '/governance-api';
 const apiBase = `${governanceApiBase}/v2`;
@@ -83,6 +84,78 @@ export async function fetchGovernanceTenants({ signal } = {}) {
       error,
     };
   }
+}
+
+function getMockGovernanceTenantDetail(tenantId) {
+  return governanceTenantsMock.tenants.find(
+    (tenant) =>
+      tenant.id === tenantId ||
+      tenant.daoId === tenantId ||
+      tenant.symbol?.toLowerCase() === tenantId?.toLowerCase() ||
+      tenant.route?.endsWith(`/${tenantId}`),
+  );
+}
+
+export async function fetchGovernanceTenant({ tenantId, signal } = {}) {
+  if (!tenantId) {
+    return {
+      item: null,
+      metadata: null,
+      source: 'frontend-empty-request',
+    };
+  }
+
+  try {
+    const response = await requestJson(`/governance/tenants/${encodeURIComponent(tenantId)}`, { signal });
+    return {
+      item: response?.data ?? response?.tenant ?? response,
+      metadata: response?.metadata ?? null,
+      source: response?.metadata?.source ?? response?.source ?? 'governance-api',
+    };
+  } catch (error) {
+    return {
+      item: getMockGovernanceTenantDetail(tenantId) ?? null,
+      metadata: null,
+      source: 'frontend-dev-fixture',
+      error,
+    };
+  }
+}
+
+export async function fetchGovernanceTenantOperations({ tenantId, signal } = {}) {
+  if (!tenantId) {
+    return {
+      items: [],
+      metadata: null,
+      source: 'frontend-empty-request',
+    };
+  }
+
+  const response = await requestJson(`/governance/tenants/${encodeURIComponent(tenantId)}/operations`, { signal });
+  const normalized = normalizePaginated(response);
+
+  return {
+    ...normalized,
+    source: response?.metadata?.source ?? 'governance-api',
+  };
+}
+
+export async function fetchGovernanceTenantReceipts({ tenantId, signal } = {}) {
+  if (!tenantId) {
+    return {
+      items: [],
+      metadata: null,
+      source: 'frontend-empty-request',
+    };
+  }
+
+  const response = await requestJson(`/governance/tenants/${encodeURIComponent(tenantId)}/receipts`, { signal });
+  const normalized = normalizePaginated(response);
+
+  return {
+    ...normalized,
+    source: response?.metadata?.source ?? 'governance-api',
+  };
 }
 
 export async function fetchGovernanceProposals({ daoId, signal } = {}) {

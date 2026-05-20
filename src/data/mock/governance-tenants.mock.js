@@ -5,6 +5,22 @@ const CORE_APR = 8.4;
 function withTenantDerivedFields(tenant) {
   const tvl = tenant.tvl ?? tenant.treasuryTvl ?? 0;
   const aprDeltaVsCore = Number((Number(tenant.apr ?? 0) - CORE_APR).toFixed(2));
+  const reasonSeverity =
+    tenant.governanceStatus === 'sanctioned'
+      ? 'constitutional'
+      : tenant.governanceStatus === 'restricted' || tenant.governanceStatus === 'under-review'
+        ? 'warning'
+        : tenant.treasuryHealth === 'review-required'
+          ? 'warning'
+          : 'info';
+  const reasonCode =
+    tenant.governanceStatus === 'sanctioned'
+      ? 'LOCAL_GOVERNANCE_MODEL_INCOMPATIBLE'
+      : tenant.governanceStatus === 'restricted'
+        ? 'REMOTE_EXECUTION_GUARDRAIL_ACTIVE'
+        : tenant.treasuryHealth === 'review-required'
+          ? 'TREASURY_POLICY_REQUIRES_REVIEW'
+          : 'VOTING_POWER_SOURCE_NOT_VERIFIED';
 
   return {
     coreApr: CORE_APR,
@@ -14,6 +30,72 @@ function withTenantDerivedFields(tenant) {
     route: `/governance/dao/${tenant.id}`,
     constitutionalStanding: tenant.constitutionalStanding ?? tenant.governanceStatus,
     supportedProducts: tenant.supportedProducts ?? tenant.productsEnabled ?? [],
+    governanceModel: tenant.governanceModel ?? `${tenant.category} local governance`,
+    localGovernanceModel: tenant.localGovernanceModel ?? 'token-voting + treasury policy review',
+    proposalQueue: tenant.proposalQueue ?? [
+      {
+        id: `${tenant.id}-proposal-001`,
+        title: `${tenant.symbol} treasury policy update`,
+        status: tenant.pendingOperations > 0 ? 'open' : 'queued',
+        category: 'Treasury',
+        executionChain: tenant.chains?.[0] ?? 'Ethereum Sepolia',
+        treasuryImpact: tenant.pendingOperations > 2 ? 'review-required' : 'bounded',
+        riskSeverity: reasonSeverity === 'constitutional' ? 'constitutional' : reasonSeverity,
+      },
+      {
+        id: `${tenant.id}-proposal-002`,
+        title: `${tenant.symbol} product access renewal`,
+        status: tenant.activeProposals > 1 ? 'voting' : 'draft',
+        category: 'Products',
+        executionChain: tenant.chains?.[1] ?? tenant.chains?.[0] ?? 'Base',
+        treasuryImpact: 'low',
+        riskSeverity: tenant.riskLevel === 'experimental' || tenant.riskLevel === 'high' ? 'warning' : 'info',
+      },
+    ],
+    operationsQueue: tenant.operationsQueue ?? [
+      {
+        id: `${tenant.id}-operation-001`,
+        label: 'Treasury execution review',
+        status: tenant.treasuryHealth === 'active' ? 'ready' : 'review-required',
+        chain: tenant.chains?.[0] ?? 'Ethereum Sepolia',
+        source: 'treasury policy',
+        reasonCode: tenant.treasuryHealth === 'active' ? null : 'TREASURY_POLICY_REQUIRES_REVIEW',
+        reasonSeverity: tenant.treasuryHealth === 'active' ? 'info' : 'warning',
+      },
+      {
+        id: `${tenant.id}-operation-002`,
+        label: 'Plugin capability sync',
+        status: tenant.governanceStatus === 'compliant' ? 'observed' : 'guarded',
+        chain: tenant.chains?.[1] ?? tenant.chains?.[0] ?? 'Base',
+        source: 'plugin capability',
+        reasonCode: tenant.governanceStatus === 'compliant' ? null : 'PLUGIN_CAPABILITY_NOT_REGISTERED',
+        reasonSeverity: tenant.governanceStatus === 'compliant' ? 'info' : reasonSeverity,
+      },
+    ],
+    executionReceiptFeed: tenant.executionReceiptFeed ?? [
+      {
+        id: `${tenant.id}-receipt-001`,
+        label: 'Governance state indexed',
+        status: 'indexed',
+        chain: tenant.chains?.[0] ?? 'Ethereum Sepolia',
+        source: 'governance indexer',
+      },
+      {
+        id: `${tenant.id}-receipt-002`,
+        label: 'Tenant registry checkpoint',
+        status: tenant.executionReceipts > 2 ? 'reconciled' : 'pending',
+        chain: tenant.chains?.[1] ?? tenant.chains?.[0] ?? 'Base',
+        source: 'federation registry',
+      },
+    ],
+    reasonCodes: tenant.reasonCodes ?? [
+      {
+        reasonCode,
+        reasonSeverity,
+        source: tenant.treasuryHealth === 'review-required' ? 'treasury policy' : 'federation registry',
+        scope: tenant.name,
+      },
+    ],
     ...tenant,
     aprDeltaVsCore,
     treasuryTvl: tvl,

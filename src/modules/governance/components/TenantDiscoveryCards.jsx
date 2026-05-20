@@ -130,7 +130,7 @@ export function TenantCard({ tenant, coreApr }) {
 
 export function DAOAllocationCard({ tenant, allocation, coreApr }) {
   return (
-    <article className="rounded-lg border border-cyan-300/15 bg-surface-container-highest p-5">
+    <article className="rounded-lg border border-cyan-300/15 bg-surface-container-highest p-5 shadow-axodus">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <div className="font-mono text-[11px] font-black uppercase text-cyan-200">{tenant.symbol}</div>
@@ -139,15 +139,15 @@ export function DAOAllocationCard({ tenant, allocation, coreApr }) {
         </div>
         <APRComparisonBadge tenantApr={tenant.apr} coreApr={coreApr} />
       </div>
-      <div className="mt-4 grid gap-2 md:grid-cols-4">
+      <div className="mt-4 grid gap-2 md:grid-cols-5">
         <TenantMetric label="Allocated capital" value={formatCurrency(allocation.allocatedCapital)} mono />
-        <TenantMetric label="DAO share" value={formatRatioAsPercent(allocation.daoSharePercent, 2)} mono />
-        <TenantMetric label="Rewards" value={formatCurrency(allocation.rewards)} mono />
         <TenantMetric label="PnL" value={formatCurrency(allocation.pnl)} mono />
-      </div>
-      <div className="mt-4 grid gap-2 md:grid-cols-3">
-        <TenantMetric label="Governance rights" value={allocation.governanceRights} />
+        <TenantMetric label="Rewards" value={formatCurrency(allocation.rewards)} mono />
+        <TenantMetric label="DAO share" value={formatRatioAsPercent(allocation.daoSharePercent, 2)} mono />
         <TenantMetric label="Voting power" value={allocation.votingPower} mono />
+      </div>
+      <div className="mt-4 grid gap-2 md:grid-cols-2">
+        <TenantMetric label="Governance rights" value={allocation.governanceRights} />
         <TenantMetric label="Treasury exposure" value={allocation.treasuryExposure} />
       </div>
     </article>

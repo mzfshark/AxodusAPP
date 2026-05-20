@@ -1,5 +1,5 @@
-import { Link, NavLink } from 'react-router-dom';
-import { Award, BookOpen, ClipboardCheck, Coins, Gauge, GraduationCap, LayoutDashboard, Route, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ShieldCheck } from 'lucide-react';
 import { academyStatusClass, formatNeurons, getAcademyTutor } from '../services/academyService';
 
 export function AcademyBadge({ value }) {
@@ -59,17 +59,6 @@ export function AcademyProgressBar({ value, label }) {
   );
 }
 
-const academyNav = [
-  { to: '/academy', label: 'Home', icon: GraduationCap, end: true },
-  { to: '/academy/courses', label: 'Courses', icon: BookOpen },
-  { to: '/academy/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/academy/progress', label: 'Progress Engine', icon: Gauge },
-  { to: '/academy/certifications', label: 'Certifications', icon: Award },
-  { to: '/academy/rewards', label: 'Rewards', icon: Coins },
-  { to: '/academy/governance-review', label: 'Academy Governance Review', icon: ClipboardCheck },
-  { to: '/academy/paths/path-governance-operator', label: 'Learning Path', icon: Route },
-];
-
 export function AcademyHeader({ title, description }) {
   return (
     <header className="flex flex-col gap-4">
@@ -84,22 +73,6 @@ export function AcademyHeader({ title, description }) {
           <span>Academy is mock-only inside AxodusAPP. No minting, transfer, wallet reward distribution, or certification contract write is executed.</span>
         </div>
       </div>
-      <nav className="flex gap-2 overflow-x-auto pb-1">
-        {academyNav.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) => `inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] transition ${isActive ? 'border-primary/50 bg-primary/20 text-on-surface' : 'border-white/10 bg-surface-container-low text-outline hover:text-on-surface'}`}
-            >
-              <Icon className="h-4 w-4" aria-hidden="true" />
-              {item.label}
-            </NavLink>
-          );
-        })}
-      </nav>
     </header>
   );
 }
@@ -120,8 +93,13 @@ export function AcademyCourseCard({ course }) {
         </div>
         <div className="grid gap-1 text-sm text-outline">
           <span>{course.category} / {course.level}</span>
+          <span>{course.estimatedDuration} / {course.certificationOutcome}</span>
           <span>{tutor?.name || 'Academy tutor'}</span>
           <span className="font-bold text-on-surface">{formatNeurons(course.rewardAmount)} as {course.rewardType}</span>
+          <span>{course.daoRecognition}</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {(course.governanceUnlocks || []).slice(0, 2).map((unlock) => <AcademyBadge key={unlock} value={unlock} />)}
         </div>
         <AcademyProgressBar value={course.progress} label="Progress" />
       </div>

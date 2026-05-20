@@ -78,12 +78,33 @@ function isFilterActive(location, target) {
   return [...targetParams.entries()].every(([key, value]) => currentParams.get(key) === value);
 }
 
+function getContextualFilterGroups(activeShellItem, pathname) {
+  return (activeShellItem?.contextualFilterGroups ?? []).filter((group) => group.route === pathname);
+}
+
+function getFilterValues(location, param) {
+  return new URLSearchParams(location.search).getAll(param);
+}
+
+function buildFilterTarget(location, group, value) {
+  const params = new URLSearchParams(location.search);
+  const values = params.getAll(group.param);
+  const nextValues = values.includes(value) ? values.filter((item) => item !== value) : [...values, value];
+
+  params.delete(group.param);
+  nextValues.forEach((item) => params.append(group.param, item));
+
+  const query = params.toString();
+  return `${location.pathname}${query ? `?${query}` : ''}`;
+}
+
 function NucleusNavigation({ activeShellItem, isCollapsed, onBack, onNavigate }) {
   const location = useLocation();
   const sections = activeShellItem?.sections ?? [];
   const filterGroups = activeShellItem?.filterGroups ?? [];
+  const contextualFilterGroups = getContextualFilterGroups(activeShellItem, location.pathname);
 
-  if (!sections.length && !filterGroups.length) return null;
+  if (!sections.length && !filterGroups.length && !contextualFilterGroups.length) return null;
 
   return (
     <section className="app-sidebar-secondary" aria-label={`${activeShellItem.label} navigation`}>
@@ -142,6 +163,42 @@ function NucleusNavigation({ activeShellItem, isCollapsed, onBack, onNavigate })
           })}
         </div>
       ))}
+
+      {!isCollapsed && contextualFilterGroups.length ? (
+        <div className="app-sidebar-secondary-section">
+          <div className="flex items-center justify-between gap-3">
+            <p className="app-sidebar-section-label">DAO Tenant Filters</p>
+            <Link
+              to={location.pathname}
+              onClick={onNavigate}
+              className="text-[10px] font-black uppercase tracking-wide text-cyan-200 hover:text-on-surface"
+            >
+              Clear
+            </Link>
+          </div>
+          {contextualFilterGroups.map((group) => (
+            <div key={group.label} className="mt-4">
+              <p className="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">{group.label}</p>
+              <div className="flex flex-col gap-1.5">
+                {group.items.map((item) => {
+                  const active = getFilterValues(location, group.param).includes(item.value);
+                  return (
+                    <Link
+                      key={`${group.param}-${item.value}`}
+                      to={buildFilterTarget(location, group, item.value)}
+                      onClick={onNavigate}
+                      className={subNavClass({ isActive: active })}
+                      title={isCollapsed ? item.label : undefined}
+                    >
+                      <span className="app-sidebar-link-label">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -174,10 +174,10 @@ async function renderTenantDetail(tenantId = 'dao-tenant-trading-alpha') {
   );
 }
 
-async function renderTenants() {
+async function renderTenants(initialEntry = '/governance/tenants') {
   const { default: GovernanceTenants } = await import('../../src/modules/governance/pages/GovernanceTenants');
   render(
-    <MemoryRouter initialEntries={['/governance/tenants']}>
+    <MemoryRouter initialEntries={[initialEntry]}>
       <GovernanceTenants />
     </MemoryRouter>,
   );
@@ -217,15 +217,11 @@ describe('Governance Operations Center smoke', () => {
   }, 10000);
 
   test('filters DAO Tenants by multiple risk and investment selections', async () => {
-    await renderTenants();
+    await renderTenants('/governance/tenants?risk=low&risk=moderate&type=Mining&type=DeFi');
 
     expect(screen.getByRole('heading', { name: /discover governed economic organizations/i })).toBeInTheDocument();
-    expect(screen.getByText(/8 DAO Tenants/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: /^low$/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^moderate$/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^mining$/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^defi$/i }));
+    expect(screen.getByText(/2 DAO Tenants/i)).toBeInTheDocument();
+    expect(screen.getByText(/4 active filters/i)).toBeInTheDocument();
 
     expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
     expect(screen.getByText(/axodus defi stability dao/i)).toBeInTheDocument();
@@ -236,9 +232,18 @@ describe('Governance Operations Center smoke', () => {
     await renderTenantDetail();
 
     expect(screen.getByRole('heading', { name: /axodus trading alpha dao/i })).toBeInTheDocument();
+    expect(screen.getByText(/tenant source/i)).toBeInTheDocument();
+    expect(screen.getByText(/frontend-dev-fixture/i)).toBeInTheDocument();
     expect(screen.getByText(/governed trading allocation/i)).toBeInTheDocument();
     expect(screen.getByText(/treasury allocation/i)).toBeInTheDocument();
     expect(screen.getByText(/APR & Performance/i)).toBeInTheDocument();
+    expect(screen.getByText(/user position/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/active proposals/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/pending operations/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/execution receipts/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/governance reason codes/i)).toBeInTheDocument();
+    expect(screen.getByText(/local governance model/i)).toBeInTheDocument();
+    expect(screen.getByText(/treasury policy update/i)).toBeInTheDocument();
     expect(screen.getByText(/trade-risk-agent/i)).toBeInTheDocument();
     expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/does not infer compliance/i)).toBeInTheDocument();
@@ -260,7 +265,7 @@ describe('Governance Operations Center smoke', () => {
     expect(screen.getByText(/DAO: Axodus Executive DAO/i)).toBeInTheDocument();
     expect(screen.getByText(/Chain: Ethereum Sepolia/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /create proposal/i })).toBeEnabled();
-  });
+  }, 10000);
 
   test('creates a local proposal draft from the console modal without on-chain submission', async () => {
     await renderDashboard();
