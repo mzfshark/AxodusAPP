@@ -88,6 +88,14 @@ function fallbackFor(path) {
     return mockEnvelope({ receipts: acsInspectionMock.receipts });
   }
 
+  if (path === '/acs/emergency-stops') {
+    return mockEnvelope(acsInspectionMock.emergencyStops);
+  }
+
+  if (path === '/acs/secret-storage/status') {
+    return mockEnvelope(acsInspectionMock.secretStorageStatus);
+  }
+
   if (path.startsWith('/acs/status/')) {
     return mockEnvelope({
       walletAddress: decodeURIComponent(path.split('/').pop()),
@@ -186,5 +194,7 @@ export const acsApi = {
     return requestAcs(`/acs/user-status/${encodeURIComponent(walletAddress || '0xunlicensed')}${query ? `?${query}` : ''}`);
   },
   getPerformanceRecords: () => requestAcs('/acs/performance-records'),
-  getReceipts: () => requestAcs('/acs/receipts')
+  getReceipts: () => requestAcs('/acs/receipts'),
+  getEmergencyStops: () => requestAcs('/acs/emergency-stops'),
+  getSecretStorageStatus: () => requestAcs('/acs/secret-storage/status')
 };

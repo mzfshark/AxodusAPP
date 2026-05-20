@@ -66,4 +66,19 @@ describe('ACS API client', () => {
     expect(result.policy).toMatchObject({ allowed: false, blockedReason: 'license_expired' });
     expect(getAcsMeta(result)).toMatchObject({ source: 'fallback' });
   });
+
+  test('falls back to ACS emergency stop and secret storage status contracts', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => {
+      throw new Error('ACS API unavailable');
+    }));
+
+    const emergencyStops = await acsApi.getEmergencyStops();
+    const secretStorage = await acsApi.getSecretStorageStatus();
+
+    expect(emergencyStops.stops[0]).toMatchObject({ active: true, scope: 'user' });
+    expect(secretStorage).toMatchObject({
+      plaintextStorageAllowed: false,
+      frontendSecretExposureAllowed: false
+    });
+  });
 });

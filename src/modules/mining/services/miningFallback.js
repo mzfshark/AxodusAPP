@@ -127,6 +127,51 @@ const providerDueDiligence = [
   { id: 'dd-fallback-luxor', providerId: 'provider-luxor', status: 'approved', legalReview: 'approved', technicalReview: 'approved', treasuryReview: 'approved', operationalReview: 'approved', documents: ['fallback provider profile'], checklist: [{ item: 'Backend API availability', status: 'required', notes: 'Reconnect to Mining API for authoritative diligence.' }], blockerSummary: 'Fallback data is not authoritative.' }
 ];
 
+const providerAdapters = providers.map((provider) => ({
+  id: `adapter-${provider.slug}`,
+  providerId: provider.id,
+  providerSlug: provider.slug,
+  providerName: provider.name,
+  adapterKey: `axodus.mining.providers.${provider.slug}`,
+  status: 'manual-reporting',
+  integrationReadiness: provider.integrationReadiness,
+  apiAvailability: provider.apiAvailability,
+  readOnly: true,
+  mock: true,
+  executionEnabled: false,
+  treasuryMovementEnabled: false,
+  walletRequired: false,
+  capabilities: [
+    'read-provider-profile',
+    'read-tokenized-hash-products',
+    'read-risk-profile',
+    'read-due-diligence',
+    'read-governance-validation',
+    'read-treasury-eligibility',
+    'read-telemetry'
+  ],
+  blockedActions: [
+    'provider-execution',
+    'hashpower-purchase',
+    'treasury-movement',
+    'wallet-claim',
+    'minting',
+    'staking',
+    'smart-contract-execution'
+  ],
+  telemetry: {
+    reportingMode: 'manual',
+    freshness: 'manual-review',
+    lastObservedAt: provider.updatedAt,
+    healthSignal: 'watch',
+    notes: 'Fallback adapter data only; Mining API is authoritative.'
+  },
+  diligenceRequirements: ['backend API availability', 'custody classification', 'treasury concentration review'],
+  fallbackStrategy: 'Use minimal offline display and block all execution-oriented actions.',
+  lifecycleStage: 'manual-review',
+  governanceNotes: provider.complianceNotes
+}));
+
 export const miningFallback = {
   summary: {
     totalProviders: providers.length,
@@ -147,6 +192,7 @@ export const miningFallback = {
   treasuryExposures,
   governanceValidations,
   providerDueDiligence,
+  providerAdapters,
   reports: [
     { id: 'report-fallback', title: 'Fallback Mining Status', reportType: 'risk', period: 'offline', status: 'draft', summary: 'Mining API is unavailable; AxodusAPP is showing minimal emergency fallback data.', sections: [{ title: 'Fallback state', findings: ['Backend API is required for authoritative Mining data.', 'No execution, claim, mint, stake, or treasury movement is available.'] }], nextActions: ['Restart Mining API on localhost:8787', 'Verify /health and /api/mining/summary'] }
   ]

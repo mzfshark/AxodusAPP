@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
 import { AcsBadge, AcsMetric, AcsPageShell, AcsPanel, CapabilityGrid, ErrorState, LoadingState, ReadinessPipeline, acsIcons } from '../components/AcsUi';
 import {
   useAcsCapabilities,
+  useAcsEmergencyStops,
   useAcsHealth,
   useAcsOperationalState,
   useAcsPolicyCheck,
@@ -11,6 +11,7 @@ import {
   useAcsReadiness,
   useAcsReceipts,
   useAcsStatus,
+  useAcsSecretStorageStatus,
   useAcsTenantServices,
   useAcsUserStatus
 } from '../hooks/useAcsData';
@@ -200,11 +201,14 @@ export function AcsStatus() {
   const stoppedStatus = useAcsUserStatus('0xstopped', { tenantId: demoTenant, productId: tradingIgnition });
   const performance = useAcsPerformanceRecords();
   const receipts = useAcsReceipts();
-  if (status.isLoading || operationalState.isLoading || userStatus.isLoading || stoppedStatus.isLoading || performance.isLoading || receipts.isLoading) return <LoadingState />;
-  if (status.isError || operationalState.isError || userStatus.isError || stoppedStatus.isError || performance.isError || receipts.isError) return <ErrorState message="ACS status unavailable" />;
+  const emergencyStops = useAcsEmergencyStops();
+  const secretStorage = useAcsSecretStorageStatus();
+  if (status.isLoading || operationalState.isLoading || userStatus.isLoading || stoppedStatus.isLoading || performance.isLoading || receipts.isLoading || emergencyStops.isLoading || secretStorage.isLoading) return <LoadingState />;
+  if (status.isError || operationalState.isError || userStatus.isError || stoppedStatus.isError || performance.isError || receipts.isError || emergencyStops.isError || secretStorage.isError) return <ErrorState message="ACS status unavailable" />;
 
   const performanceRecords = performance.data?.records || [];
   const receiptItems = receipts.data?.receipts || [];
+  const activeStops = (emergencyStops.data?.stops || []).filter((stop) => stop.active);
 
   return (
     <AcsPageShell title="Operational Status" description="Operational state, mock environment and coordination notices are provided by ACS." query={status}>
@@ -226,10 +230,24 @@ export function AcsStatus() {
         </div>
       </AcsPanel>
       <AcsPanel title="Emergency Stop Status" description="Emergency stop state is an ACS policy blocker, not a frontend override.">
-        <div className="flex flex-wrap gap-2">
-          <AcsBadge tone={stoppedStatus.data?.emergencyStop?.active ? 'blocked' : 'allowed'}>{stoppedStatus.data?.emergencyStop?.active ? 'emergency_stop_active' : 'no active stop'}</AcsBadge>
-          <AcsBadge tone="policy">{stoppedStatus.data?.policy?.automationLevel || 'blocked'}</AcsBadge>
+        <div className="mb-4 flex flex-wrap gap-2">
+          <AcsBadge tone={activeStops.length > 0 ? 'blocked' : 'allowed'}>{activeStops.length > 0 ? 'active stops present' : 'no active stop'}</AcsBadge>
+          <AcsBadge tone="policy">{emergencyStops.data?.executionImpact || stoppedStatus.data?.policy?.automationLevel || 'blocked'}</AcsBadge>
           <AcsBadge tone="warning">{stoppedStatus.data?.emergencyStop?.reason || 'mock emergency stop inspection'}</AcsBadge>
+        </div>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {activeStops.map((stop) => (
+            <article key={stop.stopId} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold text-on-surface">{stop.scope} / {stop.source}</p>
+                  <p className="mt-1 text-xs text-outline">{stop.stopId}</p>
+                </div>
+                <AcsBadge tone={stop.severity === 'constitutional' ? 'blocked' : 'warning'}>{stop.severity}</AcsBadge>
+              </div>
+              <p className="mt-3 text-sm text-outline">{stop.reason}</p>
+            </article>
+          ))}
         </div>
       </AcsPanel>
       <AcsPanel title="Performance Records" description="Mock/internal-validation records only. No return claim or live trading metric is represented.">
@@ -280,7 +298,11 @@ export function AcsStatus() {
           <AcsBadge tone="blocked">no frontend secrets</AcsBadge>
           <AcsBadge tone="warning">disable withdrawal</AcsBadge>
           <AcsBadge tone="warning">use IP permission</AcsBadge>
-          <AcsBadge tone="policy">secretRef only</AcsBadge>
+          <AcsBadge tone="policy">{secretStorage.data?.currentAdapter || 'secretRef only'}</AcsBadge>
+          <AcsBadge tone={secretStorage.data?.storageEnabled ? 'allowed' : 'warning'}>{secretStorage.data?.mode || 'contract-only'}</AcsBadge>
+        </div>
+        <div className="mt-4 space-y-2">
+          {(secretStorage.data?.frontendRules || []).map((rule) => <p key={rule} className="text-sm text-outline">{rule}</p>)}
         </div>
       </AcsPanel>
     </AcsPageShell>

@@ -7,6 +7,7 @@ import {
   miningReportSchema,
   miningSummarySchema,
   miningVaultSchema,
+  providerAdapterDefinitionSchema,
   providerDetailsSchema,
   providerDueDiligenceSchema,
   riskSummarySchema,
@@ -123,6 +124,8 @@ function fallbackService() {
     }),
     getGovernanceValidations: () => miningFallback.governanceValidations,
     getProviderDueDiligence: () => miningFallback.providerDueDiligence,
+    getProviderAdapters: () => miningFallback.providerAdapters,
+    getProviderAdapterBySlug: (slug) => miningFallback.providerAdapters.find((adapter) => adapter.providerSlug === slug) || null,
     getReports: () => miningFallback.reports
   };
 }
@@ -178,5 +181,7 @@ export const miningServiceAdapter = {
   getRisk: () => requestMining('/api/mining/risk', riskSummarySchema, fallback.getRisk),
   getGovernanceValidations: () => requestMining('/api/mining/governance-validations', governanceValidationSchema.array(), fallback.getGovernanceValidations),
   getProviderDueDiligence: () => requestMining('/api/mining/provider-due-diligence', providerDueDiligenceSchema.array(), fallback.getProviderDueDiligence),
+  getProviderAdapters: () => requestMining('/api/mining/provider-adapters', providerAdapterDefinitionSchema.array(), fallback.getProviderAdapters),
+  getProviderAdapterBySlug: (slug) => requestMining(`/api/mining/provider-adapters/${slug}`, providerAdapterDefinitionSchema, () => fallback.getProviderAdapterBySlug(slug), { nullOnNotFound: true }),
   getReports: () => requestMining('/api/mining/reports', miningReportSchema.array(), fallback.getReports)
 };

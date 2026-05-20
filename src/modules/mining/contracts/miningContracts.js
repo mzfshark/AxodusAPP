@@ -241,3 +241,32 @@ export const riskSummarySchema = z.object({
   liquidity: z.array(providerLiquiditySchema).default([]),
   providerRiskMatrix: z.array(z.unknown()).default([])
 });
+
+export const providerAdapterDefinitionSchema = z.object({
+  id: z.string(),
+  providerId: z.string(),
+  providerSlug: z.string(),
+  providerName: z.string(),
+  adapterKey: z.string(),
+  status: z.string(),
+  integrationReadiness: z.string(),
+  apiAvailability: z.string(),
+  readOnly: z.literal(true),
+  mock: z.literal(true),
+  executionEnabled: z.literal(false),
+  treasuryMovementEnabled: z.literal(false),
+  walletRequired: z.literal(false),
+  capabilities: z.array(z.string()).default([]),
+  blockedActions: z.array(z.string()).default([]),
+  telemetry: z.object({
+    reportingMode: z.string(),
+    freshness: z.string(),
+    lastObservedAt: z.string(),
+    healthSignal: z.string(),
+    notes: z.string()
+  }).passthrough(),
+  diligenceRequirements: z.array(z.string()).default([]),
+  fallbackStrategy: z.string(),
+  lifecycleStage: z.string(),
+  governanceNotes: z.string()
+}).passthrough();

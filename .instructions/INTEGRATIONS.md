@@ -138,6 +138,7 @@ Service contract:
 - `meta.mock` must remain `true` while the MVP is read-only/mock-first.
 - `errors` must always be an array, including provider-not-found responses.
 - AxodusAPP components consume normalized adapter output from `src/modules/mining/services/miningServiceAdapter.js`, never raw envelopes.
+- Provider adapter contracts are exposed through `/api/mining/provider-adapters` and remain read-only/mock. They must explicitly block provider execution, hashpower purchase, treasury movement, wallet claim, minting, staking, and smart contract execution.
 
 Fallback behavior:
 

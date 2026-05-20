@@ -114,9 +114,18 @@ AxodusAPP exposes Mining as the official unified frontend surface while the stan
 
 Development flow:
 
+Run both services together from AxodusAPP:
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/AxodusAPP
+pnpm dev:mining-stack
+```
+
+Or run each service separately:
+
 ```bash
 cd /mnt/d/Rede/Github/Axodus/Mining
-pnpm dev
+pnpm dev:api
 ```
 
 The Mining API should be available at `http://localhost:8787`.
@@ -139,6 +148,7 @@ Contract:
 - Mining API responses use the v1 envelope: `{ data, meta, errors }`.
 - `meta.source` is `mining-api`, `meta.version` is `v1`, `meta.mock` is `true`, and `meta.generatedAt` is an ISO timestamp.
 - AxodusAPP reads Mining through `src/modules/mining/services/miningServiceAdapter.js`; pages should not depend on raw API envelopes.
+- Provider adapter contracts are available at `GET /api/mining/provider-adapters` and must remain mock/read-only with execution, wallet, minting, staking, treasury movement, and smart contract actions blocked.
 - The local fallback is intentionally minimal and only supports safe offline visibility.
 
 Verification:

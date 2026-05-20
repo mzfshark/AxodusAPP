@@ -1,6 +1,6 @@
 import { describe, expect, test, vi, afterEach } from 'vitest';
 import { getMiningMeta, miningApi } from '../../src/modules/mining/services/miningApi';
-import { apiEnvelopeSchema, miningSummarySchema } from '../../src/modules/mining/contracts/miningContracts';
+import { apiEnvelopeSchema, miningSummarySchema, providerAdapterDefinitionSchema } from '../../src/modules/mining/contracts/miningContracts';
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -107,6 +107,73 @@ describe('Mining API client', () => {
 
     expect(summary.totalProviders).toBeGreaterThan(0);
     expect(getMiningMeta(summary)).toMatchObject({
+      source: 'fallback',
+      message: 'Using local mock fallback — Mining API unavailable.'
+    });
+  });
+
+  test('loads provider adapters as read-only service contracts', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(
+      JSON.stringify({
+        data: [{
+          id: 'adapter-luxor',
+          providerId: 'provider-luxor',
+          providerSlug: 'luxor',
+          providerName: 'Luxor',
+          adapterKey: 'axodus.mining.providers.luxor',
+          status: 'mock-ready',
+          integrationReadiness: 'mock-ready',
+          apiAvailability: 'partner',
+          readOnly: true,
+          mock: true,
+          executionEnabled: false,
+          treasuryMovementEnabled: false,
+          walletRequired: false,
+          capabilities: ['read-provider-profile', 'read-telemetry'],
+          blockedActions: ['hashpower-purchase', 'treasury-movement', 'wallet-claim'],
+          telemetry: {
+            reportingMode: 'partner-api',
+            freshness: 'daily-mock',
+            lastObservedAt: '2026-05-20',
+            healthSignal: 'watch',
+            notes: 'Read-only mock telemetry.'
+          },
+          diligenceRequirements: ['custody classification'],
+          fallbackStrategy: 'Manual backup telemetry.',
+          lifecycleStage: 'mock-adapter',
+          governanceNotes: 'Mock notes.'
+        }],
+        meta: {
+          source: 'mining-api',
+          version: 'v1',
+          generatedAt: '2026-05-20T00:00:00.000Z',
+          mock: true
+        },
+        errors: []
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    )));
+
+    const adapters = await miningApi.getProviderAdapters();
+
+    expect(providerAdapterDefinitionSchema.array().parse(adapters)[0]).toMatchObject({
+      providerSlug: 'luxor',
+      readOnly: true,
+      executionEnabled: false
+    });
+    expect(getMiningMeta(adapters)).toMatchObject({ source: 'api' });
+  });
+
+  test('falls back to minimal provider adapters when adapter endpoint is unavailable', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => {
+      throw new Error('adapter endpoint offline');
+    }));
+
+    const adapters = await miningApi.getProviderAdapters();
+
+    expect(adapters.length).toBeGreaterThan(0);
+    expect(adapters.every((adapter) => adapter.readOnly && !adapter.executionEnabled)).toBe(true);
+    expect(getMiningMeta(adapters)).toMatchObject({
       source: 'fallback',
       message: 'Using local mock fallback — Mining API unavailable.'
     });

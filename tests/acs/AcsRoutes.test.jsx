@@ -117,9 +117,13 @@ describe('AxodusAPP ACS routes', () => {
     expect(screen.getByText(/No real execution, CEX API or automation is enabled/i)).toBeInTheDocument();
     expect(screen.getByText(/User Status Summary/i)).toBeInTheDocument();
     expect(screen.getByText(/Emergency Stop Status/i)).toBeInTheDocument();
+    expect(screen.getByText(/active stops present/i)).toBeInTheDocument();
+    expect(screen.getByText(/policy_inspection_block_only/i)).toBeInTheDocument();
     expect(screen.getByText(/Performance Records/i)).toBeInTheDocument();
     expect(screen.getByText(/Receipt Audit Preview/i)).toBeInTheDocument();
     expect(screen.getByText(/API Secret Safety/i)).toBeInTheDocument();
+    expect(screen.getByText(/MockAcsSecretStorage/i)).toBeInTheDocument();
+    expect(screen.getByText(/contract-only/i)).toBeInTheDocument();
     expect(screen.getAllByText(/disable withdrawal/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/use IP permission/i)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /^Products$/i })).not.toBeInTheDocument();

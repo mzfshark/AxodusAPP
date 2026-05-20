@@ -150,5 +150,39 @@ export const acsInspectionMock = {
       telemetry: { warnings: ['mock audit preview only'], riskFlags: [] },
       createdAt: '2026-01-01T00:00:00.000Z'
     }
-  ]
+  ],
+  emergencyStops: {
+    mode: 'mock',
+    executionImpact: 'policy_inspection_block_only',
+    stops: [
+      {
+        stopId: 'stop_mock_user_001',
+        scope: 'user',
+        source: 'user',
+        wallet: '0xstopped',
+        capabilityId: 'product.trading-ignition',
+        reason: 'mock user emergency stop for inspection',
+        severity: 'critical',
+        active: true,
+        createdAt: '2026-01-01T00:00:00.000Z'
+      }
+    ],
+    warnings: ['Emergency stop inspection is read-only in this phase.']
+  },
+  secretStorageStatus: {
+    mode: 'contract-only',
+    storageEnabled: false,
+    plaintextStorageAllowed: false,
+    frontendSecretExposureAllowed: false,
+    logSecretExposureAllowed: false,
+    supportedSecretTypes: ['cex-api-key', 'cex-api-secret', 'oauth-token', 'webhook-secret'],
+    currentAdapter: 'MockAcsSecretStorage',
+    productionAdapterRequired: 'KMS or Vault equivalent',
+    frontendRules: [
+      'Do not store API secrets in localStorage, sessionStorage, browser memory, or frontend logs.',
+      'Display secretRef/status only; never display raw secret values.',
+      'Recommend disabling withdrawal permissions and using IP permission/allowlist.'
+    ],
+    warnings: ['No real secret persistence is enabled.', 'No real CEX API integration is enabled.']
+  }
 };

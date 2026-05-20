@@ -44,6 +44,14 @@ export function useAcsReceipts() {
   return useQuery({ queryKey: ['acs', 'receipts'], queryFn: acsApi.getReceipts });
 }
 
+export function useAcsEmergencyStops() {
+  return useQuery({ queryKey: ['acs', 'emergency-stops'], queryFn: acsApi.getEmergencyStops });
+}
+
+export function useAcsSecretStorageStatus() {
+  return useQuery({ queryKey: ['acs', 'secret-storage-status'], queryFn: acsApi.getSecretStorageStatus });
+}
+
 export function useAcsStatus(walletAddress) {
   return useQuery({ queryKey: ['acs', 'status', walletAddress || 'none'], queryFn: () => acsApi.getStatus(walletAddress) });
 }
