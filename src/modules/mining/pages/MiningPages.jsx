@@ -123,7 +123,16 @@ export function MiningProviderDetails() {
   if (details.isLoading) return <LoadingState />;
   if (!details.data) return <EmptyState message="Provider was not found in the Mining registry." />;
 
-  const { provider, riskProfile, liquidity, hashTokens, allocations, dueDiligence } = details.data;
+  const {
+    provider,
+    riskProfile,
+    liquidity,
+    hashTokens = [],
+    allocations = [],
+    dueDiligence,
+    governanceValidations = [],
+    telemetry
+  } = details.data;
 
   return (
     <main className="app-view-shell space-y-8">
@@ -137,16 +146,40 @@ export function MiningProviderDetails() {
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Panel title="Exposure Assumptions">
           <div className="space-y-4 text-sm leading-6 text-outline">
-            <p><strong className="text-on-surface">Allocation:</strong> {provider.allocationMode}</p>
-            <p><strong className="text-on-surface">Custody:</strong> {provider.custodyAssumption}</p>
+            <p><strong className="text-on-surface">Provider type:</strong> {provider.providerType}</p>
+            <p><strong className="text-on-surface">Hash model:</strong> {provider.tokenizedHashModel || provider.allocationMode}</p>
+            <p><strong className="text-on-surface">Custody:</strong> {provider.custodyModel || provider.custodyAssumption}</p>
             <p><strong className="text-on-surface">Accounting:</strong> {provider.rewardAccounting}</p>
+            <p><strong className="text-on-surface">Treasury eligibility:</strong> {provider.treasuryCompatible ? 'eligible with controls' : 'not eligible'}</p>
           </div>
         </Panel>
         <Panel title="Risk And Liquidity">
           <div className="space-y-4 text-sm leading-6 text-outline">
-            <p>{riskProfile?.notes}</p>
-            <p>Exposure limit: <strong className="text-on-surface">{riskProfile?.treasuryExposureLimitPct || 0}%</strong></p>
-            <p>Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus || 'unknown'}</strong>. {liquidity?.liquidityNotes}</p>
+            <p>{riskProfile?.explanation || riskProfile?.notes}</p>
+            <p>Composite score: <strong className="text-on-surface">{riskProfile?.compositeScore ?? 'n/a'}</strong></p>
+            <p>Exposure limit: <strong className="text-on-surface">{riskProfile?.treasuryExposureLimitPct || provider.recommendedAllocationLimitPct || 0}%</strong></p>
+            <p>Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus || provider.liquidityProfile || 'unknown'}</strong>. {liquidity?.liquidityNotes}</p>
+            <p>Governance recommendation: <strong className="text-on-surface">{riskProfile?.governanceRecommendation || 'No recommendation recorded.'}</strong></p>
+          </div>
+        </Panel>
+      </section>
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <Panel title="Provider Readiness">
+          <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
+            <Badge>{provider.operationalMaturity || telemetry?.operationalMaturity || 'maturity unknown'}</Badge>
+            <Badge>{provider.integrationReadiness || 'integration unknown'}</Badge>
+            <Badge>{provider.apiAvailability || telemetry?.apiAvailability || 'API unknown'}</Badge>
+            <Badge>{provider.publicStatus || 'status unknown'}</Badge>
+          </div>
+          <p className="mt-4 text-sm leading-6 text-outline">{provider.complianceNotes}</p>
+          <p className="mt-3 text-sm leading-6 text-outline">{provider.strategicNotes}</p>
+        </Panel>
+        <Panel title="Mock Telemetry">
+          <div className="space-y-3 text-sm leading-6 text-outline">
+            <p><strong className="text-on-surface">Reporting:</strong> {telemetry?.reportingStatus || 'manual mock reporting'}</p>
+            <p><strong className="text-on-surface">Latest signal:</strong> {telemetry?.latestMockSignal || 'provider observable'}</p>
+            <p><strong className="text-on-surface">Supported assets:</strong> {(provider.supportedAssets || []).join(' / ') || provider.primaryAsset}</p>
+            <p><strong className="text-on-surface">Chains:</strong> {(provider.supportedChains || []).join(' / ') || 'not specified'}</p>
           </div>
         </Panel>
       </section>
@@ -175,9 +208,33 @@ export function MiningProviderDetails() {
             <div className="rounded-lg border border-white/10 bg-surface-container p-4 text-sm">
               <DiligenceBadge status={dueDiligence.status} />
               <p className="mt-3 leading-6 text-outline">{dueDiligence.blockerSummary}</p>
-              <p className="mt-3 text-xs text-outline">{dueDiligence.documents.join(' / ') || 'No documents provided'}</p>
+              <p className="mt-3 text-xs text-outline">{(dueDiligence.documents || []).join(' / ') || 'No documents provided'}</p>
+              <div className="mt-4 space-y-2">
+                {(dueDiligence.checklist || []).map((item) => (
+                  <div key={item.item} className="rounded-md border border-white/10 bg-surface-container-low p-3">
+                    <p className="font-bold text-on-surface">{item.item}</p>
+                    <p className="mt-1 text-xs text-outline">{item.status}: {item.notes}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : null}
+        </div>
+      </Panel>
+      <Panel title="Governance Validation">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {governanceValidations.length ? governanceValidations.map((validation) => (
+            <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.validationType}</p>
+                  <p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p>
+                </div>
+                <GovernanceBadge standing={validation.status} />
+              </div>
+              <p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>
+            </article>
+          )) : <EmptyState message="No provider-specific governance validation was returned." />}
         </div>
       </Panel>
     </main>
@@ -274,13 +331,32 @@ export function MiningTreasury() {
   const treasury = useMiningTreasury();
   const providers = useMiningProviders();
   if (treasury.isLoading || providers.isLoading) return <LoadingState />;
+  const totalExposure = treasury.data.totalExposureUsd ?? sumNotional(treasury.data.exposures || []);
+  const groupedRisk = Object.entries(treasury.data.exposureByRiskLevel || {});
+  const groupedAssets = Object.entries(treasury.data.exposureByAsset || {});
+  const groupedCustody = Object.entries(treasury.data.exposureByCustodyModel || {});
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Treasury Routing" description="Treasury exposure is mock-only and read-only. This interface does not move funds or execute allocations." />
-      <MetricCard icon={Landmark} label="Mock Treasury Exposure" value={formatUsd(sumNotional(treasury.data.exposures))} detail="All routes require governance and diligence visibility." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <MetricCard icon={Landmark} label="Mock Treasury Exposure" value={formatUsd(totalExposure)} detail="All routes require governance and diligence visibility." />
+        <MetricCard label="Providers" value={String(treasury.data.diversification?.providerCount || 0)} detail="Diversification is calculated by provider exposure route." />
+        <MetricCard label="Largest route" value={`${treasury.data.diversification?.largestProviderExposurePct || 0}%`} detail="Mock concentration guardrail for treasury allocation." />
+      </section>
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Panel title="By Risk Level">
+          <div className="space-y-2">{groupedRisk.map(([level, value]) => <div key={level} className="flex items-center justify-between text-sm"><RiskBadge level={level} /><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
+        </Panel>
+        <Panel title="By Asset">
+          <div className="space-y-2">{groupedAssets.map(([asset, value]) => <div key={asset} className="flex items-center justify-between text-sm text-outline"><span>{asset}</span><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
+        </Panel>
+        <Panel title="By Custody Model">
+          <div className="space-y-2">{groupedCustody.map(([custody, value]) => <div key={custody} className="flex items-center justify-between gap-4 text-sm text-outline"><span>{custody}</span><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
+        </Panel>
+      </section>
       <Panel title="Exposure Routes">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {treasury.data.exposures.map((exposure) => {
+          {(treasury.data.exposures || []).map((exposure) => {
             const provider = providers.data.find((item) => item.id === exposure.providerId);
             return <article key={exposure.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm text-outline">{exposure.treasuryRoute}</p></div><DiligenceBadge status={exposure.reviewStatus} /></div><div className="mt-4 flex flex-wrap gap-2"><Badge>{exposure.exposurePct}% exposure</Badge><Badge>{exposure.reserveImpact} reserve impact</Badge><Badge>{exposure.approvedByGovernance ? 'governance approved' : 'not approved'}</Badge></div><p className="mt-4 text-2xl font-black text-on-surface">{formatUsd(exposure.notionalUsd)}</p></article>;
           })}
@@ -296,13 +372,13 @@ export function MiningRisk() {
   if (risk.isLoading || providers.isLoading) return <LoadingState />;
   return (
     <main className="app-view-shell space-y-8">
-      <MiningHeader title="Risk Console" description="Provider risk is shown across custody, liquidity, operational, jurisdictional, and treasury exposure dimensions." />
+      <MiningHeader title="Risk Console" description="Provider risk is shown across counterparty, liquidity, custody, operational, regulatory, transparency, smart contract, volatility, and concentration dimensions." />
       <Panel title="Provider Risk Profiles">
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           {risk.data.riskProfiles.map((profile) => {
             const provider = providers.data.find((item) => item.id === profile.providerId);
             const liquidity = risk.data.liquidity.find((item) => item.providerId === profile.providerId);
-            return <article key={profile.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{profile.notes}</p></div><RiskBadge level={profile.riskLevel} /></div><div className="mt-5 grid grid-cols-1 gap-2 text-sm md:grid-cols-2"><Badge>custody {profile.custodyRisk}</Badge><Badge>liquidity {profile.liquidityRisk}</Badge><Badge>operations {profile.operationalRisk}</Badge><Badge>jurisdiction {profile.jurisdictionRisk}</Badge></div><p className="mt-4 text-sm text-outline">Treasury limit: <strong className="text-on-surface">{profile.treasuryExposureLimitPct}%</strong>. Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus}</strong>.</p></article>;
+            return <article key={profile.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{profile.explanation || profile.notes}</p></div><RiskBadge level={profile.riskLevel} /></div><div className="mt-5 grid grid-cols-1 gap-2 text-sm md:grid-cols-3"><Badge>counterparty {profile.counterpartyRisk}</Badge><Badge>custody {profile.custodyRisk}</Badge><Badge>liquidity {profile.liquidityRisk}</Badge><Badge>operations {profile.operationalRisk}</Badge><Badge>regulatory {profile.regulatoryRisk}</Badge><Badge>transparency {profile.transparencyRisk}</Badge><Badge>contract {profile.smartContractRisk}</Badge><Badge>volatility {profile.marketVolatilityRisk}</Badge><Badge>concentration {profile.concentrationRisk}</Badge></div><p className="mt-4 text-sm text-outline">Score: <strong className="text-on-surface">{profile.compositeScore}</strong>. Treasury limit: <strong className="text-on-surface">{profile.treasuryExposureLimitPct}%</strong>. Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus}</strong>.</p><p className="mt-3 text-sm text-outline">{profile.governanceRecommendation}</p></article>;
           })}
         </div>
       </Panel>
@@ -317,7 +393,7 @@ export function MiningGovernance() {
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Governance Validation" description="Mining provider exposure remains subordinate to governance review, treasury limits, and constitutional controls." />
       <Panel title="Validation Queue">
-        <div className="space-y-3">{validations.data.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div></article>)}</div>
+        <div className="space-y-3">{validations.data.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div><div className="mt-4 grid grid-cols-1 gap-3 text-sm md:grid-cols-3"><Badge>{validation.providerWhitelistingStatus}</Badge><Badge>{validation.treasuryAllocationApprovalStatus}</Badge><Badge>pause {validation.emergencyPauseRecommendation}</Badge></div><p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>{validation.restrictionReasons?.length ? <p className="mt-2 text-xs text-outline">Restrictions: {validation.restrictionReasons.join(' / ')}</p> : null}</article>)}</div>
       </Panel>
     </main>
   );
@@ -332,7 +408,7 @@ export function MiningReports() {
       <MiningHeader title="Reports" description="Reporting focuses on treasury exposure, provider review, governance queues, and due diligence blockers." />
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Panel title="Mining Reports">
-          <div className="space-y-3">{reports.data.map((report) => <article key={report.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{report.title}</h2><p className="mt-1 text-sm leading-6 text-outline">{report.summary}</p></div><Badge>{report.status}</Badge></div><p className="mt-3 text-xs font-bold uppercase tracking-widest text-outline">{report.reportType} / {report.period}</p></article>)}</div>
+          <div className="space-y-3">{reports.data.map((report) => <article key={report.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{report.title}</h2><p className="mt-1 text-sm leading-6 text-outline">{report.summary}</p></div><Badge>{report.status}</Badge></div><p className="mt-3 text-xs font-bold uppercase tracking-widest text-outline">{report.reportType} / {report.period}</p><div className="mt-4 space-y-3">{(report.sections || []).map((section) => <div key={section.title} className="rounded-md border border-white/10 bg-surface-container-low p-3"><p className="font-bold text-on-surface">{section.title}</p><ul className="mt-2 space-y-1 text-xs leading-5 text-outline">{(section.findings || []).map((finding) => <li key={finding}>{finding}</li>)}</ul></div>)}</div>{report.nextActions?.length ? <p className="mt-3 text-xs text-outline">Next actions: {report.nextActions.join(' / ')}</p> : null}</article>)}</div>
         </Panel>
         <Panel title="Due Diligence Blockers">
           <div className="space-y-3">{diligence.data.map((item) => <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><p className="font-bold text-on-surface">{item.providerId}</p><DiligenceBadge status={item.status} /></div><p className="mt-2 text-sm leading-6 text-outline">{item.blockerSummary}</p><p className="mt-3 text-xs text-outline">Documents: {item.documents.length ? item.documents.join(' / ') : 'not provided'}</p></article>)}</div>
@@ -341,4 +417,3 @@ export function MiningReports() {
     </main>
   );
 }
-

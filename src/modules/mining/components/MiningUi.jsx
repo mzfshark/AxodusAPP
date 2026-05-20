@@ -1,8 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { diligenceTone, governanceTone, riskTone } from '../utils/miningUtils';
 import { miningNavItems } from '../constants/navigation';
+import { getMiningMeta } from '../services/miningApi';
+import { useMiningSummary } from '../hooks/useMiningData';
 
 export function MiningHeader({ title, description }) {
+  const summary = useMiningSummary();
+  const meta = getMiningMeta(summary.data);
+
   return (
     <header className="space-y-5">
       <div>
@@ -10,6 +15,11 @@ export function MiningHeader({ title, description }) {
         <h1 className="mt-2 text-3xl font-black tracking-tight text-on-surface md:text-4xl">{title}</h1>
         <p className="mt-3 max-w-4xl text-sm leading-6 text-outline md:text-base">{description}</p>
       </div>
+      {meta?.source === 'fallback' ? (
+        <div className="rounded-lg border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
+          {meta.message}
+        </div>
+      ) : null}
       <nav className="flex gap-2 overflow-x-auto pb-2">
         {miningNavItems.map((item) => (
           <NavLink
@@ -125,4 +135,8 @@ export function LoadingState() {
 
 export function EmptyState({ message }) {
   return <div className="rounded-lg border border-white/10 bg-surface-container-low p-8 text-sm text-outline">{message}</div>;
+}
+
+export function ErrorState({ message }) {
+  return <div className="rounded-lg border border-red-400/30 bg-red-400/10 p-8 text-sm font-semibold text-red-100">{message}</div>;
 }

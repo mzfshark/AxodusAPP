@@ -108,6 +108,32 @@ By default, the app should be available at `http://localhost:3000`.
 - `/backtesting` - Strategy backtesting interface
 - `/controllers` - Controller management
 
+### Mining Nucleus Integration
+
+AxodusAPP exposes Mining as the official unified frontend surface while the standalone Mining workspace remains the mock-first domain/API service.
+
+Development flow:
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/Mining
+pnpm dev
+```
+
+The Mining API should be available at `http://localhost:8787`.
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/AxodusAPP
+pnpm dev
+```
+
+AxodusAPP runs on `http://localhost:5174` by default and reads `VITE_MINING_API_URL=http://localhost:8787`.
+
+Verification:
+- Open `/mining` to confirm the unified Mining overview loads from the Mining API.
+- Open `/mining/providers/luxor` to confirm provider detail data resolves through the backend.
+- Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
+- Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
+
 ## Wallet Integration
 
 ### MetaMask

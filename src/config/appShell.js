@@ -41,7 +41,7 @@ const nuclei = [
     routeBase: '/mining',
     icon: Pickaxe,
     tone: 'infrastructure',
-    summary: 'Allocation, providers and hash-token operations',
+    summary: 'Tokenized mining exposure, provider risk and treasury allocation readiness',
     sections: [
       { to: '/mining', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/mining/providers', label: 'Providers', icon: Pickaxe },

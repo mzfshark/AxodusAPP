@@ -4,7 +4,8 @@ import MarketplaceBadge from '../components/MarketplaceBadge';
 import MarketplaceMetricCard from '../components/MarketplaceMetricCard';
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
-import { getMarketplaceSeller } from '../services/marketplaceService';
+import { getMarketplaceSeller, getMarketplaceTenant } from '../services/marketplaceService';
+import { getProductLifecycle } from '../utils/stateMachines';
 
 const galleryModes = [
   { id: '', label: 'All assets' },
@@ -21,6 +22,7 @@ export default function MarketplaceAssetGallery() {
   const nftAssets = marketplace.products.filter((product) => product.nftBound).length;
   const signedUrlAssets = marketplace.products.filter((product) => product.signedUrlPreviewAvailable).length;
   const bridgeReadyAssets = marketplace.products.filter((product) => product.bridgeReadiness?.layerZeroReady).length;
+  const tenantScopedAssets = marketplace.products.filter((product) => Boolean(product.tenantId)).length;
 
   const setMode = (tokenStandard) => {
     const next = new URLSearchParams(searchParams);
@@ -40,7 +42,7 @@ export default function MarketplaceAssetGallery() {
         <MarketplaceMetricCard icon={Boxes} label="Registry assets" value={marketplace.products.length} detail="Mock-driven product assets." />
         <MarketplaceMetricCard icon={FileKey2} label="NFT bound" value={nftAssets} detail="ERC721/1155 or NFT access." />
         <MarketplaceMetricCard icon={Layers3} label="Signed URL ready" value={signedUrlAssets} detail="Greenfield/access preview available." />
-        <MarketplaceMetricCard icon={ShieldCheck} label="Bridge ready" value={bridgeReadyAssets} detail="LayerZero readiness only." />
+        <MarketplaceMetricCard icon={ShieldCheck} label="Tenant scoped" value={tenantScopedAssets} detail={`${bridgeReadyAssets} bridge-ready previews.`} />
       </section>
 
       <section className="flex flex-wrap gap-2 rounded-lg border border-white/10 bg-surface-container-low p-3">
@@ -69,6 +71,8 @@ export default function MarketplaceAssetGallery() {
 
 function AssetGalleryCard({ product }) {
   const seller = getMarketplaceSeller(product.sellerId);
+  const tenant = getMarketplaceTenant(product.tenantId ?? seller?.tenantId);
+  const productLifecycle = getProductLifecycle(product);
   return (
     <article className="overflow-hidden rounded-lg border border-white/10 bg-surface-container-low">
       <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
@@ -78,6 +82,7 @@ function AssetGalleryCard({ product }) {
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-2">
             <MarketplaceBadge value={product.tokenStandard} />
             <MarketplaceBadge value={product.listingType} />
+            <MarketplaceBadge value={product.nftBound ? 'active' : 'deferred'} label={product.nftBound ? 'NFT bound' : 'offchain'} />
           </div>
         </div>
 
@@ -100,6 +105,10 @@ function AssetGalleryCard({ product }) {
             <Info label="Price" value={`${product.pricing.amount} ${product.pricing.currency}`} />
             <Info label="Delivery" value={product.deliveryType} />
             <Info label="Risk" value={product.operationalRisk} />
+            <Info label="Access" value={product.accessModel} />
+            <Info label="Lifecycle" value={productLifecycle} />
+            <Info label="Visibility" value={product.visibility} />
+            <Info label="Updated" value={product.updatedAt?.slice(0, 10) ?? 'mock'} />
           </dl>
 
           <div className="grid grid-cols-1 gap-3 text-sm lg:grid-cols-3">
@@ -110,7 +119,10 @@ function AssetGalleryCard({ product }) {
 
           {seller && (
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
-              <Link to={`/marketplace/sellers/${seller.id}`} className="text-sm font-bold text-on-surface hover:text-primary">{seller.name}</Link>
+              <div>
+                <Link to={`/marketplace/sellers/${seller.id}`} className="text-sm font-bold text-on-surface hover:text-primary">{seller.name}</Link>
+                <p className="mt-1 text-xs text-outline">{tenant?.name} / {tenant?.reviewAuthority}</p>
+              </div>
               <div className="flex flex-wrap gap-2">
                 <MarketplaceBadge value={seller.governanceStanding} />
                 <MarketplaceBadge value={product.constitutionalStanding} />

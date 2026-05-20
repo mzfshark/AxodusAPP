@@ -20,9 +20,10 @@ describe('Marketplace asset gallery', () => {
 
     expect(screen.getByRole('heading', { name: /Asset Gallery/i })).toBeInTheDocument();
     expect(screen.getByText(/Registry assets/i)).toBeInTheDocument();
-    expect(screen.getByText(/NFT bound/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/NFT bound/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Signed URL ready/i)).toBeInTheDocument();
-    expect(screen.getByText(/Bridge ready/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tenant scoped/i)).toBeInTheDocument();
+    expect(screen.getByText(/bridge-ready previews/i)).toBeInTheDocument();
 
     for (const product of marketplaceMock.products) {
       expect(screen.getByRole('link', { name: new RegExp(product.title, 'i') })).toBeInTheDocument();

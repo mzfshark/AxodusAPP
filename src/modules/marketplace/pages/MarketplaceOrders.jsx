@@ -1,8 +1,9 @@
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import MarketplaceBadge from '../components/MarketplaceBadge';
 import MarketplaceMetricCard from '../components/MarketplaceMetricCard';
+import MarketplaceLifecycleRail from '../components/MarketplaceLifecycleRail';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
-import { getMarketplaceProductById } from '../services/marketplaceService';
+import { getMarketplaceProductById, getMarketplaceTenant } from '../services/marketplaceService';
 
 export default function MarketplaceOrders() {
   const marketplace = useMarketplaceData();
@@ -44,6 +45,7 @@ export default function MarketplaceOrders() {
                     <td className="px-4 py-4">
                       <p className="font-bold text-on-surface">{product?.title ?? order.productId}</p>
                       <p className="mt-1 text-xs text-outline">{product?.tokenStandard} / {product?.listingType}</p>
+                      <p className="mt-1 text-xs text-outline">{getMarketplaceTenant(product?.tenantId)?.name}</p>
                     </td>
                     <td className="px-4 py-4">
                       <p className="font-semibold text-on-surface">{order.buyer}</p>
@@ -62,6 +64,7 @@ export default function MarketplaceOrders() {
                     <td className="px-4 py-4">
                       <MarketplaceBadge value={preview.status} />
                       <p className="mt-2 font-mono text-xs text-outline">fee {preview.protocolFee} / royalty {preview.royaltyAmount} / net {preview.sellerNet}</p>
+                      <p className="mt-1 text-xs text-outline">Accepted: {preview.acceptedCurrencies.join(', ')}</p>
                       <p className="mt-1 text-xs text-outline">{preview.blockedReasons.join(', ') || 'mock clear, settlement disabled'}</p>
                     </td>
                   </tr>
@@ -70,6 +73,25 @@ export default function MarketplaceOrders() {
             </tbody>
           </table>
         </div>
+      </section>
+      <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        {marketplace.operations.orderPreviews.map((preview) => (
+          <article key={`${preview.orderId}-lifecycle`} className="rounded-lg border border-white/10 bg-surface-container-low p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-mono text-xs text-outline">{preview.orderId}</p>
+                <h2 className="mt-2 text-lg font-bold text-on-surface">Mock purchase lifecycle</h2>
+              </div>
+              <MarketplaceBadge value={preview.purchaseLifecycle} />
+            </div>
+            <div className="mt-4 space-y-3">
+              <MarketplaceLifecycleRail title="Purchase" steps={preview.purchaseTimeline} compact />
+              <MarketplaceLifecycleRail title="Billing" steps={preview.billingTimeline} compact />
+              <MarketplaceLifecycleRail title="License" steps={preview.licenseTimeline} compact />
+            </div>
+            <p className="mt-4 rounded-lg border border-yellow-400/20 bg-yellow-500/10 p-3 text-xs text-yellow-100">{preview.disclaimer}</p>
+          </article>
+        ))}
       </section>
     </main>
   );

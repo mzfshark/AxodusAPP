@@ -13,6 +13,10 @@ describe('Marketplace compliance services', () => {
     expect(validation.service).toBe('GovernanceValidationService');
     expect(validation.activationEnabled).toBe(false);
     expect(validation.settlementAllowed).toBe(false);
+    expect(validation.productLifecycle).toBe('restricted');
+    expect(validation.governanceLifecycle).toBe('restricted');
+    expect(validation.productTimeline.length).toBeGreaterThan(0);
+    expect(validation.governanceTimeline.length).toBeGreaterThan(0);
     expect(validation.blockers).toEqual(expect.arrayContaining(['product-restricted', 'plugin-audit-required']));
     expect(validation.requiredReviews.map((review) => review.label)).toEqual(
       expect.arrayContaining(['Constitutional review', 'Treasury review', 'ACS metadata review', 'Plugin compatibility review']),

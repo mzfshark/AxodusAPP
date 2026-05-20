@@ -218,3 +218,39 @@ Required boundaries:
 Reasoning:
 
 The Academy MVP is validating navigation, educational legitimacy, reward doctrine, trust, ACS readiness, governance eligibility, treasury control, and proof visibility before production blockchain or certification execution is enabled.
+
+---
+
+## Decision 16 — Marketplace MVP Is Tenant-Aware and Settlement-Deferred
+
+The Marketplace nucleus in AxodusAPP is approved as a mock-first, governance-aware, tenant-aware NFT marketplace and commerce nucleus.
+
+It must preserve NFT marketplace primitives as first-class concepts:
+
+- ERC721 and ERC1155 assets
+- EIP-2981 royalty previews
+- fixed listings
+- auctions
+- bids
+- item detail pages
+- create/sell previews
+- buy-now previews
+- bid modals
+
+Product, license, subscription, billing, publisher, and delivery workflows may extend this nucleus, but they must not replace the Marketplace identity as an NFT marketplace governance layer.
+
+Required boundaries:
+
+- Marketplace products must carry seller, tenant/DAO, constitutional, governance, maturity, visibility, license, delivery, chain, royalty, billing, subscription, and lifecycle context.
+- Mock lifecycle states must be visible for product, governance validation, purchase, license, subscription, and billing flows.
+- Adapter boundaries may exist for marketplace contracts, auctions, royalties, Reown wallet state, Greenfield access, LayerZero bridge readiness, treasury settlement, and billing providers.
+- All adapter implementations must return mock or preview responses only.
+- No real payment, contract write, minting, purchase, bid placement, treasury routing, royalty settlement, Greenfield signed URL issuance, or LayerZero messaging is enabled.
+
+Reasoning:
+
+The Marketplace should validate Axodus commerce continuity before settlement. Users must understand who publishes an asset, which tenant or DAO owns or validates it, what license applies, which governance requirements block activation, which chains are supported, and what mock purchase or simulated license issuance would produce.
+
+Implementation note:
+
+Marketplace UI and services must use explicit labels such as `Mock validation`, `Preview only`, `No settlement`, `No wallet transaction`, `No treasury execution`, `No contract write`, and `Simulated license issuance` wherever an action is not live.

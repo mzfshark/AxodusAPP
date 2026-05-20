@@ -319,5 +319,23 @@ export const getMarketplaceBoundaryReadiness = () => {
       status: 'deferred',
       detail: `${LayerZeroBridgeService.getSupportedChains().length} supported chain labels, no bridge execution`,
     },
+    {
+      id: 'reown-wallet-adapter',
+      label: 'ReownWalletAdapter',
+      status: 'mocked',
+      detail: 'Wallet state and signature previews return mock-only responses',
+    },
+    {
+      id: 'treasury-settlement-adapter',
+      label: 'TreasurySettlementAdapter',
+      status: 'deferred',
+      detail: 'Treasury route previews are visible; no treasury execution',
+    },
+    {
+      id: 'billing-provider-adapter',
+      label: 'BillingProviderAdapter',
+      status: 'mocked',
+      detail: 'Invoice previews are generated without payment provider execution',
+    },
   ];
 };
