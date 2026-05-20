@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Gavel, ShoppingCart, X } from 'lucide-react';
-import { AuctionService, MarketplaceContractAdapter } from '../services/boundaryAdapters';
+import { AuctionService, MarketplaceContractAdapter, StorageAccessService } from '../services/boundaryAdapters';
 
 export default function PurchasePreviewModal({ product, onClose }) {
   const [record, setRecord] = useState(null);
@@ -8,7 +8,11 @@ export default function PurchasePreviewModal({ product, onClose }) {
 
   async function buyNow() {
     const result = await MarketplaceContractAdapter.buyNow(product);
-    setRecord(result.purchase);
+    setRecord({
+      ...result.purchase,
+      signedUrlPreview: StorageAccessService.createSignedUrlPreview(product, result.purchase),
+      executionBoundary: result.executionBoundary,
+    });
   }
 
   async function placeBid() {
@@ -52,6 +56,7 @@ export default function PurchasePreviewModal({ product, onClose }) {
             <div className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 p-4 text-sm text-emerald-100">
               <p className="font-bold">Mock record: {record.status}</p>
               <p>{record.amount} {record.currency} | license {record.licenseIssued}</p>
+              {record.executionBoundary && <p className="mt-2">Adapter: {record.executionBoundary.adapter} / {record.executionBoundary.mode}</p>}
               {record.signedUrlPreview && <p className="mt-2 break-all">Signed URL preview: {record.signedUrlPreview}</p>}
             </div>
           )}

@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
-import MarketplaceProductCard from '../components/MarketplaceProductCard';
+import MarketplaceListingsTable from '../components/MarketplaceListingsTable';
 import { filterMarketplaceProducts } from '../services/marketplaceService';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
 
-export default function MarketplaceExplore() {
+export default function MarketplaceListings() {
   const marketplace = useMarketplaceData();
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = useMemo(() => ({
@@ -31,7 +31,10 @@ export default function MarketplaceExplore() {
 
   return (
     <main className="app-view-shell space-y-8">
-      <MarketplacePageHeader title="Product Explorer" description="Search NFT listings, governance-enabled licenses, Academy assets, MCP services, and trading strategy access passes." />
+      <MarketplacePageHeader
+        title="Listings Registry"
+        description="Operational registry for Marketplace assets. This view prioritizes DAO ownership, treasury destination, execution scope, ACS review, and risk visibility."
+      />
       <section className="grid grid-cols-1 gap-3 rounded-lg border border-white/10 bg-surface-container-low p-4 md:grid-cols-2 xl:grid-cols-7">
         <FilterInput label="Search" value={filters.query} onChange={(query) => setFilter('query', query)} />
         <FilterSelect label="Category" value={filters.category} values={categories} onChange={(category) => setFilter('category', category)} />
@@ -41,9 +44,7 @@ export default function MarketplaceExplore() {
         <FilterSelect label="Risk" value={filters.operationalRisk} values={['low', 'medium', 'high']} onChange={(operationalRisk) => setFilter('operationalRisk', operationalRisk)} />
         <FilterSelect label="ACS" value={filters.acsValidationState} values={acsStates} onChange={(acsValidationState) => setFilter('acsValidationState', acsValidationState)} />
       </section>
-      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-        {products.map((product) => <MarketplaceProductCard key={product.id} product={product} />)}
-      </section>
+      <MarketplaceListingsTable products={products} />
     </main>
   );
 }
@@ -52,7 +53,7 @@ function FilterInput({ label, value, onChange }) {
   return (
     <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-outline">
       {label}
-      <input className="rounded-lg border border-white/10 bg-surface px-3 py-2 text-sm normal-case tracking-normal text-on-surface outline-none focus:border-primary" value={value} onChange={(event) => onChange(event.target.value)} />
+      <input className="marketplace-input normal-case tracking-normal" value={value} onChange={(event) => onChange(event.target.value)} />
     </label>
   );
 }
@@ -61,7 +62,7 @@ function FilterSelect({ label, value, values, onChange }) {
   return (
     <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-outline">
       {label}
-      <select className="rounded-lg border border-white/10 bg-surface px-3 py-2 text-sm normal-case tracking-normal text-on-surface outline-none focus:border-primary" value={value} onChange={(event) => onChange(event.target.value)}>
+      <select className="marketplace-input normal-case tracking-normal" value={value} onChange={(event) => onChange(event.target.value)}>
         <option value="">All</option>
         {values.map((item) => <option key={item} value={item}>{item}</option>)}
       </select>

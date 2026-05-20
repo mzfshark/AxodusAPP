@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { BadgeDollarSign, Gavel, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Gavel, Landmark, ShieldAlert, ShieldCheck } from 'lucide-react';
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import MarketplaceMetricCard from '../components/MarketplaceMetricCard';
 import MarketplaceProductCard from '../components/MarketplaceProductCard';
+import MarketplaceListingsTable from '../components/MarketplaceListingsTable';
 import MarketplaceBadge from '../components/MarketplaceBadge';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
 
@@ -11,8 +12,8 @@ export default function MarketplaceHome() {
   const metrics = [
     { icon: Gavel, label: 'Active listings', value: marketplace.metrics.activeListings, detail: 'Fixed, auction, and license previews.' },
     { icon: ShieldCheck, label: 'NFT-bound assets', value: marketplace.metrics.nftBoundProducts, detail: 'ERC721/1155 ownership models.' },
-    { icon: ShieldAlert, label: 'Governance review', value: marketplace.metrics.pendingGovernance, detail: 'Pending validation queue.' },
-    { icon: BadgeDollarSign, label: 'Royalty preview', value: `${marketplace.metrics.royaltyPreview} USDC`, detail: 'Mock EIP-2981/custom splits.' },
+    { icon: ShieldAlert, label: 'ACS review', value: marketplace.metrics.acsReviewProducts, detail: 'Metadata, plugin, or risk review.' },
+    { icon: Landmark, label: 'Treasury routes', value: marketplace.metrics.treasuryDestinations, detail: 'Visible mock destinations.' },
   ];
 
   return (
@@ -24,9 +25,24 @@ export default function MarketplaceHome() {
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {metrics.map((metric) => <MarketplaceMetricCard key={metric.label} {...metric} />)}
       </section>
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <MarketplaceMetricCard label="Orders in review" value={marketplace.metrics.ordersPendingReview} detail="Mock orders awaiting governance validation." />
+        <MarketplaceMetricCard label="Restricted subscriptions" value={marketplace.metrics.subscriptionsRestricted} detail="Access lifecycle needs review." />
+        <MarketplaceMetricCard label="Treasury routes in review" value={marketplace.metrics.treasuryRoutesUnderReview} detail="Accounting hooks not cleared." />
+        <MarketplaceMetricCard label="Publisher blockers" value={marketplace.metrics.publisherTasksBlocked} detail="Metadata or plugin blockers." />
+      </section>
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {marketplace.products.map((product) => <MarketplaceProductCard key={product.id} product={product} />)}
+        <div className="space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-on-surface">Operational registry</h2>
+              <p className="mt-1 text-sm text-outline">DAO ownership, treasury destination, ACS review, and execution scope are first-class listing metadata.</p>
+            </div>
+            <Link to="/marketplace/listings" className="inline-flex rounded-lg border border-white/10 px-3 py-2 text-sm font-bold text-on-surface hover:border-primary/40">
+              Open registry
+            </Link>
+          </div>
+          <MarketplaceListingsTable products={marketplace.products} />
         </div>
         <aside className="rounded-lg border border-white/10 bg-surface-container-low p-5">
           <h2 className="text-xl font-bold text-on-surface">Phase 2 boundaries</h2>
@@ -46,6 +62,9 @@ export default function MarketplaceHome() {
             Create / sell preview
           </Link>
         </aside>
+      </section>
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {marketplace.products.slice(0, 2).map((product) => <MarketplaceProductCard key={product.id} product={product} />)}
       </section>
     </main>
   );

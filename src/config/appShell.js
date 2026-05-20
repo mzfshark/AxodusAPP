@@ -1,5 +1,6 @@
 import {
   Banknote,
+  BookOpenCheck,
   BriefcaseBusiness,
   Building,
   Coins,
@@ -245,8 +246,10 @@ const nuclei = [
     sections: [
       { to: '/academy', label: 'Home', icon: GraduationCap, end: true },
       { to: '/academy/courses', label: 'Courses', icon: LibraryBig },
+      { to: '/academy/workspace/constitutional-onboarding', label: 'Workspace', icon: BookOpenCheck },
       { to: '/academy/dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/academy/progress', label: 'Progress Engine', icon: Gauge },
+      { to: '/academy/eligibility', label: 'Eligibility', icon: ShieldCheck },
       { to: '/academy/certifications', label: 'Certifications', icon: ShieldCheck },
       { to: '/academy/rewards', label: 'Rewards', icon: Banknote },
       { to: '/academy/governance-review', label: 'Governance Review', icon: Landmark },
