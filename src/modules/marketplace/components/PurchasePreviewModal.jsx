@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Gavel, ShoppingCart, X } from 'lucide-react';
 import { AuctionService, MarketplaceContractAdapter, StorageAccessService } from '../services/boundaryAdapters';
+import MarketplaceBadge from './MarketplaceBadge';
+import { getLicenseLifecycle, getPurchaseLifecycle } from '../utils/stateMachines';
 
 export default function PurchasePreviewModal({ product, onClose }) {
   const [record, setRecord] = useState(null);
@@ -12,6 +14,8 @@ export default function PurchasePreviewModal({ product, onClose }) {
       ...result.purchase,
       signedUrlPreview: StorageAccessService.createSignedUrlPreview(product, result.purchase),
       executionBoundary: result.executionBoundary,
+      purchaseLifecycle: getPurchaseLifecycle(result.purchase),
+      licenseLifecycle: getLicenseLifecycle(result.purchase),
     });
   }
 
@@ -24,6 +28,8 @@ export default function PurchasePreviewModal({ product, onClose }) {
       currency: product.pricing.currency,
       status: 'pending-governance-review',
       licenseIssued: 'pending-auction-settlement',
+      purchaseLifecycle: 'preview-issued',
+      licenseLifecycle: 'preview',
     });
   }
 
@@ -56,8 +62,14 @@ export default function PurchasePreviewModal({ product, onClose }) {
             <div className="rounded-lg border border-emerald-400/25 bg-emerald-500/10 p-4 text-sm text-emerald-100">
               <p className="font-bold">Mock record: {record.status}</p>
               <p>{record.amount} {record.currency} | license {record.licenseIssued}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <MarketplaceBadge value={record.purchaseLifecycle} label="Purchase" />
+                <MarketplaceBadge value={record.licenseLifecycle} label="License" />
+                <MarketplaceBadge value="invoice-preview" label="Billing" />
+              </div>
               {record.executionBoundary && <p className="mt-2">Adapter: {record.executionBoundary.adapter} / {record.executionBoundary.mode}</p>}
               {record.signedUrlPreview && <p className="mt-2 break-all">Signed URL preview: {record.signedUrlPreview}</p>}
+              <p className="mt-2">Simulated license issuance. No settlement. No wallet transaction. No treasury execution.</p>
             </div>
           )}
         </div>

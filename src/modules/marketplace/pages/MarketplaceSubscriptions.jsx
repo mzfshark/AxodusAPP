@@ -1,6 +1,7 @@
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import MarketplaceBadge from '../components/MarketplaceBadge';
 import MarketplaceMetricCard from '../components/MarketplaceMetricCard';
+import MarketplaceLifecycleRail from '../components/MarketplaceLifecycleRail';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
 import { getMarketplaceProductById } from '../services/marketplaceService';
 
@@ -47,11 +48,19 @@ export default function MarketplaceSubscriptions() {
                 </div>
                 <dl className="mt-3 grid grid-cols-2 gap-3">
                   <Info label="Days to review" value={readiness.daysToReview} />
-                  <Info label="Access preview" value={readiness.accessPreviewEnabled ? 'available' : 'blocked'} />
-                  <Info label="Renewal" value={readiness.renewalEnabled ? 'enabled' : 'disabled'} />
-                  <Info label="Revocation" value={readiness.revocationPreviewEnabled ? 'preview' : 'disabled'} />
-                </dl>
+                <Info label="Access preview" value={readiness.accessPreviewEnabled ? 'available' : 'blocked'} />
+                <Info label="Renewal" value={readiness.renewalEnabled ? 'enabled' : 'disabled'} />
+                <Info label="Revocation" value={readiness.revocationPreviewEnabled ? 'preview' : 'disabled'} />
+                <Info label="Pause" value={readiness.pausePreviewEnabled ? 'preview' : 'disabled'} />
+                <Info label="Cancel" value={readiness.cancellationPreviewEnabled ? 'preview' : 'disabled'} />
+                <Info label="Billing" value={readiness.billingLifecycle} />
+                <Info label="License" value={readiness.licenseLifecycle} />
+              </dl>
+                <div className="mt-3">
+                  <MarketplaceLifecycleRail title="Subscription lifecycle" steps={readiness.subscriptionTimeline} compact />
+                </div>
                 <p className="mt-3 text-xs text-outline">{readiness.blockedReasons.join(', ') || 'mock clear, renewal execution disabled'}</p>
+                <p className="mt-2 rounded-lg border border-yellow-400/20 bg-yellow-500/10 p-2 text-xs text-yellow-100">{readiness.disclaimer}</p>
               </div>
             </article>
           );

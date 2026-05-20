@@ -108,6 +108,107 @@ By default, the app should be available at `http://localhost:3000`.
 - `/backtesting` - Strategy backtesting interface
 - `/controllers` - Controller management
 
+### Mining Nucleus Integration
+
+AxodusAPP exposes Mining as the official unified frontend surface while the standalone Mining workspace remains the mock-first domain/API service.
+
+Development flow:
+
+Run both services together from AxodusAPP:
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/AxodusAPP
+pnpm dev:mining-stack
+```
+
+Or run each service separately:
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/Mining
+pnpm dev:api
+```
+
+The Mining API should be available at `http://localhost:8787`.
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/AxodusAPP
+pnpm dev
+```
+
+AxodusAPP runs on `http://localhost:5174` by default and reads `VITE_MINING_API_URL=http://localhost:8787`.
+
+Required env:
+
+```bash
+VITE_MINING_API_URL=http://localhost:8787
+VITE_MINING_USE_MOCKS=false
+```
+
+Contract:
+- Mining API responses use the v1 envelope: `{ data, meta, errors }`.
+- `meta.source` is `mining-api`, `meta.version` is `v1`, `meta.mock` is `true`, and `meta.generatedAt` is an ISO timestamp.
+- AxodusAPP reads Mining through `src/modules/mining/services/miningServiceAdapter.js`; pages should not depend on raw API envelopes.
+- Provider adapter contracts are available at `GET /api/mining/provider-adapters` and must remain mock/read-only with execution, wallet, minting, staking, treasury movement, and smart contract actions blocked.
+- Observability endpoints are available for provider telemetry, treasury policy evaluation, accounting, and reconciliation:
+  - `GET /api/mining/provider-telemetry`
+  - `GET /api/mining/treasury-policies`
+  - `GET /api/mining/treasury-policy-evaluation`
+  - `GET /api/mining/accounting`
+  - `GET /api/mining/reconciliation`
+- Governance readiness endpoints are available for action candidates and proposal intent previews:
+  - `GET /api/mining/governance-actions`
+  - `GET /api/mining/proposal-intents`
+- The local fallback is intentionally minimal and only supports safe offline visibility.
+
+Verification:
+- Open `/mining` to confirm the unified Mining overview loads from the Mining API.
+- Open `/mining/providers/luxor` to confirm provider detail data resolves through the backend.
+- Open `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation` to confirm observability views render inside AxodusAPP.
+- Open `/mining/governance` or `/mining/actions` to confirm governance action candidates and proposal intent previews render as non-executable decision surfaces.
+- Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
+- Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
+
+Troubleshooting:
+- Healthcheck: `curl http://localhost:8787/health`
+- Summary contract: `curl http://localhost:8787/api/mining/summary`
+- CORS must allow AxodusAPP local origin `http://localhost:5174`; add extra origins in Mining with `MINING_CORS_ORIGINS` when needed.
+- If the UI shows fallback, confirm the Mining backend is running before debugging frontend routes.
+
+### ACS Operational Intelligence Integration
+
+AxodusAPP exposes ACS as the governance-aware operational visibility interface while the ACS workspace remains the authoritative inspection backend.
+
+Development flow:
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/ACS
+npm run http
+```
+
+The ACS inspection API should be available at `http://localhost:8788/acs`.
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/AxodusAPP
+pnpm dev
+```
+
+AxodusAPP reads `VITE_ACS_API_URL=http://localhost:8788`.
+
+Initial routes:
+- `/acs`
+- `/acs/capabilities`
+- `/acs/services`
+- `/acs/products`
+- `/acs/policy`
+- `/acs/status`
+- `/acs/readiness`
+
+Verification:
+- Open `/acs/capabilities` to confirm Core, Service, and Product capabilities render from ACS.
+- Open `/acs/products` to confirm `product.trading-ignition` appears as one ACS Product Capability.
+- Stop the ACS backend, or set `VITE_ACS_USE_MOCKS=true`, to verify the explicit fallback banner: `Using ACS mock fallback`.
+- Keep ACS read-only in this phase: no automation, trading execution, CEX calls, API secrets, tenant state mutation, or license mutation.
+
 ## Wallet Integration
 
 ### MetaMask

@@ -44,6 +44,28 @@ Integrates:
 - providers
 - execution systems
 
+Current integration target:
+- AxodusAPP consumes ACS as an Operational Intelligence Backend.
+- ACS remains authoritative for capability availability, tenant services, product access, policy decisions, operational states, readiness, warnings, restrictions, and governance requirements.
+- AxodusAPP must not hardcode ACS business logic.
+
+Default local API:
+
+- `VITE_ACS_API_URL=http://localhost:8788`
+
+Fallback behavior:
+
+- Local ACS inspection mocks may be used only when the API is unavailable or `VITE_ACS_USE_MOCKS=true`.
+- When fallback is active, the UI must clearly show: `Using ACS mock fallback`.
+
+Boundaries:
+
+- Do not receive, render, store, or log API secrets.
+- Do not bypass ACS policy decisions.
+- Do not hardcode tenant/product permissions in the UI.
+- Do not trigger automation, trading, CEX API calls, tenant state mutation, or license mutation from ACS inspection pages.
+- Display `sandbox`, `mock`, `restricted`, and `internal-validation` when applicable.
+
 ---
 
 ## Marketplace Integration
@@ -94,10 +116,51 @@ Integrates:
 
 Integrates:
 
-- providers
-- allocations
-- reward accounting
-- compliance systems
+- external tokenized hash providers
+- provider risk profiles
+- treasury exposure summaries
+- mining vault visibility
+- due diligence state
+- governance validations
+- institutional reports
+
+AxodusAPP consumes Mining through the standalone Mining backend service first.
+
+Default local API:
+
+- `VITE_MINING_API_URL=http://localhost:8787`
+
+Service contract:
+
+- Mining API responses must use the v1 envelope `{ data, meta, errors }`.
+- `meta.source` must be `mining-api`.
+- `meta.version` must be `v1`.
+- `meta.mock` must remain `true` while the MVP is read-only/mock-first.
+- `errors` must always be an array, including provider-not-found responses.
+- AxodusAPP components consume normalized adapter output from `src/modules/mining/services/miningServiceAdapter.js`, never raw envelopes.
+- Provider adapter contracts are exposed through `/api/mining/provider-adapters` and remain read-only/mock. They must explicitly block provider execution, hashpower purchase, treasury movement, wallet claim, minting, staking, and smart contract execution.
+- Mining observability endpoints include `/api/mining/provider-telemetry`, `/api/mining/treasury-policies`, `/api/mining/treasury-policy-evaluation`, `/api/mining/accounting`, and `/api/mining/reconciliation`.
+- AxodusAPP surfaces observability through `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation`, plus treasury policy status inside `/mining/treasury`.
+- Mining governance readiness endpoints include `/api/mining/governance-actions` and `/api/mining/proposal-intents`.
+- AxodusAPP surfaces governance action readiness through `/mining/governance`, `/mining/actions`, and provider detail action sections.
+
+Fallback behavior:
+
+- Minimal local Mining fallback data may be used only when the API is unavailable or `VITE_MINING_USE_MOCKS=true`.
+- When fallback is active, the UI must clearly show: `Using local mock fallback — Mining API unavailable.`
+
+Data ownership:
+
+- Mining workspace owns provider registry, risk scoring, treasury exposure data, vault models, reports, governance validation data, and Fastify API responses.
+- AxodusAPP owns the unified app shell, navigation, route rendering, API consumption, loading states, fallback states, and user-facing presentation.
+
+Boundaries:
+
+- Do not duplicate large Mining mock objects in AxodusAPP; fallback must stay minimal and clearly stale.
+- Do not add wallet claims, minting, staking, provider execution, treasury movement, or smart contract execution to the Mining UI during the read-only MVP.
+- Do not frame Mining as farming, staking, generic emissions, or APY-first yield.
+- Telemetry, policy, accounting, and reconciliation states are advisory mock visibility only.
+- Governance actions and proposal intents are advisory previews only; Governance nucleus must own any future proposal execution path.
 
 ---
 

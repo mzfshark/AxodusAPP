@@ -10,6 +10,10 @@ export function getMarketplaceSeller(sellerId) {
   return marketplaceMock.sellers.find((seller) => seller.id === sellerId);
 }
 
+export function getMarketplaceTenant(tenantId) {
+  return marketplaceMock.tenants.find((tenant) => tenant.id === tenantId);
+}
+
 export function getMarketplaceProduct(slug) {
   return marketplaceMock.products.find((product) => product.slug === slug);
 }
@@ -28,6 +32,13 @@ export function getMarketplaceProductByItemRef(chain, contract, tokenId) {
 
 export function getMarketplaceLicenseForProduct(product) {
   return marketplaceMock.licenses.find((license) => license.type === product?.licenseType) ?? marketplaceMock.licenses[0];
+}
+
+export function getMarketplaceProductContext(product) {
+  const seller = getMarketplaceSeller(product?.sellerId);
+  const tenant = getMarketplaceTenant(product?.tenantId ?? seller?.tenantId);
+  const license = getMarketplaceLicenseForProduct(product);
+  return { product, seller, tenant, license };
 }
 
 export function filterMarketplaceProducts(filters = {}) {
@@ -55,12 +66,17 @@ export function getMarketplaceMetrics() {
     highRiskProducts: products.filter((product) => product.operationalRisk === 'high').length,
     acsReviewProducts: products.filter((product) => product.acsValidationState !== 'validated').length,
     verifiedSellers: marketplaceMock.sellers.filter((seller) => seller.governanceStanding === 'verified').length,
+    tenants: marketplaceMock.tenants.length,
+    tenantWarnings: marketplaceMock.tenants.filter((tenant) => tenant.governanceStanding !== 'verified').length,
+    licenseModels: marketplaceMock.licenses.length,
     royaltyPreview: products.reduce((sum, product) => sum + product.royaltyModel.previewAmount, 0),
     treasuryDestinations: [...new Set(products.map((product) => product.treasuryDestination))].length,
     ordersPendingReview: marketplaceMock.orders.filter((order) => order.status !== 'mock-issued').length,
     subscriptionsRestricted: marketplaceMock.subscriptions.filter((subscription) => subscription.status === 'restricted').length,
     treasuryRoutesUnderReview: marketplaceMock.treasuryRoutes.filter((route) => route.status !== 'compliant').length,
     publisherTasksBlocked: marketplaceMock.publisherQueue.filter((task) => Boolean(task.blocker)).length,
+    mockRevenuePreview: marketplaceMock.orders.reduce((sum, order) => sum + Number(order.amount), 0),
+    acceptedCurrencies: [...new Set(products.flatMap((product) => product.acceptedCurrencies))],
     categories: products.reduce((acc, product) => ({ ...acc, [product.category]: (acc[product.category] ?? 0) + 1 }), {}),
   };
 }

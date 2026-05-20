@@ -26,13 +26,17 @@ import {
 } from "./modules/academy";
 import {
   MiningAllocations,
+  MiningActions,
+  MiningAccounting,
   MiningGovernance,
   MiningHashTokens,
   MiningOverview,
   MiningProviderDetails,
   MiningProviders,
+  MiningReconciliation,
   MiningReports,
   MiningRisk,
+  MiningTelemetry,
   MiningTreasury,
   MiningVaults,
 } from "./modules/mining";
@@ -68,6 +72,16 @@ import {
   LotteryRandomness,
   LotteryTickets,
 } from "./modules/lottery";
+import {
+  AcsCapabilities,
+  AcsOverview,
+  AcsPolicy,
+  AcsPolicyDebug,
+  AcsProducts,
+  AcsReadiness,
+  AcsStatus,
+  AcsTenantServices,
+} from "./modules/acs";
 
 
 const router = createBrowserRouter([
@@ -94,9 +108,13 @@ const router = createBrowserRouter([
       { path: "mining/hash-tokens", element: <MiningHashTokens /> },
       { path: "mining/vaults", element: <MiningVaults /> },
       { path: "mining/allocations", element: <MiningAllocations /> },
+      { path: "mining/telemetry", element: <MiningTelemetry /> },
       { path: "mining/treasury", element: <MiningTreasury /> },
+      { path: "mining/accounting", element: <MiningAccounting /> },
+      { path: "mining/reconciliation", element: <MiningReconciliation /> },
       { path: "mining/risk", element: <MiningRisk /> },
       { path: "mining/governance", element: <MiningGovernance /> },
+      { path: "mining/actions", element: <MiningActions /> },
       { path: "mining/reports", element: <MiningReports /> },
       { path: "marketplace", element: <MarketplaceHome /> },
       { path: "marketplace/explore", element: <MarketplaceExplore /> },
@@ -142,6 +160,14 @@ const router = createBrowserRouter([
       { path: "bba/campaigns", element: <BbaCampaigns /> },
       { path: "bba/partnerships", element: <BbaPartnerships /> },
       { path: "bba/governance", element: <BbaGovernance /> },
+      { path: "acs", element: <AcsOverview /> },
+      { path: "acs/capabilities", element: <AcsCapabilities /> },
+      { path: "acs/services", element: <AcsTenantServices /> },
+      { path: "acs/products", element: <AcsProducts /> },
+      { path: "acs/policy", element: <AcsPolicy /> },
+      { path: "acs/debug", element: <AcsPolicyDebug /> },
+      { path: "acs/status", element: <AcsStatus /> },
+      { path: "acs/readiness", element: <AcsReadiness /> },
       { path: "mcps", element: <Mcps /> },
     ],
   },

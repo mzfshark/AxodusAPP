@@ -6,6 +6,7 @@ import {
   Badge,
   DiligenceBadge,
   EmptyState,
+  ErrorState,
   GovernanceBadge,
   LoadingState,
   MetricCard,
@@ -18,13 +19,20 @@ import {
   useMiningAllocations,
   useMiningDiligence,
   useMiningGovernance,
+  useMiningGovernanceActions,
   useMiningHashTokens,
   useMiningProvider,
+  useMiningProviderTelemetry,
   useMiningProviders,
+  useMiningAccounting,
+  useMiningProposalIntents,
+  useMiningReconciliation,
   useMiningReports,
   useMiningRisk,
   useMiningSummary,
   useMiningTreasury,
+  useMiningTreasuryPolicies,
+  useMiningTreasuryPolicyEvaluation,
   useMiningVaults
 } from '../hooks/useMiningData';
 import { formatUsd, sumNotional } from '../utils/miningUtils';
@@ -36,6 +44,7 @@ export function MiningOverview() {
   const allocations = useMiningAllocations();
 
   if (summary.isLoading || providers.isLoading || risk.isLoading || allocations.isLoading) return <LoadingState />;
+  if (summary.isError || providers.isError || risk.isError || allocations.isError) return <ErrorState message="Mining overview data is unavailable." />;
 
   const chartData = (allocations.data || []).map((allocation) => ({
     name: allocation.allocationName,
@@ -87,6 +96,7 @@ export function MiningProviders() {
   const risk = useMiningRisk();
 
   if (providers.isLoading || risk.isLoading) return <LoadingState />;
+  if (providers.isError || risk.isError) return <ErrorState message="Mining provider registry is unavailable." />;
 
   const selectClass = 'rounded-lg border border-white/10 bg-surface-container-low px-3 py-2 text-sm text-on-surface';
 
@@ -121,9 +131,22 @@ export function MiningProviderDetails() {
   const details = useMiningProvider(providerSlug);
 
   if (details.isLoading) return <LoadingState />;
+  if (details.isError) return <ErrorState message="Mining provider details are unavailable." />;
   if (!details.data) return <EmptyState message="Provider was not found in the Mining registry." />;
 
-  const { provider, riskProfile, liquidity, hashTokens, allocations, dueDiligence } = details.data;
+  const {
+    provider,
+    riskProfile,
+    liquidity,
+    hashTokens = [],
+    allocations = [],
+    dueDiligence,
+    governanceValidations = [],
+    governanceActions = [],
+    proposalIntents = [],
+    normalizedTelemetry,
+    telemetry
+  } = details.data;
 
   return (
     <main className="app-view-shell space-y-8">
@@ -137,16 +160,47 @@ export function MiningProviderDetails() {
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Panel title="Exposure Assumptions">
           <div className="space-y-4 text-sm leading-6 text-outline">
-            <p><strong className="text-on-surface">Allocation:</strong> {provider.allocationMode}</p>
-            <p><strong className="text-on-surface">Custody:</strong> {provider.custodyAssumption}</p>
+            <p><strong className="text-on-surface">Provider type:</strong> {provider.providerType}</p>
+            <p><strong className="text-on-surface">Hash model:</strong> {provider.tokenizedHashModel || provider.allocationMode}</p>
+            <p><strong className="text-on-surface">Custody:</strong> {provider.custodyModel || provider.custodyAssumption}</p>
             <p><strong className="text-on-surface">Accounting:</strong> {provider.rewardAccounting}</p>
+            <p><strong className="text-on-surface">Treasury eligibility:</strong> {provider.treasuryCompatible ? 'eligible with controls' : 'not eligible'}</p>
           </div>
         </Panel>
         <Panel title="Risk And Liquidity">
           <div className="space-y-4 text-sm leading-6 text-outline">
-            <p>{riskProfile?.notes}</p>
-            <p>Exposure limit: <strong className="text-on-surface">{riskProfile?.treasuryExposureLimitPct || 0}%</strong></p>
-            <p>Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus || 'unknown'}</strong>. {liquidity?.liquidityNotes}</p>
+            <p>{riskProfile?.explanation || riskProfile?.notes}</p>
+            <p>Composite score: <strong className="text-on-surface">{riskProfile?.compositeScore ?? 'n/a'}</strong></p>
+            <p>Exposure limit: <strong className="text-on-surface">{riskProfile?.treasuryExposureLimitPct || provider.recommendedAllocationLimitPct || 0}%</strong></p>
+            <p>Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus || provider.liquidityProfile || 'unknown'}</strong>. {liquidity?.liquidityNotes}</p>
+            <p>Governance recommendation: <strong className="text-on-surface">{riskProfile?.governanceRecommendation || 'No recommendation recorded.'}</strong></p>
+          </div>
+        </Panel>
+      </section>
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <Panel title="Provider Readiness">
+          <div className="grid grid-cols-1 gap-3 text-sm md:grid-cols-2">
+            <Badge>{provider.operationalMaturity || telemetry?.operationalMaturity || 'maturity unknown'}</Badge>
+            <Badge>{provider.integrationReadiness || 'integration unknown'}</Badge>
+            <Badge>{provider.apiAvailability || telemetry?.apiAvailability || 'API unknown'}</Badge>
+            <Badge>{provider.publicStatus || 'status unknown'}</Badge>
+          </div>
+          <p className="mt-4 text-sm leading-6 text-outline">{provider.complianceNotes}</p>
+          <p className="mt-3 text-sm leading-6 text-outline">{provider.strategicNotes}</p>
+        </Panel>
+        <Panel title="Mock Telemetry">
+          <div className="space-y-3 text-sm leading-6 text-outline">
+            <p><strong className="text-on-surface">Reporting:</strong> {telemetry?.reportingStatus || 'manual mock reporting'}</p>
+            <p><strong className="text-on-surface">Latest signal:</strong> {telemetry?.latestMockSignal || 'provider observable'}</p>
+            {normalizedTelemetry ? (
+              <>
+                <p><strong className="text-on-surface">Normalized hash exposure:</strong> {normalizedTelemetry.normalized?.hashExposureThs ?? normalizedTelemetry.normalizedHashrateThs} TH/s</p>
+                <p><strong className="text-on-surface">Freshness/confidence:</strong> {normalizedTelemetry.dataFreshnessStatus} / {normalizedTelemetry.telemetryConfidenceLevel}</p>
+                <p><strong className="text-on-surface">Reward accounting:</strong> {normalizedTelemetry.rewardAccountingStatus}</p>
+              </>
+            ) : null}
+            <p><strong className="text-on-surface">Supported assets:</strong> {(provider.supportedAssets || []).join(' / ') || provider.primaryAsset}</p>
+            <p><strong className="text-on-surface">Chains:</strong> {(provider.supportedChains || []).join(' / ') || 'not specified'}</p>
           </div>
         </Panel>
       </section>
@@ -175,9 +229,57 @@ export function MiningProviderDetails() {
             <div className="rounded-lg border border-white/10 bg-surface-container p-4 text-sm">
               <DiligenceBadge status={dueDiligence.status} />
               <p className="mt-3 leading-6 text-outline">{dueDiligence.blockerSummary}</p>
-              <p className="mt-3 text-xs text-outline">{dueDiligence.documents.join(' / ') || 'No documents provided'}</p>
+              <p className="mt-3 text-xs text-outline">{(dueDiligence.documents || []).join(' / ') || 'No documents provided'}</p>
+              <div className="mt-4 space-y-2">
+                {(dueDiligence.checklist || []).map((item) => (
+                  <div key={item.item} className="rounded-md border border-white/10 bg-surface-container-low p-3">
+                    <p className="font-bold text-on-surface">{item.item}</p>
+                    <p className="mt-1 text-xs text-outline">{item.status}: {item.notes}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : null}
+        </div>
+      </Panel>
+      <Panel title="Governance Validation">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {governanceValidations.length ? governanceValidations.map((validation) => (
+            <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.validationType}</p>
+                  <p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p>
+                </div>
+                <GovernanceBadge standing={validation.status} />
+              </div>
+              <p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>
+            </article>
+          )) : <EmptyState message="No provider-specific governance validation was returned." />}
+        </div>
+      </Panel>
+      <Panel title="Governance Action Readiness" description="Action candidates and proposal intents are mock-only and cannot execute from this surface.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {governanceActions.length ? governanceActions.map((action) => (
+            <article key={action.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-outline">{action.actionType} / {action.sourceSignal}</p>
+                  <h2 className="mt-2 font-bold text-on-surface">{action.recommendedAction}</h2>
+                </div>
+                <Badge>{action.severity}</Badge>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-outline">{action.expectedImpact}</p>
+              <div className="mt-4 flex flex-wrap gap-2"><Badge>{action.governanceStatus}</Badge><Badge>{action.requiredApprovalLevel}</Badge><Badge>{action.executionReadiness}</Badge></div>
+            </article>
+          )) : <EmptyState message="No provider-specific governance actions are active." />}
+          {proposalIntents.length ? proposalIntents.map((intent) => (
+            <article key={intent.id} className="rounded-lg border border-white/10 bg-surface-container p-4">
+              <p className="text-xs font-bold uppercase tracking-widest text-outline">{intent.intentType}</p>
+              <h2 className="mt-2 font-bold text-on-surface">{intent.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-outline">{intent.executionBlockedReason}</p>
+            </article>
+          )) : null}
         </div>
       </Panel>
     </main>
@@ -188,13 +290,15 @@ export function MiningHashTokens() {
   const tokens = useMiningHashTokens();
   const providers = useMiningProviders();
   if (tokens.isLoading || providers.isLoading) return <LoadingState />;
+  if (tokens.isError || providers.isError) return <ErrorState message="Mining hash token registry is unavailable." />;
+  const tokenList = tokens.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Hash Tokens" description="Observable tokenized hash products. No production contract addresses or execution flows are configured." />
       <Panel title="Tokenized Hash Registry">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {tokens.data.map((token) => {
-            const provider = providers.data.find((item) => item.id === token.providerId);
+          {tokenList.length ? tokenList.map((token) => {
+            const provider = (providers.data || []).find((item) => item.id === token.providerId);
             return (
               <article key={token.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
                 <div className="flex items-start justify-between gap-4">
@@ -209,7 +313,7 @@ export function MiningHashTokens() {
                 <p className="mt-4 text-xs leading-5 text-outline">{token.notes}</p>
               </article>
             );
-          })}
+          }) : <EmptyState message="No hash tokens are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -219,12 +323,14 @@ export function MiningHashTokens() {
 export function MiningVaults() {
   const vaults = useMiningVaults();
   if (vaults.isLoading) return <LoadingState />;
+  if (vaults.isError) return <ErrorState message="Mining vault data is unavailable." />;
+  const vaultList = vaults.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Mining Vaults" description="Vaults define mock allocation boundaries, concentration limits, and governance standing." />
       <Panel title="Vault Registry">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {vaults.data.map((vault) => (
+          {vaultList.length ? vaultList.map((vault) => (
             <article key={vault.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div><h2 className="text-lg font-bold text-on-surface">{vault.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{vault.description}</p></div>
@@ -237,7 +343,7 @@ export function MiningVaults() {
               </div>
               <p className="mt-4 text-xs leading-5 text-outline">{vault.riskPolicy}</p>
             </article>
-          ))}
+          )) : <EmptyState message="No Mining vaults are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -249,22 +355,26 @@ export function MiningAllocations() {
   const providers = useMiningProviders();
   const vaults = useMiningVaults();
   if (allocations.isLoading || providers.isLoading || vaults.isLoading) return <LoadingState />;
+  if (allocations.isError || providers.isError || vaults.isError) return <ErrorState message="Mining allocation data is unavailable." />;
+  const allocationList = allocations.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Allocations" description="Read-only mock allocation routes by provider, vault, governance standing, and risk level." />
-      <Panel title="Allocation Ledger" description={`Total mock notional: ${formatUsd(sumNotional(allocations.data))}`}>
+      <Panel title="Allocation Ledger" description={`Total mock notional: ${formatUsd(sumNotional(allocationList))}`}>
+        {allocationList.length ? (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-white/10 text-left text-sm">
             <thead><tr className="text-xs uppercase tracking-widest text-outline"><th className="px-3 py-3">Allocation</th><th className="px-3 py-3">Provider</th><th className="px-3 py-3">Vault</th><th className="px-3 py-3">Notional</th><th className="px-3 py-3">Governance</th><th className="px-3 py-3">Risk</th><th className="px-3 py-3">Status</th></tr></thead>
             <tbody className="divide-y divide-white/10">
-              {allocations.data.map((allocation) => {
-                const provider = providers.data.find((item) => item.id === allocation.providerId);
-                const vault = vaults.data.find((item) => item.id === allocation.vaultId);
+              {allocationList.map((allocation) => {
+                const provider = (providers.data || []).find((item) => item.id === allocation.providerId);
+                const vault = (vaults.data || []).find((item) => item.id === allocation.vaultId);
                 return <tr key={allocation.id}><td className="px-3 py-4 font-bold text-on-surface">{allocation.allocationName}</td><td className="px-3 py-4 text-outline">{provider?.name}</td><td className="px-3 py-4 text-outline">{vault?.name}</td><td className="px-3 py-4 font-bold text-on-surface">{formatUsd(allocation.notionalUsd)}</td><td className="px-3 py-4"><GovernanceBadge standing={allocation.governanceStanding} /></td><td className="px-3 py-4"><RiskBadge level={allocation.riskLevel} /></td><td className="px-3 py-4"><Badge>{allocation.status}</Badge></td></tr>;
               })}
             </tbody>
           </table>
         </div>
+        ) : <EmptyState message="No Mining allocations are available from the Mining service." />}
       </Panel>
     </main>
   );
@@ -273,17 +383,150 @@ export function MiningAllocations() {
 export function MiningTreasury() {
   const treasury = useMiningTreasury();
   const providers = useMiningProviders();
-  if (treasury.isLoading || providers.isLoading) return <LoadingState />;
+  const policies = useMiningTreasuryPolicies();
+  const policyEvaluation = useMiningTreasuryPolicyEvaluation();
+  if (treasury.isLoading || providers.isLoading || policies.isLoading || policyEvaluation.isLoading) return <LoadingState />;
+  if (treasury.isError || providers.isError || policies.isError || policyEvaluation.isError) return <ErrorState message="Mining treasury data is unavailable." />;
+  const totalExposure = treasury.data.totalExposureUsd ?? sumNotional(treasury.data.exposures || []);
+  const groupedRisk = Object.entries(treasury.data.exposureByRiskLevel || {});
+  const groupedAssets = Object.entries(treasury.data.exposureByAsset || {});
+  const groupedCustody = Object.entries(treasury.data.exposureByCustodyModel || {});
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Treasury Routing" description="Treasury exposure is mock-only and read-only. This interface does not move funds or execute allocations." />
-      <MetricCard icon={Landmark} label="Mock Treasury Exposure" value={formatUsd(sumNotional(treasury.data.exposures))} detail="All routes require governance and diligence visibility." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <MetricCard icon={Landmark} label="Mock Treasury Exposure" value={formatUsd(totalExposure)} detail="All routes require governance and diligence visibility." />
+        <MetricCard label="Providers" value={String(treasury.data.diversification?.providerCount || 0)} detail="Diversification is calculated by provider exposure route." />
+        <MetricCard label="Largest route" value={`${treasury.data.diversification?.largestProviderExposurePct || 0}%`} detail="Mock concentration guardrail for treasury allocation." />
+      </section>
+      <Panel title="Treasury Policy Evaluation" description="Read-only policy check against mock provider, asset, custody, risk, and reserve limits.">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <MetricCard label="Policy status" value={policyEvaluation.data.status} detail={policyEvaluation.data.rebalanceRecommendation} />
+          <MetricCard label="Reserve ratio" value={policyEvaluation.data.reserveRatioStatus} detail="Minimum reserve policy is evaluated against treasury-eligible vaults." />
+          <MetricCard label="Governance action" value={policyEvaluation.data.governanceActionRequired ? 'Required' : 'Not required'} detail={(policies.data || [])[0]?.requiredGovernanceApprovalLevel || 'treasury-council'} />
+        </div>
+        <div className="mt-5 grid grid-cols-1 gap-3 lg:grid-cols-2">
+          {[...(policyEvaluation.data.providerConcentrationWarnings || []), ...(policyEvaluation.data.riskLevelConcentrationWarnings || []), ...(policyEvaluation.data.restrictedProviderExposureWarnings || [])].map((warning) => (
+            <div key={warning} className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-sm text-amber-100">{warning}</div>
+          ))}
+        </div>
+      </Panel>
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Panel title="By Risk Level">
+          <div className="space-y-2">{groupedRisk.map(([level, value]) => <div key={level} className="flex items-center justify-between text-sm"><RiskBadge level={level} /><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
+        </Panel>
+        <Panel title="By Asset">
+          <div className="space-y-2">{groupedAssets.map(([asset, value]) => <div key={asset} className="flex items-center justify-between text-sm text-outline"><span>{asset}</span><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
+        </Panel>
+        <Panel title="By Custody Model">
+          <div className="space-y-2">{groupedCustody.map(([custody, value]) => <div key={custody} className="flex items-center justify-between gap-4 text-sm text-outline"><span>{custody}</span><strong className="text-on-surface">{formatUsd(value)}</strong></div>)}</div>
+        </Panel>
+      </section>
       <Panel title="Exposure Routes">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          {treasury.data.exposures.map((exposure) => {
+          {(treasury.data.exposures || []).map((exposure) => {
             const provider = providers.data.find((item) => item.id === exposure.providerId);
             return <article key={exposure.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm text-outline">{exposure.treasuryRoute}</p></div><DiligenceBadge status={exposure.reviewStatus} /></div><div className="mt-4 flex flex-wrap gap-2"><Badge>{exposure.exposurePct}% exposure</Badge><Badge>{exposure.reserveImpact} reserve impact</Badge><Badge>{exposure.approvedByGovernance ? 'governance approved' : 'not approved'}</Badge></div><p className="mt-4 text-2xl font-black text-on-surface">{formatUsd(exposure.notionalUsd)}</p></article>;
           })}
+        </div>
+      </Panel>
+    </main>
+  );
+}
+
+export function MiningTelemetry() {
+  const telemetry = useMiningProviderTelemetry();
+  if (telemetry.isLoading) return <LoadingState />;
+  if (telemetry.isError) return <ErrorState message="Mining provider telemetry is unavailable." />;
+  const rows = telemetry.data || [];
+  return (
+    <main className="app-view-shell space-y-8">
+      <MiningHeader title="Provider Telemetry" description="Normalized mock telemetry compares provider freshness, hash exposure, liquidity, service health, accounting state, and confidence." />
+      <Panel title="Telemetry Health Matrix">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {rows.length ? rows.map((item) => (
+            <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <h2 className="text-lg font-bold text-on-surface">{item.providerName || item.providerId}</h2>
+                  <p className="mt-1 text-sm text-outline">{item.notes}</p>
+                </div>
+                <Badge>{item.dataFreshnessStatus}</Badge>
+              </div>
+              <div className="mt-5 grid grid-cols-1 gap-3 text-sm md:grid-cols-3">
+                <div><p className="text-xs font-bold uppercase text-outline">Hash exposure</p><p className="mt-1 font-bold text-on-surface">{item.normalized?.hashExposureThs ?? item.normalizedHashrateThs} TH/s</p></div>
+                <div><p className="text-xs font-bold uppercase text-outline">Mined asset</p><p className="mt-1 font-bold text-on-surface">{item.estimatedMinedAsset}</p></div>
+                <div><p className="text-xs font-bold uppercase text-outline">Confidence</p><p className="mt-1 font-bold text-on-surface">{item.telemetryConfidenceLevel}</p></div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Badge>{item.providerServiceHealth}</Badge>
+                <Badge>{item.uptimeStatus}</Badge>
+                <Badge>{item.apiAvailability}</Badge>
+                <Badge>{item.rewardAccountingStatus}</Badge>
+                <Badge>{item.sourceType}</Badge>
+              </div>
+              <p className="mt-4 text-xs text-outline">Last provider update: {new Date(item.lastProviderUpdate).toLocaleString()}</p>
+            </article>
+          )) : <EmptyState message="No provider telemetry is available from the Mining service." />}
+        </div>
+      </Panel>
+    </main>
+  );
+}
+
+export function MiningAccounting() {
+  const accounting = useMiningAccounting();
+  if (accounting.isLoading) return <LoadingState />;
+  if (accounting.isError) return <ErrorState message="Mining accounting data is unavailable." />;
+  const data = accounting.data;
+  return (
+    <main className="app-view-shell space-y-8">
+      <MiningHeader title="Accounting" description="Read-only accounting periods, reward accruals, provider statements, and treasury ledger visibility. No claim or payout flow exists." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <MetricCard label="Expected rewards" value={formatUsd(data.summary.totalExpectedRewardUsd)} detail="Mock expected provider rewards for open accounting visibility." />
+        <MetricCard label="Reported rewards" value={formatUsd(data.summary.totalReportedRewardUsd)} detail="Provider-reported reward statements in the mock layer." />
+        <MetricCard label="Variance" value={formatUsd(data.summary.totalVarianceUsd)} detail={`${data.summary.pendingAccruals} pending, ${data.summary.varianceWatchAccruals} under variance watch.`} />
+      </section>
+      <Panel title="Accounting Periods">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {(data.periods || []).map((period) => (
+            <article key={period.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex items-start justify-between gap-4"><h2 className="font-bold text-on-surface">{period.label}</h2><Badge>{period.status}</Badge></div>
+              <p className="mt-3 text-sm text-outline">{period.auditNotes}</p>
+              <div className="mt-4 grid grid-cols-3 gap-3 text-sm"><strong>{formatUsd(period.expectedRewardUsd)}</strong><strong>{formatUsd(period.reportedRewardUsd)}</strong><strong>{period.variancePct}%</strong></div>
+            </article>
+          ))}
+        </div>
+      </Panel>
+      <Panel title="Reward Accruals">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-white/10 text-left text-sm">
+            <thead><tr className="text-xs uppercase tracking-widest text-outline"><th className="px-3 py-3">Provider</th><th className="px-3 py-3">Expected</th><th className="px-3 py-3">Reported</th><th className="px-3 py-3">Variance</th><th className="px-3 py-3">Status</th></tr></thead>
+            <tbody className="divide-y divide-white/10">{(data.rewardAccruals || []).map((item) => <tr key={item.id}><td className="px-3 py-4 text-outline">{item.providerId}</td><td className="px-3 py-4 font-bold text-on-surface">{formatUsd(item.expectedRewardUsd)}</td><td className="px-3 py-4 font-bold text-on-surface">{formatUsd(item.reportedRewardUsd)}</td><td className="px-3 py-4 text-outline">{formatUsd(item.varianceUsd)}</td><td className="px-3 py-4"><Badge>{item.status}</Badge></td></tr>)}</tbody>
+          </table>
+        </div>
+      </Panel>
+    </main>
+  );
+}
+
+export function MiningReconciliation() {
+  const reconciliation = useMiningReconciliation();
+  if (reconciliation.isLoading) return <LoadingState />;
+  if (reconciliation.isError) return <ErrorState message="Mining reconciliation data is unavailable." />;
+  const runs = reconciliation.data || [];
+  return (
+    <main className="app-view-shell space-y-8">
+      <MiningHeader title="Reconciliation" description="Read-only reconciliation runs compare expected rewards, provider statements, ledger entries, variance, materiality, and audit findings." />
+      <Panel title="Reconciliation Runs">
+        <div className="space-y-4">
+          {runs.length ? runs.map((run) => (
+            <article key={run.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><h2 className="font-bold text-on-surface">{run.id}</h2><p className="mt-2 text-sm leading-6 text-outline">{run.auditSummary}</p></div><Badge>{run.status}</Badge></div>
+              <div className="mt-5 grid grid-cols-1 gap-3 text-sm md:grid-cols-4"><div>Expected <strong className="block text-on-surface">{formatUsd(run.expectedRewardUsd)}</strong></div><div>Reported <strong className="block text-on-surface">{formatUsd(run.reportedRewardUsd)}</strong></div><div>Variance <strong className="block text-on-surface">{formatUsd(run.varianceUsd)}</strong></div><div>Materiality <strong className="block text-on-surface">{run.materialityThresholdPct}%</strong></div></div>
+              <div className="mt-4 space-y-2">{(run.findings || []).map((finding) => <div key={finding.id} className="rounded-md border border-white/10 bg-surface-container-low p-3 text-sm text-outline"><strong className="text-on-surface">{finding.findingType}</strong>: {finding.auditNotes}</div>)}</div>
+            </article>
+          )) : <EmptyState message="No reconciliation runs are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -294,16 +537,18 @@ export function MiningRisk() {
   const risk = useMiningRisk();
   const providers = useMiningProviders();
   if (risk.isLoading || providers.isLoading) return <LoadingState />;
+  if (risk.isError || providers.isError) return <ErrorState message="Mining risk data is unavailable." />;
+  const riskProfiles = risk.data?.riskProfiles || [];
   return (
     <main className="app-view-shell space-y-8">
-      <MiningHeader title="Risk Console" description="Provider risk is shown across custody, liquidity, operational, jurisdictional, and treasury exposure dimensions." />
+      <MiningHeader title="Risk Console" description="Provider risk is shown across counterparty, liquidity, custody, operational, regulatory, transparency, smart contract, volatility, and concentration dimensions." />
       <Panel title="Provider Risk Profiles">
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-          {risk.data.riskProfiles.map((profile) => {
-            const provider = providers.data.find((item) => item.id === profile.providerId);
-            const liquidity = risk.data.liquidity.find((item) => item.providerId === profile.providerId);
-            return <article key={profile.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{profile.notes}</p></div><RiskBadge level={profile.riskLevel} /></div><div className="mt-5 grid grid-cols-1 gap-2 text-sm md:grid-cols-2"><Badge>custody {profile.custodyRisk}</Badge><Badge>liquidity {profile.liquidityRisk}</Badge><Badge>operations {profile.operationalRisk}</Badge><Badge>jurisdiction {profile.jurisdictionRisk}</Badge></div><p className="mt-4 text-sm text-outline">Treasury limit: <strong className="text-on-surface">{profile.treasuryExposureLimitPct}%</strong>. Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus}</strong>.</p></article>;
-          })}
+          {riskProfiles.length ? riskProfiles.map((profile) => {
+            const provider = (providers.data || []).find((item) => item.id === profile.providerId);
+            const liquidity = (risk.data?.liquidity || []).find((item) => item.providerId === profile.providerId);
+            return <article key={profile.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{provider?.name}</h2><p className="mt-1 text-sm leading-6 text-outline">{profile.explanation || profile.notes}</p></div><RiskBadge level={profile.riskLevel} /></div><div className="mt-5 grid grid-cols-1 gap-2 text-sm md:grid-cols-3"><Badge>counterparty {profile.counterpartyRisk}</Badge><Badge>custody {profile.custodyRisk}</Badge><Badge>liquidity {profile.liquidityRisk}</Badge><Badge>operations {profile.operationalRisk}</Badge><Badge>regulatory {profile.regulatoryRisk}</Badge><Badge>transparency {profile.transparencyRisk}</Badge><Badge>contract {profile.smartContractRisk}</Badge><Badge>volatility {profile.marketVolatilityRisk}</Badge><Badge>concentration {profile.concentrationRisk}</Badge></div><p className="mt-4 text-sm text-outline">Score: <strong className="text-on-surface">{profile.compositeScore}</strong>. Treasury limit: <strong className="text-on-surface">{profile.treasuryExposureLimitPct}%</strong>. Liquidity: <strong className="text-on-surface">{liquidity?.liquidityStatus}</strong>.</p><p className="mt-3 text-sm text-outline">{profile.governanceRecommendation}</p></article>;
+          }) : <EmptyState message="No Mining risk profiles are available from the Mining service." />}
         </div>
       </Panel>
     </main>
@@ -312,33 +557,81 @@ export function MiningRisk() {
 
 export function MiningGovernance() {
   const validations = useMiningGovernance();
-  if (validations.isLoading) return <LoadingState />;
+  const actions = useMiningGovernanceActions();
+  const intents = useMiningProposalIntents();
+  if (validations.isLoading || actions.isLoading || intents.isLoading) return <LoadingState />;
+  if (validations.isError || actions.isError || intents.isError) return <ErrorState message="Mining governance validations are unavailable." />;
+  const validationList = validations.data || [];
+  const actionList = actions.data || [];
+  const intentList = intents.data || [];
   return (
     <main className="app-view-shell space-y-8">
-      <MiningHeader title="Governance Validation" description="Mining provider exposure remains subordinate to governance review, treasury limits, and constitutional controls." />
+      <MiningHeader title="Governance Validation" description="Mining provider exposure remains subordinate to governance review, treasury limits, constitutional controls, and mock-only proposal intent generation." />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <MetricCard label="Action candidates" value={String(actionList.length)} detail="Generated from policy, telemetry, due diligence, reconciliation, and emergency pause signals." />
+        <MetricCard label="Proposal intents" value={String(intentList.length)} detail="Preview only; no DAO proposal execution exists in this MVP." />
+        <MetricCard label="Ready for review" value={String(actionList.filter((action) => action.governanceStatus === 'ready-for-review').length)} detail="Candidates with enough mock data for governance review." />
+      </section>
+      <Panel title="Governance Actions" description="Action candidates translate observability signals into DAO-reviewable decisions. Execution is blocked.">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {actionList.length ? actionList.map((action) => (
+            <article key={action.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-outline">{action.actionType} / {action.sourceSignal}</p>
+                  <h2 className="mt-2 font-bold text-on-surface">{action.recommendedAction}</h2>
+                </div>
+                <Badge>{action.severity}</Badge>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-outline">{action.expectedImpact}</p>
+              <div className="mt-4 flex flex-wrap gap-2"><Badge>{action.governanceStatus}</Badge><Badge>{action.requiredApprovalLevel}</Badge><Badge>{action.constitutionalStanding}</Badge><Badge>{action.executionReadiness}</Badge></div>
+              <p className="mt-3 text-xs text-outline">Reason codes: {(action.reasonCodes || []).join(' / ') || 'none'}</p>
+              <p className="mt-2 text-xs text-outline">{action.mockOnlyDisclaimer}</p>
+            </article>
+          )) : <EmptyState message="No governance action candidates are currently generated." />}
+        </div>
+      </Panel>
+      <Panel title="Proposal Intent Preview" description="Read-only proposal drafts that can later map to DAO proposal workflows after the Governance nucleus owns execution.">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          {intentList.length ? intentList.map((intent) => (
+            <article key={intent.id} className="rounded-lg border border-white/10 bg-surface-container p-5">
+              <div className="flex items-start justify-between gap-4"><h2 className="font-bold text-on-surface">{intent.title}</h2><Badge>{intent.intentType}</Badge></div>
+              <p className="mt-3 text-sm leading-6 text-outline">{intent.summary}</p>
+              <p className="mt-3 text-sm leading-6 text-outline">{intent.expectedImpact}</p>
+              <p className="mt-3 text-xs text-outline">Blocked: {intent.executionBlockedReason}</p>
+            </article>
+          )) : <EmptyState message="No proposal intents are currently available." />}
+        </div>
+      </Panel>
       <Panel title="Validation Queue">
-        <div className="space-y-3">{validations.data.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div></article>)}</div>
+        <div className="space-y-3">{validationList.length ? validationList.map((validation) => <article key={validation.id} className="rounded-lg border border-white/10 bg-surface-container p-5"><div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-bold uppercase tracking-widest text-outline">{validation.targetType} / {validation.validationType}</p><h2 className="mt-1 font-bold text-on-surface">{validation.reviewer}</h2><p className="mt-2 text-sm leading-6 text-outline">{validation.summary}</p></div><GovernanceBadge standing={validation.status} /></div><div className="mt-4 grid grid-cols-1 gap-3 text-sm md:grid-cols-3"><Badge>{validation.providerWhitelistingStatus}</Badge><Badge>{validation.treasuryAllocationApprovalStatus}</Badge><Badge>pause {validation.emergencyPauseRecommendation}</Badge></div><p className="mt-3 text-xs text-outline">Reason codes: {(validation.reasonCodes || []).join(' / ') || 'none'}</p>{validation.restrictionReasons?.length ? <p className="mt-2 text-xs text-outline">Restrictions: {validation.restrictionReasons.join(' / ')}</p> : null}</article>) : <EmptyState message="No governance validations are available from the Mining service." />}</div>
       </Panel>
     </main>
   );
+}
+
+export function MiningActions() {
+  return <MiningGovernance />;
 }
 
 export function MiningReports() {
   const reports = useMiningReports();
   const diligence = useMiningDiligence();
   if (reports.isLoading || diligence.isLoading) return <LoadingState />;
+  if (reports.isError || diligence.isError) return <ErrorState message="Mining reports are unavailable." />;
+  const reportList = reports.data || [];
+  const diligenceList = diligence.data || [];
   return (
     <main className="app-view-shell space-y-8">
       <MiningHeader title="Reports" description="Reporting focuses on treasury exposure, provider review, governance queues, and due diligence blockers." />
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Panel title="Mining Reports">
-          <div className="space-y-3">{reports.data.map((report) => <article key={report.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{report.title}</h2><p className="mt-1 text-sm leading-6 text-outline">{report.summary}</p></div><Badge>{report.status}</Badge></div><p className="mt-3 text-xs font-bold uppercase tracking-widest text-outline">{report.reportType} / {report.period}</p></article>)}</div>
+          <div className="space-y-3">{reportList.length ? reportList.map((report) => <article key={report.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><div><h2 className="font-bold text-on-surface">{report.title}</h2><p className="mt-1 text-sm leading-6 text-outline">{report.summary}</p></div><Badge>{report.status}</Badge></div><p className="mt-3 text-xs font-bold uppercase tracking-widest text-outline">{report.reportType} / {report.period}</p><div className="mt-4 space-y-3">{(report.sections || []).map((section) => <div key={section.title} className="rounded-md border border-white/10 bg-surface-container-low p-3"><p className="font-bold text-on-surface">{section.title}</p><ul className="mt-2 space-y-1 text-xs leading-5 text-outline">{(section.findings || []).map((finding) => <li key={finding}>{finding}</li>)}</ul></div>)}</div>{report.nextActions?.length ? <p className="mt-3 text-xs text-outline">Next actions: {report.nextActions.join(' / ')}</p> : null}</article>) : <EmptyState message="No Mining reports are available from the Mining service." />}</div>
         </Panel>
         <Panel title="Due Diligence Blockers">
-          <div className="space-y-3">{diligence.data.map((item) => <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><p className="font-bold text-on-surface">{item.providerId}</p><DiligenceBadge status={item.status} /></div><p className="mt-2 text-sm leading-6 text-outline">{item.blockerSummary}</p><p className="mt-3 text-xs text-outline">Documents: {item.documents.length ? item.documents.join(' / ') : 'not provided'}</p></article>)}</div>
+          <div className="space-y-3">{diligenceList.length ? diligenceList.map((item) => <article key={item.id} className="rounded-lg border border-white/10 bg-surface-container p-4"><div className="flex items-start justify-between gap-4"><p className="font-bold text-on-surface">{item.providerId}</p><DiligenceBadge status={item.status} /></div><p className="mt-2 text-sm leading-6 text-outline">{item.blockerSummary}</p><p className="mt-3 text-xs text-outline">Documents: {item.documents.length ? item.documents.join(' / ') : 'not provided'}</p></article>) : <EmptyState message="No due diligence records are available from the Mining service." />}</div>
         </Panel>
       </section>
     </main>
   );
 }
-

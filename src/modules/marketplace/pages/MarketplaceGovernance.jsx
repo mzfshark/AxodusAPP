@@ -2,8 +2,10 @@ import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import MarketplaceProductCard from '../components/MarketplaceProductCard';
 import MarketplaceMetricCard from '../components/MarketplaceMetricCard';
 import MarketplaceBadge from '../components/MarketplaceBadge';
+import MarketplaceLifecycleRail from '../components/MarketplaceLifecycleRail';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
 import { GovernanceValidationService } from '../services/complianceServices';
+import { getMarketplaceTenant } from '../services/marketplaceService';
 
 export default function MarketplaceGovernance() {
   const marketplace = useMarketplaceData();
@@ -32,29 +34,44 @@ export default function MarketplaceGovernance() {
           <p className="mt-2 text-sm leading-6 text-outline">Read-only activation readiness. Governance approval, ACS review and treasury routing remain mocked.</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1120px] text-left text-sm">
+          <table className="w-full min-w-[1320px] text-left text-sm">
             <thead className="bg-surface-container text-xs uppercase tracking-[0.14em] text-outline">
               <tr>
                 <th className="px-4 py-3">Product</th>
                 <th className="px-4 py-3">Seller</th>
+                <th className="px-4 py-3">Tenant</th>
                 <th className="px-4 py-3">Standing</th>
+                <th className="px-4 py-3">Lifecycle</th>
                 <th className="px-4 py-3">Required reviews</th>
                 <th className="px-4 py-3">Blockers</th>
                 <th className="px-4 py-3">Activation</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
-              {validationSummary.validations.map((validation) => (
+              {validationSummary.validations.map((validation) => {
+                const product = marketplace.products.find((item) => item.id === validation.productId);
+                const tenant = getMarketplaceTenant(product?.tenantId);
+                return (
                 <tr key={validation.productId} className="align-top">
                   <td className="px-4 py-4">
-                    <p className="font-bold text-on-surface">{marketplace.products.find((product) => product.id === validation.productId)?.title}</p>
+                    <p className="font-bold text-on-surface">{product?.title}</p>
                     <p className="mt-1 font-mono text-xs text-outline">{validation.productId}</p>
                   </td>
                   <td className="px-4 py-4">
                     <p className="font-semibold text-on-surface">{validation.seller?.name}</p>
                     <p className="mt-1 text-xs text-outline">{validation.seller?.governanceStanding}</p>
                   </td>
+                  <td className="px-4 py-4">
+                    <p className="font-semibold text-on-surface">{tenant?.name}</p>
+                    <p className="mt-1 text-xs text-outline">{tenant?.reviewAuthority}</p>
+                  </td>
                   <td className="px-4 py-4"><MarketplaceBadge value={validation.standing} /></td>
+                  <td className="px-4 py-4">
+                    <div className="flex flex-wrap gap-2">
+                      <MarketplaceBadge value={validation.productLifecycle} label="Product" />
+                      <MarketplaceBadge value={validation.governanceLifecycle} label="Governance" />
+                    </div>
+                  </td>
                   <td className="px-4 py-4">
                     <div className="flex flex-wrap gap-2">
                       {validation.requiredReviews.map((review) => <MarketplaceBadge key={review.id} value={review.status} label={review.label} />)}
@@ -66,10 +83,31 @@ export default function MarketplaceGovernance() {
                     <p className="mt-2 text-xs text-outline">Settlement {validation.settlementAllowed ? 'eligible after approval' : 'blocked or review-only'}</p>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
+      </section>
+      <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        {validationSummary.validations.map((validation) => (
+          <article key={`${validation.productId}-timeline`} className="rounded-lg border border-white/10 bg-surface-container-low p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-mono text-xs text-outline">{validation.productId}</p>
+                <h2 className="mt-2 text-lg font-bold text-on-surface">Validation timeline</h2>
+              </div>
+              <MarketplaceBadge value={validation.governanceLifecycle} />
+            </div>
+            <div className="mt-4 space-y-3">
+              <MarketplaceLifecycleRail title="Product lifecycle" steps={validation.productTimeline} />
+              <MarketplaceLifecycleRail title="Governance validation lifecycle" steps={validation.governanceTimeline} />
+            </div>
+            <p className="mt-4 rounded-lg border border-yellow-400/20 bg-yellow-500/10 p-3 text-xs text-yellow-100">
+              Mock validation. No settlement. No contract write. Recommendations are review-only.
+            </p>
+          </article>
+        ))}
       </section>
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {reviewProducts.map((product) => <MarketplaceProductCard key={product.id} product={product} />)}

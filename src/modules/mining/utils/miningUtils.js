@@ -14,9 +14,15 @@ export const diligenceTone = {
 };
 
 export const governanceTone = {
+  compliant: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200',
+  eligible: 'border-sky-400/30 bg-sky-400/10 text-sky-200',
   approved: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200',
   limited: 'border-sky-400/30 bg-sky-400/10 text-sky-200',
   'under-review': 'border-amber-400/30 bg-amber-400/10 text-amber-200',
+  restricted: 'border-red-400/30 bg-red-400/10 text-red-200',
+  sanctioned: 'border-red-500/40 bg-red-500/15 text-red-100',
+  suspended: 'border-red-500/40 bg-red-500/15 text-red-100',
+  'not-eligible': 'border-red-400/30 bg-red-400/10 text-red-200',
   paused: 'border-red-400/30 bg-red-400/10 text-red-200',
   'future-only': 'border-slate-400/30 bg-slate-400/10 text-slate-200'
 };
@@ -46,4 +52,3 @@ export function filterProviders(providers, filters, riskProfiles) {
 export function sumNotional(items) {
   return items.reduce((total, item) => total + (item.notionalUsd || 0), 0);
 }
-

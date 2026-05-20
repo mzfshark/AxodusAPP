@@ -17,6 +17,9 @@ export default function MarketplaceTreasury() {
         <MarketplaceMetricCard label="Under review" value={marketplace.operations.treasuryReviewRequired} detail="Routes needing governance or treasury validation." />
         <MarketplaceMetricCard label="Royalty preview" value={`${marketplace.metrics.royaltyPreview} USDC`} detail="EIP-2981/custom preview only." />
       </section>
+      <section className="rounded-lg border border-yellow-400/20 bg-yellow-500/10 p-4 text-sm text-yellow-100">
+        Preview only. No settlement. No treasury execution. No contract write. No wallet transaction.
+      </section>
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {marketplace.treasuryRoutes.map((route) => (
           <TreasuryRouteCard key={route.id} route={route} preview={marketplace.operations.treasuryPreviews.find((item) => item.routeId === route.id)} />
@@ -48,6 +51,7 @@ function TreasuryRouteCard({ route, preview }) {
           <MarketplaceBadge value={preview.status} />
         </div>
         <p className="mt-2 font-mono text-xs text-outline">{preview.accountingHook}</p>
+        <p className="mt-2 text-xs text-outline">Treasury execution: {preview.settlementEnabled ? 'enabled' : 'disabled'}</p>
         <p className="mt-2 text-xs text-outline">{preview.blockedReasons.join(', ') || 'mock clear, treasury movement disabled'}</p>
       </div>
     </article>

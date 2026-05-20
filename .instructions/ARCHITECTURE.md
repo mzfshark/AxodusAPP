@@ -314,6 +314,64 @@ Service clients should support:
 
 ---
 
+## Marketplace Nucleus Architecture
+
+The Marketplace nucleus is a governance-aware NFT marketplace and commerce layer, not a generic product catalog.
+
+Current implementation state:
+
+- mock-first
+- tenant-aware
+- governance-aware
+- production-shaped
+- settlement-deferred
+- prepared for NFT assets, licenses, subscriptions, publisher workflows, and DAO-owned products
+
+Marketplace products must remain attached to ecosystem context:
+
+- seller or publisher identity
+- optional DAO or tenant ownership
+- constitutional standing
+- governance validation state
+- seller standing and reputation
+- product maturity and visibility
+- license and access model
+- supported chains
+- NFT-bound status
+- royalty configuration
+- delivery method
+- billing and subscription mode
+- lifecycle timestamps
+
+The Marketplace mock layer should model the continuous operational flow:
+
+Publisher Console -> Asset/Product creation preview -> Governance validation -> License model -> Listing preview -> Purchase preview -> Issued license preview.
+
+The frontend may expose production-shaped boundaries for future integrations, but all current implementations must remain explicit previews:
+
+- `MarketplaceContractAdapter`
+- `AuctionAdapter`
+- `RoyaltyAdapter`
+- `GreenfieldAccessAdapter`
+- `ReownWalletAdapter`
+- `LayerZeroBridgeAdapter`
+- `TreasurySettlementAdapter`
+- `BillingProviderAdapter`
+
+These boundaries must not execute wallet transactions, contract writes, minting, payment provider calls, treasury movement, Greenfield production delivery, LayerZero messaging, auction settlement, bid placement, royalty settlement, or fiat checkout until explicitly approved in a later sprint.
+
+Marketplace UI labels must distinguish:
+
+- Mock validation
+- Preview only
+- No settlement
+- No wallet transaction
+- No treasury execution
+- No contract write
+- Simulated license issuance
+
+---
+
 ## Long-Term Architecture Goal
 
 AxodusAPP should become a modular ecosystem shell where new Axodus nuclei can be added as first-class modules without rewriting the application core.

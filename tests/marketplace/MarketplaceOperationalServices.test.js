@@ -14,6 +14,10 @@ describe('Marketplace operational services', () => {
 
     expect(preview.service).toBe('BillingPreviewService');
     expect(preview.settlementEnabled).toBe(false);
+    expect(preview.purchaseLifecycle).toBe('preview-issued');
+    expect(preview.billingLifecycle).toBe('invoice-preview');
+    expect(preview.licenseLifecycle).toBe('issued');
+    expect(preview.purchaseTimeline.length).toBeGreaterThan(0);
     expect(preview.protocolFeeBps).toBe(250);
     expect(preview.protocolFee).toBeGreaterThan(0);
     expect(preview.blockedReasons).toEqual(expect.arrayContaining(['governance-review-required']));
@@ -25,6 +29,10 @@ describe('Marketplace operational services', () => {
 
     expect(readiness.service).toBe('SubscriptionLifecycleService');
     expect(readiness.renewalEnabled).toBe(false);
+    expect(readiness.pausePreviewEnabled).toBe(true);
+    expect(readiness.cancellationPreviewEnabled).toBe(true);
+    expect(readiness.subscriptionLifecycle).toBe('paused');
+    expect(readiness.subscriptionTimeline.length).toBeGreaterThan(0);
     expect(readiness.revocationPreviewEnabled).toBe(true);
     expect(readiness.status).toBe('review-required');
     expect(readiness.blockedReasons).toEqual(expect.arrayContaining(['subscription-restricted']));

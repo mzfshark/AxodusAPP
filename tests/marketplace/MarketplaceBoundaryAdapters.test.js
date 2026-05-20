@@ -1,12 +1,19 @@
 import { describe, expect, test } from 'vitest';
 import { marketplaceMock } from '../../src/data/mock';
 import {
+  AuctionAdapter,
   AuctionService,
+  BillingProviderAdapter,
+  GreenfieldAccessAdapter,
   LayerZeroBridgeService,
+  LayerZeroBridgeAdapter,
   ListingDraftService,
   MarketplaceContractAdapter,
+  ReownWalletAdapter,
+  RoyaltyAdapter,
   RoyaltyService,
   StorageAccessService,
+  TreasurySettlementAdapter,
   getMarketplaceBoundaryReadiness,
 } from '../../src/modules/marketplace/services/boundaryAdapters';
 
@@ -61,8 +68,31 @@ describe('Marketplace boundary adapters', () => {
         'AuctionService',
         'StorageAccessService',
         'LayerZeroBridgeService',
+        'ReownWalletAdapter',
+        'TreasurySettlementAdapter',
+        'BillingProviderAdapter',
       ]),
     );
+  });
+
+  test('future adapters return explicit mock-only previews without execution', async () => {
+    const product = marketplaceMock.products[0];
+    const auctionProduct = marketplaceMock.products.find((item) => item.auction);
+    const wallet = await ReownWalletAdapter.getWalletState();
+    const auction = await AuctionAdapter.placeBidPreview(auctionProduct, 100);
+    const royalty = await RoyaltyAdapter.previewRoyalty(product);
+    const greenfield = await GreenfieldAccessAdapter.requestSignedUrlPreview(product, { id: 'purchase-preview', status: 'mock-issued' });
+    const bridge = await LayerZeroBridgeAdapter.getBridgePreview(product, 'Arbitrum');
+    const treasury = await TreasurySettlementAdapter.previewRoute({ destination: product.treasuryDestination, amount: 120, currency: 'USDC' });
+    const invoice = await BillingProviderAdapter.createInvoicePreview({ productId: product.id, buyer: '0xMock', amount: 120, currency: 'USDC' });
+
+    expect(wallet.transactionEnabled).toBe(false);
+    expect(auction.contractWriteEnabled).toBe(false);
+    expect(royalty.settlementEnabled).toBe(false);
+    expect(greenfield.productionDeliveryEnabled).toBe(false);
+    expect(bridge.bridgeExecutionEnabled).toBe(false);
+    expect(treasury.treasuryExecutionEnabled).toBe(false);
+    expect(invoice.paymentExecutionEnabled).toBe(false);
   });
 
   test('previews create/sell listing drafts with metadata, auction, and governance readiness', async () => {

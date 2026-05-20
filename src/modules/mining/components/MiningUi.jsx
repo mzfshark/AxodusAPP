@@ -1,8 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { diligenceTone, governanceTone, riskTone } from '../utils/miningUtils';
-import { miningNavItems } from '../constants/navigation';
+import { getMiningMeta } from '../services/miningApi';
+import { useMiningSummary } from '../hooks/useMiningData';
 
 export function MiningHeader({ title, description }) {
+  const summary = useMiningSummary();
+  const meta = getMiningMeta(summary.data);
+
   return (
     <header className="space-y-5">
       <div>
@@ -10,25 +14,21 @@ export function MiningHeader({ title, description }) {
         <h1 className="mt-2 text-3xl font-black tracking-tight text-on-surface md:text-4xl">{title}</h1>
         <p className="mt-3 max-w-4xl text-sm leading-6 text-outline md:text-base">{description}</p>
       </div>
-      <nav className="flex gap-2 overflow-x-auto pb-2">
-        {miningNavItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              `inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition ${
-                isActive
-                  ? 'border-primary/50 bg-primary/15 text-primary'
-                  : 'border-white/10 bg-surface-container-low text-outline hover:border-primary/30 hover:text-on-surface'
-              }`
-            }
-          >
-            <item.icon className="h-4 w-4" aria-hidden="true" />
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
+      {meta?.source === 'fallback' ? (
+        <div className="rounded-lg border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-100">
+          {meta.message}
+        </div>
+      ) : null}
+      {meta ? (
+        <div className="flex flex-wrap gap-2 text-xs">
+          <Badge tone={meta.source === 'api' ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-100' : 'border-amber-400/30 bg-amber-400/10 text-amber-100'}>
+            {meta.source === 'api' ? 'API online' : 'fallback active'}
+          </Badge>
+          <Badge>mock/read-only</Badge>
+          <Badge>{meta.version}</Badge>
+          <Badge>{meta.generatedAt ? `generated ${new Date(meta.generatedAt).toLocaleString()}` : 'timestamp unavailable'}</Badge>
+        </div>
+      ) : null}
     </header>
   );
 }
@@ -125,4 +125,8 @@ export function LoadingState() {
 
 export function EmptyState({ message }) {
   return <div className="rounded-lg border border-white/10 bg-surface-container-low p-8 text-sm text-outline">{message}</div>;
+}
+
+export function ErrorState({ message }) {
+  return <div className="rounded-lg border border-red-400/30 bg-red-400/10 p-8 text-sm font-semibold text-red-100">{message}</div>;
 }

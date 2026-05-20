@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import MarketplacePageHeader from '../components/MarketplacePageHeader';
 import MarketplaceBadge from '../components/MarketplaceBadge';
+import MarketplaceLifecycleRail from '../components/MarketplaceLifecycleRail';
 import PurchasePreviewModal from '../components/PurchasePreviewModal';
 import {
   AuctionService,
@@ -10,17 +11,28 @@ import {
   RoyaltyService,
   StorageAccessService,
 } from '../services/boundaryAdapters';
-import { getMarketplaceProduct, getMarketplaceSeller } from '../services/marketplaceService';
+import { getMarketplaceProduct, getMarketplaceProductContext } from '../services/marketplaceService';
+import {
+  GovernanceValidationLifecycle,
+  ProductLifecycle,
+  buildLifecycleTimeline,
+  getGovernanceLifecycle,
+  getProductLifecycle,
+} from '../utils/stateMachines';
 
 export default function MarketplaceProductDetail() {
   const { slug } = useParams();
   const product = getMarketplaceProduct(slug);
-  const seller = product ? getMarketplaceSeller(product.sellerId) : null;
+  const context = product ? getMarketplaceProductContext(product) : {};
+  const seller = context.seller;
+  const tenant = context.tenant;
   const executionBoundary = product ? MarketplaceContractAdapter.getExecutionBoundary(product) : null;
   const royaltyPreview = product ? RoyaltyService.previewForProduct(product) : null;
   const auctionState = product ? AuctionService.getAuctionState(product) : null;
   const storageAccess = product ? StorageAccessService.getAccessModel(product) : null;
   const bridgeReadiness = product ? LayerZeroBridgeService.getReadiness(product) : null;
+  const productLifecycle = product ? getProductLifecycle(product) : null;
+  const governanceLifecycle = product ? getGovernanceLifecycle(product) : null;
   const [purchaseOpen, setPurchaseOpen] = useState(false);
 
   if (!product) {
@@ -42,6 +54,7 @@ export default function MarketplaceProductDetail() {
             <MarketplaceBadge value={product.tokenStandard} />
             <MarketplaceBadge value={product.listingType} />
             <MarketplaceBadge value={product.constitutionalStanding} />
+            <MarketplaceBadge value={productLifecycle} />
           </div>
           <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
             <Info label="Price" value={`${product.pricing.amount} ${product.pricing.currency}`} />
@@ -52,6 +65,8 @@ export default function MarketplaceProductDetail() {
             <Info label="Risk" value={product.operationalRisk} />
             <Info label="Contract" value={product.contractAddress ?? 'mock offchain'} />
             <Info label="Token ID" value={product.tokenId ?? 'not minted'} />
+            <Info label="Lifecycle" value={productLifecycle} />
+            <Info label="Validation" value={product.validationStatus} />
           </dl>
           <button type="button" onClick={() => setPurchaseOpen(true)} className="mt-5 w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold text-on-primary">
             Open buy-now / bid preview
@@ -62,6 +77,11 @@ export default function MarketplaceProductDetail() {
         <Panel title="Seller">
           {seller && <Link to={`/marketplace/sellers/${seller.id}`} className="font-bold text-primary">{seller.name}</Link>}
           {seller && <p className="mt-2 text-outline">Standing: {seller.governanceStanding} / reputation {seller.reputation}</p>}
+        </Panel>
+        <Panel title="Tenant / DAO owner">
+          <p className="font-bold text-on-surface">{tenant?.name ?? product.daoOwner}</p>
+          <p className="mt-2">Review authority: {tenant?.reviewAuthority ?? 'mock governance review'}</p>
+          <p>Constitutional status: {tenant?.constitutionalStanding ?? product.constitutionalStanding}</p>
         </Panel>
         <Panel title="Treasury destination">
           <p className="font-mono">{product.treasuryDestination}</p>
@@ -97,6 +117,13 @@ export default function MarketplaceProductDetail() {
           <p>Destinations: {bridgeReadiness.destinationChains.join(', ') || 'none'}</p>
           <p>Bridge execution: {bridgeReadiness.bridgeExecutionEnabled ? 'enabled' : 'disabled'}</p>
         </Panel>
+      </section>
+      <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <MarketplaceLifecycleRail title="Product lifecycle" steps={buildLifecycleTimeline(Object.values(ProductLifecycle), productLifecycle)} />
+        <MarketplaceLifecycleRail title="Governance validation lifecycle" steps={buildLifecycleTimeline(Object.values(GovernanceValidationLifecycle), governanceLifecycle)} />
+      </section>
+      <section className="rounded-lg border border-yellow-400/20 bg-yellow-500/10 p-4 text-sm text-yellow-100">
+        Preview only. No settlement. No wallet transaction. No treasury execution. No contract write. Simulated license issuance only.
       </section>
       {purchaseOpen && <PurchasePreviewModal product={product} onClose={() => setPurchaseOpen(false)} />}
     </main>
