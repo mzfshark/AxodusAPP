@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { diligenceTone, governanceTone, riskTone } from '../utils/miningUtils';
-import { miningNavItems } from '../constants/navigation';
 import { getMiningMeta } from '../services/miningApi';
 import { useMiningSummary } from '../hooks/useMiningData';
 
@@ -20,25 +19,6 @@ export function MiningHeader({ title, description }) {
           {meta.message}
         </div>
       ) : null}
-      <nav className="flex gap-2 overflow-x-auto pb-2">
-        {miningNavItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              `inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-bold transition ${
-                isActive
-                  ? 'border-primary/50 bg-primary/15 text-primary'
-                  : 'border-white/10 bg-surface-container-low text-outline hover:border-primary/30 hover:text-on-surface'
-              }`
-            }
-          >
-            <item.icon className="h-4 w-4" aria-hidden="true" />
-            {item.label}
-          </NavLink>
-        ))}
-      </nav>
     </header>
   );
 }

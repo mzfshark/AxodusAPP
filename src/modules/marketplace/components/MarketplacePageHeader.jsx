@@ -1,5 +1,4 @@
 import { ShieldCheck } from 'lucide-react';
-import MarketplaceSectionNav from './MarketplaceSectionNav';
 
 export default function MarketplacePageHeader({ title, description, children }) {
   return (
@@ -15,7 +14,6 @@ export default function MarketplacePageHeader({ title, description, children }) 
           <span>NFT marketplace MVP is mock-driven. No wallet signature, settlement, bridge transfer, or treasury routing is executed.</span>
         </div>
       </div>
-      <MarketplaceSectionNav />
       {children}
     </header>
   );

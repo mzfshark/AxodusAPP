@@ -33,14 +33,9 @@ export default function MarketplaceHome() {
       </section>
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
         <div className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-on-surface">Operational registry</h2>
-              <p className="mt-1 text-sm text-outline">DAO ownership, treasury destination, ACS review, and execution scope are first-class listing metadata.</p>
-            </div>
-            <Link to="/marketplace/listings" className="inline-flex rounded-lg border border-white/10 px-3 py-2 text-sm font-bold text-on-surface hover:border-primary/40">
-              Open registry
-            </Link>
+          <div>
+            <h2 className="text-xl font-bold text-on-surface">Operational registry</h2>
+            <p className="mt-1 text-sm text-outline">DAO ownership, treasury destination, ACS review, and execution scope are first-class listing metadata.</p>
           </div>
           <MarketplaceListingsTable products={marketplace.products} />
         </div>

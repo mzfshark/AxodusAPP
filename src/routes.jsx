@@ -68,6 +68,15 @@ import {
   LotteryRandomness,
   LotteryTickets,
 } from "./modules/lottery";
+import {
+  AcsCapabilities,
+  AcsOverview,
+  AcsPolicy,
+  AcsProducts,
+  AcsReadiness,
+  AcsStatus,
+  AcsTenantServices,
+} from "./modules/acs";
 
 
 const router = createBrowserRouter([
@@ -142,6 +151,13 @@ const router = createBrowserRouter([
       { path: "bba/campaigns", element: <BbaCampaigns /> },
       { path: "bba/partnerships", element: <BbaPartnerships /> },
       { path: "bba/governance", element: <BbaGovernance /> },
+      { path: "acs", element: <AcsOverview /> },
+      { path: "acs/capabilities", element: <AcsCapabilities /> },
+      { path: "acs/services", element: <AcsTenantServices /> },
+      { path: "acs/products", element: <AcsProducts /> },
+      { path: "acs/policy", element: <AcsPolicy /> },
+      { path: "acs/status", element: <AcsStatus /> },
+      { path: "acs/readiness", element: <AcsReadiness /> },
       { path: "mcps", element: <Mcps /> },
     ],
   },

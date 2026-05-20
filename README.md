@@ -134,6 +134,41 @@ Verification:
 - Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
 - Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
 
+### ACS Operational Intelligence Integration
+
+AxodusAPP exposes ACS as the governance-aware operational visibility interface while the ACS workspace remains the authoritative inspection backend.
+
+Development flow:
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/ACS
+npm run http
+```
+
+The ACS inspection API should be available at `http://localhost:8788/acs`.
+
+```bash
+cd /mnt/d/Rede/Github/Axodus/AxodusAPP
+pnpm dev
+```
+
+AxodusAPP reads `VITE_ACS_API_URL=http://localhost:8788`.
+
+Initial routes:
+- `/acs`
+- `/acs/capabilities`
+- `/acs/services`
+- `/acs/products`
+- `/acs/policy`
+- `/acs/status`
+- `/acs/readiness`
+
+Verification:
+- Open `/acs/capabilities` to confirm Core, Service, and Product capabilities render from ACS.
+- Open `/acs/products` to confirm `product.trading-ignition` appears as one ACS Product Capability.
+- Stop the ACS backend, or set `VITE_ACS_USE_MOCKS=true`, to verify the explicit fallback banner: `Using ACS mock fallback`.
+- Keep ACS read-only in this phase: no automation, trading execution, CEX calls, API secrets, tenant state mutation, or license mutation.
+
 ## Wallet Integration
 
 ### MetaMask
