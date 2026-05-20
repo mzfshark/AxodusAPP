@@ -254,3 +254,36 @@ The Marketplace should validate Axodus commerce continuity before settlement. Us
 Implementation note:
 
 Marketplace UI and services must use explicit labels such as `Mock validation`, `Preview only`, `No settlement`, `No wallet transaction`, `No treasury execution`, `No contract write`, and `Simulated license issuance` wherever an action is not live.
+
+---
+
+## Decision 17 — Marketplace Runtime Persistence Starts With Contracts and Repositories
+
+Marketplace may move from frontend-only mock constants toward runtime-ready state through typed contracts, schemas, repositories, and entitlement read models.
+
+Approved Sprint 01 boundaries:
+
+- API schemas and route contracts are defined with Zod.
+- TypeScript DTOs are inferred from the validation schemas.
+- Repository interfaces exist for products, sellers, tenants, licenses, purchases, subscriptions, billing previews, and governance validations.
+- Mock repository adapters are the only implemented adapters.
+- Runtime identifiers use stable UUID-shaped `runtimeId` values and deterministic `entityRef` references.
+- Entitlement read models may aggregate owned products, active licenses, subscriptions, governance restrictions, delivery permissions, and NFT ownership readiness.
+- A mock API runtime may wrap repository responses in API-shaped envelopes.
+
+Explicitly deferred:
+
+- production database writes
+- live backend handlers
+- wallet execution
+- contract writes
+- bid placement
+- NFT minting or transfer
+- payment settlement
+- treasury movement
+- Greenfield production delivery
+- LayerZero messaging
+
+Reasoning:
+
+Marketplace needs backend-ready shape before production settlement. Contract-first repositories let AxodusAPP replace mock sources with API, database, or indexer adapters without redesigning the UI or implying live commerce execution.

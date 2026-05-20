@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { getMarketplaceMetrics, getMarketplaceOverview } from '../services/marketplaceService';
+import { getMarketplaceMetrics } from '../services/marketplaceService';
 import { getMarketplaceOperationalSummary } from '../services/operationalServices';
+import { createMockMarketplaceRuntimeSnapshot } from '../repositories';
 
 export function useMarketplaceData() {
   return useMemo(() => ({
-    ...getMarketplaceOverview(),
+    ...createMockMarketplaceRuntimeSnapshot(),
     metrics: getMarketplaceMetrics(),
     operations: getMarketplaceOperationalSummary(),
   }), []);

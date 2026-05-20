@@ -370,6 +370,24 @@ Marketplace UI labels must distinguish:
 - No contract write
 - Simulated license issuance
 
+Sprint 01 runtime persistence boundaries:
+
+- API contracts live under `src/modules/marketplace/contracts`.
+- Zod validation schemas live under `src/modules/marketplace/schemas`.
+- Repository abstractions live under `src/modules/marketplace/repositories`.
+- API module scaffolding lives under `apps/api/modules/marketplace`.
+- Entitlement read models are aggregated through `buildMarketplaceEntitlementReadModel`.
+- Frontend mock consumption should prefer repository-normalized runtime snapshots instead of raw static constants where practical.
+- Runtime entities must carry stable `runtimeId` UUIDs and deterministic `entityRef` references.
+
+Repositories are intentionally adapter-shaped:
+
+- mock adapters are implemented now
+- future database adapters may replace them
+- future indexer adapters may replace them
+- production database writes are not implemented
+- production settlement is not implemented
+
 ---
 
 ## Long-Term Architecture Goal
