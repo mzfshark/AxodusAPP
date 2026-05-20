@@ -287,3 +287,34 @@ Explicitly deferred:
 Reasoning:
 
 Marketplace needs backend-ready shape before production settlement. Contract-first repositories let AxodusAPP replace mock sources with API, database, or indexer adapters without redesigning the UI or implying live commerce execution.
+
+## Decision 18 — Marketplace Wallet Runtime Is Preview-Only Until Execution Approval
+
+Marketplace may model wallet session, chain readiness, ownership readiness, listing lifecycle, bid lifecycle, and royalty accounting before enabling live settlement.
+
+Approved Sprint 02 boundaries:
+
+- Reown/AppKit session state is represented through mock-only wallet runtime services.
+- EVM provider readiness exposes chain and permission state without requesting signatures.
+- NFT ownership readiness supports ERC721, ERC1155, license-bound NFTs, access NFTs, governance NFTs, and offchain license fallbacks.
+- Listing runtime supports fixed listing, English auction, Dutch auction, reserve listing, bid lifecycle, and restricted/pending/expired/sold/cancelled/settlement-pending states.
+- Royalty runtime previews EIP-2981 readiness, creator splits, platform fees, and treasury splits.
+- Product detail may show these states as operational panels to clarify readiness and restrictions.
+
+Explicitly deferred:
+
+- real wallet signatures
+- wallet transaction submission
+- live ownership chain reads
+- contract writes
+- NFT minting or transfer
+- real listing creation
+- real bid placement
+- auction settlement
+- EIP-2981 contract reads
+- royalty settlement
+- treasury execution
+
+Reasoning:
+
+The Marketplace must become wallet-runtime aware before on-chain execution. Modeling wallet and ownership state now improves UX, governance visibility, and adapter boundaries while keeping the MVP settlement-deferred and safe.

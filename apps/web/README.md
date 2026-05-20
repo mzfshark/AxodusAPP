@@ -19,6 +19,10 @@ It models Axodus commerce as an NFT marketplace nucleus with support for:
 - subscription and billing previews
 - Greenfield delivery readiness
 - Reown wallet state mocks
+- wallet session and chain readiness runtime
+- NFT ownership readiness for ERC721, ERC1155, license-bound, access, and governance assets
+- listing and bid lifecycle previews
+- royalty accounting previews
 - LayerZero chain and bridge readiness
 
 ## Execution Boundary
@@ -52,5 +56,9 @@ Future integrations are represented through mock-only adapters:
 - `LayerZeroBridgeAdapter`
 - `TreasurySettlementAdapter`
 - `BillingProviderAdapter`
+- `WalletRuntimeService`
+- `NftOwnershipRuntime`
+- `ListingRuntimeService`
+- `RoyaltyRuntimeService`
 
 These adapters are intended to preserve interface shape while returning preview responses only.

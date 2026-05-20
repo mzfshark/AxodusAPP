@@ -107,9 +107,9 @@ function resolveListingLifecycle(product: ListingProductLike, now: Date): Listin
   if (product.governanceStatus === 'restricted' || product.validationStatus === 'restricted' || product.lifecycleStatus === 'restricted') return 'restricted';
   if (product.status === 'sold' || product.purchaseLifecycle === 'completed-mock') return 'sold';
   if (product.status === 'cancelled') return 'cancelled';
-  if (product.purchaseLifecycle === 'validating') return 'settlement-pending';
   if (product.auction?.endsAt && new Date(product.auction.endsAt).getTime() < now.getTime()) return 'expired';
   if (['pending-validation', 'draft'].includes(product.lifecycleStatus ?? '') || ['under-review', 'submitted'].includes(product.governanceStatus ?? '')) return 'pending';
+  if (product.purchaseLifecycle === 'validating') return 'settlement-pending';
   return 'active';
 }
 

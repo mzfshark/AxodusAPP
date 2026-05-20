@@ -388,6 +388,19 @@ Repositories are intentionally adapter-shaped:
 - production database writes are not implemented
 - production settlement is not implemented
 
+Sprint 02 wallet, ownership, listing, and royalty runtime boundaries:
+
+- Wallet runtime lives in `src/modules/marketplace/services/walletRuntime.ts`.
+- NFT ownership readiness lives in `src/modules/marketplace/services/nftOwnershipRuntime.ts`.
+- Listing and bid lifecycle previews live in `src/modules/marketplace/services/listingRuntime.ts`.
+- Royalty accounting previews live in `src/modules/marketplace/services/royaltyRuntime.ts`.
+- Product detail UI exposes wallet runtime, ownership readiness, listing runtime, and royalty runtime panels.
+- Reown/AppKit and EVM provider boundaries are modeled as mock-only adapters.
+- Wallet actions are permission-aware and chain-aware, but signatures, wallet transactions, and chain writes remain disabled.
+- ERC721, ERC1155, license-bound NFTs, access NFTs, and governance NFTs are modeled for readiness only.
+- Fixed listings, English auctions, Dutch auctions, reserve listings, and bid lifecycle states are prepared without settlement.
+- EIP-2981 royalty reads and accounting splits are previewed without contract reads, accounting writes, treasury execution, or royalty settlement.
+
 ---
 
 ## Long-Term Architecture Goal
