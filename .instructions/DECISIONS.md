@@ -318,3 +318,31 @@ Explicitly deferred:
 Reasoning:
 
 The Marketplace must become wallet-runtime aware before on-chain execution. Modeling wallet and ownership state now improves UX, governance visibility, and adapter boundaries while keeping the MVP settlement-deferred and safe.
+
+## Decision 19 — Marketplace Governance and ACS Runtime Are Federated Read Models
+
+Marketplace must behave as federated ecosystem commerce infrastructure, not as isolated product catalog state.
+
+Approved Sprint 03 boundaries:
+
+- Products carry governance runtime state derived from product, seller, and tenant context.
+- Sellers carry governance standing, treasury linkage, product restriction, warning, and sanction previews.
+- Tenants act as DAO commerce boundaries with isolation references, storefront readiness, ownership hierarchy, governance authority, and treasury destination.
+- ACS Marketplace visibility exposes MCP services, orchestration packages, AI agents, compute access, and ACS runtime packages as review/provisioning previews.
+- Dashboard and Governance views may render federation metrics, ACS metrics, constitutional alerts, seller standing alerts, and tenant-scoped commerce tables.
+
+Explicitly deferred:
+
+- live Governance API enforcement
+- DAO storefront activation
+- ACS provisioning
+- agent deployment
+- compute allocation
+- sanctions execution
+- product activation
+- contract writes
+- settlement
+
+Reasoning:
+
+Governance and ACS must become first-class Marketplace runtime concerns before backend or on-chain execution. Federated read models make tenant ownership, operational authority, constitutional restrictions, and ACS distribution risk visible without introducing live execution paths.

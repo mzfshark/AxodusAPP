@@ -14,6 +14,9 @@ It models Axodus commerce as an NFT marketplace nucleus with support for:
 - EIP-2981 royalty previews
 - seller and publisher profiles
 - DAO or tenant ownership context
+- tenant federation and DAO storefront readiness
+- governance runtime restrictions, warnings, sanctions, and authorities
+- ACS Marketplace package visibility for MCP services, agents, orchestration, compute, and runtime packages
 - governance validation state
 - license and access models
 - subscription and billing previews
@@ -60,5 +63,8 @@ Future integrations are represented through mock-only adapters:
 - `NftOwnershipRuntime`
 - `ListingRuntimeService`
 - `RoyaltyRuntimeService`
+- `MarketplaceGovernanceRuntime`
+- `TenantFederationReadModel`
+- `AcsMarketplaceLayer`
 
 These adapters are intended to preserve interface shape while returning preview responses only.
