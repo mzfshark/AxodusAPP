@@ -370,6 +370,48 @@ Marketplace UI labels must distinguish:
 - No contract write
 - Simulated license issuance
 
+Sprint 01 runtime persistence boundaries:
+
+- API contracts live under `src/modules/marketplace/contracts`.
+- Zod validation schemas live under `src/modules/marketplace/schemas`.
+- Repository abstractions live under `src/modules/marketplace/repositories`.
+- API module scaffolding lives under `apps/api/modules/marketplace`.
+- Entitlement read models are aggregated through `buildMarketplaceEntitlementReadModel`.
+- Frontend mock consumption should prefer repository-normalized runtime snapshots instead of raw static constants where practical.
+- Runtime entities must carry stable `runtimeId` UUIDs and deterministic `entityRef` references.
+
+Repositories are intentionally adapter-shaped:
+
+- mock adapters are implemented now
+- future database adapters may replace them
+- future indexer adapters may replace them
+- production database writes are not implemented
+- production settlement is not implemented
+
+Sprint 02 wallet, ownership, listing, and royalty runtime boundaries:
+
+- Wallet runtime lives in `src/modules/marketplace/services/walletRuntime.ts`.
+- NFT ownership readiness lives in `src/modules/marketplace/services/nftOwnershipRuntime.ts`.
+- Listing and bid lifecycle previews live in `src/modules/marketplace/services/listingRuntime.ts`.
+- Royalty accounting previews live in `src/modules/marketplace/services/royaltyRuntime.ts`.
+- Product detail UI exposes wallet runtime, ownership readiness, listing runtime, and royalty runtime panels.
+- Reown/AppKit and EVM provider boundaries are modeled as mock-only adapters.
+- Wallet actions are permission-aware and chain-aware, but signatures, wallet transactions, and chain writes remain disabled.
+- ERC721, ERC1155, license-bound NFTs, access NFTs, and governance NFTs are modeled for readiness only.
+- Fixed listings, English auctions, Dutch auctions, reserve listings, and bid lifecycle states are prepared without settlement.
+- EIP-2981 royalty reads and accounting splits are previewed without contract reads, accounting writes, treasury execution, or royalty settlement.
+
+Sprint 03 governance, ACS, and tenant federation boundaries:
+
+- Governance runtime read models live in `src/modules/marketplace/services/governanceRuntime.ts`.
+- Tenant federation read models live in `src/modules/marketplace/services/tenantFederation.ts`.
+- ACS Marketplace visibility lives in `src/modules/marketplace/services/acsMarketplaceLayer.ts`.
+- Marketplace products and sellers expose constitutional standing, restriction state, warnings, sanctions, federation tier, governance authority, DAO ownership, and operational approval state as first-class runtime data.
+- Tenants are treated as DAO commerce boundaries with isolation references, storefront readiness, seller relationships, product scopes, treasury destinations, and governance authorities.
+- ACS package visibility covers MCP services, orchestration packages, AI agents, compute access, and ACS runtime packages as provisioning previews only.
+- Federation dashboard UI exposes tenant metrics, governance metrics, ACS operational metrics, seller standing metrics, and constitutional alerts.
+- DAO storefront execution, ACS provisioning, agent deployment, compute allocation, governance execution, contract writes, and settlement remain disabled.
+
 ---
 
 ## Long-Term Architecture Goal

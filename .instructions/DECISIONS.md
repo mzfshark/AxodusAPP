@@ -254,3 +254,95 @@ The Marketplace should validate Axodus commerce continuity before settlement. Us
 Implementation note:
 
 Marketplace UI and services must use explicit labels such as `Mock validation`, `Preview only`, `No settlement`, `No wallet transaction`, `No treasury execution`, `No contract write`, and `Simulated license issuance` wherever an action is not live.
+
+---
+
+## Decision 17 — Marketplace Runtime Persistence Starts With Contracts and Repositories
+
+Marketplace may move from frontend-only mock constants toward runtime-ready state through typed contracts, schemas, repositories, and entitlement read models.
+
+Approved Sprint 01 boundaries:
+
+- API schemas and route contracts are defined with Zod.
+- TypeScript DTOs are inferred from the validation schemas.
+- Repository interfaces exist for products, sellers, tenants, licenses, purchases, subscriptions, billing previews, and governance validations.
+- Mock repository adapters are the only implemented adapters.
+- Runtime identifiers use stable UUID-shaped `runtimeId` values and deterministic `entityRef` references.
+- Entitlement read models may aggregate owned products, active licenses, subscriptions, governance restrictions, delivery permissions, and NFT ownership readiness.
+- A mock API runtime may wrap repository responses in API-shaped envelopes.
+
+Explicitly deferred:
+
+- production database writes
+- live backend handlers
+- wallet execution
+- contract writes
+- bid placement
+- NFT minting or transfer
+- payment settlement
+- treasury movement
+- Greenfield production delivery
+- LayerZero messaging
+
+Reasoning:
+
+Marketplace needs backend-ready shape before production settlement. Contract-first repositories let AxodusAPP replace mock sources with API, database, or indexer adapters without redesigning the UI or implying live commerce execution.
+
+## Decision 18 — Marketplace Wallet Runtime Is Preview-Only Until Execution Approval
+
+Marketplace may model wallet session, chain readiness, ownership readiness, listing lifecycle, bid lifecycle, and royalty accounting before enabling live settlement.
+
+Approved Sprint 02 boundaries:
+
+- Reown/AppKit session state is represented through mock-only wallet runtime services.
+- EVM provider readiness exposes chain and permission state without requesting signatures.
+- NFT ownership readiness supports ERC721, ERC1155, license-bound NFTs, access NFTs, governance NFTs, and offchain license fallbacks.
+- Listing runtime supports fixed listing, English auction, Dutch auction, reserve listing, bid lifecycle, and restricted/pending/expired/sold/cancelled/settlement-pending states.
+- Royalty runtime previews EIP-2981 readiness, creator splits, platform fees, and treasury splits.
+- Product detail may show these states as operational panels to clarify readiness and restrictions.
+
+Explicitly deferred:
+
+- real wallet signatures
+- wallet transaction submission
+- live ownership chain reads
+- contract writes
+- NFT minting or transfer
+- real listing creation
+- real bid placement
+- auction settlement
+- EIP-2981 contract reads
+- royalty settlement
+- treasury execution
+
+Reasoning:
+
+The Marketplace must become wallet-runtime aware before on-chain execution. Modeling wallet and ownership state now improves UX, governance visibility, and adapter boundaries while keeping the MVP settlement-deferred and safe.
+
+## Decision 19 — Marketplace Governance and ACS Runtime Are Federated Read Models
+
+Marketplace must behave as federated ecosystem commerce infrastructure, not as isolated product catalog state.
+
+Approved Sprint 03 boundaries:
+
+- Products carry governance runtime state derived from product, seller, and tenant context.
+- Sellers carry governance standing, treasury linkage, product restriction, warning, and sanction previews.
+- Tenants act as DAO commerce boundaries with isolation references, storefront readiness, ownership hierarchy, governance authority, and treasury destination.
+- ACS Marketplace visibility exposes MCP services, orchestration packages, AI agents, compute access, and ACS runtime packages as review/provisioning previews.
+- Dashboard and Governance views may render federation metrics, ACS metrics, constitutional alerts, seller standing alerts, and tenant-scoped commerce tables.
+
+Explicitly deferred:
+
+- live Governance API enforcement
+- DAO storefront activation
+- ACS provisioning
+- agent deployment
+- compute allocation
+- sanctions execution
+- product activation
+- contract writes
+- settlement
+
+Reasoning:
+
+Governance and ACS must become first-class Marketplace runtime concerns before backend or on-chain execution. Federated read models make tenant ownership, operational authority, constitutional restrictions, and ACS distribution risk visible without introducing live execution paths.

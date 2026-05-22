@@ -1,4 +1,5 @@
 import { marketplaceMock } from '@/data/mock';
+import { createNewMarketplaceRuntimeId } from '../utils/runtimeIds';
 
 const normalize = (value) => String(value ?? '').toLowerCase();
 
@@ -85,7 +86,7 @@ export function issueMockPurchase(product, buyer = '0xAxoD...Mock') {
   const license = getMarketplaceLicenseForProduct(product);
   const blocked = product.governanceStatus === 'restricted' || product.governanceStatus === 'suspended';
   return {
-    id: `purchase-${product.id}-${Date.now()}`,
+    id: createNewMarketplaceRuntimeId('purchase'),
     buyer,
     productId: product.id,
     sellerId: product.sellerId,
@@ -101,7 +102,7 @@ export function issueMockPurchase(product, buyer = '0xAxoD...Mock') {
 
 export function createDraftListingPreview(input) {
   return {
-    id: `draft-listing-${Date.now()}`,
+    id: createNewMarketplaceRuntimeId('product'),
     input,
     status: input.governanceReviewRequired ? 'requires-governance-review' : 'draft-created',
     contractAdapterAction: 'createListing',
