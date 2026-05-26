@@ -188,12 +188,16 @@ const nuclei = [
   {
     id: 'business',
     label: 'Business',
-    routeBase: '/account',
+    routeBase: '/business',
     icon: BriefcaseBusiness,
     tone: 'enterprise',
-    summary: 'Enterprise account and client operating context',
+    summary: 'Operational infrastructure, funding visibility and ACS runtime coordination',
     sections: [
-      { to: '/account', label: 'Account', icon: BriefcaseBusiness, end: true },
+      { to: '/business', label: 'Overview', icon: LayoutDashboard, end: true },
+      { to: '/business/projects', label: 'Projects', icon: LibraryBig },
+      { to: '/business/assets', label: 'Assets', icon: PackageCheck },
+      { to: '/business/treasury', label: 'Treasury', icon: Landmark },
+      { to: '/business/telemetry', label: 'Telemetry', icon: Activity },
     ],
   },
   {

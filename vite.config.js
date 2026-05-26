@@ -15,7 +15,8 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@styles': path.resolve(__dirname, './src/styles'),
-      '@config': path.resolve(__dirname, './src/appkit.config.js' )
+      '@config': path.resolve(__dirname, './src/appkit.config.js' ),
+      '@axodus/business-runtime': path.resolve(__dirname, '../Business/src/index.ts')
     }
   },
   server: {
@@ -41,6 +42,7 @@ export default defineConfig({
     url: process.env.VITE_PUBLIC_URL || "http://localhost:5174", // fallback local
   },
   optimizeDeps: {
+    exclude: ['@axodus/business-runtime'],
     include: [
       '@reown/appkit',
       '@reown/appkit/react',

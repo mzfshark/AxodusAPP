@@ -7,7 +7,19 @@ import { DefiDashboard } from "./modules/defi";
 import Settings from "./pages/Settings";
 import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
-import Business from "./pages/Business";
+import {
+  BusinessACS,
+  BusinessAssets,
+  BusinessDebentures,
+  BusinessFunding,
+  BusinessOverview,
+  BusinessPlugins,
+  BusinessProjects,
+  BusinessRequests,
+  BusinessRevenue,
+  BusinessTelemetry,
+  BusinessTreasury,
+} from "./modules/business";
 
 // Importações dos novos componentes estáticos
 import {
@@ -91,7 +103,18 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Overview /> },
       { path: "connect", element: <ConnectWalletPage /> },
-      { path: "account", element: <Business /> },
+      { path: "account", element: <BusinessOverview /> },
+      { path: "business", element: <BusinessOverview /> },
+      { path: "business/requests", element: <BusinessRequests /> },
+      { path: "business/projects", element: <BusinessProjects /> },
+      { path: "business/assets", element: <BusinessAssets /> },
+      { path: "business/plugins", element: <BusinessPlugins /> },
+      { path: "business/funding", element: <BusinessFunding /> },
+      { path: "business/debentures", element: <BusinessDebentures /> },
+      { path: "business/treasury", element: <BusinessTreasury /> },
+      { path: "business/revenue", element: <BusinessRevenue /> },
+      { path: "business/acs", element: <BusinessACS /> },
+      { path: "business/telemetry", element: <BusinessTelemetry /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "defi", element: <DefiDashboard /> },
       { path: "settings", element: <Settings /> },
