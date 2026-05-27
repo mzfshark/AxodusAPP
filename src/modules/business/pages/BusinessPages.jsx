@@ -21,6 +21,7 @@ import {
   useBusinessCriticalEvents,
   useBusinessEvents,
   useBusinessEventSummary,
+  useBusinessFinanceRiskModel,
   useBusinessFundingRecords,
   useBusinessGovernanceReadiness,
   useBusinessOverview,
@@ -250,6 +251,160 @@ export function BusinessTreasury() {
           ]}
         />
       </BusinessPanel>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessFinance() {
+  const finance = useBusinessFinanceRiskModel();
+  if (finance.isLoading) return <BusinessLoadingState />;
+  if (finance.isError) return <BusinessErrorState message="Business finance risk model unavailable." />;
+
+  const model = finance.data;
+  const summary = model.summary;
+  const routingSummaryRows = Object.entries(model.revenueRoutingSummary).map(([key, value]) => ({
+    id: key,
+    bucket: key,
+    amount: value
+  }));
+
+  return (
+    <BusinessPageShell
+      title="Finance Risk"
+      description="Treasury exposure, funding eligibility, debenture planning, revenue routing and financial restrictions rendered from the Business runtime. This console is visibility only."
+    >
+      <BusinessSummaryCards cards={[
+        { id: 'finance-exposure', label: 'Treasury Exposure', value: money(summary.totalTreasuryExposure, summary.currency), detail: `${money(summary.totalConsumedExposure, summary.currency)} consumed in visible mock exposure records.`, status: 'WARNING' },
+        { id: 'finance-funding', label: 'Funding Records', value: summary.fundingRecords, detail: 'Funding lifecycle records with simulated eligibility decisions.', status: 'NOTICE' },
+        { id: 'finance-debentures', label: 'Debentures', value: summary.debentures, detail: `${summary.convertibleDebentures} convertible / ${summary.nonConvertibleDebentures} non-convertible planning records.`, status: 'WARNING' },
+        { id: 'finance-readiness', label: 'Readiness Score', value: `${summary.financialReadinessScore}%`, detail: `${summary.blockedFinancialActions} financial actions are blocked or require approval.`, status: summary.financialReadinessScore >= 80 ? 'APPROVED' : 'WARNING' }
+      ]} />
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <BusinessPanel title="Treasury Safety Status" description="Financial adapters are mock/read-only. No allocation, settlement or distribution can execute from this console.">
+          <DetailList items={[
+            { label: 'Runtime mode', value: model.mock && model.readOnly ? 'mock/read-only' : 'review' },
+            { label: 'Treasury freeze', value: model.freezeStatus.frozen ? 'FROZEN' : 'NOT_FROZEN' },
+            { label: 'Execution', value: 'view-only / simulation-only' },
+            { label: 'Contract calls', value: 'disabled' }
+          ]} />
+        </BusinessPanel>
+        <BusinessPanel title="Financial Readiness Score" description="Calculated from visible exposure, restrictions and simulated eligibility only.">
+          <ProgressBar value={summary.financialReadinessScore} />
+          <p className="mt-4 text-sm leading-6 text-outline">
+            Readiness is not approval. Treasury movement, debenture issuance, APR payment, settlement and revenue distribution remain forbidden.
+          </p>
+        </BusinessPanel>
+        <BusinessPanel title="Revenue Routing Summary" description="Revenue is classified and visible, but no distribution is available.">
+          <BusinessLifecycleTable
+            rows={routingSummaryRows}
+            columns={[
+              { key: 'bucket', label: 'Route bucket', render: idCell('bucket') },
+              { key: 'amount', label: 'Amount', render: (row) => <span className="text-outline">{money(row.amount, summary.currency)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Risk Tier Distribution" description="Exposure grouped by runtime risk tier and mock treasury limits.">
+          <BusinessLifecycleTable
+            rows={model.exposureByRiskTier}
+            columns={[
+              { key: 'riskTier', label: 'Risk tier', render: riskCell() },
+              { key: 'count', label: 'Records', render: (row) => <strong className="text-on-surface">{row.count}</strong> },
+              { key: 'approvedAmount', label: 'Approved', render: (row) => <span className="text-outline">{money(row.approvedAmount, row.currency)}</span> },
+              { key: 'consumedAmount', label: 'Consumed', render: (row) => <span className="text-outline">{money(row.consumedAmount, row.currency)}</span> },
+              { key: 'utilizationPercent', label: 'Limit use', render: (row) => <ProgressBar value={row.utilizationPercent} /> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Treasury Exposure By Project" description="Project exposure remains transparent with explicit restriction count and readiness scoring.">
+          <BusinessLifecycleTable
+            rows={model.exposureByProject}
+            columns={[
+              { key: 'projectId', label: 'Project', render: linkCell('/business/projects', 'projectId') },
+              { key: 'riskTier', label: 'Risk', render: riskCell() },
+              { key: 'approvedAmount', label: 'Approved', render: (row) => <span className="text-outline">{money(row.approvedAmount, row.currency)}</span> },
+              { key: 'consumedAmount', label: 'Consumed', render: (row) => <span className="text-outline">{money(row.consumedAmount, row.currency)}</span> },
+              { key: 'readinessScore', label: 'Readiness', render: (row) => <ProgressBar value={row.readinessScore} /> },
+              { key: 'restrictionCount', label: 'Restrictions', render: (row) => <strong className="text-on-surface">{row.restrictionCount}</strong> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <BusinessPanel title="Funding Eligibility" description="Eligibility is simulated by runtime contracts and does not authorize funding execution.">
+        <BusinessLifecycleTable
+          rows={model.fundingEligibilityRows}
+          columns={[
+            { key: 'id', label: 'Funding', render: idCell() },
+            { key: 'projectTitle', label: 'Project', render: textCell('projectTitle') },
+            { key: 'fundingType', label: 'Model', render: statusCell('fundingType') },
+            { key: 'status', label: 'Status', render: statusCell() },
+            { key: 'riskTier', label: 'Risk', render: riskCell() },
+            { key: 'targetAmount', label: 'Target', render: (row) => <span className="text-outline">{money(row.targetAmount, row.currency)}</span> },
+            { key: 'percentFunded', label: 'Funded', render: (row) => <ProgressBar value={row.percentFunded} /> },
+            { key: 'eligible', label: 'Eligibility', render: (row) => <BusinessStatusBadge status={row.eligible ? 'APPROVED' : 'UNDER_REVIEW'} /> },
+            { key: 'eligibilityReason', label: 'Reason', render: textCell('eligibilityReason') }
+          ]}
+        />
+      </BusinessPanel>
+
+      <BusinessPanel title="Debenture Planning" description="Planning records only. Issuance, purchase, conversion, APR payment and liquidation are unavailable.">
+        <BusinessLifecycleTable
+          rows={model.debenturePlanningRows}
+          columns={[
+            { key: 'id', label: 'Debenture', render: idCell() },
+            { key: 'projectTitle', label: 'Project', render: textCell('projectTitle') },
+            { key: 'debentureType', label: 'Type', render: statusCell('debentureType') },
+            { key: 'convertible', label: 'Convertible', render: (row) => <span className="text-outline">{row.convertible ? 'yes' : 'no'}</span> },
+            { key: 'targetAmount', label: 'Target', render: (row) => <span className="text-outline">{money(row.targetAmount, row.currency)}</span> },
+            { key: 'percentRaised', label: 'Progress', render: (row) => <ProgressBar value={row.percentRaised} /> },
+            { key: 'repaymentStatus', label: 'Repayment', render: statusCell('repaymentStatus') },
+            { key: 'defaultRisk', label: 'Default risk', render: statusCell('defaultRisk') },
+            { key: 'issuanceAllowed', label: 'Issue allowed', render: (row) => <BusinessStatusBadge status={row.issuanceAllowed ? 'APPROVED' : 'FORBIDDEN_IN_CURRENT_RUNTIME'} /> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Revenue Routing" description="Routing allocations are explicit and visible. Distribution is not executable.">
+          <BusinessLifecycleTable
+            rows={model.revenueRoutingRows}
+            columns={[
+              { key: 'id', label: 'Revenue', render: idCell() },
+              { key: 'projectTitle', label: 'Project', render: textCell('projectTitle') },
+              { key: 'status', label: 'Status', render: statusCell() },
+              { key: 'netAmount', label: 'Net', render: (row) => <span className="text-outline">{money(row.netAmount, row.currency)}</span> },
+              { key: 'treasuryShare', label: 'Treasury', render: (row) => <span className="text-outline">{money(row.treasuryShare, row.currency)}</span> },
+              { key: 'debentureShare', label: 'Debenture', render: (row) => <span className="text-outline">{money(row.debentureShare, row.currency)}</span> },
+              { key: 'settlementStatus', label: 'Settlement', render: statusCell('settlementStatus') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Financial Restrictions" description="Treasury restrictions and blocked financial actions must remain visible before any future integration.">
+          <div className="space-y-6">
+            <BusinessLifecycleTable
+              rows={model.treasuryRestrictions}
+              columns={[
+                { key: 'projectId', label: 'Project', render: idCell('projectId') },
+                { key: 'riskTier', label: 'Risk', render: riskCell() },
+                { key: 'restriction', label: 'Restriction', render: idCell('restriction') },
+                { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> }
+              ]}
+            />
+            <BusinessLifecycleTable
+              rows={model.blockedFinancialActions}
+              columns={[
+                { key: 'action', label: 'Blocked Financial Actions', render: idCell('action') },
+                { key: 'mode', label: 'Execution policy', render: statusCell('mode') },
+                { key: 'reason', label: 'Reason', render: textCell('reason') }
+              ]}
+            />
+          </div>
+        </BusinessPanel>
+      </section>
     </BusinessPageShell>
   );
 }

@@ -13,8 +13,10 @@ import {
   RiskTier,
   TreasuryExposureType,
   businessApiHandlers,
+  canUseFinancialInstrument,
   createBusinessDraftTemplate,
   createDraftStoreRecord,
+  debentureAdapter,
   deleteDraftStoreRecord,
   explainCapabilityDenial,
   explainPermissionDecision,
@@ -35,15 +37,19 @@ import {
   getBusinessRuntimeCoreSummary,
   getBusinessWorkflowSummary,
   getCriticalBusinessEvents,
+  getDebentureRiskProfile,
   getDraftPreviewById,
   getDraftStoreRecordById,
   getFederationStanding,
   getGovernanceRestrictions,
   getGovernanceStatus,
+  getOperationalCostProfile,
   getProjectEventTimeline,
   getProposalReference,
   getProjectRegistryView,
+  getRevenueRouting,
   getRiskTierRegistryView,
+  getSettlementStatus,
   getWorkflowBlockers,
   getWorkflowForProject,
   getWorkflowProgress,
@@ -54,7 +60,9 @@ import {
   listDraftStoreRecords,
   resetBusinessDraftStore,
   simulateTransition,
+  treasuryAdapter,
   updateDraftStoreRecord,
+  validateFundingModel,
   validateDraftById,
   requiresGovernanceApproval,
   selectBusinessProjectById
@@ -91,6 +99,200 @@ const apiOrDirect = (path, directReader) => (businessUseApi ? businessApiDataFro
 const apiProjectionOrDirect = async (path, selector, directReader) => {
   if (!businessUseApi) return directReader();
   return selector(await businessApiDataFrom(path));
+};
+
+const sumBy = (records, selector) => records.reduce((total, record) => total + Number(selector(record) || 0), 0);
+
+const createFinanceRiskModel = () => {
+  const projects = dataFrom(businessApiHandlers.getBusinessProjects);
+  const assets = dataFrom(businessApiHandlers.getBusinessAssets);
+  const fundingRecords = dataFrom(businessApiHandlers.getBusinessFundingRecords);
+  const debentures = dataFrom(businessApiHandlers.getBusinessDebentures);
+  const treasuryExposures = dataFrom(businessApiHandlers.getBusinessTreasuryExposures);
+  const revenueRecords = dataFrom(businessApiHandlers.getBusinessRevenueRecords);
+  const executionPolicies = Object.values(BUSINESS_EXECUTION_POLICY_MATRIX);
+  const financialActionIds = new Set(['MOVE_TREASURY_FUNDS', 'ISSUE_DEBENTURE', 'DISTRIBUTE_REVENUE', 'CALL_CONTRACT']);
+
+  const exposureByRiskTier = valuesOf(RiskTier).map((riskTier) => {
+    const records = treasuryExposures.filter((record) => record.riskTier === riskTier);
+    const limit = treasuryAdapter.getTreasuryExposureLimit(riskTier);
+    const approvedAmount = sumBy(records, (record) => record.approvedAmount);
+
+    return {
+      id: `risk-${riskTier}`,
+      riskTier,
+      count: records.length,
+      requestedAmount: sumBy(records, (record) => record.requestedAmount),
+      approvedAmount,
+      consumedAmount: sumBy(records, (record) => record.consumedAmount),
+      exposureLimit: limit.exposureLimit,
+      currency: limit.currency,
+      governanceRequired: limit.governanceRequired,
+      utilizationPercent: limit.exposureLimit ? Math.round((approvedAmount / limit.exposureLimit) * 100) : 0
+    };
+  });
+
+  const exposureByProject = projects.map((project) => {
+    const projectExposures = treasuryExposures.filter((record) => record.projectId === project.id);
+    const funding = fundingRecords.find((record) => record.id === project.fundingId);
+    const asset = assets.find((record) => record.id === project.assetId);
+    const requestedAmount = sumBy(projectExposures, (record) => record.requestedAmount);
+    const approvedAmount = sumBy(projectExposures, (record) => record.approvedAmount);
+    const consumedAmount = sumBy(projectExposures, (record) => record.consumedAmount);
+    const restrictions = treasuryAdapter.getTreasuryRestrictions(project.id);
+    const limit = treasuryAdapter.getTreasuryExposureLimit(project.riskTier);
+    const allocationDecision = treasuryAdapter.canAllocateTreasury(project.id, requestedAmount || approvedAmount);
+    const consumptionDecision = treasuryAdapter.canConsumeTreasury(project.id, Math.max(0, approvedAmount - consumedAmount));
+    const fundingEligibility = validateFundingModel(project.id, funding?.fundingType || FundingType.HYBRID);
+    const instrumentEligibility = canUseFinancialInstrument(project.id, funding?.fundingType || FundingType.HYBRID);
+    const readinessScore = Math.max(
+      0,
+      100 -
+        restrictions.length * 10 -
+        (approvedAmount > limit.exposureLimit ? 25 : 0) -
+        (fundingEligibility.eligible ? 0 : 20) -
+        (allocationDecision.allowed ? 0 : 10)
+    );
+
+    return {
+      id: project.id,
+      projectId: project.id,
+      title: project.title,
+      assetId: asset?.id,
+      assetName: asset?.name,
+      status: project.status,
+      riskTier: project.riskTier,
+      fundingId: funding?.id,
+      fundingType: funding?.fundingType,
+      requestedAmount,
+      approvedAmount,
+      consumedAmount,
+      currency: projectExposures[0]?.currency || funding?.currency || 'USD',
+      exposureStatus: projectExposures[0]?.status || 'NO_EXPOSURE',
+      restrictionCount: restrictions.length,
+      restrictions,
+      allocationDecision,
+      consumptionDecision,
+      fundingEligibility,
+      instrumentEligibility,
+      costProfile: getOperationalCostProfile(project.id),
+      readinessScore,
+      mock: true,
+      readOnly: true
+    };
+  });
+
+  const fundingEligibilityRows = fundingRecords.map((record) => {
+    const project = projects.find((entry) => entry.id === record.projectId);
+    const eligibility = validateFundingModel(record.projectId, record.fundingType);
+    const instrument = canUseFinancialInstrument(record.projectId, record.fundingType);
+
+    return {
+      ...record,
+      projectTitle: project?.title || record.projectId,
+      riskTier: project?.riskTier,
+      percentFunded: record.targetAmount ? Math.round((record.raisedAmount / record.targetAmount) * 100) : 0,
+      eligible: eligibility.eligible && instrument.eligible,
+      eligibilityReason: eligibility.reason,
+      instrumentReason: instrument.reason,
+      simulated: eligibility.simulated && instrument.simulated
+    };
+  });
+
+  const debenturePlanningRows = debentures.map((record) => {
+    const project = projects.find((entry) => entry.id === record.projectId);
+    const progress = debentureAdapter.getDebentureFundingProgress(record.id);
+    const repayment = debentureAdapter.getDebentureRepaymentStatus(record.id);
+    const maturity = debentureAdapter.getDebentureMaturityStatus(record.id);
+    const issuanceDecision = debentureAdapter.canIssueDebenture(record.projectId);
+    const riskProfile = getDebentureRiskProfile(record.projectId);
+    const simulation = debentureAdapter.simulateDebentureTerms(record.projectId, record.targetAmount, record.convertible);
+
+    return {
+      ...record,
+      projectTitle: project?.title || record.projectId,
+      riskTier: project?.riskTier,
+      percentRaised: progress?.percentRaised || 0,
+      repaymentStatus: repayment.status,
+      maturityStatus: maturity.status,
+      defaultRisk: riskProfile?.defaultRisk || 'UNKNOWN',
+      issuanceAllowed: issuanceDecision.eligible,
+      issuanceReason: issuanceDecision.reason,
+      simulatedAprModel: simulation.aprModel,
+      executable: simulation.executable
+    };
+  });
+
+  const revenueRoutingRows = revenueRecords.map((record) => ({
+    ...record,
+    projectTitle: projects.find((entry) => entry.id === record.projectId)?.title || record.projectId,
+    settlementStatus: getSettlementStatus(record.id),
+    routingRecords: getRevenueRouting(record.assetId)
+  }));
+
+  const blockedFinancialActions = executionPolicies
+    .filter((policy) => financialActionIds.has(policy.action) || policy.treasuryApprovalRequired)
+    .map((policy) => ({
+      id: policy.action,
+      action: policy.action,
+      mode: policy.mode,
+      reason: policy.reason,
+      governanceRequired: policy.governanceRequired,
+      treasuryApprovalRequired: policy.treasuryApprovalRequired,
+      humanReviewRequired: policy.humanReviewRequired
+    }));
+
+  const treasuryRestrictions = exposureByProject.flatMap((project) =>
+    project.restrictions.map((restriction) => ({
+      ...restriction,
+      id: restriction.id,
+      title: project.title,
+      riskTier: project.riskTier
+    }))
+  );
+  const totalApprovedExposure = sumBy(treasuryExposures, (record) => record.approvedAmount);
+  const totalConsumedExposure = sumBy(treasuryExposures, (record) => record.consumedAmount);
+  const totalNetRevenue = sumBy(revenueRecords, (record) => record.netAmount);
+  const averageReadiness = exposureByProject.length
+    ? Math.round(sumBy(exposureByProject, (record) => record.readinessScore) / exposureByProject.length)
+    : 100;
+
+  return {
+    summary: {
+      totalTreasuryExposure: totalApprovedExposure,
+      totalConsumedExposure,
+      totalRequestedExposure: sumBy(treasuryExposures, (record) => record.requestedAmount),
+      totalRevenue: totalNetRevenue,
+      fundingRecords: fundingRecords.length,
+      debentures: debentures.length,
+      convertibleDebentures: debentures.filter((record) => record.convertible).length,
+      nonConvertibleDebentures: debentures.filter((record) => !record.convertible).length,
+      restrictions: treasuryRestrictions.length,
+      blockedFinancialActions: blockedFinancialActions.length,
+      financialReadinessScore: averageReadiness,
+      currency: 'USD'
+    },
+    exposureByRiskTier,
+    exposureByProject,
+    fundingEligibilityRows,
+    debenturePlanningRows,
+    revenueRoutingRows,
+    revenueRoutingSummary: {
+      grossAmount: sumBy(revenueRecords, (record) => record.grossAmount),
+      netAmount: totalNetRevenue,
+      treasuryShare: sumBy(revenueRecords, (record) => record.treasuryShare),
+      daoShare: sumBy(revenueRecords, (record) => record.daoShare),
+      builderShare: sumBy(revenueRecords, (record) => record.builderShare),
+      maintainerShare: sumBy(revenueRecords, (record) => record.maintainerShare),
+      debentureShare: sumBy(revenueRecords, (record) => record.debentureShare),
+      reserveShare: sumBy(revenueRecords, (record) => record.reserveShare)
+    },
+    treasuryRestrictions,
+    blockedFinancialActions,
+    freezeStatus: treasuryAdapter.getTreasuryFreezeStatus(),
+    mock: true,
+    readOnly: true
+  };
 };
 
 export const businessRuntimeClient = {
@@ -238,6 +440,7 @@ export const businessRuntimeClient = {
       readOnly: true
     };
   },
+  getFinanceRiskModel: createFinanceRiskModel,
   createDraftTemplate: createBusinessDraftTemplate,
   getDraftTemplates: listBusinessDraftTemplates,
   getDraftPreviewModel: getBusinessDraftPreviewModel,

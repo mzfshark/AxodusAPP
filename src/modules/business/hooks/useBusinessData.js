@@ -61,6 +61,10 @@ export function useBusinessGovernanceReadiness() {
   return useQuery({ queryKey: ['business', 'governance-readiness'], queryFn: businessRuntimeClient.getGovernanceReadinessModel });
 }
 
+export function useBusinessFinanceRiskModel() {
+  return useQuery({ queryKey: ['business', 'finance-risk'], queryFn: businessRuntimeClient.getFinanceRiskModel });
+}
+
 export function useBusinessProjectRegistry(projectId) {
   return useQuery({ enabled: Boolean(projectId), queryKey: ['business', 'registry', 'project', projectId], queryFn: () => businessRuntimeClient.getProjectRegistryView(projectId) });
 }

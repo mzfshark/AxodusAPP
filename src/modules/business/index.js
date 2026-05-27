@@ -5,6 +5,7 @@ export {
   BusinessAssets,
   BusinessDebentures,
   BusinessEvents,
+  BusinessFinance,
   BusinessFunding,
   BusinessGovernanceReadiness,
   BusinessOverview,

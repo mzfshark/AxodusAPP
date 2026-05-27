@@ -8,6 +8,7 @@ import {
   BusinessAssetDetail,
   BusinessAccess,
   BusinessEvents,
+  BusinessFinance,
   BusinessIntakePage,
   BusinessGovernanceReadiness,
   BusinessOverview,
@@ -66,6 +67,7 @@ describe('AxodusAPP Business routes', () => {
       '/business/workflows',
       '/business/events',
       '/business/governance',
+      '/business/finance',
       '/business/access',
       '/business/runtime'
     ]));
@@ -279,5 +281,23 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getAllByText(/REVIEW_REQUIRED/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/PREPARE_GOVERNANCE_REVIEW/i).length).toBeGreaterThan(0);
     expect(screen.queryByRole('button', { name: /create proposal|submit to dao|vote|execute proposal|approve funding|unlock treasury/i })).not.toBeInTheDocument();
+  });
+
+  test('renders finance risk console with treasury, funding, debenture and revenue visibility only', async () => {
+    renderBusinessRoute('/business/finance', '/business/finance', <BusinessFinance />);
+
+    expect(await screen.findByRole('heading', { name: /Finance Risk/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Treasury Safety Status/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Risk Tier Distribution/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Treasury Exposure By Project/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Funding Eligibility/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Debenture Planning/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { name: /Revenue Routing/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/NO_TREASURY_MOVEMENT/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/deb-dex-country/i)).toBeInTheDocument();
+    expect(screen.getByText(/rev-dex-country/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/FORBIDDEN_IN_CURRENT_RUNTIME/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /move treasury|approve allocation|issue debenture|buy debenture|convert debenture|pay apr|distribute revenue|execute settlement|swap|contract call/i })).not.toBeInTheDocument();
   });
 });
