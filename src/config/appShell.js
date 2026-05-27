@@ -202,6 +202,7 @@ const nuclei = [
       { to: '/business/events', label: 'Events', icon: Activity },
       { to: '/business/governance', label: 'Governance', icon: Landmark },
       { to: '/business/finance', label: 'Finance', icon: Banknote },
+      { to: '/business/acs/readiness', label: 'ACS Readiness', icon: Network },
       { to: '/business/access', label: 'Access', icon: UsersRound },
       { to: '/business/runtime', label: 'Runtime', icon: ShieldCheck },
     ],

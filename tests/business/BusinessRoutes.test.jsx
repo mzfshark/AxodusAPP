@@ -6,6 +6,7 @@ import { appShellNav } from '../../src/config/appShell';
 import {
   BusinessAssets,
   BusinessAssetDetail,
+  BusinessACSReadiness,
   BusinessAccess,
   BusinessEvents,
   BusinessFinance,
@@ -68,6 +69,7 @@ describe('AxodusAPP Business routes', () => {
       '/business/events',
       '/business/governance',
       '/business/finance',
+      '/business/acs/readiness',
       '/business/access',
       '/business/runtime'
     ]));
@@ -299,5 +301,28 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getAllByText(/FORBIDDEN_IN_CURRENT_RUNTIME/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
     expect(screen.queryByRole('button', { name: /move treasury|approve allocation|issue debenture|buy debenture|convert debenture|pay apr|distribute revenue|execute settlement|swap|contract call/i })).not.toBeInTheDocument();
+  });
+
+  test('renders ACS readiness with isolation, permission, receipts and human review visibility only', async () => {
+    renderBusinessRoute('/business/acs/readiness', '/business/acs/readiness', <BusinessACSReadiness />);
+
+    expect(await screen.findByRole('heading', { name: /ACS Readiness/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Safety Status/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Required Projects/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Runtime Status/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Isolation Profiles/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Permission Profiles/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Compute Usage Mock/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Orchestration Receipts/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Human Review Requirements/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Blocked ACS Actions/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/acs-enterprise-sample/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/DEDICATED/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/TENANT_SCOPED/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/READ_ENTERPRISE_SCOPE/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/receipt-business-intake-1/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/PROVISION_ACS_RUNTIME/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /provision mcp|start agent|deploy acs|access memory|execute workflow|escalate permissions|bypass human review/i })).not.toBeInTheDocument();
   });
 });

@@ -12,6 +12,7 @@ import {
   RequestType,
   RiskTier,
   TreasuryExposureType,
+  acsAdapter,
   businessApiHandlers,
   canUseFinancialInstrument,
   createBusinessDraftTemplate,
@@ -295,6 +296,149 @@ const createFinanceRiskModel = () => {
   };
 };
 
+const createACSReadinessModel = () => {
+  const requests = dataFrom(businessApiHandlers.getBusinessRequests);
+  const projects = dataFrom(businessApiHandlers.getBusinessProjects);
+  const acsRuntimes = dataFrom(businessApiHandlers.getBusinessACSRuntimes);
+  const telemetryEvents = dataFrom(businessApiHandlers.getBusinessTelemetryEvents);
+  const workflows = listBusinessWorkflows();
+  const draftRecords = listDraftStoreRecords();
+  const executionPolicies = Object.values(BUSINESS_EXECUTION_POLICY_MATRIX);
+  const acsActionIds = new Set(['PREPARE_ACS_PROVISIONING_REQUEST', 'VIEW_ACS_RUNTIME', 'PROVISION_ACS_RUNTIME']);
+
+  const runtimeRows = acsRuntimes.map((runtime) => {
+    const project = projects.find((record) => record.id === runtime.relatedProjectId);
+    const request = project ? requests.find((record) => record.id === project.requestId) : undefined;
+    const isolationPolicy = acsAdapter.getACSIsolationProfile(runtime.id);
+    const permissionProfile = acsAdapter.getACSPermissionProfile(runtime.id);
+    const computeUsage = acsAdapter.getComputeUsage(runtime.id);
+    const receipts = acsAdapter.getOrchestrationReceipts(runtime.relatedProjectId);
+    const assistDecision = acsAdapter.canACSAssist(runtime.relatedProjectId, 'PREPARE_ACS_PROVISIONING_REQUEST');
+    const blockedDecision = acsAdapter.canACSAssist(runtime.relatedProjectId, 'PROVISION_ACS_RUNTIME');
+    const isolationRisk = runtime.isolationProfile === 'SHARED'
+      ? 'REVIEW_SHARED_BOUNDARY'
+      : runtime.status === 'REQUESTED'
+        ? 'REQUESTED_NOT_PROVISIONED'
+        : 'BOUNDARY_VISIBLE';
+
+    return {
+      ...runtime,
+      projectTitle: project?.title || runtime.relatedProjectId,
+      requestTitle: request?.title,
+      acsRequired: Boolean(request?.acsRequired || project?.projectType === 'ENTERPRISE_ACS'),
+      isolationPolicy,
+      permissionPolicy: permissionProfile,
+      computeUsage,
+      receipts,
+      receiptCount: receipts.length,
+      memoryScope: isolationPolicy?.memoryBoundary || 'UNKNOWN',
+      tenantBoundary: isolationPolicy?.tenantBoundary || 'UNKNOWN',
+      autonomousExecutionAllowed: permissionProfile?.autonomousExecutionAllowed === true,
+      assistDecision,
+      blockedDecision,
+      isolationRisk,
+      humanReviewRequired: assistDecision.humanReviewRequired || runtime.status === 'REQUESTED',
+      mock: true,
+      readOnly: true
+    };
+  });
+
+  const acsRequiredProjects = projects
+    .map((project) => {
+      const request = requests.find((record) => record.id === project.requestId);
+      const runtime = runtimeRows.find((record) => record.relatedProjectId === project.id);
+      const workflow = workflows.find((record) => record.projectId === project.id);
+      const acsBlockers = (workflow?.steps || [])
+        .filter((step) => step.acsRequired && step.blockingIssues.length > 0)
+        .flatMap((step) => step.blockingIssues.map((issue) => ({ stepId: step.stepId, issue })));
+
+      return {
+        id: project.id,
+        projectId: project.id,
+        title: project.title,
+        status: project.status,
+        riskTier: project.riskTier,
+        requestId: request?.id,
+        requestAcsRequired: Boolean(request?.acsRequired),
+        runtimeId: runtime?.id,
+        runtimeStatus: acsAdapter.getACSRuntimeStatus(project.id),
+        isolationProfile: runtime?.isolationProfile || 'NO_RUNTIME',
+        permissionProfile: runtime?.permissionProfile || [],
+        blockerCount: acsBlockers.length,
+        blockers: acsBlockers,
+        readiness: runtime && acsBlockers.length === 0 ? 'VISIBLE' : runtime ? 'REVIEW_REQUIRED' : 'MISSING_RUNTIME'
+      };
+    })
+    .filter((project) => project.requestAcsRequired || project.runtimeId || project.runtimeStatus !== 'NO_RUNTIME');
+
+  const acsDrafts = draftRecords
+    .map((record) => ({ ...record, runtimeReview: getBusinessDraftRuntimeReview(record.draft) }))
+    .filter((record) => record.runtimeReview.acsRequirement);
+
+  const receiptRows = runtimeRows.flatMap((runtime) =>
+    runtime.receipts.map((receipt) => ({
+      ...receipt,
+      runtimeType: runtime.runtimeType,
+      isolationProfile: runtime.isolationProfile,
+      projectTitle: runtime.projectTitle
+    }))
+  );
+
+  const humanReviewRows = BUSINESS_RUNTIME_ACTIONS
+    .map((action) => acsAdapter.requiresHumanReview(action))
+    .filter((requirement) => requirement.required || acsActionIds.has(requirement.action))
+    .map((requirement) => ({
+      id: requirement.action,
+      ...requirement,
+      policy: BUSINESS_EXECUTION_POLICY_MATRIX[requirement.action]
+    }));
+
+  const blockedACSActions = executionPolicies
+    .filter((policy) => acsActionIds.has(policy.action) || policy.reason.toLowerCase().includes('acs'))
+    .map((policy) => ({
+      id: policy.action,
+      action: policy.action,
+      mode: policy.mode,
+      reason: policy.reason,
+      humanReviewRequired: policy.humanReviewRequired,
+      governanceRequired: policy.governanceRequired
+    }));
+
+  const acsTelemetryEvents = telemetryEvents.filter((event) =>
+    event.eventType?.includes('ACS') ||
+    event.actor?.includes('acs') ||
+    event.relatedProjectId === 'proj-enterprise-acs' ||
+    event.payload?.acsRequired === true
+  );
+  const sharedBoundaryCount = runtimeRows.filter((runtime) => runtime.isolationRisk === 'REVIEW_SHARED_BOUNDARY').length;
+  const requestedRuntimeCount = runtimeRows.filter((runtime) => runtime.status === 'REQUESTED').length;
+  const totalBlockers = acsRequiredProjects.reduce((total, project) => total + project.blockerCount, 0);
+  const readinessScore = Math.max(0, 100 - sharedBoundaryCount * 15 - requestedRuntimeCount * 20 - totalBlockers * 15);
+
+  return {
+    summary: {
+      totalRuntimes: acsRuntimes.length,
+      acsRequiredProjects: acsRequiredProjects.length,
+      acsRequiredDrafts: acsDrafts.length,
+      orchestrationReceipts: receiptRows.length,
+      humanReviewRequirements: humanReviewRows.filter((row) => row.required).length,
+      blockedACSActions: blockedACSActions.filter((row) => row.mode === 'FORBIDDEN_IN_CURRENT_RUNTIME').length,
+      isolationRisks: sharedBoundaryCount + requestedRuntimeCount,
+      readinessScore
+    },
+    acsRequiredProjects,
+    acsDrafts,
+    runtimeRows,
+    receiptRows,
+    humanReviewRows,
+    blockedACSActions,
+    acsTelemetryEvents,
+    securityValidatorStatus: getBusinessRuntimeCoreSummary().securityValidatorStatus,
+    mock: true,
+    readOnly: true
+  };
+};
+
 export const businessRuntimeClient = {
   getOverview: () => apiOrDirect('/overview', () => dataFrom(businessApiHandlers.getBusinessOverview)),
   getRuntimeSummary: () => apiOrDirect('/summary', () => dataFrom(businessApiHandlers.getBusinessRuntimeSummary)),
@@ -441,6 +585,7 @@ export const businessRuntimeClient = {
     };
   },
   getFinanceRiskModel: createFinanceRiskModel,
+  getACSReadinessModel: createACSReadinessModel,
   createDraftTemplate: createBusinessDraftTemplate,
   getDraftTemplates: listBusinessDraftTemplates,
   getDraftPreviewModel: getBusinessDraftPreviewModel,

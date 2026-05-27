@@ -13,6 +13,7 @@ import {
   BusinessTelemetryFeed
 } from '../components/BusinessUi';
 import {
+  useBusinessACSReadinessModel,
   useBusinessACSRuntimes,
   useBusinessAccessModel,
   useBusinessAssets,
@@ -1093,6 +1094,182 @@ export function BusinessACS() {
           ]}
         />
       </BusinessPanel>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessACSReadiness() {
+  const readiness = useBusinessACSReadinessModel();
+  if (readiness.isLoading) return <BusinessLoadingState />;
+  if (readiness.isError) return <BusinessErrorState message="Business ACS readiness unavailable." />;
+
+  const model = readiness.data;
+  const summary = model.summary;
+
+  return (
+    <BusinessPageShell
+      title="ACS Readiness"
+      description="ACS runtime readiness, isolation boundaries, permission profiles, receipts, compute usage and human review requirements. No MCP provisioning, agent startup or memory access is enabled."
+    >
+      <BusinessSummaryCards cards={[
+        { id: 'acs-runtimes', label: 'ACS Runtimes', value: summary.totalRuntimes, detail: 'Mock ACS runtime records visible from Business runtime.', status: 'INFO' },
+        { id: 'acs-projects', label: 'ACS Projects', value: summary.acsRequiredProjects, detail: 'Projects requiring ACS visibility or review.', status: 'NOTICE' },
+        { id: 'acs-receipts', label: 'Receipts', value: summary.orchestrationReceipts, detail: 'Orchestration receipts are mock audit references only.', status: 'NOTICE' },
+        { id: 'acs-readiness', label: 'Readiness Score', value: `${summary.readinessScore}%`, detail: `${summary.blockedACSActions} ACS actions are forbidden in current runtime.`, status: summary.readinessScore >= 80 ? 'APPROVED' : 'WARNING' }
+      ]} />
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <BusinessPanel title="ACS Safety Status" description="Adapters and runtime remain mock/read-only. Operational assistance is limited to visibility, classification and summarization.">
+          <DetailList items={[
+            { label: 'Runtime mode', value: model.mock && model.readOnly ? 'mock/read-only' : 'review' },
+            { label: 'Provisioning', value: 'disabled' },
+            { label: 'Autonomous execution', value: 'disabled' },
+            { label: 'Security validators', value: model.securityValidatorStatus.valid ? 'PASS' : 'REVIEW' }
+          ]} />
+        </BusinessPanel>
+        <BusinessPanel title="Human Review Requirements" description="Critical ACS preparation and forbidden actions require human review before any future integration can leave planning.">
+          <BusinessLifecycleTable
+            rows={model.humanReviewRows}
+            columns={[
+              { key: 'action', label: 'Action', render: idCell('action') },
+              { key: 'required', label: 'Required', render: (row) => <span className="text-outline">{String(row.required)}</span> },
+              { key: 'mode', label: 'Policy', render: (row) => <BusinessStatusBadge status={row.policy?.mode} /> },
+              { key: 'reason', label: 'Reason', render: textCell('reason') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Isolation Risks" description="Shared boundaries and requested runtimes are visible for review. No isolation boundary is changed from this page.">
+          <DetailList items={[
+            { label: 'Isolation risks', value: summary.isolationRisks },
+            { label: 'ACS drafts', value: summary.acsRequiredDrafts },
+            { label: 'Human review actions', value: summary.humanReviewRequirements },
+            { label: 'Blocked ACS actions', value: summary.blockedACSActions }
+          ]} />
+        </BusinessPanel>
+      </section>
+
+      <BusinessPanel title="ACS Required Projects" description="Projects with ACS runtime visibility, ACS request context or ACS workflow requirements.">
+        <BusinessLifecycleTable
+          rows={model.acsRequiredProjects}
+          columns={[
+            { key: 'projectId', label: 'Project', render: linkCell('/business/projects', 'projectId') },
+            { key: 'title', label: 'Title', render: textCell('title') },
+            { key: 'status', label: 'Project status', render: statusCell() },
+            { key: 'runtimeId', label: 'Runtime', render: idCell('runtimeId') },
+            { key: 'runtimeStatus', label: 'Runtime status', render: statusCell('runtimeStatus') },
+            { key: 'isolationProfile', label: 'Isolation', render: statusCell('isolationProfile') },
+            { key: 'readiness', label: 'Readiness', render: statusCell('readiness') },
+            { key: 'blockerCount', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockerCount}</strong> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Runtime Status" description="Runtime status, type, owner and project linkage. This is not a deployment or provisioning surface.">
+          <BusinessLifecycleTable
+            rows={model.runtimeRows}
+            columns={[
+              { key: 'id', label: 'Runtime', render: idCell() },
+              { key: 'runtimeType', label: 'Runtime type', render: statusCell('runtimeType') },
+              { key: 'ownerId', label: 'Owner', render: idCell('ownerId') },
+              { key: 'projectTitle', label: 'Project', render: textCell('projectTitle') },
+              { key: 'status', label: 'Status', render: statusCell() },
+              { key: 'isolationRisk', label: 'Isolation risk', render: statusCell('isolationRisk') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Compute Usage Mock" description="Compute usage is static mock visibility. It does not reserve, provision or scale infrastructure.">
+          <BusinessLifecycleTable
+            rows={model.runtimeRows}
+            columns={[
+              { key: 'id', label: 'Runtime', render: idCell() },
+              { key: 'cpuUnits', label: 'CPU units', render: (row) => <span className="text-outline">{row.computeUsage?.cpuUnits ?? 'n/a'}</span> },
+              { key: 'memoryMb', label: 'Memory MB', render: (row) => <span className="text-outline">{row.computeUsage?.memoryMb ?? 'n/a'}</span> },
+              { key: 'monthlyBudget', label: 'Monthly budget', render: (row) => <span className="text-outline">{money(row.computeUsage?.monthlyBudget?.amount, row.computeUsage?.monthlyBudget?.currency || 'USD')}</span> },
+              { key: 'receiptCount', label: 'Receipts', render: (row) => <strong className="text-on-surface">{row.receiptCount}</strong> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Isolation Profiles" description="Tenant and memory boundaries derived from the ACS adapter contract.">
+          <BusinessLifecycleTable
+            rows={model.runtimeRows}
+            columns={[
+              { key: 'id', label: 'Runtime', render: idCell() },
+              { key: 'isolationProfile', label: 'Profile', render: statusCell('isolationProfile') },
+              { key: 'tenantBoundary', label: 'Tenant boundary', render: statusCell('tenantBoundary') },
+              { key: 'memoryScope', label: 'Memory scope', render: statusCell('memoryScope') },
+              { key: 'humanReviewRequired', label: 'Human review', render: (row) => <span className="text-outline">{String(row.humanReviewRequired)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Permission Profiles" description="Permission profiles are visible and non-escalating. Autonomous execution remains false.">
+          <BusinessLifecycleTable
+            rows={model.runtimeRows}
+            columns={[
+              { key: 'id', label: 'Runtime', render: idCell() },
+              { key: 'permissionProfile', label: 'Permissions', render: (row) => <span className="text-outline">{row.permissionProfile?.join(' / ')}</span> },
+              { key: 'autonomousExecutionAllowed', label: 'Autonomous', render: (row) => <span className="text-outline">{String(row.autonomousExecutionAllowed)}</span> },
+              { key: 'assistDecision', label: 'Assist', render: (row) => <span className="text-outline">{row.assistDecision.allowed ? 'visibility-only' : 'not-linked'}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Orchestration Receipts" description="Receipts are mock audit evidence. They do not trigger provisioning, deployment or workflow execution.">
+          <BusinessLifecycleTable
+            rows={model.receiptRows}
+            columns={[
+              { key: 'id', label: 'Receipt', render: idCell() },
+              { key: 'acsRuntimeId', label: 'Runtime', render: idCell('acsRuntimeId') },
+              { key: 'actionType', label: 'Action type', render: statusCell('actionType') },
+              { key: 'confidenceLevel', label: 'Confidence', render: (row) => <span className="text-outline">{Math.round(row.confidenceLevel * 100)}%</span> },
+              { key: 'humanReviewRequired', label: 'Human review', render: (row) => <span className="text-outline">{String(row.humanReviewRequired)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Blocked ACS Actions" description="Actions that would provision, deploy, access memory or bypass review remain blocked by execution policy.">
+          <BusinessLifecycleTable
+            rows={model.blockedACSActions}
+            columns={[
+              { key: 'action', label: 'Action', render: idCell('action') },
+              { key: 'mode', label: 'Mode', render: statusCell('mode') },
+              { key: 'humanReviewRequired', label: 'Human review', render: (row) => <span className="text-outline">{String(row.humanReviewRequired)}</span> },
+              { key: 'reason', label: 'Reason', render: textCell('reason') }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Required Drafts" description="Prepared local drafts that require ACS review. Drafts are not submitted to ACS or MCP.">
+          <BusinessLifecycleTable
+            rows={model.acsDrafts}
+            columns={[
+              { key: 'id', label: 'Draft', render: idCell() },
+              { key: 'draftType', label: 'Type', render: (row) => <BusinessStatusBadge status={row.draft.draftType} /> },
+              { key: 'status', label: 'Store status', render: statusCell() },
+              { key: 'riskTier', label: 'Risk', render: (row) => <BusinessRiskBadge riskTier={row.runtimeReview.riskReview.inferredRiskTier} /> },
+              { key: 'policy', label: 'Policy', render: (row) => <BusinessStatusBadge status={row.runtimeReview.executionReview.policy.mode} /> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Telemetry" description="ACS-related telemetry is visible for audit context only.">
+          <BusinessLifecycleTable
+            rows={model.acsTelemetryEvents}
+            columns={[
+              { key: 'id', label: 'Event', render: idCell() },
+              { key: 'eventType', label: 'Type', render: statusCell('eventType') },
+              { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+              { key: 'relatedProjectId', label: 'Project', render: idCell('relatedProjectId') },
+              { key: 'status', label: 'Status', render: textCell('status') }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
     </BusinessPageShell>
   );
 }
