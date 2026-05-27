@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, describe, expect, test } from 'vitest';
 import { appShellNav } from '../../src/config/appShell';
@@ -7,6 +7,7 @@ import {
   BusinessAssets,
   BusinessAssetDetail,
   BusinessEvents,
+  BusinessIntakePage,
   BusinessOverview,
   BusinessProjects,
   BusinessProjectDetail,
@@ -56,6 +57,7 @@ describe('AxodusAPP Business routes', () => {
     });
     expect(businessEntry.sections.map((section) => section.to)).toEqual(expect.arrayContaining([
       '/business',
+      '/business/intake',
       '/business/projects',
       '/business/assets',
       '/business/registry',
@@ -76,6 +78,56 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getByText(/Telemetry Summary/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Blocked Workflows/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Registry Edges/i)).toBeInTheDocument();
+  });
+
+  test('renders Business intake overview with general draft form and preview', async () => {
+    renderBusinessRoute('/business/intake', '/business/intake', <BusinessIntakePage />);
+
+    expect(await screen.findByRole('heading', { name: /Business Intake/i })).toBeInTheDocument();
+    expect(screen.getByText(/Ecosystem Infrastructure Request Draft/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Request title/i)).toBeInTheDocument();
+    expect(screen.getByText(/Preview Request/i)).toBeInTheDocument();
+    expect(screen.getByText(/Capability And Permission Review/i)).toBeInTheDocument();
+    expect(screen.getByText(/Execution Policy/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Mock \/ Read-only|mock\/read-only/i).length).toBeGreaterThan(0);
+  });
+
+  test('renders specialized intake draft forms', async () => {
+    renderBusinessRoute('/business/intake/dao-plugin', '/business/intake/dao-plugin', <BusinessIntakePage />);
+    expect(await screen.findByText(/DAO Plugin Request Draft/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Plugin type/i)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(/HIP \/ RP voting/i)).toBeInTheDocument();
+
+    cleanup();
+    renderBusinessRoute('/business/intake/acs-service', '/business/intake/acs-service', <BusinessIntakePage />);
+    expect(await screen.findByText(/ACS Service Request Draft/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Isolation profile/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Human review requirement/i)).toBeInTheDocument();
+
+    cleanup();
+    renderBusinessRoute('/business/intake/treasury-sponsorship', '/business/intake/treasury-sponsorship', <BusinessIntakePage />);
+    expect(await screen.findByText(/Treasury Sponsorship Request Draft/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Requested amount/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Governance reference/i)).toBeInTheDocument();
+
+    cleanup();
+    renderBusinessRoute('/business/intake/debenture-funding', '/business/intake/debenture-funding', <BusinessIntakePage />);
+    expect(await screen.findByText(/Debenture Funding Request Draft/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Debenture type/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Convertible flag/i)).toBeInTheDocument();
+  });
+
+  test('validates draft locally and keeps dangerous actions absent', async () => {
+    renderBusinessRoute('/business/intake/new', '/business/intake/new', <BusinessIntakePage />);
+
+    expect(await screen.findByText(/General Business Request Draft/i)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/Request title/i), { target: { value: '' } });
+    fireEvent.click(screen.getByRole('button', { name: /Validate Structure/i }));
+
+    expect(screen.getByText(/Missing required field: title/i)).toBeInTheDocument();
+    expect(screen.getByText(/CREATE_BUSINESS_REQUEST/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/PREPARE_ONLY/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /submit to dao|issue debenture|move treasury|deploy acs|create contract|buy|invest now/i })).not.toBeInTheDocument();
   });
 
   test('renders project and asset tables from isolated runtime client', async () => {

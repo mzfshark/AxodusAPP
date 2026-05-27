@@ -49,6 +49,10 @@ export function useBusinessTelemetryEvents() {
   return useQuery({ queryKey: ['business', 'telemetry'], queryFn: businessRuntimeClient.getTelemetryEvents });
 }
 
+export function useBusinessIdentities() {
+  return useQuery({ queryKey: ['business', 'identities'], queryFn: businessRuntimeClient.getIdentities });
+}
+
 export function useBusinessProjectRegistry(projectId) {
   return useQuery({ enabled: Boolean(projectId), queryKey: ['business', 'registry', 'project', projectId], queryFn: () => businessRuntimeClient.getProjectRegistryView(projectId) });
 }
@@ -100,6 +104,18 @@ export function useBusinessRuntimeSafetyModel() {
       executionPolicies: businessRuntimeClient.getExecutionPolicies(),
       runtimeSummary: businessRuntimeClient.getRuntimeSummary(),
       coreSummary: businessRuntimeClient.getCoreSummary()
+    })
+  });
+}
+
+export function useBusinessIntakeRuntime() {
+  return useQuery({
+    queryKey: ['business', 'intake-runtime'],
+    queryFn: () => ({
+      identities: businessRuntimeClient.getIdentities(),
+      options: businessRuntimeClient.getIntakeOptions(),
+      routeCatalog: businessRuntimeClient.getRouteCatalog(),
+      safety: businessRuntimeClient.getCoreSummary().securityValidatorStatus
     })
   });
 }

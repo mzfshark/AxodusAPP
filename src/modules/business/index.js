@@ -19,5 +19,6 @@ export {
   BusinessTreasury,
   BusinessWorkflows
 } from './pages/BusinessPages';
+export { BusinessIntakePage } from './pages/BusinessIntake';
 
 export { businessRuntimeClient, businessRuntimeSafety } from './services/businessRuntimeClient';

@@ -1,9 +1,17 @@
 import {
+  BUSINESS_ROUTE_DEFINITIONS,
   BUSINESS_EXECUTION_POLICY_MATRIX,
   BUSINESS_TRANSITION_GUARD_CATEGORIES,
   BUSINESS_TRANSITION_MAPS,
   BUSINESS_WORKFLOW_TYPES,
+  DebentureType,
+  FundingType,
+  PluginType,
+  RequestType,
+  RiskTier,
+  TreasuryExposureType,
   businessApiHandlers,
+  explainPermissionDecision,
   getACSRuntimeEventTimeline,
   getACSRuntimeRegistryView,
   getAssetEventTimeline,
@@ -16,8 +24,10 @@ import {
   getBusinessRuntimeCoreSummary,
   getBusinessWorkflowSummary,
   getCriticalBusinessEvents,
+  getExecutionPolicy,
   getProjectEventTimeline,
   getProjectRegistryView,
+  getRequiredCapabilitiesForAction,
   getRiskTierRegistryView,
   getWorkflowBlockers,
   getWorkflowForProject,
@@ -39,6 +49,18 @@ const assertReadOnlyEnvelope = (response) => {
 
 const dataFrom = (handler) => assertReadOnlyEnvelope(handler()).data;
 
+const intakeActionByDraftType = {
+  GENERAL: 'CREATE_BUSINESS_REQUEST',
+  DAO_PLUGIN: 'PREPARE_GOVERNANCE_REVIEW',
+  ACS_SERVICE: 'PREPARE_ACS_PROVISIONING_REQUEST',
+  TREASURY_SPONSORSHIP: 'PREPARE_FUNDING_REVIEW',
+  DEBENTURE_FUNDING: 'PREPARE_DEBENTURE_DRAFT',
+  ECOSYSTEM_INFRASTRUCTURE: 'REGISTER_OPERATIONAL_ASSET_DRAFT',
+  PRIVATE_DEVELOPMENT: 'CREATE_BUSINESS_REQUEST'
+};
+
+const valuesOf = (runtimeEnum) => Object.values(runtimeEnum);
+
 export const businessRuntimeClient = {
   getOverview: () => dataFrom(businessApiHandlers.getBusinessOverview),
   getRuntimeSummary: () => dataFrom(businessApiHandlers.getBusinessRuntimeSummary),
@@ -55,6 +77,7 @@ export const businessRuntimeClient = {
   getRevenueRecords: () => dataFrom(businessApiHandlers.getBusinessRevenueRecords),
   getACSRuntimes: () => dataFrom(businessApiHandlers.getBusinessACSRuntimes),
   getTelemetryEvents: () => dataFrom(businessApiHandlers.getBusinessTelemetryEvents),
+  getIdentities: () => dataFrom(businessApiHandlers.getBusinessIdentities),
   getReadOnlyMeta: () => assertReadOnlyEnvelope(businessApiHandlers.getBusinessOverview()).meta,
   getProjectRegistryView,
   getAssetRegistryView,
@@ -79,7 +102,36 @@ export const businessRuntimeClient = {
   getTransitionGuardCategories: () => BUSINESS_TRANSITION_GUARD_CATEGORIES,
   simulateTransition,
   getExecutionPolicies: () => BUSINESS_EXECUTION_POLICY_MATRIX,
-  getWorkflowTypes: () => BUSINESS_WORKFLOW_TYPES
+  getWorkflowTypes: () => BUSINESS_WORKFLOW_TYPES,
+  getRouteCatalog: () => BUSINESS_ROUTE_DEFINITIONS,
+  getIntakeOptions: () => ({
+    debentureTypes: valuesOf(DebentureType),
+    fundingTypes: valuesOf(FundingType),
+    pluginTypes: valuesOf(PluginType),
+    requestTypes: valuesOf(RequestType),
+    riskTiers: valuesOf(RiskTier),
+    treasuryExposureTypes: valuesOf(TreasuryExposureType),
+    workflowTypes: BUSINESS_WORKFLOW_TYPES
+  }),
+  getDraftRuntimeReview: (draft) => {
+    const action = intakeActionByDraftType[draft.draftType] || 'CREATE_BUSINESS_REQUEST';
+    const identityId = draft.requesterIdentity || 'id-axodus-core';
+    const policy = getExecutionPolicy(action);
+    const requiredCapabilities = getRequiredCapabilitiesForAction(action);
+    const permissionDecision = explainPermissionDecision(identityId, action);
+    const routeContracts = BUSINESS_ROUTE_DEFINITIONS.filter((route) => route.executionPolicy === action);
+
+    return {
+      action,
+      executionPolicy: policy,
+      permissionDecision,
+      requiredCapabilities,
+      routeContracts,
+      runtimeMode: 'MOCK_READ_ONLY',
+      mock: true,
+      readOnly: true
+    };
+  }
 };
 
 export const businessRuntimeSafety = {
