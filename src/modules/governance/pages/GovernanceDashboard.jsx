@@ -202,6 +202,83 @@ function TenantPills({ items = [], emptyLabel }) {
   );
 }
 
+function GovernanceExecutorPanel({ resolution, source }) {
+  const executor = resolution?.executor;
+  const reasonCodes = resolution?.reasonCodes ?? executor?.reasonCodes ?? [];
+
+  return (
+    <section className="rounded-lg border border-amber-300/15 bg-surface-container-highest">
+      <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Canonical Governance Executor</h2>
+          <p className="mt-1 text-xs leading-5 text-on-surface-variant">
+            Read-only executor reference for DAO/tenant routing. This is not a wallet, signer, production address or execution trigger.
+          </p>
+        </div>
+        <span className="rounded-md border border-amber-300/20 bg-amber-950/20 px-3 py-1 text-xs font-black uppercase text-amber-100">
+          {executor?.executionMode ?? 'not resolved'}
+        </span>
+      </div>
+
+      {executor ? (
+        <div className="grid gap-3 p-5 md:grid-cols-3">
+          <TenantMetric label="Executor" value={executor.executorId} detail={executor.governanceExecutorRef} />
+          <TenantMetric label="Status" value={executor.executorStatus} detail={`scope: ${executor.executorScope}`} />
+          <TenantMetric label="Policy version" value={executor.policyVersion} detail={source ?? 'governance-api'} />
+          <TenantMetric label="Address status" value={executor.addressStatus} detail={executor.address ?? 'No address configured'} />
+          <TenantMetric label="Production executor" value={executor.isProductionExecutor ? 'yes' : 'no'} detail="safe implementation boundary" />
+          <TenantMetric
+            label="Blocked"
+            value={resolution.blocked ? 'yes' : 'no'}
+            detail={executor.emergencyDisabled ? 'emergency disabled' : 'policy evaluated'}
+          />
+          <TenantMetric label="Proposal support" value={resolution.supported ? 'supported' : 'restricted'} detail="selected executor resolution" />
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4 md:col-span-3">
+            <div className="text-xs font-black uppercase text-slate-500">Supported proposal types</div>
+            <div className="mt-3">
+              <TenantPills items={executor.supportedProposalTypes} emptyLabel="No proposal types configured." />
+            </div>
+          </div>
+          <div className="rounded-lg border border-amber-300/15 bg-amber-950/10 p-4 md:col-span-3">
+            <div className="text-xs font-black uppercase text-amber-100">Execution authority boundary</div>
+            <p className="mt-2 text-sm leading-6 text-amber-50/80">
+              {executor.authorityBoundary ??
+                'Executor status is informational only. Governance runtime, contracts, indexers and receipts must prove execution.'}
+            </p>
+          </div>
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4 md:col-span-3">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div className="text-xs font-black uppercase text-slate-500">Executor reason codes</div>
+              <span className="w-fit rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
+                {reasonCodes.length} reason{reasonCodes.length === 1 ? '' : 's'}
+              </span>
+            </div>
+            {reasonCodes.length ? (
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {reasonCodes.map((reason, index) => (
+                  <div key={`${reason.reasonCode}-${index}`} className="rounded-md border border-white/5 bg-background/30 p-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-black uppercase text-on-surface">{reason.reasonCode}</span>
+                      <ReasonSeverityBadge severity={reason.reasonSeverity} />
+                    </div>
+                    <div className="mt-2 text-xs leading-5 text-on-surface-variant">
+                      {reason.message ?? reason.source ?? 'Governance executor registry'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-3 text-xs text-on-surface-variant">No executor reason codes are currently exposed.</div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="p-5 text-sm text-on-surface-variant">No canonical executor reference is resolved for this tenant.</div>
+      )}
+    </section>
+  );
+}
+
 function DaoTenantOperationsCenter({ tenant, selectedDao, selectedChain, tenantSource }) {
   if (!tenant) {
     return (
@@ -515,6 +592,8 @@ export default function GovernanceDashboard() {
           selectedChain={governanceConsole.selectedChain}
           tenantSource={governanceConsole.tenantSource}
         />
+
+        <GovernanceExecutorPanel resolution={governanceConsole.executorResolution} source={governanceConsole.executorSource} />
 
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1fr]">
           <GovernanceHealthPanel

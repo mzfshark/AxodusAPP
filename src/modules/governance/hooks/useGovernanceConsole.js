@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchGovernanceDaos, fetchGovernancePlugins, fetchGovernanceProposals, fetchGovernanceTenants, getFederalDaoRecord } from '../api/governanceClient';
+import {
+  fetchGovernanceDaos,
+  fetchGovernancePlugins,
+  fetchGovernanceProposals,
+  fetchGovernanceTenantExecutor,
+  fetchGovernanceTenants,
+  getFederalDaoRecord,
+} from '../api/governanceClient';
 import { getMockGovernancePlugins, getMockGovernanceProposals, getMockGovernanceTenants, shouldUseGovernanceMocks } from '../api/mockGovernanceData';
 import { useWallet } from '@/hooks/useWallet';
 import { collectGovernanceGuardrailReasons, getConstitutionalStanding } from '../utils/governanceState';
@@ -100,6 +107,8 @@ export function useGovernanceConsole(chains) {
   const [selectedDaoId, setSelectedDaoId] = useState(getFederalDaoRecord().id);
   const [proposals, setProposals] = useState([]);
   const [plugins, setPlugins] = useState([]);
+  const [executorResolution, setExecutorResolution] = useState(null);
+  const [executorSource, setExecutorSource] = useState('loading');
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
 
@@ -189,6 +198,35 @@ export function useGovernanceConsole(chains) {
     return () => controller.abort();
   }, [selectedDao]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadExecutor() {
+      if (!selectedTenant?.id) {
+        setExecutorResolution(null);
+        setExecutorSource('frontend-empty-request');
+        return;
+      }
+
+      try {
+        const result = await fetchGovernanceTenantExecutor({
+          tenantId: selectedTenant.id,
+          signal: controller.signal,
+        });
+        setExecutorResolution(result.resolution);
+        setExecutorSource(result.source ?? 'governance-api');
+      } catch {
+        if (controller.signal.aborted) return;
+        setExecutorResolution(null);
+        setExecutorSource('frontend-dev-fixture');
+      }
+    }
+
+    loadExecutor();
+
+    return () => controller.abort();
+  }, [selectedTenant?.id]);
+
   const selectedChain = useMemo(
     () => chains.find((chain) => chain.network === selectedDao?.network || chain.slug === selectedDao?.network),
     [chains, selectedDao?.network],
@@ -227,6 +265,8 @@ export function useGovernanceConsole(chains) {
     selectedTenant,
     tenants,
     tenantSource,
+    executorResolution,
+    executorSource,
     selectedDaoId,
     setSelectedDaoId,
     selectedChain,

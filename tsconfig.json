@@ -20,7 +20,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],
-      "@config": ["src/appkit.config.js"]
+      "@config": ["src/appkit.config.js"],
+      "@axodus/business-runtime": ["../Business/src/index.ts"]
     },
     "types": ["node", "vitest/globals"]
   },
