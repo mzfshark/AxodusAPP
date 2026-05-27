@@ -11,7 +11,9 @@ import {
   RiskTier,
   TreasuryExposureType,
   businessApiHandlers,
-  explainPermissionDecision,
+  createBusinessDraftTemplate,
+  getBusinessDraftPreviewModel,
+  getBusinessDraftRuntimeReview,
   getACSRuntimeEventTimeline,
   getACSRuntimeRegistryView,
   getAssetEventTimeline,
@@ -24,16 +26,15 @@ import {
   getBusinessRuntimeCoreSummary,
   getBusinessWorkflowSummary,
   getCriticalBusinessEvents,
-  getExecutionPolicy,
   getProjectEventTimeline,
   getProjectRegistryView,
-  getRequiredCapabilitiesForAction,
   getRiskTierRegistryView,
   getWorkflowBlockers,
   getWorkflowForProject,
   getWorkflowProgress,
   getWorkflowReadiness,
   getWorkflowTemplate,
+  listBusinessDraftTemplates,
   listBusinessWorkflows,
   simulateTransition,
   selectBusinessProjectById
@@ -48,16 +49,6 @@ const assertReadOnlyEnvelope = (response) => {
 };
 
 const dataFrom = (handler) => assertReadOnlyEnvelope(handler()).data;
-
-const intakeActionByDraftType = {
-  GENERAL: 'CREATE_BUSINESS_REQUEST',
-  DAO_PLUGIN: 'PREPARE_GOVERNANCE_REVIEW',
-  ACS_SERVICE: 'PREPARE_ACS_PROVISIONING_REQUEST',
-  TREASURY_SPONSORSHIP: 'PREPARE_FUNDING_REVIEW',
-  DEBENTURE_FUNDING: 'PREPARE_DEBENTURE_DRAFT',
-  ECOSYSTEM_INFRASTRUCTURE: 'REGISTER_OPERATIONAL_ASSET_DRAFT',
-  PRIVATE_DEVELOPMENT: 'CREATE_BUSINESS_REQUEST'
-};
 
 const valuesOf = (runtimeEnum) => Object.values(runtimeEnum);
 
@@ -104,6 +95,10 @@ export const businessRuntimeClient = {
   getExecutionPolicies: () => BUSINESS_EXECUTION_POLICY_MATRIX,
   getWorkflowTypes: () => BUSINESS_WORKFLOW_TYPES,
   getRouteCatalog: () => BUSINESS_ROUTE_DEFINITIONS,
+  createDraftTemplate: createBusinessDraftTemplate,
+  getDraftTemplates: listBusinessDraftTemplates,
+  getDraftPreviewModel: getBusinessDraftPreviewModel,
+  getDraftRuntimeReview: getBusinessDraftRuntimeReview,
   getIntakeOptions: () => ({
     debentureTypes: valuesOf(DebentureType),
     fundingTypes: valuesOf(FundingType),
@@ -112,26 +107,7 @@ export const businessRuntimeClient = {
     riskTiers: valuesOf(RiskTier),
     treasuryExposureTypes: valuesOf(TreasuryExposureType),
     workflowTypes: BUSINESS_WORKFLOW_TYPES
-  }),
-  getDraftRuntimeReview: (draft) => {
-    const action = intakeActionByDraftType[draft.draftType] || 'CREATE_BUSINESS_REQUEST';
-    const identityId = draft.requesterIdentity || 'id-axodus-core';
-    const policy = getExecutionPolicy(action);
-    const requiredCapabilities = getRequiredCapabilitiesForAction(action);
-    const permissionDecision = explainPermissionDecision(identityId, action);
-    const routeContracts = BUSINESS_ROUTE_DEFINITIONS.filter((route) => route.executionPolicy === action);
-
-    return {
-      action,
-      executionPolicy: policy,
-      permissionDecision,
-      requiredCapabilities,
-      routeContracts,
-      runtimeMode: 'MOCK_READ_ONLY',
-      mock: true,
-      readOnly: true
-    };
-  }
+  })
 };
 
 export const businessRuntimeSafety = {

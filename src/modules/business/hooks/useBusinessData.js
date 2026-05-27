@@ -114,6 +114,7 @@ export function useBusinessIntakeRuntime() {
     queryFn: () => ({
       identities: businessRuntimeClient.getIdentities(),
       options: businessRuntimeClient.getIntakeOptions(),
+      templates: businessRuntimeClient.getDraftTemplates(),
       routeCatalog: businessRuntimeClient.getRouteCatalog(),
       safety: businessRuntimeClient.getCoreSummary().securityValidatorStatus
     })
