@@ -21,7 +21,7 @@
       "@utils/*": ["src/utils/*"],
       "@styles/*": ["src/styles/*"],
       "@config": ["src/appkit.config.js"],
-      "@axodus/business-runtime": ["../Business/src/index.ts"]
+      "@axodus/business-runtime": ["src/modules/business/runtime/index.ts"]
     },
     "types": ["node", "vitest/globals"]
   },
