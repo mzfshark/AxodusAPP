@@ -16,6 +16,7 @@ import {
   BusinessProjects,
   BusinessProjectDetail,
   BusinessRegistry,
+  BusinessReviewQueue,
   BusinessRuntime,
   BusinessState,
   BusinessTelemetry,
@@ -48,6 +49,7 @@ function renderBusinessRoute(initialEntry, route, element) {
 
 afterEach(() => {
   cleanup();
+  businessRuntimeClient.resetDraftStore();
 });
 
 describe('AxodusAPP Business routes', () => {
@@ -62,6 +64,7 @@ describe('AxodusAPP Business routes', () => {
     expect(businessEntry.sections.map((section) => section.to)).toEqual(expect.arrayContaining([
       '/business',
       '/business/intake',
+      '/business/review-queue',
       '/business/projects',
       '/business/assets',
       '/business/registry',
@@ -174,6 +177,46 @@ describe('AxodusAPP Business routes', () => {
 
     expect(businessRuntimeClient.deleteDraftStoreRecord(record.id)).toBe(true);
     expect(businessRuntimeClient.listDraftStoreRecords()).toHaveLength(0);
+  });
+
+  test('renders review queue with summary, filters, blockers and preview links', async () => {
+    businessRuntimeClient.resetDraftStore();
+    businessRuntimeClient.createDraftStoreRecord(businessRuntimeClient.createDraftTemplate('GENERAL_BUSINESS_REQUEST'));
+
+    const acsDraft = businessRuntimeClient.createDraftTemplate('ACS_SERVICE_REQUEST');
+    acsDraft.values = {
+      requesterIdentity: 'id-enterprise-sample',
+      acsRuntimeType: 'DEDICATED_BUSINESS_RUNTIME',
+      isolationProfile: 'TENANT_ISOLATED',
+      memoryScope: 'PROJECT_SCOPED_MEMORY',
+      permissionProfile: 'READ_ONLY_ANALYSIS',
+      computeProfile: 'STANDARD_REVIEW_RUNTIME',
+      humanReviewRequirement: true,
+      workflowObjective: 'Classify ACS scope for future review',
+      operatingScope: 'ENTERPRISE',
+      telemetryRequirements: 'Runtime telemetry'
+    };
+    const acsRecord = businessRuntimeClient.createDraftStoreRecord(acsDraft);
+
+    expect(businessRuntimeClient.getReviewQueueView().items).toHaveLength(2);
+    expect(businessRuntimeClient.getReviewQueueItemsByReviewType('ACS_REVIEW')).toHaveLength(1);
+    expect(businessRuntimeClient.getReviewQueueItemsByStatus('BLOCKED')).toHaveLength(1);
+
+    renderBusinessRoute('/business/review-queue', '/business/review-queue', <BusinessReviewQueue />);
+
+    expect(await screen.findByRole('heading', { name: /Business Review Queue/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Queue Items/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Ready For Review/i)).toBeInTheDocument();
+    expect(screen.getByText(/Review Queue Filters/i)).toBeInTheDocument();
+    expect(screen.getByText(/Queue Table/i)).toBeInTheDocument();
+    expect(screen.getByText(/Review Blockers/i)).toBeInTheDocument();
+    expect(screen.getByText(/Queue Safety/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/ACS_REVIEW/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/BLOCKED/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Preview Draft/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(`review-${acsRecord.id}`)).toBeInTheDocument();
+    expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /submit to governance|approve request|reject request|issue debenture|move treasury|provision acs|deploy contract|execute billing|distribute revenue|assign reviewer|create proposal/i })).not.toBeInTheDocument();
   });
 
   test('renders project and asset tables from isolated runtime client', async () => {

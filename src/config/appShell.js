@@ -195,6 +195,7 @@ const nuclei = [
     sections: [
       { to: '/business', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/business/intake', label: 'Intake', icon: FilePlus2 },
+      { to: '/business/review-queue', label: 'Review Queue', icon: ListChecks },
       { to: '/business/projects', label: 'Projects', icon: LibraryBig },
       { to: '/business/assets', label: 'Assets', icon: PackageCheck },
       { to: '/business/registry', label: 'Registry', icon: Network },
