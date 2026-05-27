@@ -1,3 +1,4 @@
+import { Link, useParams } from 'react-router-dom';
 import {
   BusinessErrorState,
   BusinessLifecycleTable,
@@ -5,6 +6,7 @@ import {
   BusinessPageShell,
   BusinessPanel,
   BusinessRiskBadge,
+  BusinessSeverityBadge,
   BusinessStatusBadge,
   BusinessSummaryCards,
   BusinessTelemetryFeed
@@ -12,16 +14,26 @@ import {
 import {
   useBusinessACSRuntimes,
   useBusinessAssets,
+  useBusinessAssetRegistry,
   useBusinessDebentures,
+  useBusinessCriticalEvents,
+  useBusinessEvents,
+  useBusinessEventSummary,
   useBusinessFundingRecords,
   useBusinessOverview,
   useBusinessPlugins,
+  useBusinessProjectRegistry,
   useBusinessProjects,
+  useBusinessRegistrySummary,
   useBusinessRequests,
   useBusinessRevenueRecords,
   useBusinessRuntimeSummary,
+  useBusinessRuntimeSafetyModel,
+  useBusinessStateRuntime,
   useBusinessTelemetryEvents,
-  useBusinessTreasuryExposures
+  useBusinessTreasuryExposures,
+  useBusinessWorkflowSummary,
+  useBusinessWorkflows
 } from '../hooks/useBusinessData';
 
 const money = (amount, currency = 'USD') => new Intl.NumberFormat('en-US', { currency, maximumFractionDigits: 0, style: 'currency' }).format(Number(amount || 0));
@@ -34,6 +46,18 @@ const idCell = (key = 'id') => (row) => <span className="font-mono text-xs font-
 const statusCell = (key = 'status') => (row) => <BusinessStatusBadge status={row[key]} />;
 const riskCell = (key = 'riskTier') => (row) => row[key] ? <BusinessRiskBadge riskTier={row[key]} /> : <span className="text-outline">n/a</span>;
 const textCell = (key) => (row) => <span className="text-outline">{row[key] ?? 'n/a'}</span>;
+const linkCell = (path, key = 'id') => (row) => row[key] ? <Link className="font-mono text-xs font-bold text-primary hover:text-primary-container" to={`${path}/${row[key]}`}>{row[key]}</Link> : <span className="text-outline">n/a</span>;
+
+function ProgressBar({ value = 0 }) {
+  return (
+    <div className="min-w-[120px]">
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+      </div>
+      <p className="mt-1 text-xs font-bold text-on-surface">{value}%</p>
+    </div>
+  );
+}
 
 export function BusinessOverview() {
   const overview = useBusinessOverview();
@@ -42,9 +66,12 @@ export function BusinessOverview() {
   const assets = useBusinessAssets();
   const treasury = useBusinessTreasuryExposures();
   const telemetry = useBusinessTelemetryEvents();
+  const registry = useBusinessRegistrySummary();
+  const workflows = useBusinessWorkflowSummary();
+  const events = useBusinessEventSummary();
 
-  if (overview.isLoading || runtime.isLoading || projects.isLoading || assets.isLoading || treasury.isLoading || telemetry.isLoading) return <BusinessLoadingState />;
-  const failed = queryFailed(overview, runtime, projects, assets, treasury, telemetry);
+  if (overview.isLoading || runtime.isLoading || projects.isLoading || assets.isLoading || treasury.isLoading || telemetry.isLoading || registry.isLoading || workflows.isLoading || events.isLoading) return <BusinessLoadingState />;
+  const failed = queryFailed(overview, runtime, projects, assets, treasury, telemetry, registry, workflows, events);
   if (failed) return <BusinessErrorState message={failed.error?.message || 'Business runtime unavailable.'} />;
 
   const dashboard = overview.data;
@@ -61,7 +88,38 @@ export function BusinessOverview() {
         { id: 'governance-review-count', label: 'Governance Reviews', value: summary.activeGovernanceReviews, detail: 'Requests currently requiring governance review.', status: 'WARNING' },
         { id: 'funding-review-count', label: 'Funding Reviews', value: summary.activeFundingReviews, detail: 'Funding records in governance or treasury review.', status: 'WARNING' },
         { id: 'critical-events', label: 'Critical Events', value: summary.criticalTelemetryEvents, detail: 'Critical or emergency telemetry events visible in the mock runtime.', status: summary.criticalTelemetryEvents ? 'CRITICAL' : 'INFO' }
+        , { id: 'registry-edges', label: 'Registry Edges', value: registry.data.relationshipEdges, detail: 'Read-only graph relationships across Business runtime entities.', status: 'INFO' },
+        { id: 'blocked-workflows', label: 'Blocked Workflows', value: workflows.data.blockedWorkflows, detail: 'Workflow blockers detected from registry and runtime status.', status: workflows.data.blockedWorkflows ? 'WARNING' : 'INFO' },
+        { id: 'runtime-events', label: 'Runtime Events', value: events.data.totalEvents, detail: 'Derived event timeline records across Business entities.', status: 'NOTICE' },
+        { id: 'security-status', label: 'Security Validators', value: summary.securityValidatorStatus?.valid ? 'PASS' : 'REVIEW', detail: 'Non-execution and mock/read-only validator status.', status: summary.securityValidatorStatus?.valid ? 'APPROVED' : 'WARNING' }
       ]} />
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <BusinessPanel title="Runtime Health" description="Contract, policy and validator posture from the runtime package.">
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Execution policies</span><strong className="text-on-surface">{summary.executionPolicySummary?.totalPolicies}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Executable policies</span><strong className="text-on-surface">{summary.executionPolicySummary?.executablePolicies}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Capabilities</span><strong className="text-on-surface">{summary.capabilitySummary?.totalCapabilities}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Permission decisions</span><strong className="text-on-surface">{summary.permissionSummary?.totalDecisions}</strong></div>
+          </div>
+        </BusinessPanel>
+        <BusinessPanel title="Workflow Readiness" description="Readiness is computed only; no workflow step can execute from this UI.">
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Active workflows</span><strong className="text-on-surface">{workflows.data.totalWorkflows}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Ready workflows</span><strong className="text-on-surface">{workflows.data.readyWorkflows}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Blocked workflows</span><strong className="text-on-surface">{workflows.data.blockedWorkflows}</strong></div>
+            <ProgressBar value={workflows.data.averageProgressPercent} />
+          </div>
+        </BusinessPanel>
+        <BusinessPanel title="Registry Summary" description="Graph-like operational relationships exposed without database or backend mutations.">
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Projects</span><strong className="text-on-surface">{registry.data.totalProjects}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Assets</span><strong className="text-on-surface">{registry.data.totalAssets}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">ACS runtimes</span><strong className="text-on-surface">{registry.data.totalACSRuntimes}</strong></div>
+            <div className="flex items-center justify-between gap-3"><span className="text-outline">Runtime events</span><strong className="text-on-surface">{registry.data.totalRuntimeEvents}</strong></div>
+          </div>
+        </BusinessPanel>
+      </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
@@ -69,7 +127,7 @@ export function BusinessOverview() {
             <BusinessLifecycleTable
               rows={dashboard.lifecycleTables.projects.slice(0, 6)}
               columns={[
-                { key: 'id', label: 'Project', render: idCell() },
+                { key: 'id', label: 'Project', render: linkCell('/business/projects') },
                 { key: 'label', label: 'Title', render: textCell('label') },
                 { key: 'status', label: 'Status', render: statusCell() },
                 { key: 'riskTier', label: 'Risk', render: riskCell() },
@@ -125,13 +183,13 @@ export function BusinessProjects() {
         <BusinessLifecycleTable
           rows={projects.data || []}
           columns={[
-            { key: 'id', label: 'Project id', render: idCell() },
+            { key: 'id', label: 'Project id', render: linkCell('/business/projects') },
             { key: 'title', label: 'Title', render: textCell('title') },
             { key: 'projectType', label: 'Type', render: textCell('projectType') },
             { key: 'status', label: 'Status', render: statusCell() },
             { key: 'riskTier', label: 'Risk tier', render: riskCell() },
             { key: 'fundingId', label: 'Funding', render: idCell('fundingId') },
-            { key: 'assetId', label: 'Asset', render: idCell('assetId') },
+            { key: 'assetId', label: 'Asset', render: (row) => <Link className="font-mono text-xs font-bold text-primary" to={`/business/assets/${row.assetId}`}>{row.assetId}</Link> },
             { key: 'telemetryProfile', label: 'Telemetry', render: (row) => <span className="text-outline">{row.telemetryProfile?.enabled ? 'enabled' : 'disabled'}</span> }
           ]}
         />
@@ -151,7 +209,7 @@ export function BusinessAssets() {
         <BusinessLifecycleTable
           rows={assets.data || []}
           columns={[
-            { key: 'id', label: 'Asset id', render: idCell() },
+            { key: 'id', label: 'Asset id', render: linkCell('/business/assets') },
             { key: 'name', label: 'Asset name', render: textCell('name') },
             { key: 'assetType', label: 'Type', render: textCell('assetType') },
             { key: 'ownerType', label: 'Owner type', render: textCell('ownerType') },
@@ -214,6 +272,326 @@ export function BusinessTelemetry() {
             { key: 'status', label: 'Status', render: textCell('status') }
           ]}
         />
+      </BusinessPanel>
+    </BusinessPageShell>
+  );
+}
+
+function DetailList({ items }) {
+  return (
+    <dl className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      {items.map((item) => (
+        <div key={item.label} className="rounded-lg border border-white/10 bg-surface-container p-3">
+          <dt className="text-[11px] font-bold uppercase tracking-widest text-outline">{item.label}</dt>
+          <dd className="mt-1 break-words text-sm font-semibold text-on-surface">{item.value ?? 'n/a'}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function WorkflowPanel({ workflow }) {
+  if (!workflow) return null;
+  const completed = workflow.steps.filter((step) => step.status === 'COMPLETED').length;
+  const progress = Math.round((completed / Math.max(1, workflow.steps.length)) * 100);
+
+  return (
+    <BusinessPanel title="Workflow" description="Declarative readiness only. Steps are not executable from AxodusAPP.">
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <BusinessStatusBadge status={workflow.workflowType} />
+        <ProgressBar value={progress} />
+      </div>
+      <div className="space-y-3">
+        {workflow.steps.map((step) => (
+          <article key={step.stepId} className="rounded-lg border border-white/10 bg-surface-container p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-bold text-on-surface">{step.label}</p>
+                <p className="mt-1 text-xs text-outline">{step.description}</p>
+              </div>
+              <BusinessStatusBadge status={step.status} />
+            </div>
+            {step.blockingIssues.length ? <p className="mt-3 text-xs font-semibold text-amber-100">{step.blockingIssues.join(' / ')}</p> : null}
+          </article>
+        ))}
+      </div>
+    </BusinessPanel>
+  );
+}
+
+function EventTimelinePanel({ title = 'Event Timeline', events = [] }) {
+  return (
+    <BusinessPanel title={title} description="Derived read-only events. No broker, webhook or automation is active.">
+      <div className="space-y-3">
+        {events.map((event) => (
+          <article key={event.eventId} className="rounded-lg border border-white/10 bg-surface-container p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <BusinessSeverityBadge severity={event.severity} />
+                <span className="font-mono text-xs font-bold text-on-surface">{event.eventType}</span>
+              </div>
+              <span className="text-xs text-outline">{new Date(event.timestamp).toLocaleString()}</span>
+            </div>
+            <p className="mt-2 font-mono text-xs text-outline">{event.eventId}</p>
+          </article>
+        ))}
+      </div>
+    </BusinessPanel>
+  );
+}
+
+export function BusinessProjectDetail() {
+  const { projectId } = useParams();
+  const registry = useBusinessProjectRegistry(projectId);
+  const workflows = useBusinessWorkflows();
+  if (registry.isLoading || workflows.isLoading) return <BusinessLoadingState />;
+  if (registry.isError || workflows.isError || !registry.data) return <BusinessErrorState message="Project registry view unavailable." />;
+
+  const view = registry.data;
+  const workflow = workflows.data?.find((record) => record.projectId === projectId);
+  return (
+    <BusinessPageShell title={view.project.title} description="Project registry view with linked request, asset, funding, treasury, debenture, ACS, telemetry, workflow and event context.">
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Project Overview">
+          <DetailList items={[
+            { label: 'Project id', value: view.project.id },
+            { label: 'Type', value: view.project.projectType },
+            { label: 'Status', value: view.project.status },
+            { label: 'Risk tier', value: view.project.riskTier },
+            { label: 'Request', value: view.request?.id },
+            { label: 'Asset', value: view.asset?.id },
+            { label: 'Funding', value: view.funding?.id },
+            { label: 'Debenture', value: view.debenture?.id }
+          ]} />
+        </BusinessPanel>
+        <WorkflowPanel workflow={workflow} />
+      </section>
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Treasury And Revenue">
+          <BusinessLifecycleTable rows={[...view.treasuryExposures, ...view.revenueRecords]} columns={[
+            { key: 'id', label: 'Record', render: idCell() },
+            { key: 'status', label: 'Status', render: statusCell() },
+            { key: 'approvedAmount', label: 'Approved', render: (row) => row.approvedAmount !== undefined ? money(row.approvedAmount, row.currency) : 'n/a' },
+            { key: 'netAmount', label: 'Net revenue', render: (row) => row.netAmount !== undefined ? money(row.netAmount, row.currency) : 'n/a' }
+          ]} />
+        </BusinessPanel>
+        <BusinessPanel title="ACS And Telemetry">
+          <BusinessLifecycleTable rows={[...view.acsRuntimes, ...view.telemetryEvents]} columns={[
+            { key: 'id', label: 'Record', render: idCell() },
+            { key: 'status', label: 'Status', render: textCell('status') },
+            { key: 'runtimeType', label: 'Runtime type', render: textCell('runtimeType') },
+            { key: 'eventType', label: 'Event type', render: textCell('eventType') }
+          ]} />
+        </BusinessPanel>
+      </section>
+      <EventTimelinePanel events={view.runtimeEvents} />
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessAssetDetail() {
+  const { assetId } = useParams();
+  const registry = useBusinessAssetRegistry(assetId);
+  if (registry.isLoading) return <BusinessLoadingState />;
+  if (registry.isError || !registry.data) return <BusinessErrorState message="Asset registry view unavailable." />;
+  const view = registry.data;
+
+  return (
+    <BusinessPageShell title={view.asset.name} description="Asset detail with ownership, project, funding, treasury, revenue, telemetry and lifecycle context.">
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Asset Overview">
+          <DetailList items={[
+            { label: 'Asset id', value: view.asset.id },
+            { label: 'Type', value: view.asset.assetType },
+            { label: 'Owner type', value: view.asset.ownerType },
+            { label: 'Owner', value: view.owner?.displayName || view.asset.ownerId },
+            { label: 'Lifecycle', value: view.asset.status },
+            { label: 'Funding', value: view.funding?.id },
+            { label: 'Revenue model', value: view.asset.revenueModel },
+            { label: 'Maintenance owner', value: view.asset.maintenanceOwner }
+          ]} />
+        </BusinessPanel>
+        <BusinessPanel title="Linked Project">
+          {view.project ? <DetailList items={[
+            { label: 'Project', value: view.project.title },
+            { label: 'Project id', value: view.project.id },
+            { label: 'Risk tier', value: view.project.riskTier },
+            { label: 'Status', value: view.project.status }
+          ]} /> : null}
+        </BusinessPanel>
+      </section>
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Financial Visibility">
+          <BusinessLifecycleTable rows={[...view.treasuryExposures, ...view.revenueRecords]} columns={[
+            { key: 'id', label: 'Record', render: idCell() },
+            { key: 'status', label: 'Status', render: textCell('status') },
+            { key: 'riskTier', label: 'Risk', render: riskCell() },
+            { key: 'netAmount', label: 'Net', render: (row) => row.netAmount !== undefined ? money(row.netAmount, row.currency) : 'n/a' }
+          ]} />
+        </BusinessPanel>
+        <EventTimelinePanel title="Asset Event Timeline" events={view.runtimeEvents} />
+      </section>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessRegistry() {
+  const summary = useBusinessRegistrySummary();
+  const projects = useBusinessProjects();
+  const assets = useBusinessAssets();
+  const funding = useBusinessFundingRecords();
+  const treasury = useBusinessTreasuryExposures();
+  const acs = useBusinessACSRuntimes();
+  if (summary.isLoading || projects.isLoading || assets.isLoading || funding.isLoading || treasury.isLoading || acs.isLoading) return <BusinessLoadingState />;
+  const failed = queryFailed(summary, projects, assets, funding, treasury, acs);
+  if (failed) return <BusinessErrorState message="Business registry unavailable." />;
+
+  return (
+    <BusinessPageShell title="Runtime Registry" description="Read-only operational graph view across Business runtime entities and relationships.">
+      <BusinessSummaryCards cards={[
+        { id: 'registry-projects', label: 'Projects', value: summary.data.totalProjects, detail: 'Indexed project records.', status: 'INFO' },
+        { id: 'registry-assets', label: 'Assets', value: summary.data.totalAssets, detail: 'Indexed operational assets.', status: 'INFO' },
+        { id: 'registry-edges', label: 'Relationships', value: summary.data.relationshipEdges, detail: 'Derived registry relationship edges.', status: 'NOTICE' },
+        { id: 'registry-events', label: 'Runtime Events', value: summary.data.totalRuntimeEvents, detail: 'Events linked into registry views.', status: 'NOTICE' }
+      ]} />
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Projects">
+          <BusinessLifecycleTable rows={projects.data || []} columns={[
+            { key: 'id', label: 'Project', render: linkCell('/business/projects') },
+            { key: 'title', label: 'Title', render: textCell('title') },
+            { key: 'assetId', label: 'Asset', render: (row) => <Link className="font-mono text-xs font-bold text-primary" to={`/business/assets/${row.assetId}`}>{row.assetId}</Link> },
+            { key: 'riskTier', label: 'Risk', render: riskCell() }
+          ]} />
+        </BusinessPanel>
+        <BusinessPanel title="Runtime Relationships">
+          <BusinessLifecycleTable rows={[...(funding.data || []), ...(treasury.data || []), ...(acs.data || [])]} columns={[
+            { key: 'id', label: 'Record', render: idCell() },
+            { key: 'projectId', label: 'Project', render: idCell('projectId') },
+            { key: 'relatedProjectId', label: 'ACS Project', render: idCell('relatedProjectId') },
+            { key: 'status', label: 'Status', render: textCell('status') }
+          ]} />
+        </BusinessPanel>
+      </section>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessWorkflows() {
+  const workflows = useBusinessWorkflows();
+  const summary = useBusinessWorkflowSummary();
+  if (workflows.isLoading || summary.isLoading) return <BusinessLoadingState />;
+  if (workflows.isError || summary.isError) return <BusinessErrorState message="Business workflows unavailable." />;
+
+  return (
+    <BusinessPageShell title="Workflows" description="Declarative operational workflows with readiness, blockers and progress. No workflow step executes from the UI.">
+      <BusinessSummaryCards cards={[
+        { id: 'workflow-total', label: 'Workflows', value: summary.data.totalWorkflows, detail: 'Project workflows derived from runtime registry.', status: 'INFO' },
+        { id: 'workflow-ready', label: 'Ready', value: summary.data.readyWorkflows, detail: 'Ready means no blockers in the read model.', status: 'APPROVED' },
+        { id: 'workflow-blocked', label: 'Blocked', value: summary.data.blockedWorkflows, detail: 'Detected governance, treasury, ACS or telemetry blockers.', status: summary.data.blockedWorkflows ? 'WARNING' : 'INFO' },
+        { id: 'workflow-progress', label: 'Average Progress', value: `${summary.data.averageProgressPercent}%`, detail: 'Calculated progress across required steps.', status: 'NOTICE' }
+      ]} />
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        {workflows.data.map((workflow) => (
+          <WorkflowPanel key={workflow.projectId} workflow={workflow} />
+        ))}
+      </section>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessEvents() {
+  const events = useBusinessEvents();
+  const summary = useBusinessEventSummary();
+  const critical = useBusinessCriticalEvents();
+  if (events.isLoading || summary.isLoading || critical.isLoading) return <BusinessLoadingState />;
+  if (events.isError || summary.isError || critical.isError) return <BusinessErrorState message="Business events unavailable." />;
+
+  return (
+    <BusinessPageShell title="Events" description="Read-only runtime event timelines and lineage derived from Business records.">
+      <BusinessSummaryCards cards={[
+        { id: 'events-total', label: 'Events', value: summary.data.totalEvents, detail: 'Derived runtime events.', status: 'INFO' },
+        { id: 'events-critical', label: 'Critical', value: summary.data.criticalEvents, detail: 'Critical event count.', status: summary.data.criticalEvents ? 'CRITICAL' : 'INFO' },
+        { id: 'events-types', label: 'Event Types', value: Object.keys(summary.data.byType).length, detail: 'Lifecycle and telemetry event categories.', status: 'NOTICE' },
+        { id: 'events-sources', label: 'Sources', value: Object.keys(summary.data.bySource).length, detail: 'Runtime source categories.', status: 'NOTICE' }
+      ]} />
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <EventTimelinePanel title="Critical Events" events={critical.data} />
+        <EventTimelinePanel title="Runtime Timeline" events={(events.data || []).slice(0, 12)} />
+      </section>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessState() {
+  const state = useBusinessStateRuntime();
+  if (state.isLoading) return <BusinessLoadingState />;
+  if (state.isError) return <BusinessErrorState message="Business state machine unavailable." />;
+
+  const transitionRows = Object.entries(state.data.transitionMaps.PROJECT).map(([status, targets]) => ({ id: status, status, targets: targets.join(' / ') || 'terminal' }));
+
+  return (
+    <BusinessPageShell title="State Machine" description="Lifecycle transition maps, guard placeholders and read-only simulation. No transition is persisted or executed.">
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Project Lifecycle Transitions">
+          <BusinessLifecycleTable rows={transitionRows} columns={[
+            { key: 'status', label: 'From', render: idCell('status') },
+            { key: 'targets', label: 'Allowed transitions', render: textCell('targets') }
+          ]} />
+        </BusinessPanel>
+        <BusinessPanel title="Transition Simulation">
+          <DetailList items={[
+            { label: 'Valid simulation', value: `${state.data.simulation.fromStatus} -> ${state.data.simulation.toStatus}: ${state.data.simulation.allowed}` },
+            { label: 'Invalid simulation', value: state.data.invalidSimulation.error?.message },
+            { label: 'Mutation', value: String(state.data.simulation.mutated) },
+            { label: 'Guards', value: state.data.guardCategories.join(' / ') }
+          ]} />
+        </BusinessPanel>
+      </section>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessRuntime() {
+  const safety = useBusinessRuntimeSafetyModel();
+  if (safety.isLoading) return <BusinessLoadingState />;
+  if (safety.isError) return <BusinessErrorState message="Runtime safety model unavailable." />;
+
+  const policies = Object.values(safety.data.executionPolicies);
+  return (
+    <BusinessPageShell title="Runtime Safety" description="Execution policy, validators and non-execution guarantees for the Business console.">
+      <BusinessSummaryCards cards={[
+        { id: 'runtime-mode', label: 'Runtime Mode', value: 'MOCK', detail: 'All Business runtime data is mock/read-only.', status: 'APPROVED' },
+        { id: 'forbidden', label: 'Forbidden Actions', value: policies.filter((policy) => policy.mode === 'FORBIDDEN_IN_CURRENT_RUNTIME').length, detail: 'Actions blocked in the current runtime.', status: 'CRITICAL' },
+        { id: 'executable', label: 'Executable Policies', value: safety.data.coreSummary.executionPolicySummary.executablePolicies, detail: 'Must remain zero in this sprint.', status: 'APPROVED' },
+        { id: 'validators', label: 'Validators', value: safety.data.coreSummary.securityValidatorStatus.valid ? 'PASS' : 'REVIEW', detail: 'Security validator status.', status: safety.data.coreSummary.securityValidatorStatus.valid ? 'APPROVED' : 'WARNING' }
+      ]} />
+      <BusinessPanel title="Execution Policies">
+        <BusinessLifecycleTable rows={policies} columns={[
+          { key: 'action', label: 'Action', render: idCell('action') },
+          { key: 'mode', label: 'Mode', render: statusCell('mode') },
+          { key: 'governanceRequired', label: 'Governance', render: (row) => <span className="text-outline">{String(row.governanceRequired)}</span> },
+          { key: 'treasuryApprovalRequired', label: 'Treasury', render: (row) => <span className="text-outline">{String(row.treasuryApprovalRequired)}</span> },
+          { key: 'reason', label: 'Reason', render: textCell('reason') }
+        ]} />
+      </BusinessPanel>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessRisk() {
+  const projects = useBusinessProjects();
+  const treasury = useBusinessTreasuryExposures();
+  if (projects.isLoading || treasury.isLoading) return <BusinessLoadingState />;
+  if (projects.isError || treasury.isError) return <BusinessErrorState message="Business risk unavailable." />;
+  return (
+    <BusinessPageShell title="Risk" description="Risk tier visibility across projects and treasury exposure.">
+      <BusinessPanel title="Risk Registry">
+        <BusinessLifecycleTable rows={projects.data || []} columns={[
+          { key: 'id', label: 'Project', render: linkCell('/business/projects') },
+          { key: 'title', label: 'Title', render: textCell('title') },
+          { key: 'riskTier', label: 'Risk tier', render: riskCell() },
+          { key: 'status', label: 'Status', render: statusCell() }
+        ]} />
       </BusinessPanel>
     </BusinessPageShell>
   );

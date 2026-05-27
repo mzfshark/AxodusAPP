@@ -5,10 +5,17 @@ import { afterEach, describe, expect, test } from 'vitest';
 import { appShellNav } from '../../src/config/appShell';
 import {
   BusinessAssets,
+  BusinessAssetDetail,
+  BusinessEvents,
   BusinessOverview,
   BusinessProjects,
+  BusinessProjectDetail,
+  BusinessRegistry,
+  BusinessRuntime,
+  BusinessState,
   BusinessTelemetry,
   BusinessTreasury,
+  BusinessWorkflows,
   businessRuntimeClient,
   businessRuntimeSafety
 } from '../../src/modules/business';
@@ -51,8 +58,10 @@ describe('AxodusAPP Business routes', () => {
       '/business',
       '/business/projects',
       '/business/assets',
-      '/business/treasury',
-      '/business/telemetry'
+      '/business/registry',
+      '/business/workflows',
+      '/business/events',
+      '/business/runtime'
     ]));
   });
 
@@ -60,11 +69,13 @@ describe('AxodusAPP Business routes', () => {
     renderBusinessRoute('/business', '/business', <BusinessOverview />);
 
     expect(await screen.findByRole('heading', { name: /Business Runtime/i })).toBeInTheDocument();
-    expect(screen.getByText(/mock\/read-only/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Treasury Exposure/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Debenture Status/i)).toBeInTheDocument();
     expect(screen.getAllByText(/ACS Runtime/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Telemetry Summary/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Blocked Workflows/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Registry Edges/i)).toBeInTheDocument();
   });
 
   test('renders project and asset tables from isolated runtime client', async () => {
@@ -107,5 +118,48 @@ describe('AxodusAPP Business routes', () => {
     expect(businessRuntimeSafety.debentureIssuanceEnabled).toBe(false);
     expect(businessRuntimeSafety.acsProvisioningEnabled).toBe(false);
     expect(businessRuntimeSafety.contractCallsEnabled).toBe(false);
+  });
+
+  test('renders project and asset detail registry views', async () => {
+    renderBusinessRoute('/business/projects/proj-dex-country', '/business/projects/:projectId', <BusinessProjectDetail />);
+
+    expect(await screen.findByRole('heading', { name: /Dex.Country/i })).toBeInTheDocument();
+    expect(screen.getByText(/Project Overview/i)).toBeInTheDocument();
+    expect(screen.getByText(/Event Timeline/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/deb-dex-country/i).length).toBeGreaterThan(0);
+
+    cleanup();
+    renderBusinessRoute('/business/assets/asset-dex-country', '/business/assets/:assetId', <BusinessAssetDetail />);
+
+    expect(await screen.findByRole('heading', { name: /Dex.Country/i })).toBeInTheDocument();
+    expect(screen.getByText(/Asset Overview/i)).toBeInTheDocument();
+    expect(screen.getByText(/Asset Event Timeline/i)).toBeInTheDocument();
+  });
+
+  test('renders registry, workflow, events, state and runtime console pages', async () => {
+    renderBusinessRoute('/business/registry', '/business/registry', <BusinessRegistry />);
+    expect(await screen.findByRole('heading', { name: /Runtime Registry/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Relationships/i).length).toBeGreaterThan(0);
+
+    cleanup();
+    renderBusinessRoute('/business/workflows', '/business/workflows', <BusinessWorkflows />);
+    expect(await screen.findByRole('heading', { name: /Workflows/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Blocked/i).length).toBeGreaterThan(0);
+
+    cleanup();
+    renderBusinessRoute('/business/events', '/business/events', <BusinessEvents />);
+    expect(await screen.findByRole('heading', { level: 1, name: /Events/i })).toBeInTheDocument();
+    expect(screen.getByText(/Runtime Timeline/i)).toBeInTheDocument();
+
+    cleanup();
+    renderBusinessRoute('/business/state', '/business/state', <BusinessState />);
+    expect(await screen.findByRole('heading', { name: /State Machine/i })).toBeInTheDocument();
+    expect(screen.getByText(/Transition Simulation/i)).toBeInTheDocument();
+
+    cleanup();
+    renderBusinessRoute('/business/runtime', '/business/runtime', <BusinessRuntime />);
+    expect(await screen.findByRole('heading', { name: /Runtime Safety/i })).toBeInTheDocument();
+    expect(screen.getByText(/Executable Policies/i)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /approve|allocate|move|execute|issue|buy|provision|distribute|contract/i })).not.toBeInTheDocument();
   });
 });

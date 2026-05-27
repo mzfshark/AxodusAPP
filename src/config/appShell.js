@@ -196,8 +196,10 @@ const nuclei = [
       { to: '/business', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/business/projects', label: 'Projects', icon: LibraryBig },
       { to: '/business/assets', label: 'Assets', icon: PackageCheck },
-      { to: '/business/treasury', label: 'Treasury', icon: Landmark },
-      { to: '/business/telemetry', label: 'Telemetry', icon: Activity },
+      { to: '/business/registry', label: 'Registry', icon: Network },
+      { to: '/business/workflows', label: 'Workflows', icon: Route },
+      { to: '/business/events', label: 'Events', icon: Activity },
+      { to: '/business/runtime', label: 'Runtime', icon: ShieldCheck },
     ],
   },
   {

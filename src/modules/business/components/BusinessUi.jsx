@@ -123,10 +123,10 @@ export function BusinessLifecycleTable({ rows = [], columns }) {
           </tr>
         </thead>
         <tbody className="divide-y divide-white/10">
-          {rows.map((row) => (
-            <tr key={row.id} className="align-top">
+          {rows.map((row, rowIndex) => (
+            <tr key={row.id || row.eventId || row.stepId || row.action || `${rowIndex}`} className="align-top">
               {columns.map((column) => (
-                <td key={`${row.id}-${column.key}`} className="px-3 py-4">
+                <td key={`${row.id || row.eventId || row.stepId || row.action || rowIndex}-${column.key}`} className="px-3 py-4">
                   {column.render ? column.render(row) : <span className="text-outline">{row[column.key] ?? 'n/a'}</span>}
                 </td>
               ))}
