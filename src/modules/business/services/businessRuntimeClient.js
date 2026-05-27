@@ -60,38 +60,59 @@ const dataFrom = (handler) => assertReadOnlyEnvelope(handler()).data;
 
 const valuesOf = (runtimeEnum) => Object.values(runtimeEnum);
 
+const businessApiBaseUrl = import.meta.env.VITE_BUSINESS_API_URL?.replace(/\/+$/, '') || '';
+const businessUseApi = import.meta.env.VITE_BUSINESS_USE_API === 'true' && Boolean(businessApiBaseUrl);
+
+const businessApiDataFrom = async (path) => {
+  const response = await fetch(`${businessApiBaseUrl}/api/v1/business${path}`);
+  const envelope = assertReadOnlyEnvelope(await response.json());
+
+  if (!response.ok || envelope.errors.length > 0) {
+    const message = envelope.errors[0]?.message || `Business mock API request failed: ${path}`;
+    throw new Error(message);
+  }
+
+  return envelope.data;
+};
+
+const apiOrDirect = (path, directReader) => (businessUseApi ? businessApiDataFrom(path) : directReader());
+const apiProjectionOrDirect = async (path, selector, directReader) => {
+  if (!businessUseApi) return directReader();
+  return selector(await businessApiDataFrom(path));
+};
+
 export const businessRuntimeClient = {
-  getOverview: () => dataFrom(businessApiHandlers.getBusinessOverview),
-  getRuntimeSummary: () => dataFrom(businessApiHandlers.getBusinessRuntimeSummary),
+  getOverview: () => apiOrDirect('/overview', () => dataFrom(businessApiHandlers.getBusinessOverview)),
+  getRuntimeSummary: () => apiOrDirect('/summary', () => dataFrom(businessApiHandlers.getBusinessRuntimeSummary)),
   getCoreSummary: () => getBusinessRuntimeCoreSummary(),
   getDashboardModel: () => getBusinessDashboardModel(),
-  getRequests: () => dataFrom(businessApiHandlers.getBusinessRequests),
-  getProjects: () => dataFrom(businessApiHandlers.getBusinessProjects),
+  getRequests: () => apiOrDirect('/requests', () => dataFrom(businessApiHandlers.getBusinessRequests)),
+  getProjects: () => apiOrDirect('/projects', () => dataFrom(businessApiHandlers.getBusinessProjects)),
   getProjectById: (projectId) => selectBusinessProjectById(projectId),
-  getAssets: () => dataFrom(businessApiHandlers.getBusinessAssets),
-  getPlugins: () => dataFrom(businessApiHandlers.getBusinessPlugins),
-  getFundingRecords: () => dataFrom(businessApiHandlers.getBusinessFundingRecords),
-  getDebentures: () => dataFrom(businessApiHandlers.getBusinessDebentures),
-  getTreasuryExposures: () => dataFrom(businessApiHandlers.getBusinessTreasuryExposures),
-  getRevenueRecords: () => dataFrom(businessApiHandlers.getBusinessRevenueRecords),
-  getACSRuntimes: () => dataFrom(businessApiHandlers.getBusinessACSRuntimes),
-  getTelemetryEvents: () => dataFrom(businessApiHandlers.getBusinessTelemetryEvents),
-  getIdentities: () => dataFrom(businessApiHandlers.getBusinessIdentities),
+  getAssets: () => apiOrDirect('/assets', () => dataFrom(businessApiHandlers.getBusinessAssets)),
+  getPlugins: () => apiOrDirect('/plugins', () => dataFrom(businessApiHandlers.getBusinessPlugins)),
+  getFundingRecords: () => apiOrDirect('/funding', () => dataFrom(businessApiHandlers.getBusinessFundingRecords)),
+  getDebentures: () => apiOrDirect('/debentures', () => dataFrom(businessApiHandlers.getBusinessDebentures)),
+  getTreasuryExposures: () => apiOrDirect('/treasury/exposure', () => dataFrom(businessApiHandlers.getBusinessTreasuryExposures)),
+  getRevenueRecords: () => apiOrDirect('/revenue', () => dataFrom(businessApiHandlers.getBusinessRevenueRecords)),
+  getACSRuntimes: () => apiOrDirect('/acs', () => dataFrom(businessApiHandlers.getBusinessACSRuntimes)),
+  getTelemetryEvents: () => apiOrDirect('/telemetry', () => dataFrom(businessApiHandlers.getBusinessTelemetryEvents)),
+  getIdentities: () => apiOrDirect('/identities', () => dataFrom(businessApiHandlers.getBusinessIdentities)),
   getReadOnlyMeta: () => assertReadOnlyEnvelope(businessApiHandlers.getBusinessOverview()).meta,
   getProjectRegistryView,
   getAssetRegistryView,
   getRiskTierRegistryView,
   getACSRuntimeRegistryView,
-  getRegistrySummary: getBusinessRegistrySummary,
+  getRegistrySummary: () => apiOrDirect('/registry', getBusinessRegistrySummary),
   getWorkflowForProject,
   getWorkflowTemplate,
   getWorkflowReadiness,
   getWorkflowBlockers,
   getWorkflowProgress,
-  getWorkflowSummary: getBusinessWorkflowSummary,
-  listWorkflows: listBusinessWorkflows,
-  getRuntimeEvents: getBusinessRuntimeEvents,
-  getEventSummary: getBusinessEventSummary,
+  getWorkflowSummary: () => apiProjectionOrDirect('/workflows', (data) => data.summary, getBusinessWorkflowSummary),
+  listWorkflows: () => apiProjectionOrDirect('/workflows', (data) => data.workflows, listBusinessWorkflows),
+  getRuntimeEvents: () => apiProjectionOrDirect('/events', (data) => data.events, getBusinessRuntimeEvents),
+  getEventSummary: () => apiProjectionOrDirect('/events', (data) => data.summary, getBusinessEventSummary),
   getCriticalEvents: getCriticalBusinessEvents,
   getProjectEventTimeline,
   getAssetEventTimeline,
@@ -115,6 +136,11 @@ export const businessRuntimeClient = {
   getDraftPreviewById,
   validateDraftById,
   resetDraftStore: resetBusinessDraftStore,
+  getApiMode: () => ({
+    enabled: businessUseApi,
+    baseUrl: businessApiBaseUrl || null,
+    fallback: businessUseApi ? 'BUSINESS_MOCK_API' : 'DIRECT_RUNTIME'
+  }),
   getIntakeOptions: () => ({
     debentureTypes: valuesOf(DebentureType),
     fundingTypes: valuesOf(FundingType),
