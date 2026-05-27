@@ -4,6 +4,8 @@ import {
   BUSINESS_TRANSITION_GUARD_CATEGORIES,
   BUSINESS_TRANSITION_MAPS,
   BUSINESS_WORKFLOW_TYPES,
+  BUSINESS_CAPABILITIES,
+  BUSINESS_RUNTIME_ACTIONS,
   DebentureType,
   FundingType,
   PluginType,
@@ -14,8 +16,12 @@ import {
   createBusinessDraftTemplate,
   createDraftStoreRecord,
   deleteDraftStoreRecord,
+  explainCapabilityDenial,
+  explainPermissionDecision,
+  getBusinessCapabilityMatrix,
   getBusinessDraftPreviewModel,
   getBusinessDraftRuntimeReview,
+  getBusinessPermissionMatrix,
   getACSRuntimeEventTimeline,
   getACSRuntimeRegistryView,
   getAssetEventTimeline,
@@ -98,6 +104,7 @@ export const businessRuntimeClient = {
   getACSRuntimes: () => apiOrDirect('/acs', () => dataFrom(businessApiHandlers.getBusinessACSRuntimes)),
   getTelemetryEvents: () => apiOrDirect('/telemetry', () => dataFrom(businessApiHandlers.getBusinessTelemetryEvents)),
   getIdentities: () => apiOrDirect('/identities', () => dataFrom(businessApiHandlers.getBusinessIdentities)),
+  getFederationParticipants: () => apiOrDirect('/federation', () => dataFrom(businessApiHandlers.getBusinessFederationParticipants)),
   getReadOnlyMeta: () => assertReadOnlyEnvelope(businessApiHandlers.getBusinessOverview()).meta,
   getProjectRegistryView,
   getAssetRegistryView,
@@ -124,6 +131,36 @@ export const businessRuntimeClient = {
   getExecutionPolicies: () => BUSINESS_EXECUTION_POLICY_MATRIX,
   getWorkflowTypes: () => BUSINESS_WORKFLOW_TYPES,
   getRouteCatalog: () => BUSINESS_ROUTE_DEFINITIONS,
+  getCapabilities: () => BUSINESS_CAPABILITIES,
+  getRuntimeActions: () => BUSINESS_RUNTIME_ACTIONS,
+  getCapabilityMatrix: getBusinessCapabilityMatrix,
+  getPermissionMatrix: getBusinessPermissionMatrix,
+  explainCapabilityDenial,
+  explainPermissionDecision,
+  getAccessModel: () => {
+    const identities = dataFrom(businessApiHandlers.getBusinessIdentities);
+    const federationParticipants = dataFrom(businessApiHandlers.getBusinessFederationParticipants);
+    const capabilityMatrix = getBusinessCapabilityMatrix();
+    const permissionMatrix = getBusinessPermissionMatrix();
+    const executionPolicies = Object.values(BUSINESS_EXECUTION_POLICY_MATRIX);
+    const capabilityDenials = identities.flatMap((identity) =>
+      BUSINESS_CAPABILITIES
+        .map((capability) => explainCapabilityDenial(identity.id, capability))
+        .filter((decision) => !decision.allowed)
+    );
+
+    return {
+      identities,
+      federationParticipants,
+      capabilityMatrix,
+      permissionMatrix,
+      executionPolicies,
+      capabilityDenials,
+      permissionDenials: permissionMatrix.filter((decision) => !decision.allowed),
+      mock: true,
+      readOnly: true
+    };
+  },
   createDraftTemplate: createBusinessDraftTemplate,
   getDraftTemplates: listBusinessDraftTemplates,
   getDraftPreviewModel: getBusinessDraftPreviewModel,

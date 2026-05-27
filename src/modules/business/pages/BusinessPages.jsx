@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import {
+  BusinessBadge,
   BusinessErrorState,
   BusinessLifecycleTable,
   BusinessLoadingState,
@@ -13,6 +14,7 @@ import {
 } from '../components/BusinessUi';
 import {
   useBusinessACSRuntimes,
+  useBusinessAccessModel,
   useBusinessAssets,
   useBusinessAssetRegistry,
   useBusinessDebentures,
@@ -592,6 +594,146 @@ export function BusinessRisk() {
           { key: 'riskTier', label: 'Risk tier', render: riskCell() },
           { key: 'status', label: 'Status', render: statusCell() }
         ]} />
+      </BusinessPanel>
+    </BusinessPageShell>
+  );
+}
+
+const hasCapability = (capabilities = [], capability) => capabilities.includes(capability);
+
+function BusinessFederationBadge({ level }) {
+  return <BusinessBadge tone="border-cyan-300/30 bg-cyan-300/10 text-cyan-100">{level}</BusinessBadge>;
+}
+
+export function BusinessAccess() {
+  const access = useBusinessAccessModel();
+  if (access.isLoading) return <BusinessLoadingState />;
+  if (access.isError) return <BusinessErrorState message="Business access model unavailable." />;
+
+  const data = access.data;
+  const identityCapabilityRows = data.identities.map((identity) => {
+    const matrixEntry = data.capabilityMatrix.find((entry) => entry.subjectId === identity.id && entry.subjectType === 'IDENTITY');
+    const capabilities = matrixEntry?.capabilities || [];
+    const participant = data.federationParticipants.find((entry) => entry.identityId === identity.id);
+
+    return {
+      ...identity,
+      federationParticipantStatus: participant?.status || 'NOT_REGISTERED',
+      capabilityCount: capabilities.length,
+      treasuryEligible: hasCapability(capabilities, 'REQUEST_TREASURY_SPONSORSHIP'),
+      debentureEligible: hasCapability(capabilities, 'REQUEST_DEBENTURE_FUNDING'),
+      acsEligible: hasCapability(capabilities, 'REQUEST_ACS_SERVICE'),
+      capabilities
+    };
+  });
+
+  const blockedPermissionRows = data.permissionDenials.slice(0, 16);
+  const visiblePermissionRows = data.permissionMatrix
+    .filter((decision) => ['CREATE_BUSINESS_REQUEST', 'PREPARE_DEBENTURE_DRAFT', 'PREPARE_ACS_PROVISIONING_REQUEST', 'MOVE_TREASURY_FUNDS', 'ISSUE_DEBENTURE', 'PROVISION_ACS_RUNTIME', 'CALL_CONTRACT'].includes(decision.action))
+    .slice(0, 36)
+    .map((decision) => ({ ...decision, id: `${decision.identityId}-${decision.action}` }));
+  const denialRows = blockedPermissionRows.map((decision) => ({ ...decision, id: `${decision.identityId}-${decision.action}` }));
+
+  return (
+    <BusinessPageShell
+      title="Access Control"
+      description="Identity context, federation level, verification level, capabilities, permission decisions and denial explanations from the Business runtime. This page is visibility only."
+    >
+      <BusinessSummaryCards cards={[
+        { id: 'access-identities', label: 'Identities', value: data.identities.length, detail: 'Mock Business identities available for operational review.', status: 'INFO' },
+        { id: 'access-federation', label: 'Federation Records', value: data.federationParticipants.length, detail: 'Federation participants linked to Business identities.', status: 'NOTICE' },
+        { id: 'access-capability-subjects', label: 'Capability Subjects', value: data.capabilityMatrix.length, detail: 'Identity and project capability matrix entries.', status: 'INFO' },
+        { id: 'access-denials', label: 'Permission Denials', value: data.permissionDenials.length, detail: 'Blocked or forbidden permission decisions with explanations.', status: data.permissionDenials.length ? 'WARNING' : 'INFO' }
+      ]} />
+
+      <BusinessPanel title="Business Identities" description="Requester, DAO, enterprise and agent identities. Eligibility is derived from runtime capabilities; no identity can be changed here.">
+        <BusinessLifecycleTable
+          rows={identityCapabilityRows}
+          columns={[
+            { key: 'id', label: 'Identity', render: idCell() },
+            { key: 'displayName', label: 'Name', render: textCell('displayName') },
+            { key: 'identityType', label: 'Requester type', render: textCell('identityType') },
+            { key: 'federationLevel', label: 'Federation level', render: (row) => <BusinessFederationBadge level={row.federationLevel} /> },
+            { key: 'verificationLevel', label: 'Verification', render: statusCell('verificationLevel') },
+            { key: 'treasuryEligible', label: 'Treasury', render: (row) => <span className="text-outline">{row.treasuryEligible ? 'eligible' : 'not eligible'}</span> },
+            { key: 'debentureEligible', label: 'Debenture', render: (row) => <span className="text-outline">{row.debentureEligible ? 'eligible' : 'not eligible'}</span> },
+            { key: 'acsEligible', label: 'ACS', render: (row) => <span className="text-outline">{row.acsEligible ? 'eligible' : 'not eligible'}</span> },
+            { key: 'capabilityCount', label: 'Capabilities', render: (row) => <strong className="text-on-surface">{row.capabilityCount}</strong> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Federation Context" description="Operational federation visibility. No federation enrollment, upgrade or revocation action exists in this UI.">
+          <BusinessLifecycleTable
+            rows={data.federationParticipants}
+            columns={[
+              { key: 'id', label: 'Participant', render: idCell() },
+              { key: 'displayName', label: 'Name', render: textCell('displayName') },
+              { key: 'level', label: 'Level', render: (row) => <BusinessFederationBadge level={row.level} /> },
+              { key: 'status', label: 'Status', render: statusCell() },
+              { key: 'permissions', label: 'Federation permissions', render: (row) => <span className="text-outline">{row.permissions.join(' / ')}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Capability Matrix" description="Capabilities are read-only runtime decisions for identity and project subjects.">
+          <BusinessLifecycleTable
+            rows={data.capabilityMatrix}
+            columns={[
+              { key: 'subjectId', label: 'Subject', render: idCell('subjectId') },
+              { key: 'subjectType', label: 'Type', render: textCell('subjectType') },
+              { key: 'capabilities', label: 'Capability count', render: (row) => <strong className="text-on-surface">{row.capabilities.length}</strong> },
+              { key: 'mock', label: 'Runtime', render: (row) => <span className="text-outline">{row.mock && row.readOnly ? 'mock/read-only' : 'review'}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <BusinessPanel title="Permission Matrix" description="Permission decisions explain whether an action is view, prepare, simulation, review, blocked or forbidden. No permission can be granted from AxodusAPP.">
+        <BusinessLifecycleTable
+          rows={visiblePermissionRows}
+          columns={[
+            { key: 'identityId', label: 'Identity', render: idCell('identityId') },
+            { key: 'action', label: 'Action', render: idCell('action') },
+            { key: 'mode', label: 'Mode', render: statusCell('mode') },
+            { key: 'allowed', label: 'Allowed', render: (row) => <span className="text-outline">{String(row.allowed)}</span> },
+            { key: 'reason', label: 'Decision reason', render: textCell('reason') }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Denial Explanations" description="Blocked and forbidden actions surface stable explanations instead of hidden permission failures.">
+          <BusinessLifecycleTable
+            rows={denialRows}
+            columns={[
+              { key: 'identityId', label: 'Identity', render: idCell('identityId') },
+              { key: 'action', label: 'Denied action', render: idCell('action') },
+              { key: 'mode', label: 'Mode', render: statusCell('mode') },
+              { key: 'reason', label: 'Reason', render: textCell('reason') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Execution Policy Per Action" description="Execution policy is visible for every modeled action. Critical actions remain forbidden in the current runtime.">
+          <BusinessLifecycleTable
+            rows={data.executionPolicies}
+            columns={[
+              { key: 'action', label: 'Action', render: idCell('action') },
+              { key: 'mode', label: 'Execution policy', render: statusCell('mode') },
+              { key: 'governanceRequired', label: 'Governance', render: (row) => <span className="text-outline">{String(row.governanceRequired)}</span> },
+              { key: 'treasuryApprovalRequired', label: 'Treasury', render: (row) => <span className="text-outline">{String(row.treasuryApprovalRequired)}</span> },
+              { key: 'humanReviewRequired', label: 'Human review', render: (row) => <span className="text-outline">{String(row.humanReviewRequired)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <BusinessPanel title="Access Safety" description="Identity and permission operations are intentionally non-executable in Sprint 14.">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+          {['No real KYC verification', 'No permission grants', 'No federation changes', 'No wallet signing', 'No access release', 'No treasury unlock'].map((item) => (
+            <div key={item} className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-sm font-semibold text-amber-100">{item}</div>
+          ))}
+        </div>
       </BusinessPanel>
     </BusinessPageShell>
   );

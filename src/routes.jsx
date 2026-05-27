@@ -9,6 +9,7 @@ import Overview from "./pages/Overview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
 import {
   BusinessACS,
+  BusinessAccess,
   BusinessAssetDetail,
   BusinessAssets,
   BusinessDebentures,
@@ -135,6 +136,10 @@ const router = createBrowserRouter([
       { path: "business/state", element: <BusinessState /> },
       { path: "business/risk", element: <BusinessRisk /> },
       { path: "business/runtime", element: <BusinessRuntime /> },
+      { path: "business/access", element: <BusinessAccess /> },
+      { path: "business/identity", element: <BusinessAccess /> },
+      { path: "business/permissions", element: <BusinessAccess /> },
+      { path: "business/capabilities", element: <BusinessAccess /> },
       { path: "business/plugins", element: <BusinessPlugins /> },
       { path: "business/funding", element: <BusinessFunding /> },
       { path: "business/debentures", element: <BusinessDebentures /> },

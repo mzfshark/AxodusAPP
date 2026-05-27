@@ -6,6 +6,7 @@ import { appShellNav } from '../../src/config/appShell';
 import {
   BusinessAssets,
   BusinessAssetDetail,
+  BusinessAccess,
   BusinessEvents,
   BusinessIntakePage,
   BusinessOverview,
@@ -63,6 +64,7 @@ describe('AxodusAPP Business routes', () => {
       '/business/registry',
       '/business/workflows',
       '/business/events',
+      '/business/access',
       '/business/runtime'
     ]));
   });
@@ -244,5 +246,21 @@ describe('AxodusAPP Business routes', () => {
     expect(await screen.findByRole('heading', { name: /Runtime Safety/i })).toBeInTheDocument();
     expect(screen.getByText(/Executable Policies/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /approve|allocate|move|execute|issue|buy|provision|distribute|contract/i })).not.toBeInTheDocument();
+  });
+
+  test('renders identity, capability and permission access console without grant actions', async () => {
+    renderBusinessRoute('/business/access', '/business/access', <BusinessAccess />);
+
+    expect(await screen.findByRole('heading', { name: /Access Control/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Business Identities/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Axodus Core/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Harmony DAO/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/LEVEL_5_AXODUS_NATIVE_ENTITY/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { name: /Capability Matrix/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Permission Matrix/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Denial Explanations/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/MOVE_TREASURY_FUNDS/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/FORBIDDEN/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /grant|verify kyc|change federation|release access|sign|approve/i })).not.toBeInTheDocument();
   });
 });
