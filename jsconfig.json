@@ -1,9 +1,21 @@
 {
     "compilerOptions": {
-      "jsx": "react-jsx",   // habilita JSX automático (React 17+)
-      "checkJs": false      // (opcional) desativa avisos TS em arquivos .js/.jsx
+      "baseUrl": ".",
+      "jsx": "react-jsx",
+      "checkJs": false,
+      "paths": {
+        "@/*": ["src/*"],
+        "@components/*": ["src/components/*"],
+        "@assets/*": ["src/assets/*"],
+        "@pages/*": ["src/pages/*"],
+        "@hooks/*": ["src/hooks/*"],
+        "@utils/*": ["src/utils/*"],
+        "@styles/*": ["src/styles/*"],
+        "@config": ["src/appkit.config.js"],
+        "@axodus/business-runtime": ["src/modules/business/runtime/index.ts"]
+      }
     },
-    "include": ["src"],     // garanta que a pasta src está coberta
+    "include": ["src"],
     "exclude": ["node_modules"]
   }
   

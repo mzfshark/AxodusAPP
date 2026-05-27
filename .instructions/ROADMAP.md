@@ -1,5 +1,24 @@
 # AxodusAPP Roadmap
 
+## Sprint 00A — Vercel Build Recovery & Deployment Gate
+
+### Objectives
+
+- restore deterministic production builds before UI refactor work
+- remove Vercel-incompatible imports that point outside AxodusAPP
+- keep the current UI structure intact while stabilizing deployment
+- add a minimal deploy verification command
+
+### Deliverables
+
+- Vite build succeeds from the AxodusAPP project root
+- `@axodus/business-runtime` resolves to an in-repository runtime source
+- production build script no longer forces debug output
+- build recovery report under `.instructions/reports`
+- project status marked as Build Recovery Phase
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

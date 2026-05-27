@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
+const businessRuntimeAlias = path.resolve(__dirname, './src/modules/business/runtime/index.ts');
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -16,7 +18,7 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@styles': path.resolve(__dirname, './src/styles'),
       '@config': path.resolve(__dirname, './src/appkit.config.js' ),
-      '@axodus/business-runtime': path.resolve(__dirname, '../Business/src/index.ts')
+      '@axodus/business-runtime': businessRuntimeAlias
     }
   },
   server: {

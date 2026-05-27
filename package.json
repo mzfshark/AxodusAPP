@@ -8,7 +8,11 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--max-old-space-size=4096' vite",
     "dev:mining-stack": "bash scripts/dev-mining-stack.sh",
-    "build": "rm -rf dist/ && NODE_OPTIONS='--max-old-space-size=4096' vite build --debug",
+    "clean": "rm -rf dist",
+    "build": "pnpm run clean && vite build",
+    "build:debug": "vite build --debug --clearScreen false",
+    "verify:build": "pnpm run build",
+    "verify:deploy": "pnpm run typecheck && pnpm run lint && pnpm run build",
     "preview": "vite preview",
     "serve": "serve -s dist -l 4000",
     "test": "vitest",

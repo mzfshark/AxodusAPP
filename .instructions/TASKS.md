@@ -2,11 +2,23 @@
 
 ## Progress Snapshot
 
-Last updated: 2026-05-19
+Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current priority: Governance contextual sidebar controls, DAO Tenant detail workspace, DAO Tenant Operations Center, createProposal indexer reconciliation readiness, indexed Constitutional Layer source records, and BBA MVP visual QA.
+Current phase: Build Recovery Phase
+
+Current priority: Sprint 00A Vercel Build Recovery & Deployment Gate. UI normalization remains pending and must not be marked complete during this sprint.
+
+### Sprint 00A — Vercel Build Recovery & Deployment Gate
+
+- Reproduce Vercel-style isolated build failure — 100%
+- Identify missing file/import root cause — 100%
+- Remove external build dependency on sibling `../Business` workspace — 100%
+- Stabilize production build script — 100%
+- Add deploy verification scripts — 100%
+- Document build recovery report — 100%
+- Run final local validation gate — pending
 
 ### Module Progress
 
