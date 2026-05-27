@@ -81,6 +81,10 @@ export function useBusinessRegistrySummary() {
   return useQuery({ queryKey: ['business', 'registry', 'summary'], queryFn: businessRuntimeClient.getRegistrySummary });
 }
 
+export function useBusinessReviewQueue(filter = {}) {
+  return useQuery({ queryKey: ['business', 'review-queue', filter], queryFn: () => businessRuntimeClient.getReviewQueueView(filter) });
+}
+
 export function useBusinessWorkflows() {
   return useQuery({ queryKey: ['business', 'workflows'], queryFn: businessRuntimeClient.listWorkflows });
 }
