@@ -94,9 +94,78 @@ function PreviewPanel({ panel }) {
   );
 }
 
+function ReadinessBar({ value }) {
+  return (
+    <div>
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+      </div>
+      <p className="mt-1 text-xs font-bold text-on-surface">{value}%</p>
+    </div>
+  );
+}
+
+function ReadinessReviewPanel({ readiness }) {
+  if (!readiness) {
+    return (
+      <BusinessPanel title="Readiness Review" description="Save the draft locally to generate a final readiness review by draft ID.">
+        <div className="rounded-lg border border-white/10 bg-surface-container p-4 text-sm font-semibold text-outline">
+          Readiness review requires a stored local/mock draft. No backend persistence or submission is available.
+        </div>
+      </BusinessPanel>
+    );
+  }
+
+  return (
+    <BusinessPanel title="Readiness Review" description="Final runtime readiness review before any future review queue. This is analysis only and cannot submit the draft.">
+      <div className="mb-5 grid grid-cols-1 gap-3 md:grid-cols-3">
+        <div className="rounded-lg border border-white/10 bg-surface-container p-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-outline">Readiness score</p>
+          <ReadinessBar value={readiness.readinessScore} />
+        </div>
+        <div className="rounded-lg border border-white/10 bg-surface-container p-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-outline">Blocking issues</p>
+          <p className="mt-1 text-2xl font-black text-on-surface">{readiness.blockers.length}</p>
+        </div>
+        <div className="rounded-lg border border-white/10 bg-surface-container p-3">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-outline">Required reviews</p>
+          <p className="mt-1 text-sm font-bold text-on-surface">{readiness.requiredReviews.join(' / ') || 'none'}</p>
+        </div>
+      </div>
+
+      <div className="mb-5 rounded-lg border border-white/10 bg-surface-container p-4">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-outline">Next Recommended Step</p>
+        <p className="mt-2 text-sm font-semibold text-on-surface">{readiness.nextRecommendedStep}</p>
+      </div>
+
+      <BusinessLifecycleTable rows={readiness.categories} columns={[
+        { key: 'category', label: 'Category', render: (row) => <span className="font-mono text-xs font-bold text-on-surface">{row.category}</span> },
+        { key: 'ready', label: 'Ready', render: (row) => <BusinessStatusBadge status={row.ready ? 'APPROVED' : 'UNDER_REVIEW'} /> },
+        { key: 'score', label: 'Score', render: (row) => <ReadinessBar value={row.score} /> },
+        { key: 'blockers', label: 'Blockers', render: (row) => <span className="text-outline">{row.blockers.join(' / ') || 'none'}</span> },
+        { key: 'warnings', label: 'Warnings', render: (row) => <span className="text-outline">{row.warnings.join(' / ') || 'none'}</span> }
+      ]} />
+
+      <section className="mt-5 grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <div className="rounded-lg border border-amber-300/30 bg-amber-300/10 p-4">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-amber-100">Blockers</p>
+          <ul className="mt-3 space-y-2 text-sm font-semibold text-amber-100">
+            {(readiness.blockers.length ? readiness.blockers : ['No blocking issue detected for future review.']).map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
+        <div className="rounded-lg border border-white/10 bg-surface-container p-4">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-outline">Disabled Future Actions</p>
+          <p className="mt-3 text-sm font-semibold text-outline">{readiness.disabledFutureActions.join(' / ')}</p>
+        </div>
+      </section>
+    </BusinessPanel>
+  );
+}
+
 function DraftPreview({ draft, prepared, storedRecord }) {
   const preview = storedRecord?.preview || businessRuntimeClient.getDraftPreviewModel(draft);
   const review = preview.runtimeReview;
+  const readiness = storedRecord ? businessRuntimeClient.getDraftReadinessReview(storedRecord.id) : undefined;
 
   return (
     <div className="space-y-6" data-testid="business-draft-preview">
@@ -156,6 +225,8 @@ function DraftPreview({ draft, prepared, storedRecord }) {
         <PreviewPanel panel={preview.riskPanel} />
         <PreviewPanel panel={preview.validationPanel} />
       </section>
+
+      <ReadinessReviewPanel readiness={readiness} />
 
       <BusinessPanel title="Non-Execution Notice" description="Sprint 11 preview model is runtime-owned and still non-executable.">
         <p className="text-sm leading-6 text-outline">{preview.nonExecutionNotice}</p>

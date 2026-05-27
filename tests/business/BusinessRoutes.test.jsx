@@ -153,6 +153,8 @@ describe('AxodusAPP Business routes', () => {
     expect(businessRuntimeClient.listDraftStoreRecords()).toHaveLength(1);
     expect(businessRuntimeClient.getDraftPreviewById(record.id).summary.items[0].value).toBe('GENERAL_BUSINESS_REQUEST');
     expect(businessRuntimeClient.validateDraftById(record.id).valid).toBe(true);
+    expect(businessRuntimeClient.getDraftReadinessReview(record.id).readinessScore).toBeGreaterThan(0);
+    expect(businessRuntimeClient.getDraftBlockingIssues(record.id)).toHaveLength(0);
 
     renderBusinessRoute('/business/intake/drafts', '/business/intake/drafts', <BusinessIntakePage />);
     expect(await screen.findByRole('heading', { name: /Business Drafts/i })).toBeInTheDocument();
@@ -163,6 +165,11 @@ describe('AxodusAPP Business routes', () => {
     renderBusinessRoute(`/business/intake/preview/${record.id}`, '/business/intake/preview/:draftId', <BusinessIntakePage />);
     expect(await screen.findByRole('heading', { name: /Business Intake/i })).toBeInTheDocument();
     expect(screen.getByText(/Stored as/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Readiness Review/i })).toBeInTheDocument();
+    expect(screen.getByText(/Next Recommended Step/i)).toBeInTheDocument();
+    expect(screen.getByText(/Disabled Future Actions/i)).toBeInTheDocument();
+    expect(screen.getByText(/STRUCTURAL_READINESS/i)).toBeInTheDocument();
+    expect(screen.getByText(/SECURITY_READINESS/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /submit to dao|issue debenture|move treasury|deploy acs|create contract|buy|invest now/i })).not.toBeInTheDocument();
 
     expect(businessRuntimeClient.deleteDraftStoreRecord(record.id)).toBe(true);
