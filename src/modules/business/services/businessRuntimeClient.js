@@ -22,6 +22,7 @@ import {
   getBusinessDraftPreviewModel,
   getBusinessDraftRuntimeReview,
   getBusinessPermissionMatrix,
+  getConstitutionalCompatibility,
   getACSRuntimeEventTimeline,
   getACSRuntimeRegistryView,
   getAssetEventTimeline,
@@ -36,7 +37,11 @@ import {
   getCriticalBusinessEvents,
   getDraftPreviewById,
   getDraftStoreRecordById,
+  getFederationStanding,
+  getGovernanceRestrictions,
+  getGovernanceStatus,
   getProjectEventTimeline,
+  getProposalReference,
   getProjectRegistryView,
   getRiskTierRegistryView,
   getWorkflowBlockers,
@@ -51,6 +56,7 @@ import {
   simulateTransition,
   updateDraftStoreRecord,
   validateDraftById,
+  requiresGovernanceApproval,
   selectBusinessProjectById
 } from '@axodus/business-runtime';
 
@@ -157,6 +163,77 @@ export const businessRuntimeClient = {
       executionPolicies,
       capabilityDenials,
       permissionDenials: permissionMatrix.filter((decision) => !decision.allowed),
+      mock: true,
+      readOnly: true
+    };
+  },
+  getGovernanceReadinessModel: () => {
+    const projects = dataFrom(businessApiHandlers.getBusinessProjects);
+    const requests = dataFrom(businessApiHandlers.getBusinessRequests);
+    const fundingRecords = dataFrom(businessApiHandlers.getBusinessFundingRecords);
+    const draftRecords = listDraftStoreRecords();
+    const workflows = listBusinessWorkflows();
+    const approvalActions = BUSINESS_RUNTIME_ACTIONS.map((action) => requiresGovernanceApproval(action)).filter((entry) => entry.required);
+    const governanceProjects = projects
+      .map((project) => {
+        const request = requests.find((entry) => entry.id === project.requestId);
+        const funding = fundingRecords.find((entry) => entry.id === project.fundingId);
+        const restrictions = getGovernanceRestrictions(project.id);
+        const workflow = workflows.find((entry) => entry.projectId === project.id);
+        const governanceBlockers = (workflow?.steps || []).filter((step) => step.governanceRequired && step.blockingIssues.length > 0);
+        const compatibility = getConstitutionalCompatibility(project.id);
+        const governanceRequired = Boolean(request?.governanceRequired || restrictions.length > 0 || compatibility === 'REVIEW_REQUIRED' || compatibility === 'RESTRICTED');
+        const readinessScore = Math.max(0, 100 - restrictions.length * 12 - governanceBlockers.length * 15 - (compatibility === 'RESTRICTED' ? 35 : compatibility === 'REVIEW_REQUIRED' ? 15 : 0));
+
+        return {
+          id: project.id,
+          projectId: project.id,
+          title: project.title,
+          status: project.status,
+          riskTier: project.riskTier,
+          fundingId: funding?.id,
+          governanceRequired,
+          governanceStatus: getGovernanceStatus(project.id),
+          constitutionalCompatibility: compatibility,
+          federationStanding: getFederationStanding(project.ownerId),
+          proposalReference: getProposalReference(project.id),
+          proposalId: getProposalReference(project.id)?.proposalId || 'mock://proposal-reference-not-created',
+          restrictions,
+          restrictionCount: restrictions.length,
+          blockerCount: governanceBlockers.length,
+          blockers: governanceBlockers.flatMap((step) => step.blockingIssues.map((issue) => ({ stepId: step.stepId, issue }))),
+          decision: compatibility === 'RESTRICTED' ? 'BLOCKED' : governanceRequired ? 'REVIEW_REQUIRED' : 'CAN_PROCEED',
+          readinessScore,
+          mock: true,
+          readOnly: true
+        };
+      })
+      .filter((project) => project.governanceRequired);
+    const governanceDrafts = draftRecords
+      .map((record) => ({ ...record, runtimeReview: getBusinessDraftRuntimeReview(record.draft) }))
+      .filter((record) => record.runtimeReview.governanceRequirement);
+    const restrictionRows = governanceProjects.flatMap((project) =>
+      project.restrictions.map((restriction) => ({
+        ...restriction,
+        id: restriction.id,
+        projectTitle: project.title,
+        compatibility: project.constitutionalCompatibility
+      }))
+    );
+    const totalBlockers = governanceProjects.reduce((total, project) => total + project.blockerCount + project.restrictionCount, 0);
+    const readinessScore = governanceProjects.length === 0
+      ? 100
+      : Math.round(governanceProjects.reduce((total, project) => total + project.readinessScore, 0) / governanceProjects.length);
+
+    return {
+      projects: governanceProjects,
+      drafts: governanceDrafts,
+      restrictions: restrictionRows,
+      approvalActions,
+      workflows,
+      guardCategories: BUSINESS_TRANSITION_GUARD_CATEGORIES,
+      readinessScore,
+      totalBlockers,
       mock: true,
       readOnly: true
     };

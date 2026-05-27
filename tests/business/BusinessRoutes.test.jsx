@@ -9,6 +9,7 @@ import {
   BusinessAccess,
   BusinessEvents,
   BusinessIntakePage,
+  BusinessGovernanceReadiness,
   BusinessOverview,
   BusinessProjects,
   BusinessProjectDetail,
@@ -64,6 +65,7 @@ describe('AxodusAPP Business routes', () => {
       '/business/registry',
       '/business/workflows',
       '/business/events',
+      '/business/governance',
       '/business/access',
       '/business/runtime'
     ]));
@@ -262,5 +264,20 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getAllByText(/MOVE_TREASURY_FUNDS/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/FORBIDDEN/i).length).toBeGreaterThan(0);
     expect(screen.queryByRole('button', { name: /grant|verify kyc|change federation|release access|sign|approve/i })).not.toBeInTheDocument();
+  });
+
+  test('renders governance readiness with compatibility, blockers and mock proposal references', async () => {
+    renderBusinessRoute('/business/governance', '/business/governance', <BusinessGovernanceReadiness />);
+
+    expect(await screen.findByRole('heading', { name: /Governance Readiness/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Governance Required Projects/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Constitutional Compatibility/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Governance Restrictions/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Governance Blockers/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Proposal References/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/gov-ref-business-sprint-1/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/REVIEW_REQUIRED/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/PREPARE_GOVERNANCE_REVIEW/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /create proposal|submit to dao|vote|execute proposal|approve funding|unlock treasury/i })).not.toBeInTheDocument();
   });
 });

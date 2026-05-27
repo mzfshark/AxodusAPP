@@ -6,6 +6,7 @@ export {
   BusinessDebentures,
   BusinessEvents,
   BusinessFunding,
+  BusinessGovernanceReadiness,
   BusinessOverview,
   BusinessPlugins,
   BusinessProjectDetail,

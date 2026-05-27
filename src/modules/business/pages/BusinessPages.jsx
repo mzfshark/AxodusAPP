@@ -22,6 +22,7 @@ import {
   useBusinessEvents,
   useBusinessEventSummary,
   useBusinessFundingRecords,
+  useBusinessGovernanceReadiness,
   useBusinessOverview,
   useBusinessPlugins,
   useBusinessProjectRegistry,
@@ -731,6 +732,155 @@ export function BusinessAccess() {
       <BusinessPanel title="Access Safety" description="Identity and permission operations are intentionally non-executable in Sprint 14.">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
           {['No real KYC verification', 'No permission grants', 'No federation changes', 'No wallet signing', 'No access release', 'No treasury unlock'].map((item) => (
+            <div key={item} className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-sm font-semibold text-amber-100">{item}</div>
+          ))}
+        </div>
+      </BusinessPanel>
+    </BusinessPageShell>
+  );
+}
+
+export function BusinessGovernanceReadiness() {
+  const governance = useBusinessGovernanceReadiness();
+  if (governance.isLoading) return <BusinessLoadingState />;
+  if (governance.isError) return <BusinessErrorState message="Business governance readiness unavailable." />;
+
+  const model = governance.data;
+  const proposalRows = model.projects.map((project) => ({
+    id: `${project.projectId}-proposal`,
+    projectId: project.projectId,
+    title: project.title,
+    proposalId: project.proposalId,
+    proposalUrl: project.proposalReference?.proposalUrl || 'mock://proposal-reference-not-created',
+    decision: project.decision,
+    readinessScore: project.readinessScore
+  }));
+  const blockerRows = model.projects.flatMap((project) =>
+    project.blockers.map((blocker, index) => ({
+      id: `${project.projectId}-blocker-${index}`,
+      projectId: project.projectId,
+      title: project.title,
+      stepId: blocker.stepId,
+      issue: blocker.issue,
+      decision: project.decision
+    }))
+  );
+
+  return (
+    <BusinessPageShell
+      title="Governance Readiness"
+      description="Readiness view for Business projects, drafts, assets and funding requests that require governance review before future execution. No proposal creation or DAO execution is available."
+    >
+      <BusinessSummaryCards cards={[
+        { id: 'governance-projects', label: 'Governance Projects', value: model.projects.length, detail: 'Projects requiring governance visibility or review.', status: 'WARNING' },
+        { id: 'governance-drafts', label: 'Governance Drafts', value: model.drafts.length, detail: 'Stored local drafts requiring governance context.', status: model.drafts.length ? 'WARNING' : 'INFO' },
+        { id: 'governance-blockers', label: 'Blockers', value: model.totalBlockers, detail: 'Restrictions and workflow blockers requiring review.', status: model.totalBlockers ? 'CRITICAL' : 'INFO' },
+        { id: 'governance-score', label: 'Readiness Score', value: `${model.readinessScore}%`, detail: 'Computed readiness only; no approval is executed.', status: model.readinessScore < 70 ? 'WARNING' : 'NOTICE' }
+      ]} />
+
+      <BusinessPanel title="Governance Required Projects" description="Projects where governance review, constitutional compatibility or restrictions must be visible before any future transition.">
+        <BusinessLifecycleTable
+          rows={model.projects}
+          columns={[
+            { key: 'projectId', label: 'Project', render: linkCell('/business/projects', 'projectId') },
+            { key: 'title', label: 'Title', render: textCell('title') },
+            { key: 'constitutionalCompatibility', label: 'Compatibility', render: statusCell('constitutionalCompatibility') },
+            { key: 'federationStanding', label: 'Federation standing', render: statusCell('federationStanding') },
+            { key: 'proposalId', label: 'Proposal reference', render: idCell('proposalId') },
+            { key: 'restrictionCount', label: 'Restrictions', render: (row) => <strong className="text-on-surface">{row.restrictionCount}</strong> },
+            { key: 'blockerCount', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockerCount}</strong> },
+            { key: 'decision', label: 'Decision', render: statusCell('decision') },
+            { key: 'readinessScore', label: 'Score', render: (row) => <ProgressBar value={row.readinessScore} /> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Constitutional Compatibility" description="Compatibility is read from mock governance references and cannot be changed here.">
+          <BusinessLifecycleTable
+            rows={model.projects}
+            columns={[
+              { key: 'projectId', label: 'Project', render: idCell('projectId') },
+              { key: 'constitutionalCompatibility', label: 'Compatibility', render: statusCell('constitutionalCompatibility') },
+              { key: 'governanceStatus', label: 'Governance status', render: statusCell('governanceStatus') },
+              { key: 'decision', label: 'Proceed decision', render: statusCell('decision') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Proposal References" description="Proposal references are mock links only. This console cannot create, submit, vote or execute proposals.">
+          <BusinessLifecycleTable
+            rows={proposalRows}
+            columns={[
+              { key: 'projectId', label: 'Project', render: idCell('projectId') },
+              { key: 'proposalId', label: 'Mock proposal', render: idCell('proposalId') },
+              { key: 'proposalUrl', label: 'Reference URL', render: textCell('proposalUrl') },
+              { key: 'decision', label: 'Decision', render: statusCell('decision') }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Governance Restrictions" description="Restrictions remain visible and advisory in this sprint. They do not unlock or approve treasury.">
+          <BusinessLifecycleTable
+            rows={model.restrictions}
+            columns={[
+              { key: 'projectId', label: 'Project', render: idCell('projectId') },
+              { key: 'restriction', label: 'Restriction', render: textCell('restriction') },
+              { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+              { key: 'compatibility', label: 'Compatibility', render: statusCell('compatibility') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Governance Blockers" description="Blockers come from workflow readiness and governance-required steps.">
+          {blockerRows.length ? (
+            <BusinessLifecycleTable
+              rows={blockerRows}
+              columns={[
+                { key: 'projectId', label: 'Project', render: idCell('projectId') },
+                { key: 'stepId', label: 'Step', render: idCell('stepId') },
+                { key: 'issue', label: 'Blocker', render: textCell('issue') },
+                { key: 'decision', label: 'Decision', render: statusCell('decision') }
+              ]}
+            />
+          ) : (
+            <p className="text-sm text-outline">No governance workflow blockers detected in the current mock runtime.</p>
+          )}
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Governance Required Drafts" description="Stored local/mock intake drafts that require governance review according to runtime draft review.">
+          {model.drafts.length ? (
+            <BusinessLifecycleTable
+              rows={model.drafts}
+              columns={[
+                { key: 'id', label: 'Draft', render: idCell() },
+                { key: 'title', label: 'Title', render: textCell('title') },
+                { key: 'status', label: 'Status', render: statusCell() },
+                { key: 'draftType', label: 'Type', render: (row) => <span className="text-outline">{row.draft.draftType}</span> },
+                { key: 'policy', label: 'Policy', render: (row) => <BusinessStatusBadge status={row.runtimeReview.executionReview.policy.mode} /> }
+              ]}
+            />
+          ) : (
+            <p className="text-sm text-outline">No stored local drafts currently require governance review.</p>
+          )}
+        </BusinessPanel>
+        <BusinessPanel title="Actions Requiring Governance" description="Approval requirements are derived from execution policy and governance contract. Every action remains non-executable.">
+          <BusinessLifecycleTable
+            rows={model.approvalActions.map((action) => ({ ...action, id: action.action }))}
+            columns={[
+              { key: 'action', label: 'Action', render: idCell('action') },
+              { key: 'required', label: 'Governance required', render: (row) => <span className="text-outline">{String(row.required)}</span> },
+              { key: 'reason', label: 'Reason', render: textCell('reason') }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <BusinessPanel title="Governance Safety" description="Future governance actions are represented only as disabled/readiness states.">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+          {['No proposal creation', 'No DAO submission', 'No voting', 'No proposal execution', 'No governance bypass', 'No treasury unlock'].map((item) => (
             <div key={item} className="rounded-lg border border-amber-400/30 bg-amber-400/10 p-3 text-sm font-semibold text-amber-100">{item}</div>
           ))}
         </div>
