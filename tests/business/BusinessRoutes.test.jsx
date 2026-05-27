@@ -130,6 +130,37 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.queryByRole('button', { name: /submit to dao|issue debenture|move treasury|deploy acs|create contract|buy|invest now/i })).not.toBeInTheDocument();
   });
 
+  test('stores drafts locally and renders preview by draft id', async () => {
+    businessRuntimeClient.resetDraftStore();
+    const draft = businessRuntimeClient.createDraftTemplate('GENERAL_BUSINESS_REQUEST');
+    draft.values = {
+      title: 'Stored intake draft',
+      description: 'Prepare request structure only',
+      requesterIdentity: 'id-axodus-core',
+      requestCategory: 'ENTERPRISE_DEVELOPMENT',
+      fundingModel: 'HYBRID'
+    };
+    const record = businessRuntimeClient.createDraftStoreRecord(draft);
+
+    expect(businessRuntimeClient.listDraftStoreRecords()).toHaveLength(1);
+    expect(businessRuntimeClient.getDraftPreviewById(record.id).summary.items[0].value).toBe('GENERAL_BUSINESS_REQUEST');
+    expect(businessRuntimeClient.validateDraftById(record.id).valid).toBe(true);
+
+    renderBusinessRoute('/business/intake/drafts', '/business/intake/drafts', <BusinessIntakePage />);
+    expect(await screen.findByRole('heading', { name: /Business Drafts/i })).toBeInTheDocument();
+    expect(screen.getByText(/Stored intake draft/i)).toBeInTheDocument();
+    expect(screen.getByText(record.id)).toBeInTheDocument();
+
+    cleanup();
+    renderBusinessRoute(`/business/intake/preview/${record.id}`, '/business/intake/preview/:draftId', <BusinessIntakePage />);
+    expect(await screen.findByRole('heading', { name: /Business Intake/i })).toBeInTheDocument();
+    expect(screen.getByText(/Stored as/i)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /submit to dao|issue debenture|move treasury|deploy acs|create contract|buy|invest now/i })).not.toBeInTheDocument();
+
+    expect(businessRuntimeClient.deleteDraftStoreRecord(record.id)).toBe(true);
+    expect(businessRuntimeClient.listDraftStoreRecords()).toHaveLength(0);
+  });
+
   test('renders project and asset tables from isolated runtime client', async () => {
     renderBusinessRoute('/business/projects', '/business/projects', <BusinessProjects />);
 

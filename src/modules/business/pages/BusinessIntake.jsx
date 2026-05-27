@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   BusinessBadge,
   BusinessErrorState,
@@ -21,7 +21,8 @@ const draftTypeByPath = {
   '/business/intake/acs-service': 'ACS_SERVICE_REQUEST',
   '/business/intake/treasury-sponsorship': 'TREASURY_SPONSORSHIP_REQUEST',
   '/business/intake/debenture-funding': 'DEBENTURE_FUNDING_REQUEST',
-  '/business/intake/preview': 'GENERAL_BUSINESS_REQUEST'
+  '/business/intake/preview': 'GENERAL_BUSINESS_REQUEST',
+  '/business/intake/drafts': 'GENERAL_BUSINESS_REQUEST'
 };
 
 const draftLabel = (draftType) => draftType.replaceAll('_', ' ').replace(' REQUEST', '');
@@ -93,8 +94,8 @@ function PreviewPanel({ panel }) {
   );
 }
 
-function DraftPreview({ draft, prepared }) {
-  const preview = businessRuntimeClient.getDraftPreviewModel(draft);
+function DraftPreview({ draft, prepared, storedRecord }) {
+  const preview = storedRecord?.preview || businessRuntimeClient.getDraftPreviewModel(draft);
   const review = preview.runtimeReview;
 
   return (
@@ -103,7 +104,7 @@ function DraftPreview({ draft, prepared }) {
         { id: 'draft-type', label: 'Draft Type', value: draftLabel(draft.draftType), detail: 'Runtime template rendered as local form state.', status: 'INFO' },
         { id: 'draft-valid', label: 'Validation', value: preview.validation.valid ? 'READY' : 'REVIEW', detail: `${preview.validation.missingFields.length} missing fields detected by runtime validation.`, status: preview.validation.valid ? 'APPROVED' : 'WARNING' },
         { id: 'draft-mode', label: 'Execution Mode', value: review.executionReview.policy.mode, detail: review.executionReview.policy.reason, status: 'NOTICE' },
-        { id: 'draft-prepared', label: 'Local Draft', value: prepared ? 'PREPARED' : 'PREVIEW', detail: 'No backend mutation, wallet signing or contract call.', status: 'INFO' }
+        { id: 'draft-prepared', label: 'Local Draft', value: storedRecord?.status || (prepared ? 'PREPARED' : 'PREVIEW'), detail: storedRecord ? `Stored as ${storedRecord.id}.` : 'No backend mutation, wallet signing or contract call.', status: 'INFO' }
       ]} />
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
@@ -165,19 +166,32 @@ function DraftPreview({ draft, prepared }) {
 
 export function BusinessIntakePage() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { draftId } = useParams();
   const intakeRuntime = useBusinessIntakeRuntime();
-  const initialDraftType = draftTypeByPath[location.pathname] || 'ECOSYSTEM_INFRASTRUCTURE_REQUEST';
+  const isDraftList = location.pathname === '/business/intake/drafts';
+  const storedRecord = draftId ? businessRuntimeClient.getDraftStoreRecordById(draftId) : undefined;
+  const initialDraftType = storedRecord?.draft.draftType || draftTypeByPath[location.pathname] || 'ECOSYSTEM_INFRASTRUCTURE_REQUEST';
   const [selectedDraftType, setSelectedDraftType] = useState(initialDraftType);
-  const [draft, setDraft] = useState(() => createDraft(initialDraftType));
+  const [draft, setDraft] = useState(() => storedRecord?.draft || createDraft(initialDraftType));
   const [prepared, setPrepared] = useState(false);
+  const [draftRecords, setDraftRecords] = useState(() => businessRuntimeClient.listDraftStoreRecords());
 
   const runtime = intakeRuntime.data;
   const activeTemplate = useMemo(() => runtime?.templates.find((template) => template.draftType === selectedDraftType), [runtime?.templates, selectedDraftType]);
+
+  useEffect(() => {
+    if (storedRecord) {
+      setSelectedDraftType(storedRecord.draft.draftType);
+      setDraft(storedRecord.draft);
+    }
+  }, [storedRecord]);
 
   if (intakeRuntime.isLoading) return <BusinessLoadingState />;
   if (intakeRuntime.isError) return <BusinessErrorState message="Business intake runtime unavailable." />;
 
   const identityOptions = runtime.identities.map((identity) => ({ label: `${identity.displayName} / ${identity.identityType}`, value: identity.id }));
+  const refreshDraftRecords = () => setDraftRecords(businessRuntimeClient.listDraftStoreRecords());
 
   const onDraftTypeChange = (draftType) => {
     setSelectedDraftType(draftType);
@@ -198,18 +212,67 @@ export function BusinessIntakePage() {
     setPrepared(false);
   };
 
+  const saveDraft = () => {
+    const record = storedRecord
+      ? businessRuntimeClient.updateDraftStoreRecord(storedRecord.id, { draft })
+      : businessRuntimeClient.createDraftStoreRecord(draft);
+
+    refreshDraftRecords();
+    setPrepared(true);
+    if (record?.id) navigate(`/business/intake/preview/${record.id}`);
+  };
+
+  const discardDraft = (recordId) => {
+    businessRuntimeClient.deleteDraftStoreRecord(recordId);
+    refreshDraftRecords();
+    if (draftId === recordId) navigate('/business/intake/drafts');
+  };
+
   const prepareDraft = () => setPrepared(true);
+
+  if (isDraftList) {
+    return (
+      <BusinessPageShell
+        title="Business Drafts"
+        description="Local/mock Business drafts stored in the runtime draft store. Records are reusable for preview and review only."
+        actions={<Link className="rounded-lg border border-white/10 bg-surface-container px-4 py-2 text-sm font-bold text-on-surface hover:border-primary" to="/business/intake/new">Prepare Draft</Link>}
+      >
+        <BusinessSummaryCards cards={[
+          { id: 'drafts-total', label: 'Stored Drafts', value: draftRecords.length, detail: 'Local mock records in the runtime draft store.', status: 'INFO' },
+          { id: 'drafts-mode', label: 'Store Mode', value: 'LOCAL', detail: 'No backend persistence or external side effects.', status: 'APPROVED' },
+          { id: 'drafts-preview', label: 'Preview Source', value: 'BY ID', detail: 'Preview can be generated from stored draft records.', status: 'NOTICE' },
+          { id: 'drafts-execution', label: 'Execution', value: 'DISABLED', detail: 'No submission path exists in this sprint.', status: 'APPROVED' }
+        ]} />
+        <BusinessPanel title="Prepared Draft Records" description="Open, preview or discard local/mock records. Discard only changes local draft store state.">
+          <BusinessLifecycleTable rows={draftRecords} columns={[
+            { key: 'id', label: 'Draft id', render: (row) => <Link className="font-mono text-xs font-bold text-primary" to={`/business/intake/drafts/${row.id}`}>{row.id}</Link> },
+            { key: 'title', label: 'Title' },
+            { key: 'draftType', label: 'Type', render: (row) => <span className="text-outline">{row.draft.draftType}</span> },
+            { key: 'status', label: 'Status', render: (row) => <BusinessStatusBadge status={row.status} /> },
+            { key: 'valid', label: 'Valid', render: (row) => <span className="text-outline">{String(row.validation.valid)}</span> },
+            { key: 'updatedAt', label: 'Updated', render: (row) => <span className="text-outline">{new Date(row.updatedAt).toLocaleString()}</span> },
+            { key: 'preview', label: 'Preview', render: (row) => <Link className="text-sm font-bold text-primary" to={`/business/intake/preview/${row.id}`}>Preview Request</Link> },
+            { key: 'discard', label: 'Discard', render: (row) => <button className="rounded-lg border border-white/10 bg-surface-container px-3 py-1 text-xs font-bold text-outline" onClick={() => discardDraft(row.id)} type="button">Discard Draft</button> }
+          ]} />
+        </BusinessPanel>
+      </BusinessPageShell>
+    );
+  }
+
+  if (draftId && !storedRecord) {
+    return <BusinessErrorState message="Stored Business draft not found." />;
+  }
 
   return (
     <BusinessPageShell
       title="Business Intake"
       description="Prepare local Business request drafts and preview governance, treasury, ACS, capability, permission and execution-policy requirements without submitting or mutating anything."
-      actions={<Link className="rounded-lg border border-white/10 bg-surface-container px-4 py-2 text-sm font-bold text-on-surface hover:border-primary" to="/business/intake/preview">Preview Request</Link>}
+      actions={<div className="flex flex-wrap gap-2"><Link className="rounded-lg border border-white/10 bg-surface-container px-4 py-2 text-sm font-bold text-on-surface hover:border-primary" to="/business/intake/drafts">Stored Drafts</Link><Link className="rounded-lg border border-white/10 bg-surface-container px-4 py-2 text-sm font-bold text-on-surface hover:border-primary" to={storedRecord ? `/business/intake/preview/${storedRecord.id}` : '/business/intake/preview'}>Preview Request</Link></div>}
     >
       <BusinessSummaryCards cards={[
-        { id: 'intake-mode', label: 'Intake Mode', value: 'LOCAL', detail: 'Draft state lives in React; draft rules live in @axodus/business-runtime.', status: 'INFO' },
+        { id: 'intake-mode', label: 'Intake Mode', value: 'LOCAL', detail: 'Draft state is local/mock; draft rules and store helpers live in @axodus/business-runtime.', status: 'INFO' },
         { id: 'intake-policy', label: 'Execution', value: 'DISABLED', detail: 'Runtime policies remain non-executable.', status: 'APPROVED' },
-        { id: 'intake-routes', label: 'Route Contracts', value: runtime.routeCatalog.length, detail: 'Future API metadata is visible for review.', status: 'NOTICE' },
+        { id: 'intake-routes', label: 'Stored Drafts', value: draftRecords.length, detail: 'Prepared local/mock drafts available for preview by ID.', status: 'NOTICE' },
         { id: 'intake-validators', label: 'Validators', value: runtime.safety.valid ? 'PASS' : 'REVIEW', detail: 'Business runtime validator status.', status: runtime.safety.valid ? 'APPROVED' : 'WARNING' }
       ]} />
 
@@ -233,15 +296,16 @@ export function BusinessIntakePage() {
           <form className="grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={(event) => event.preventDefault()}>
             {activeTemplate?.fields.map((field) => <Field draft={draft} field={field} identityOptions={identityOptions} key={field.name} onChange={onFieldChange} />)}
             <div className="flex flex-wrap gap-3 md:col-span-2">
-              <button className="rounded-lg border border-primary bg-primary/15 px-4 py-2 text-sm font-bold text-on-surface" onClick={prepareDraft} type="button">Prepare Draft</button>
+              <button className="rounded-lg border border-primary bg-primary/15 px-4 py-2 text-sm font-bold text-on-surface" onClick={saveDraft} type="button">{storedRecord ? 'Update Draft' : 'Save Draft'}</button>
               <button className="rounded-lg border border-white/10 bg-surface-container px-4 py-2 text-sm font-bold text-on-surface" onClick={prepareDraft} type="button">Validate Structure</button>
+              {storedRecord ? <button className="rounded-lg border border-white/10 bg-surface-container px-4 py-2 text-sm font-bold text-outline" onClick={() => discardDraft(storedRecord.id)} type="button">Discard Draft</button> : null}
               <span className="self-center text-xs font-semibold text-outline">Simulation Only / Mock / Read-only</span>
             </div>
           </form>
         </BusinessPanel>
 
         <div className="space-y-6">
-          <DraftPreview draft={draft} prepared={prepared || location.pathname.endsWith('/preview')} />
+          <DraftPreview draft={draft} prepared={prepared || location.pathname.includes('/preview')} storedRecord={storedRecord} />
         </div>
       </section>
     </BusinessPageShell>
