@@ -5,6 +5,7 @@ import { Bell, Settings } from 'lucide-react';
 import WalletConnectButton from './WalletConnectButton';
 import { shellSearchMeta } from '../config/appShell';
 import ScopeBadge from './uiScope/ScopeBadge';
+import { TenantSelector } from './tenant';
 
 export default function Header({ activeShellItem }) {
   const SearchIcon = shellSearchMeta.icon;
@@ -37,6 +38,7 @@ export default function Header({ activeShellItem }) {
             <span className="ax-meta-chip">{activeShellItem?.maturity ?? 'prototype'}</span>
             <span className="ax-meta-chip">read-only</span>
           </div>
+          <TenantSelector compact />
           <div className="flex items-center gap-3 text-slate-400">
             <button className="app-icon-button" aria-label="Notifications">
               <Bell className="h-5 w-5" aria-hidden="true" />

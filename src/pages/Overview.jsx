@@ -6,6 +6,7 @@ import { ScopeLegend, ScopeSection, ScopedCard } from '@/components/uiScope';
 import { axodusModuleRegistry, getModulesByScope } from '@/config/moduleRegistry';
 import { ContentGrid, PageShell, SectionShell } from '@/components/layout';
 import { CardShell } from '@/components/ui';
+import { TenantIdentityPanel } from '@/components/tenant';
 
 const dashboardBlocks = [
   {
@@ -111,6 +112,8 @@ const Overview = () => {
     >
 
         <ScopeLegend />
+
+        <TenantIdentityPanel moduleId="governance" />
 
         <ContentGrid columns="four">
           {dashboardBlocks.map((block) => (

@@ -12,6 +12,7 @@ import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 import { useProposalDrafts } from '../hooks/useProposalDrafts';
 import { acsMock } from '@/data/mock';
+import { TenantIdentityPanel } from '@/components/tenant';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -578,6 +579,8 @@ export default function GovernanceDashboard() {
         </header>
 
         <SourceBanner source={source} status={status} error={error} />
+
+        <TenantIdentityPanel moduleId="governance" />
 
         <DaoContextSelector
           daos={governanceConsole.daos}

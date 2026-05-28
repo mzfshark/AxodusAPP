@@ -41,6 +41,7 @@ import {
   useBusinessWorkflows
 } from '../hooks/useBusinessData';
 import { ScopeSection } from '@/components/uiScope';
+import { TenantIdentityPanel } from '@/components/tenant';
 
 const money = (amount, currency = 'USD') => new Intl.NumberFormat('en-US', { currency, maximumFractionDigits: 0, style: 'currency' }).format(Number(amount || 0));
 
@@ -88,6 +89,8 @@ export function BusinessOverview() {
       title="Business Runtime"
       description="Operational infrastructure, development intake, treasury exposure, ACS visibility, revenue routing and telemetry state rendered from the Business mock runtime."
     >
+      <TenantIdentityPanel moduleId="business" />
+
       <ScopeSection
         scope="operator"
         title="Business operations and review control"

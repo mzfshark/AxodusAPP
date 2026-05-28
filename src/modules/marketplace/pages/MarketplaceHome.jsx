@@ -7,6 +7,7 @@ import MarketplaceListingsTable from '../components/MarketplaceListingsTable';
 import MarketplaceBadge from '../components/MarketplaceBadge';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
 import { ScopeSection } from '@/components/uiScope';
+import { TenantIdentityPanel } from '@/components/tenant';
 
 export default function MarketplaceHome() {
   const marketplace = useMarketplaceData();
@@ -23,6 +24,7 @@ export default function MarketplaceHome() {
         title="Governance-Aware NFT Marketplace"
         description="AxodusAPP integrated marketplace for ERC721/1155 assets, fixed listings, auctions, bids, licenses, Greenfield delivery previews, and governance validation states."
       />
+      <TenantIdentityPanel moduleId="marketplace" />
       <ScopeSection scope="tenant" title="Tenant marketplace registry" description="Listings, NFT-bound products and treasury destinations belong to DAO/seller tenants.">
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {metrics.map((metric) => <MarketplaceMetricCard key={metric.label} {...metric} />)}

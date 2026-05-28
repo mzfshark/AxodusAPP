@@ -6,9 +6,9 @@ Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current phase: App Shell Normalization Phase
+Current phase: Tenant Context Runtime Phase
 
-Current priority: Sprint 01 App Shell Normalization. Full module redesign remains deferred; current work is shared shell structure and navigation grouping.
+Current priority: Sprint 02 Tenant Context Runtime. Backend tenancy remains out of scope; current work is frontend mock runtime and UI binding.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -50,6 +50,18 @@ Current priority: Sprint 01 App Shell Normalization. Full module redesign remain
 - Apply shared shell/card pattern to main dashboard — 100%
 - Document normalization report — 100%
 - Validate lint/build after shell changes — 100%
+
+### Sprint 02 — Tenant Context Runtime
+
+- Define shared tenant type model — 100%
+- Add mock tenant registry — 100%
+- Add tenant context provider, hook and registry helpers — 100%
+- Add tenant-aware runtime module registry — 100%
+- Add TenantSelector to global header — 100%
+- Add TenantIdentityPanel reusable component — 100%
+- Apply tenant context to dashboard, Governance, Business, Marketplace and Academy — 100%
+- Document Tenant Context Runtime report — 100%
+- Validate lint/build after tenant runtime changes — 100%
 
 ### Module Progress
 

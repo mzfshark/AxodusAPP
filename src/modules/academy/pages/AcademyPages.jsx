@@ -13,6 +13,7 @@ import {
 import { useAcademyCourse, useAcademyData, useAcademyPath } from '../hooks/useAcademyData';
 import { formatNeurons, getAcademyCourseTitle, getAcademyTutor } from '../services/academyService';
 import { ScopeSection } from '@/components/uiScope';
+import { TenantIdentityPanel } from '@/components/tenant';
 
 const selectClass = 'rounded-lg border border-white/10 bg-surface-container-low px-3 py-2 text-sm text-on-surface';
 
@@ -31,6 +32,7 @@ export function AcademyHome() {
         title="PoK-Based $NEURONS Qualification Nucleus"
         description="Academy is integrated into AxodusAPP as the constitutional education, progression, Proof of Knowledge, and treasury-controlled reward surface."
       />
+      <TenantIdentityPanel moduleId="academy" />
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1.3fr_.7fr]">
         <AcademyPanel>
           <div className="space-y-5">

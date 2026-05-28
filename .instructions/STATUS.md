@@ -2,7 +2,7 @@
 
 Last updated: 2026-05-27
 
-Current phase: App Shell Normalization Phase
+Current phase: Tenant Context Runtime Phase
 
 ## Deployment Gate
 
@@ -10,6 +10,7 @@ Current phase: App Shell Normalization Phase
 - Sprint 00B adds semantic UI scope separation before visual polish.
 - Sprint 00C inventories routes, cards, panels, data sources, mixed scopes and duplication before app shell normalization.
 - Sprint 01 introduces the shared app shell, grouped navigation, page shell primitives and card shell foundation.
+- Sprint 02 introduces a frontend selected tenant runtime with mock tenant accounts and UI binding.
 - UI normalization is not complete and remains deferred until scope semantics and the production build gate are stable.
 - Business runtime imports must resolve inside AxodusAPP for Vercel-compatible isolated builds.
 
@@ -44,3 +45,13 @@ Current phase: App Shell Normalization Phase
 - Header exposes lightweight scope/maturity/read-only indicators.
 - Main dashboard is the first route using the normalized `PageShell` and `CardShell` pattern.
 - Deeper module shell migration remains pending for Governance detail, Business subroutes, Marketplace detail, Academy subroutes, Defi, DEX, Mining, Lottery and ACS.
+
+## Tenant Context Position
+
+- Tenant provider exists at `src/runtime/tenantContext/TenantContext.jsx`.
+- Mock tenant registry exists at `src/data/mock/tenants.js`.
+- Selected tenant is visible in the global header via `TenantSelector`.
+- Tenant identity panel is visible on Dashboard, Governance Console, Business, Marketplace and Academy.
+- Tenant-aware module registry exists at `src/runtime/moduleRegistry/moduleRegistry.js`.
+- Tenant context is frontend/mock-only and does not implement backend tenancy or real account creation.
+- Next tenant work should map selected tenant ids to Governance DAO tenant ids and add route-level tenant metadata.

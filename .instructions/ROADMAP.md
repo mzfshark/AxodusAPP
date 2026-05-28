@@ -81,6 +81,29 @@
 
 ---
 
+## Sprint 02 — Tenant Context Runtime
+
+### Objectives
+
+- make selected tenant a first-class frontend runtime concept
+- represent Sub-DAOs, companies, agencies, products and sandbox workspaces as tenant accounts
+- expose selected tenant in the global app shell
+- provide reusable tenant identity panels for major routes
+- add tenant-aware module metadata without backend tenancy
+
+### Deliverables
+
+- tenant type model
+- mock tenant registry
+- `TenantProvider`, tenant hook and registry helpers
+- global tenant selector
+- reusable tenant identity panel
+- tenant-aware module registry
+- dashboard, Governance, Business, Marketplace and Academy tenant context visibility
+- Tenant Context Runtime report under `.instructions/reports`
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

@@ -14,4 +14,5 @@ export { settingsMock } from './settings.mock';
 export { walletMock } from './wallet.mock';
 export { notificationsMock } from './notifications.mock';
 export { reportsMock } from './reports.mock';
+export { tenantsMock, defaultTenantId } from './tenants';
 export { MOCK_NOTICE, MOCK_SOURCE, EVM_CHAINS, MOCK_DATES } from './constants';
