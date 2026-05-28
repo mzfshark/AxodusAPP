@@ -104,6 +104,29 @@
 
 ---
 
+## Sprint 03 — Dashboard Recomposition
+
+### Objectives
+
+- turn the dashboard into the front door of AxodusAPP
+- organize the dashboard by Protocol, User, Tenant and Operations
+- compose dashboard data outside raw JSX
+- summarize module maturity and readiness
+- keep execution surfaces disabled and route users to deeper module consoles
+
+### Deliverables
+
+- dashboard module under `src/modules/dashboard`
+- dashboard composition layer
+- Protocol Overview section
+- My Axodus section
+- Tenant Console Summary section
+- Operations Center section
+- Module Maturity Summary
+- Dashboard recomposition report under `.instructions/reports`
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

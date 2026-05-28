@@ -6,9 +6,9 @@ Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current phase: Tenant Context Runtime Phase
+Current phase: Dashboard Recomposition Phase
 
-Current priority: Sprint 02 Tenant Context Runtime. Backend tenancy remains out of scope; current work is frontend mock runtime and UI binding.
+Current priority: Sprint 03 Dashboard Recomposition. Dashboard is now structured around Protocol/User/Tenant/Operations before deeper module normalization.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -62,6 +62,18 @@ Current priority: Sprint 02 Tenant Context Runtime. Backend tenancy remains out 
 - Apply tenant context to dashboard, Governance, Business, Marketplace and Academy — 100%
 - Document Tenant Context Runtime report — 100%
 - Validate lint/build after tenant runtime changes — 100%
+
+### Sprint 03 — Dashboard Recomposition
+
+- Create dashboard module and composition layer — 100%
+- Split dashboard into Protocol, User, Tenant and Operations sections — 100%
+- Add module maturity summary — 100%
+- Show selected tenant context on dashboard — 100%
+- Separate wallet/user summary from protocol state — 100%
+- Separate operator/readiness summary from public protocol state — 100%
+- Replace large dashboard JSX data composition with `dashboardComposition.js` — 100%
+- Document kept/moved/deferred dashboard cards — 100%
+- Validate lint/build after dashboard recomposition — 100%
 
 ### Module Progress
 

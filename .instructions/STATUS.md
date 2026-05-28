@@ -2,7 +2,7 @@
 
 Last updated: 2026-05-27
 
-Current phase: Tenant Context Runtime Phase
+Current phase: Dashboard Recomposition Phase
 
 ## Deployment Gate
 
@@ -11,6 +11,7 @@ Current phase: Tenant Context Runtime Phase
 - Sprint 00C inventories routes, cards, panels, data sources, mixed scopes and duplication before app shell normalization.
 - Sprint 01 introduces the shared app shell, grouped navigation, page shell primitives and card shell foundation.
 - Sprint 02 introduces a frontend selected tenant runtime with mock tenant accounts and UI binding.
+- Sprint 03 recomposes the dashboard into Protocol, User, Tenant and Operations sections with a separate composition layer.
 - UI normalization is not complete and remains deferred until scope semantics and the production build gate are stable.
 - Business runtime imports must resolve inside AxodusAPP for Vercel-compatible isolated builds.
 
@@ -55,3 +56,12 @@ Current phase: Tenant Context Runtime Phase
 - Tenant-aware module registry exists at `src/runtime/moduleRegistry/moduleRegistry.js`.
 - Tenant context is frontend/mock-only and does not implement backend tenancy or real account creation.
 - Next tenant work should map selected tenant ids to Governance DAO tenant ids and add route-level tenant metadata.
+
+## Dashboard Position
+
+- Dashboard module exists under `src/modules/dashboard`.
+- Dashboard data is composed in `src/modules/dashboard/dashboardComposition.js`.
+- `/` and `/dashboard` render the recomposed dashboard through `src/pages/Overview.jsx`.
+- Dashboard sections are Protocol Overview, My Axodus, Tenant Console Summary and Operations Center.
+- Module maturity summary is visible on the dashboard.
+- Dashboard actions are navigation-only and do not execute blockchain, treasury, marketplace, lottery, trading or governance actions.
