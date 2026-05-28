@@ -42,6 +42,9 @@ import {
 } from '../hooks/useBusinessData';
 import { ScopeSection } from '@/components/uiScope';
 import { TenantIdentityPanel } from '@/components/tenant';
+import { WorkbenchSummarySection } from '@/components/workbench';
+import { useTenantContext } from '@/runtime/tenantContext';
+import { buildBusinessWorkbenchModel } from '../businessWorkbenchModel';
 
 const money = (amount, currency = 'USD') => new Intl.NumberFormat('en-US', { currency, maximumFractionDigits: 0, style: 'currency' }).format(Number(amount || 0));
 
@@ -76,6 +79,7 @@ export function BusinessOverview() {
   const registry = useBusinessRegistrySummary();
   const workflows = useBusinessWorkflowSummary();
   const events = useBusinessEventSummary();
+  const { selectedTenant } = useTenantContext();
 
   if (overview.isLoading || runtime.isLoading || projects.isLoading || assets.isLoading || treasury.isLoading || telemetry.isLoading || registry.isLoading || workflows.isLoading || events.isLoading) return <BusinessLoadingState />;
   const failed = queryFailed(overview, runtime, projects, assets, treasury, telemetry, registry, workflows, events);
@@ -83,6 +87,14 @@ export function BusinessOverview() {
 
   const dashboard = overview.data;
   const summary = runtime.data;
+  const workbench = buildBusinessWorkbenchModel({
+    dashboard,
+    summary,
+    registry,
+    workflows,
+    events,
+    selectedTenant,
+  });
 
   return (
     <BusinessPageShell
@@ -90,6 +102,39 @@ export function BusinessOverview() {
       description="Operational infrastructure, development intake, treasury exposure, ACS visibility, revenue routing and telemetry state rendered from the Business mock runtime."
     >
       <TenantIdentityPanel moduleId="business" />
+
+      <WorkbenchSummarySection
+        scope="protocol"
+        title="Business protocol service model"
+        description="Business defines the protocol-level operating model for company/workspace intake, funding visibility and runtime safety."
+        cards={workbench.protocolCards}
+        columns="three"
+      />
+
+      <WorkbenchSummarySection
+        scope="tenant"
+        title="Tenant business workspace"
+        description="Projects, assets, workflows and readiness describe the selected company/Sub-DAO workspace."
+        cards={workbench.tenantCards}
+        columns="three"
+      />
+
+      <WorkbenchSummarySection
+        scope="user"
+        title="My business role"
+        description="User role and permissions are shown from mock tenant context and remain read-only."
+        cards={workbench.userCards}
+        columns="two"
+      />
+
+      <WorkbenchSummarySection
+        scope="operator"
+        title="Business operations and ACS review"
+        description="Blocked workflows, runtime events and risk visibility are operator-scoped and non-executable."
+        cards={workbench.operationsCards}
+        executionMode="simulation"
+        columns="three"
+      />
 
       <ScopeSection
         scope="operator"

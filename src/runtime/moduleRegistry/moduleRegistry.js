@@ -2,6 +2,8 @@ import { axodusModuleRegistry } from '@/config/moduleRegistry';
 
 export const tenantAwareModuleRegistry = axodusModuleRegistry.map((module) => ({
   ...module,
+  executionMode: module.id === 'dex' || module.id === 'defi' ? 'executable-disabled' : module.maturity === 'mock' ? 'read-only' : 'preview',
+  operatorSurfaceAvailable: module.supportedScopes.includes('operator'),
   tenantAware: Boolean(module.tenantAware),
   requiresTenant: ['business', 'marketplace'].includes(module.id),
   supportsProtocolScope: module.supportedScopes.includes('protocol'),

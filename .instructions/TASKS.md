@@ -6,9 +6,9 @@ Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current phase: Dashboard Recomposition Phase
+Current phase: Module Workbench Normalization Phase
 
-Current priority: Sprint 03 Dashboard Recomposition. Dashboard is now structured around Protocol/User/Tenant/Operations before deeper module normalization.
+Current priority: Sprint 04 Module Workbench Normalization. Governance and Business now start rendering as scoped workbenches before deeper Marketplace and Academy passes.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -74,6 +74,18 @@ Current priority: Sprint 03 Dashboard Recomposition. Dashboard is now structured
 - Replace large dashboard JSX data composition with `dashboardComposition.js` — 100%
 - Document kept/moved/deferred dashboard cards — 100%
 - Validate lint/build after dashboard recomposition — 100%
+
+### Sprint 04 — Module Workbench Normalization
+
+- Inspect Governance, Business, Marketplace, Academy and Trading route surfaces — 100%
+- Add shared workbench summary helper — 100%
+- Add Governance workbench composition model — 100%
+- Normalize Governance console into Protocol/User/Tenant/Operations summaries — 100%
+- Add Business workbench composition model — 100%
+- Normalize Business overview into Protocol/User/Tenant/Operations summaries — 100%
+- Extend module metadata for workbench scope support — 100%
+- Document module workbench normalization report — 100%
+- Validate lint/build after module workbench changes — 100%
 
 ### Module Progress
 

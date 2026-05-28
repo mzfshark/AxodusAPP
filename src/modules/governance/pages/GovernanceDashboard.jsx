@@ -1,7 +1,9 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
+import { PageShell } from '@/components/layout';
 import { ScopeSection } from '@/components/uiScope';
+import { WorkbenchSummarySection } from '@/components/workbench';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
@@ -13,6 +15,7 @@ import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 import { useProposalDrafts } from '../hooks/useProposalDrafts';
 import { acsMock } from '@/data/mock';
 import { TenantIdentityPanel } from '@/components/tenant';
+import { buildGovernanceWorkbenchModel } from '../governanceWorkbenchModel';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -564,23 +567,59 @@ export default function GovernanceDashboard() {
   });
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
   const visibleProposals = [...proposalDrafts.drafts, ...governanceConsole.proposals];
+  const workbench = buildGovernanceWorkbenchModel({
+    chains,
+    governanceConsole,
+    proposalDrafts,
+    summary,
+    source,
+  });
 
   return (
-    <main className="min-h-full bg-background p-4 md:p-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Governance</span>
-            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">DAO Tenant Operations Center</h1>
-            <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
-              Governed business-unit control room for tenant DAOs, constitutional authority, treasury state, products, agents, proposals and execution receipts.
-            </p>
-          </div>
-        </header>
-
+    <PageShell
+      title="DAO Tenant Operations Center"
+      subtitle="Governed business-unit control room for tenant DAOs, constitutional authority, treasury state, products, agents, proposals and execution receipts."
+      module="Governance Workbench"
+      scope="tenant"
+      maturity="prototype"
+      executionMode="preview"
+    >
         <SourceBanner source={source} status={status} error={error} />
 
         <TenantIdentityPanel moduleId="governance" />
+
+        <WorkbenchSummarySection
+          scope="protocol"
+          title="Protocol governance layer"
+          description="Constitutional standing, federation registry, chain registry and guardrail reason codes apply to Axodus as a protocol."
+          cards={workbench.protocolCards}
+          columns="three"
+        />
+
+        <WorkbenchSummarySection
+          scope="tenant"
+          title="Tenant governance workspace"
+          description="Selected DAO/Sub-DAO state, local proposals, treasury policy and tenant readiness are shown separately from protocol state."
+          cards={workbench.tenantCards}
+          columns="three"
+        />
+
+        <WorkbenchSummarySection
+          scope="user"
+          title="My governance context"
+          description="Wallet and tenant-role information is user-scoped and does not grant execution by itself."
+          cards={workbench.userCards}
+          columns="two"
+        />
+
+        <WorkbenchSummarySection
+          scope="operator"
+          title="Governance operations and review"
+          description="Execution readiness, required approvals and blocked actions are operator-scoped preview data."
+          cards={workbench.operationsCards}
+          executionMode="simulation"
+          columns="two"
+        />
 
         <DaoContextSelector
           daos={governanceConsole.daos}
@@ -703,7 +742,6 @@ export default function GovernanceDashboard() {
         />
 
         <ChainRegistryTable chains={chains} />
-      </div>
-    </main>
+    </PageShell>
   );
 }

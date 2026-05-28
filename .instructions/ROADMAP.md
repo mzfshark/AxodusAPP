@@ -127,6 +127,27 @@
 
 ---
 
+## Sprint 04 — Module Workbench Normalization
+
+### Objectives
+
+- start turning module pages into auditable workbenches
+- separate protocol, user, tenant and operator information inside high-priority modules
+- preserve existing MVP module information while adding clearer semantic hierarchy
+- keep execution surfaces read-only, preview, simulation or disabled
+
+### Deliverables
+
+- shared workbench summary section helper
+- Governance workbench composition model
+- Business workbench composition model
+- Governance console scoped into Protocol, User, Tenant and Operations summaries
+- Business overview scoped into Protocol, User, Tenant and Operations summaries
+- module metadata extended for workbench rendering
+- module workbench normalization report under `.instructions/reports`
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives
