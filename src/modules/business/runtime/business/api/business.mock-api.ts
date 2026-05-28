@@ -72,6 +72,16 @@ export const BUSINESS_MOCK_API_ROUTES = [
   "GET /api/v1/business/governance/bridge/:entityId/compatibility",
   "GET /api/v1/business/governance/bridge/:entityId/restrictions",
   "GET /api/v1/business/governance/bridge/:entityId/proposal-reference",
+  "GET /api/v1/business/finance/bridge",
+  "GET /api/v1/business/finance/bridge/summary",
+  "GET /api/v1/business/finance/bridge/:entityId",
+  "GET /api/v1/business/finance/bridge/:entityId/treasury-package",
+  "GET /api/v1/business/finance/bridge/:entityId/funding-package",
+  "GET /api/v1/business/finance/bridge/:entityId/debenture-package",
+  "GET /api/v1/business/finance/bridge/:entityId/revenue-package",
+  "GET /api/v1/business/finance/bridge/:entityId/risk-snapshot",
+  "GET /api/v1/business/finance/bridge/:entityId/settlement-readiness",
+  "GET /api/v1/business/finance/bridge/:entityId/handoff-receipt",
   "GET /api/v1/business/audit",
   "GET /api/v1/business/audit/:auditId",
   "GET /api/v1/business/audit/entity/:entityId",
@@ -202,6 +212,17 @@ export const handleBusinessMockApiRequest = (request: BusinessMockApiRequest): B
     if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "federation-standing") return fromHandler(businessApiHandlers.getBusinessGovernanceFederationStanding(segments[2]));
     if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "blockers") return fromHandler(businessApiHandlers.getBusinessGovernanceBridgeBlockers(segments[2]));
     if (segments[0] === "governance" && segments[1] === "bridge" && segments[2]) return fromHandler(businessApiHandlers.getBusinessGovernanceBridgeStatus(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] === "summary") return fromHandler(businessApiHandlers.getBusinessFinancialBridgeSummary());
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments.length === 2) return fromHandler(businessApiHandlers.getBusinessFinancialBridge());
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "treasury-package") return fromHandler(businessApiHandlers.getBusinessTreasuryReadinessPackage(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "funding-package") return fromHandler(businessApiHandlers.getBusinessFundingReadinessPackage(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "debenture-package") return fromHandler(businessApiHandlers.getBusinessDebentureReadinessPackage(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "revenue-package") return fromHandler(businessApiHandlers.getBusinessRevenueRoutingReadinessPackage(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "risk-snapshot") return fromHandler(businessApiHandlers.getBusinessFinancialRiskSnapshot(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "settlement-readiness") return fromHandler(businessApiHandlers.getBusinessSettlementReadinessSnapshot(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "handoff-receipt") return fromHandler(businessApiHandlers.getBusinessFinancialHandoffReceipt(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "blockers") return fromHandler(businessApiHandlers.getBusinessFinancialBridgeBlockers(segments[2]));
+    if (segments[0] === "finance" && segments[1] === "bridge" && segments[2]) return fromHandler(businessApiHandlers.getBusinessFinancialBridgeStatus(segments[2]));
     if (segments[0] === "audit" && segments[1] === "entity" && segments[2]) return fromHandler(businessApiHandlers.getBusinessAuditRecordsByEntity(segments[2]));
     if (segments[0] === "audit" && segments[1] === "actor" && segments[2]) return fromHandler(businessApiHandlers.getBusinessAuditRecordsByActor(segments[2]));
     if (segments[0] === "audit" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessAuditRecords());

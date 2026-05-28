@@ -22,6 +22,7 @@ import {
   useBusinessCriticalEvents,
   useBusinessEvents,
   useBusinessEventSummary,
+  useBusinessFinancialBridge,
   useBusinessFinanceRiskModel,
   useBusinessFundingRecords,
   useBusinessGovernanceBridge,
@@ -320,10 +321,12 @@ export function BusinessTreasury() {
 
 export function BusinessFinance() {
   const finance = useBusinessFinanceRiskModel();
-  if (finance.isLoading) return <BusinessLoadingState />;
-  if (finance.isError) return <BusinessErrorState message="Business finance risk model unavailable." />;
+  const bridge = useBusinessFinancialBridge();
+  if (finance.isLoading || bridge.isLoading) return <BusinessLoadingState />;
+  if (finance.isError || bridge.isError) return <BusinessErrorState message="Business finance risk model unavailable." />;
 
   const model = finance.data;
+  const bridgeModel = bridge.data;
   const summary = model.summary;
   const routingSummaryRows = Object.entries(model.revenueRoutingSummary).map(([key, value]) => ({
     id: key,
@@ -340,8 +343,95 @@ export function BusinessFinance() {
         { id: 'finance-exposure', label: 'Treasury Exposure', value: money(summary.totalTreasuryExposure, summary.currency), detail: `${money(summary.totalConsumedExposure, summary.currency)} consumed in visible mock exposure records.`, status: 'WARNING' },
         { id: 'finance-funding', label: 'Funding Records', value: summary.fundingRecords, detail: 'Funding lifecycle records with simulated eligibility decisions.', status: 'NOTICE' },
         { id: 'finance-debentures', label: 'Debentures', value: summary.debentures, detail: `${summary.convertibleDebentures} convertible / ${summary.nonConvertibleDebentures} non-convertible planning records.`, status: 'WARNING' },
-        { id: 'finance-readiness', label: 'Readiness Score', value: `${summary.financialReadinessScore}%`, detail: `${summary.blockedFinancialActions} financial actions are blocked or require approval.`, status: summary.financialReadinessScore >= 80 ? 'APPROVED' : 'WARNING' }
+        { id: 'finance-readiness', label: 'Readiness Score', value: `${summary.financialReadinessScore}%`, detail: `${summary.blockedFinancialActions} financial actions are blocked or require approval.`, status: summary.financialReadinessScore >= 80 ? 'APPROVED' : 'WARNING' },
+        { id: 'bridge-packages', label: 'Bridge Packages', value: bridgeModel.summary.totalEntities, detail: 'Mock financial readiness packages prepared by runtime.', status: 'NOTICE' },
+        { id: 'bridge-handoffs', label: 'Handoff Receipts', value: bridgeModel.receipts.length, detail: 'Simulation-only handoff receipts; no financial integration is called.', status: 'INFO' },
+        { id: 'bridge-blockers', label: 'Bridge Blockers', value: bridgeModel.summary.blockerCount, detail: 'Financial bridge blockers and non-executable safety warnings.', status: bridgeModel.summary.blockerCount ? 'WARNING' : 'APPROVED' },
+        { id: 'external-finance-effects', label: 'External Effects', value: bridgeModel.externalSideEffects ? 'YES' : 'NO', detail: 'Financial bridge cannot move funds, issue debentures, settle or call contracts.', status: bridgeModel.externalSideEffects ? 'CRITICAL' : 'APPROVED' }
       ]} />
+
+      <BusinessPanel title="Financial Bridge Packages" description="Mock handoff packages prepare treasury, funding, debenture, revenue and settlement context for future financial integrations without execution.">
+        <BusinessLifecycleTable
+          rows={bridgeModel.packages}
+          columns={[
+            { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+            { key: 'entityType', label: 'Type', render: textCell('entityType') },
+            { key: 'projectId', label: 'Project', render: (row) => row.projectId ? <Link className="font-mono text-xs font-bold text-primary" to={`/business/projects/${row.projectId}`}>{row.projectId}</Link> : <span className="text-outline">draft</span> },
+            { key: 'bridgeStatus', label: 'Bridge status', render: statusCell('bridgeStatus') },
+            { key: 'riskSnapshot', label: 'Exposure', render: (row) => <span className="text-outline">{money(row.riskSnapshot.treasuryExposureAmount, row.treasuryPackage?.currency || 'USD')}</span> },
+            { key: 'settlementReadiness', label: 'Settlement ready', render: (row) => <span className="text-outline">{String(row.settlementReadiness.settlementReady)}</span> },
+            { key: 'blockers', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockers.length}</strong> },
+            { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Financial Handoff Receipts" description="Receipts are simulation-only and explicitly block real treasury, debenture, revenue, settlement, swap and contract actions.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.receipts}
+            columns={[
+              { key: 'handoffReceiptId', label: 'Receipt', render: idCell('handoffReceiptId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'financialBridgeStatus', label: 'Status', render: statusCell('financialBridgeStatus') },
+              { key: 'requiredFinancialActions', label: 'Required reviews', render: (row) => <strong className="text-on-surface">{row.requiredFinancialActions.length}</strong> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Financial Bridge Blockers" description="Bridge blockers must be resolved before any future real financial handoff can be considered.">
+          {bridgeModel.blockers.length ? (
+            <BusinessLifecycleTable
+              rows={bridgeModel.blockers}
+              columns={[
+                { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+                { key: 'source', label: 'Source', render: statusCell('source') },
+                { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+                { key: 'message', label: 'Blocker', render: textCell('message') }
+              ]}
+            />
+          ) : (
+            <p className="text-sm text-outline">No blocking financial bridge issues detected in the current mock runtime.</p>
+          )}
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <BusinessPanel title="Treasury Readiness Packages" description="Treasury package visibility only; allocation and consumption remain disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.treasuryPackages}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'requestedAmount', label: 'Requested', render: (row) => <span className="text-outline">{money(row.requestedAmount, row.currency)}</span> },
+              { key: 'approvedAmountMock', label: 'Approved mock', render: (row) => <span className="text-outline">{money(row.approvedAmountMock, row.currency)}</span> },
+              { key: 'riskTier', label: 'Risk', render: riskCell() }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Debenture Readiness Packages" description="Debenture package visibility only; issuance, purchase, conversion and APR payment remain disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.debenturePackages}
+            columns={[
+              { key: 'debentureId', label: 'Debenture', render: idCell('debentureId') },
+              { key: 'targetAmount', label: 'Target', render: (row) => <span className="text-outline">{money(row.targetAmount, row.currency)}</span> },
+              { key: 'raisedAmountMock', label: 'Raised mock', render: (row) => <span className="text-outline">{money(row.raisedAmountMock, row.currency)}</span> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Revenue Routing Readiness" description="Revenue routing package visibility only; settlement and distribution remain disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.revenuePackages}
+            columns={[
+              { key: 'assetId', label: 'Asset', render: idCell('assetId') },
+              { key: 'netAmountMock', label: 'Net mock', render: (row) => <span className="text-outline">{money(row.netAmountMock, 'USD')}</span> },
+              { key: 'settlementReadiness', label: 'Settlement', render: statusCell('settlementReadiness') },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <BusinessPanel title="Treasury Safety Status" description="Financial adapters are mock/read-only. No allocation, settlement or distribution can execute from this console.">

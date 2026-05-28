@@ -43,6 +43,7 @@ export const BUSINESS_ROUTE_CATALOG = {
   submissions: "/business/submissions",
   reviewQueue: "/business/review-queue",
   governanceBridge: "/business/governance/bridge",
+  financialBridge: "/business/finance/bridge",
   audit: "/business/audit",
   snapshots: "/business/snapshots"
 } as const;

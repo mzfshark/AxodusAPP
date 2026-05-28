@@ -40,6 +40,7 @@ import * as reviewQueueHandlers from "./business.review-queue.handlers.js";
 import * as auditHandlers from "./business.audit.handlers.js";
 import * as snapshotHandlers from "./business.snapshot.handlers.js";
 import * as governanceBridgeHandlers from "./business.governance-bridge.handlers.js";
+import * as financialBridgeHandlers from "./business.financial-bridge.handlers.js";
 import type {
   ACSRuntime,
   BusinessDashboardModel,
@@ -210,7 +211,8 @@ export const businessApiHandlers = {
   ...reviewQueueHandlers,
   ...auditHandlers,
   ...snapshotHandlers,
-  ...governanceBridgeHandlers
+  ...governanceBridgeHandlers,
+  ...financialBridgeHandlers
 };
 
 export type BusinessApiHandlerName = keyof typeof businessApiHandlers;

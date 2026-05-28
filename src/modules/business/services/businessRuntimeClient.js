@@ -11,6 +11,7 @@ import {
   BUSINESS_REVIEW_TYPES,
   BUSINESS_DRAFT_SUBMISSION_STATUSES,
   BUSINESS_DRAFT_SUBMISSION_TYPES,
+  BUSINESS_FINANCIAL_BRIDGE_STATUSES,
   BUSINESS_GOVERNANCE_BRIDGE_STATUSES,
   DebentureType,
   FundingType,
@@ -21,8 +22,14 @@ import {
   acsAdapter,
   businessApiHandlers,
   canUseFinancialInstrument,
+  createDebentureReadinessPackage,
+  createFinancialHandoffReceipt,
+  createFinancialReadinessPackage,
+  createFundingReadinessPackage,
   createGovernanceHandoffReceipt,
   createGovernanceReadinessPackage,
+  createRevenueRoutingReadinessPackage,
+  createTreasuryReadinessPackage,
   createBusinessDraftTemplate,
   createDraftStoreRecord,
   debentureAdapter,
@@ -54,6 +61,10 @@ import {
   getBusinessRuntimeCoreSummary,
   getBusinessWorkflowSummary,
   getBusinessDraftSubmission,
+  getFinancialBridgeBlockers,
+  getFinancialBridgeStatus,
+  getFinancialBridgeSummary,
+  getFinancialRiskSnapshot,
   getGovernanceBridgeBlockers,
   getGovernanceBridgeStatus,
   getGovernanceBridgeSummary,
@@ -78,6 +89,7 @@ import {
   getRevenueRouting,
   getRiskTierRegistryView,
   getSettlementStatus,
+  getSettlementReadinessSnapshot,
   getReviewQueueItemsByPriority,
   getReviewQueueItemsByReviewType,
   getReviewQueueItemsByStatus,
@@ -102,6 +114,7 @@ import {
   canSimulateDraftSubmission,
   listDraftSubmissionReceipts,
   requiresGovernanceApproval,
+  requiresFinancialBridge,
   requiresGovernanceBridge,
   selectBusinessProjectById
 } from '@axodus/business-runtime';
@@ -506,6 +519,43 @@ const createGovernanceBridgeModel = () => {
   };
 };
 
+const createFinancialBridgeModel = () => {
+  const projects = dataFrom(businessApiHandlers.getBusinessProjects);
+  const draftRecords = listDraftStoreRecords();
+  const packages = [
+    ...projects.map((project) => createFinancialReadinessPackage(project.id)),
+    ...draftRecords.map((record) => createFinancialReadinessPackage(record.id))
+  ].filter(Boolean);
+  const receipts = packages.map((pkg) => createFinancialHandoffReceipt(pkg.entityId)).filter(Boolean);
+
+  return {
+    summary: getFinancialBridgeSummary(),
+    statuses: BUSINESS_FINANCIAL_BRIDGE_STATUSES,
+    packages,
+    treasuryPackages: packages.map((pkg) => pkg.treasuryPackage).filter(Boolean),
+    fundingPackages: packages.map((pkg) => pkg.fundingPackage).filter(Boolean),
+    debenturePackages: packages.map((pkg) => pkg.debenturePackage).filter(Boolean),
+    revenuePackages: packages.map((pkg) => pkg.revenuePackage).filter(Boolean),
+    riskSnapshots: packages.map((pkg) => getFinancialRiskSnapshot(pkg.entityId)).filter(Boolean),
+    settlementReadinessSnapshots: packages.map((pkg) => getSettlementReadinessSnapshot(pkg.entityId)).filter(Boolean),
+    receipts,
+    blockers: packages.flatMap((pkg) => pkg.blockers),
+    blockedActions: [...new Set(packages.flatMap((pkg) => pkg.blockedActions))],
+    requiredActions: [...new Set(packages.flatMap((pkg) => pkg.requiredFinancialActions))],
+    requiresFinancialBridge,
+    getFinancialBridgeStatus,
+    getFinancialBridgeBlockers,
+    createTreasuryReadinessPackage,
+    createFundingReadinessPackage,
+    createDebentureReadinessPackage,
+    createRevenueRoutingReadinessPackage,
+    mock: true,
+    readOnly: true,
+    simulationOnly: true,
+    externalSideEffects: false
+  };
+};
+
 export const businessRuntimeClient = {
   getOverview: () => apiOrDirect('/overview', () => dataFrom(businessApiHandlers.getBusinessOverview)),
   getRuntimeSummary: () => apiOrDirect('/summary', () => dataFrom(businessApiHandlers.getBusinessRuntimeSummary)),
@@ -677,6 +727,7 @@ export const businessRuntimeClient = {
     };
   },
   getGovernanceBridgeModel: createGovernanceBridgeModel,
+  getFinancialBridgeModel: createFinancialBridgeModel,
   getFinanceRiskModel: createFinanceRiskModel,
   getACSReadinessModel: createACSReadinessModel,
   createDraftTemplate: createBusinessDraftTemplate,

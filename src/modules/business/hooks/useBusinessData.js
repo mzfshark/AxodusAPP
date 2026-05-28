@@ -69,6 +69,10 @@ export function useBusinessFinanceRiskModel() {
   return useQuery({ queryKey: ['business', 'finance-risk'], queryFn: businessRuntimeClient.getFinanceRiskModel });
 }
 
+export function useBusinessFinancialBridge() {
+  return useQuery({ queryKey: ['business', 'financial-bridge'], queryFn: businessRuntimeClient.getFinancialBridgeModel });
+}
+
 export function useBusinessACSReadinessModel() {
   return useQuery({ queryKey: ['business', 'acs-readiness'], queryFn: businessRuntimeClient.getACSReadinessModel });
 }

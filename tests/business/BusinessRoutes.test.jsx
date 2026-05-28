@@ -396,8 +396,15 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getByRole('heading', { name: /Treasury Exposure By Project/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Funding Eligibility/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Debenture Planning/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Financial Bridge Packages/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Financial Handoff Receipts/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Treasury Readiness Packages/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Debenture Readiness Packages/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Revenue Routing Readiness/i })).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { name: /Revenue Routing/i }).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/NO_TREASURY_MOVEMENT/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/HANDOFF_PREPARED|DEBENTURE_REVIEW_REQUIRED|TREASURY_REVIEW_REQUIRED/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/External effects/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/deb-dex-country/i)).toBeInTheDocument();
     expect(screen.getByText(/rev-dex-country/i)).toBeInTheDocument();
     expect(screen.getAllByText(/FORBIDDEN_IN_CURRENT_RUNTIME/i).length).toBeGreaterThan(0);

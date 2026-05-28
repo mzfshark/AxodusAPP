@@ -60,6 +60,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     submissions: "SUBMIT_BUSINESS_REQUEST",
     reviewQueue: "SUBMIT_BUSINESS_REQUEST",
     governanceBridge: "PREPARE_PROJECT_FOR_GOVERNANCE",
+    financialBridge: "PREPARE_PROJECT_FOR_FUNDING",
     audit: "VIEW_GOVERNANCE_REFERENCES",
     snapshots: "VIEW_GOVERNANCE_REFERENCES"
   };
@@ -86,6 +87,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     submissions: "BUSINESS_API",
     reviewQueue: "BUSINESS_API",
     governanceBridge: "GOVERNANCE",
+    financialBridge: "FINANCIAL_CORE",
     audit: "BUSINESS_API",
     snapshots: "BUSINESS_API"
   };
@@ -112,6 +114,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     submissions: "CREATE_BUSINESS_REQUEST",
     reviewQueue: "CREATE_BUSINESS_REQUEST",
     governanceBridge: "PREPARE_GOVERNANCE_REVIEW",
+    financialBridge: "PREPARE_FUNDING_REVIEW",
     audit: "VIEW_GOVERNANCE_REFERENCES",
     snapshots: "VIEW_GOVERNANCE_REFERENCES"
   };
@@ -120,8 +123,8 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     requiredCapability: capabilityByDomain[domain] ?? "VIEW_TELEMETRY",
     futureIntegrationTarget: integrationTargetByDomain[domain] ?? "BUSINESS_API",
     executionPolicy: executionPolicyByDomain[domain] ?? "VIEW_TELEMETRY",
-    governanceRequirement: ["projects", "federation", "plugins", "funding", "debentures", "drafts", "reviewQueue", "governanceBridge", "audit", "snapshots"].includes(domain),
-    treasuryRequirement: ["funding", "debentures", "treasuryExposure", "revenue", "submissions", "reviewQueue"].includes(domain),
+    governanceRequirement: ["projects", "federation", "plugins", "funding", "debentures", "drafts", "reviewQueue", "governanceBridge", "financialBridge", "audit", "snapshots"].includes(domain),
+    treasuryRequirement: ["funding", "debentures", "treasuryExposure", "revenue", "submissions", "reviewQueue", "financialBridge"].includes(domain),
     acsRequirement: ["acsRuntimes", "acsReceipts", "drafts", "submissions", "snapshots"].includes(domain)
   };
 };
@@ -145,6 +148,7 @@ const route = (
     submissions: "BusinessSubmissionRepository",
     reviewQueue: "BusinessReviewQueueRepository",
     governanceBridge: "BusinessAuditRepository",
+    financialBridge: "BusinessAuditRepository",
     audit: "BusinessAuditRepository",
     snapshots: "BusinessSnapshotRepository"
   };
@@ -173,8 +177,8 @@ const route = (
     acsRequirement: routeSecurity.acsRequirement,
     futureIntegrationTarget: routeSecurity.futureIntegrationTarget,
     futureRepositoryDependency: futureRepositoryDependencyByDomain[domain],
-    auditRequirement: method !== "GET" || ["submissions", "reviewQueue", "governanceBridge", "audit"].includes(domain),
-    snapshotRequirement: ["drafts", "draftReadiness", "submissions", "reviewQueue", "governanceBridge", "audit", "snapshots"].includes(domain)
+    auditRequirement: method !== "GET" || ["submissions", "reviewQueue", "governanceBridge", "financialBridge", "audit"].includes(domain),
+    snapshotRequirement: ["drafts", "draftReadiness", "submissions", "reviewQueue", "governanceBridge", "financialBridge", "audit", "snapshots"].includes(domain)
   };
 };
 
@@ -273,5 +277,16 @@ export const BUSINESS_ROUTE_DEFINITIONS: BusinessRouteDefinition[] = [
   route("business.governance-bridge.handoff", "GET", "governanceBridge", "Get mock governance handoff receipt for an entity.", "getBusinessGovernanceHandoffReceipt", "BusinessGovernanceHandoffReceipt | null", "/business/governance/bridge/:entityId/handoff-receipt"),
   route("business.governance-bridge.compatibility", "GET", "governanceBridge", "Get constitutional compatibility snapshot for an entity.", "getBusinessGovernanceCompatibility", "BusinessGovernanceCompatibilitySnapshot | null", "/business/governance/bridge/:entityId/compatibility"),
   route("business.governance-bridge.restrictions", "GET", "governanceBridge", "Get governance restriction snapshot for an entity.", "getBusinessGovernanceRestrictions", "BusinessGovernanceRestrictionSnapshot | null", "/business/governance/bridge/:entityId/restrictions"),
-  route("business.governance-bridge.proposal-reference", "GET", "governanceBridge", "Get mock proposal reference for an entity.", "getBusinessGovernanceProposalReference", "BusinessGovernanceProposalReference | null", "/business/governance/bridge/:entityId/proposal-reference")
+  route("business.governance-bridge.proposal-reference", "GET", "governanceBridge", "Get mock proposal reference for an entity.", "getBusinessGovernanceProposalReference", "BusinessGovernanceProposalReference | null", "/business/governance/bridge/:entityId/proposal-reference"),
+  route("business.financial-bridge.list", "GET", "financialBridge", "Get mock financial bridge summary.", "getBusinessFinancialBridge", "BusinessFinancialBridgeSummary"),
+  route("business.financial-bridge.summary", "GET", "financialBridge", "Get mock financial bridge summary.", "getBusinessFinancialBridgeSummary", "BusinessFinancialBridgeSummary", "/business/finance/bridge/summary"),
+  route("business.financial-bridge.status", "GET", "financialBridge", "Get financial bridge status for an entity.", "getBusinessFinancialBridgeStatus", "BusinessFinancialBridgeStatus", "/business/finance/bridge/:entityId"),
+  route("business.financial-bridge.package", "GET", "financialBridge", "Get financial readiness package for an entity.", "getBusinessFinancialReadinessPackage", "BusinessFinancialBridgePackage | null", "/business/finance/bridge/:entityId"),
+  route("business.financial-bridge.treasury-package", "GET", "financialBridge", "Get treasury readiness package for an entity.", "getBusinessTreasuryReadinessPackage", "BusinessTreasuryReadinessPackage | null", "/business/finance/bridge/:entityId/treasury-package"),
+  route("business.financial-bridge.funding-package", "GET", "financialBridge", "Get funding readiness package for an entity.", "getBusinessFundingReadinessPackage", "BusinessFundingReadinessPackage | null", "/business/finance/bridge/:entityId/funding-package"),
+  route("business.financial-bridge.debenture-package", "GET", "financialBridge", "Get debenture readiness package for an entity.", "getBusinessDebentureReadinessPackage", "BusinessDebentureReadinessPackage | null", "/business/finance/bridge/:entityId/debenture-package"),
+  route("business.financial-bridge.revenue-package", "GET", "financialBridge", "Get revenue routing readiness package for an entity.", "getBusinessRevenueRoutingReadinessPackage", "BusinessRevenueRoutingReadinessPackage | null", "/business/finance/bridge/:entityId/revenue-package"),
+  route("business.financial-bridge.risk-snapshot", "GET", "financialBridge", "Get financial risk snapshot for an entity.", "getBusinessFinancialRiskSnapshot", "BusinessFinancialRiskSnapshot | null", "/business/finance/bridge/:entityId/risk-snapshot"),
+  route("business.financial-bridge.settlement-readiness", "GET", "financialBridge", "Get settlement readiness snapshot for an entity.", "getBusinessSettlementReadinessSnapshot", "BusinessSettlementReadinessSnapshot | null", "/business/finance/bridge/:entityId/settlement-readiness"),
+  route("business.financial-bridge.handoff", "GET", "financialBridge", "Get mock financial handoff receipt for an entity.", "getBusinessFinancialHandoffReceipt", "BusinessFinancialHandoffReceipt | null", "/business/finance/bridge/:entityId/handoff-receipt")
 ];
