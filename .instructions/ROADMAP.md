@@ -19,6 +19,68 @@
 
 ---
 
+## Sprint 00B — Information Architecture & UI Scope Separation
+
+### Objectives
+
+- introduce protocol, user, tenant and operator information scopes before visual polish
+- stop dashboard and module cards from mixing ownership context without labels
+- add reusable scope UI primitives without redesigning the full app shell
+- document route-level scope risks and future normalization direction
+
+### Deliverables
+
+- shared UI scope metadata types
+- scope badge, section, scoped card and legend components
+- minimal module registry with scope capability metadata
+- dashboard split into Protocol Overview, My Axodus, Tenant Console and Operations
+- initial scoped treatment for Governance, Business, Marketplace and Academy
+- UI scope audit report under `.instructions/reports`
+
+---
+
+## Sprint 00C — UI Route & Card Inventory
+
+### Objectives
+
+- inventory the current SPA route surface before app shell normalization
+- classify major UI cards, panels, widgets, tables and status blocks
+- identify mixed protocol/user/tenant/operator pages
+- document duplicated UI patterns and data-source risks
+- create the refactor backlog for Sprint 01
+
+### Deliverables
+
+- route inventory report under `.instructions/reports`
+- card and panel inventory report under `.instructions/reports`
+- mixed scope report under `.instructions/reports`
+- duplication report under `.instructions/reports`
+- data source inventory under `.instructions/reports`
+- prioritized UI refactor backlog for Sprint 01
+
+---
+
+## Sprint 01 — App Shell Normalization
+
+### Objectives
+
+- make AxodusAPP render through one shared global shell
+- group navigation by Protocol, User, Tenant and Operations
+- add reusable page, section, grid and card shell primitives
+- normalize the dashboard as the first shell adoption target
+- keep module redesign and domain cleanup deferred
+
+### Deliverables
+
+- `AppShell`, `PageShell`, `PageHeader`, `SectionShell`, `ContentGrid`
+- reusable `CardShell`
+- sidebar grouped by information architecture scope
+- header runtime indicators for scope, maturity and read-only mode
+- app shell normalization report under `.instructions/reports`
+- passing lint/build validation
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

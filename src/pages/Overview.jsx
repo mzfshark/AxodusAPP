@@ -1,267 +1,355 @@
-import React from "react";
-import "@/styles/Global.css";
-import { defiMock, ecosystemMock, governanceMock } from '@/data/mock';
+import React from 'react';
+import '@/styles/Global.css';
+import { Link } from 'react-router-dom';
+import { academyMock, acsMock, defiMock, ecosystemMock, governanceMock, marketplaceMock, walletMock } from '@/data/mock';
+import { ScopeLegend, ScopeSection, ScopedCard } from '@/components/uiScope';
+import { axodusModuleRegistry, getModulesByScope } from '@/config/moduleRegistry';
+import { ContentGrid, PageShell, SectionShell } from '@/components/layout';
+import { CardShell } from '@/components/ui';
+
+const dashboardBlocks = [
+  {
+    meta: {
+      id: 'dashboard-protocol-overview',
+      title: 'Protocol Overview',
+      module: 'ecosystem',
+      scope: 'protocol',
+      surface: 'dashboard',
+      maturity: 'mock',
+      executionMode: 'read-only',
+      walletAware: false,
+      tenantAware: false,
+      governanceAware: true,
+      acsAware: true,
+    },
+    route: '/governance',
+    description: 'Global Axodus state, active nuclei, governance-first posture and protocol readiness.',
+  },
+  {
+    meta: {
+      id: 'dashboard-my-axodus',
+      title: 'My Axodus',
+      module: 'account',
+      scope: 'user',
+      surface: 'dashboard',
+      maturity: 'mock',
+      executionMode: 'read-only',
+      walletAware: true,
+      tenantAware: false,
+      governanceAware: true,
+      acsAware: false,
+    },
+    route: '/connect',
+    description: 'Connected wallet, Academy progress, permissions, marketplace access and personal activity.',
+  },
+  {
+    meta: {
+      id: 'dashboard-tenant-console',
+      title: 'Tenant Console',
+      module: 'governance',
+      scope: 'tenant',
+      surface: 'console',
+      maturity: 'prototype',
+      executionMode: 'preview',
+      walletAware: true,
+      tenantAware: true,
+      governanceAware: true,
+      acsAware: true,
+    },
+    route: '/governance/tenants',
+    description: 'Selected DAO, company or Sub-DAO operating context, treasury posture and local governance readiness.',
+  },
+  {
+    meta: {
+      id: 'dashboard-operations',
+      title: 'Operations',
+      module: 'acs',
+      scope: 'operator',
+      surface: 'operations',
+      maturity: 'prototype',
+      executionMode: 'simulation',
+      walletAware: false,
+      tenantAware: true,
+      governanceAware: true,
+      acsAware: true,
+    },
+    route: '/business/review-queue',
+    description: 'ACS, Business intake, review queues, blocked workflows and supervised execution-control visibility.',
+  },
+];
+
+function RegistryCard({ module }) {
+  return (
+    <CardShell
+      title={module.name}
+      subtitle={module.route}
+      scope={module.primaryScope}
+      maturity={module.maturity}
+      executionMode="read-only"
+    >
+      <p className="mt-3 text-sm text-outline">Primary scope: <strong className="text-on-surface">{module.primaryScope}</strong></p>
+      <p className="mt-1 text-xs text-outline">Supported: {module.supportedScopes.join(', ')}</p>
+    </CardShell>
+  );
+}
 
 const Overview = () => {
+  const protocolModules = getModulesByScope('protocol');
+  const connectedState = walletMock.states.find((state) => state.id === 'wallet-state-connected') ?? walletMock.states[0];
+  const academyProgress = academyMock.learningProgress?.[0];
+  const primaryDao = governanceMock.daoRegistry?.[0];
+  const activeWorkflows = acsMock.workflows?.filter((workflow) => workflow.status !== 'completed') ?? [];
+
   return (
-    <main className="flex-1 overflow-y-auto bg-background p-8">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Ecosystem Overview</h1>
-        <p className="text-on-surface-variant text-sm">{ecosystemMock.overview.mockNotice}</p>
-      </header>
-      {/* 1. Financial Summary Bento Section */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-2 bg-surface-container-highest p-8 rounded-xl relative overflow-hidden flex items-center">
-          <div className="relative z-10 w-1/2">
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 block">Total Net Worth</span>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-5xl font-extrabold tracking-tighter text-white">{defiMock.summary.treasuryValueMock}</span>
-              <span className="text-green text-sm font-bold flex items-center">
-                <span className="material-symbols-outlined text-sm">trending_up</span> +5.24%
-              </span>
-            </div>
-            <div className="flex gap-4 mt-8">
-              <button disabled className="bg-primary/40 text-on-primary px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary cursor-not-allowed">Deposit disabled</button>
-              <button disabled className="bg-surface-container-high text-on-surface/50 px-6 py-2.5 rounded-lg font-bold text-sm border-outline-variant/10 cursor-not-allowed">Withdraw disabled</button>
-            </div>
+    <PageShell
+      title="Ecosystem dashboard by information ownership"
+      subtitle="The dashboard now separates protocol, user, tenant and operator information so no surface has to guess whether data belongs to Axodus, a wallet, a DAO/company or an operations queue."
+      module="AxodusAPP Information Architecture"
+      scope="protocol"
+      maturity="prototype"
+      executionMode="read-only"
+    >
+
+        <ScopeLegend />
+
+        <ContentGrid columns="four">
+          {dashboardBlocks.map((block) => (
+            <CardShell
+              key={block.meta.id}
+              title={block.meta.title}
+              scope={block.meta.scope}
+              maturity={block.meta.maturity}
+              executionMode={block.meta.executionMode}
+              status={block.meta.surface}
+            >
+              <p className="text-sm leading-6 text-outline">{block.description}</p>
+              <Link to={block.route} className="mt-5 inline-flex rounded-lg border border-white/10 bg-surface-container px-3 py-2 text-sm font-black text-on-surface hover:border-primary">
+                Open surface
+              </Link>
+            </CardShell>
+          ))}
+        </ContentGrid>
+
+        <ScopeSection
+          scope="protocol"
+          title="Protocol Overview"
+          description="Global ecosystem state, module readiness, constitutional posture and read-only protocol finance."
+        >
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <ScopedCard meta={{
+              id: 'protocol-ecosystem-health',
+              title: 'Ecosystem Health',
+              module: 'ecosystem',
+              scope: 'protocol',
+              surface: 'dashboard',
+              maturity: 'mock',
+              executionMode: 'read-only',
+              walletAware: false,
+              tenantAware: false,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-2xl font-black text-on-surface">{ecosystemMock.overview.mvpPhase}</p>
+              <p className="mt-2 text-sm leading-6 text-outline">{ecosystemMock.overview.mockNotice}</p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'protocol-governance-summary',
+              title: 'Constitutional Governance',
+              module: 'governance',
+              scope: 'protocol',
+              surface: 'dashboard',
+              maturity: 'mock',
+              executionMode: 'read-only',
+              walletAware: false,
+              tenantAware: false,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-2xl font-black text-on-surface">{governanceMock.summary.constitutionalStatus}</p>
+              <p className="mt-2 text-sm text-outline">{governanceMock.summary.totalDaos} DAOs, {governanceMock.summary.activeProposals} active proposals.</p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'protocol-defi-readonly',
+              title: 'Defi Read-Only State',
+              module: 'defi',
+              scope: 'protocol',
+              surface: 'dashboard',
+              maturity: 'mock',
+              executionMode: 'executable-disabled',
+              walletAware: false,
+              tenantAware: true,
+              governanceAware: true,
+              acsAware: false,
+            }}>
+              <p className="text-2xl font-black text-on-surface">{defiMock.summary.treasuryValueMock}</p>
+              <p className="mt-2 text-sm text-outline">{defiMock.summary.financialDisclaimer}</p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'protocol-module-registry',
+              title: 'Module Registry',
+              module: 'ecosystem',
+              scope: 'protocol',
+              surface: 'dashboard',
+              maturity: 'prototype',
+              executionMode: 'read-only',
+              walletAware: false,
+              tenantAware: false,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-2xl font-black text-on-surface">{axodusModuleRegistry.length}</p>
+              <p className="mt-2 text-sm text-outline">{protocolModules.length} modules expose protocol-level surfaces.</p>
+            </ScopedCard>
           </div>
-          <div className="w-1/2 h-full flex items-end">
-            <div className="w-full h-40 flex items-end gap-1 px-4 opacity-60">
-              {/* Simple custom CSS sparkline visualization */}
-              <div className="bg-secondary w-full h-[30%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[45%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[40%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[60%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[55%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[75%] rounded-t-sm"></div>
-              <div className="bg-secondary w-full h-[90%] rounded-t-sm shadow-[0_0_15px_#41e4b8]"></div>
-            </div>
+        </ScopeSection>
+
+        <ScopeSection
+          scope="user"
+          title="My Axodus"
+          description="Wallet and account-specific data stays separate from protocol and tenant operations."
+        >
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <ScopedCard meta={{
+              id: 'user-wallet-state',
+              title: 'Wallet State',
+              module: 'connect',
+              scope: 'user',
+              surface: 'dashboard',
+              maturity: 'mock',
+              executionMode: 'read-only',
+              walletAware: true,
+              tenantAware: false,
+              governanceAware: false,
+              acsAware: false,
+            }}>
+              <p className="text-xl font-black text-on-surface">{connectedState.shortAddress ?? connectedState.status}</p>
+              <p className="mt-2 text-sm text-outline">{connectedState.message}</p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'user-academy-progress',
+              title: 'Academy Progress',
+              module: 'academy',
+              scope: 'user',
+              surface: 'dashboard',
+              maturity: 'mock',
+              executionMode: 'read-only',
+              walletAware: true,
+              tenantAware: false,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-xl font-black text-on-surface">{academyProgress?.progress ?? 0}% complete</p>
+              <p className="mt-2 text-sm text-outline">Certificate: {academyProgress?.certificateStatus ?? 'mock-pending'}.</p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'user-marketplace-access',
+              title: 'Marketplace Access',
+              module: 'marketplace',
+              scope: 'user',
+              surface: 'dashboard',
+              maturity: 'mock',
+              executionMode: 'preview',
+              walletAware: true,
+              tenantAware: false,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-xl font-black text-on-surface">{marketplaceMock.orders?.length ?? 0} mock orders</p>
+              <p className="mt-2 text-sm text-outline">Access is shown as mock/read-only. Settlement is disabled.</p>
+            </ScopedCard>
           </div>
-          {/* Decorative Radial Gradient */}
-          <div className="absolute -right-20 -top-20 w-80 h-80 bg-primary/5 rounded-full blur-[80px]"></div>
-        </div>
-        <div className="bg-surface-container-highest p-8 rounded-xl flex flex-col justify-between">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6 block">Current APY Focus</span>
-            <div className="flex items-center justify-center py-4">
-              <div className="relative w-32 h-32 flex items-center justify-center">
-                <svg className="absolute inset-0 w-full h-full -rotate-90">
-                  <circle className="text-surface-container-high" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" strokeWidth="8"></circle>
-                  <circle className="text-indigo-400" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" strokeDasharray="364.4" strokeDashoffset="100" strokeWidth="8"></circle>
-                </svg>
-                <span className="text-2xl font-bold text-white">18.4%</span>
-              </div>
-            </div>
+        </ScopeSection>
+
+        <ScopeSection
+          scope="tenant"
+          title="Tenant Console"
+          description="DAO/company context is grouped as tenant information, not protocol-wide truth."
+        >
+          <div className="grid gap-4 md:grid-cols-2">
+            <ScopedCard meta={{
+              id: 'tenant-dao-profile',
+              title: primaryDao?.name ?? 'Selected DAO',
+              module: 'governance',
+              scope: 'tenant',
+              surface: 'console',
+              maturity: 'mock',
+              executionMode: 'preview',
+              walletAware: true,
+              tenantAware: true,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-sm leading-6 text-outline">{primaryDao?.description}</p>
+              <p className="mt-3 text-sm text-outline">Standing: <strong className="text-on-surface">{primaryDao?.standing}</strong></p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'tenant-business-readiness',
+              title: 'Business Runtime Boundary',
+              module: 'business',
+              scope: 'tenant',
+              surface: 'operations',
+              maturity: 'prototype',
+              executionMode: 'simulation',
+              walletAware: false,
+              tenantAware: true,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-sm leading-6 text-outline">Business data is tenant/workspace operational visibility. It remains mock-first and non-executing.</p>
+              <Link to="/business" className="mt-5 inline-flex rounded-lg border border-white/10 bg-surface-container px-3 py-2 text-sm font-black text-on-surface hover:border-primary">
+                Open Business
+              </Link>
+            </ScopedCard>
           </div>
-          <div className="text-center text-xs text-on-surface-variant font-medium">
-            Projected monthly yield: <span className="text-indigo-300">+$2,189.20</span>
+        </ScopeSection>
+
+        <ScopeSection
+          scope="operator"
+          title="Operations"
+          description="ACS, review, blocker and execution-control information is visibly operator-scoped."
+        >
+          <div className="grid gap-4 md:grid-cols-2">
+            <ScopedCard meta={{
+              id: 'operator-acs-summary',
+              title: 'ACS Operations',
+              module: 'acs',
+              scope: 'operator',
+              surface: 'operations',
+              maturity: 'mock',
+              executionMode: 'simulation',
+              walletAware: false,
+              tenantAware: true,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-xl font-black text-on-surface">{acsMock.summary.activeWorkflows} active workflows</p>
+              <p className="mt-2 text-sm text-outline">{acsMock.summary.pendingReviews} pending reviews, {acsMock.summary.riskAlerts} risk alerts.</p>
+            </ScopedCard>
+            <ScopedCard meta={{
+              id: 'operator-workflow-queue',
+              title: 'Workflow Queue',
+              module: 'business',
+              scope: 'operator',
+              surface: 'operations',
+              maturity: 'mock',
+              executionMode: 'simulation',
+              walletAware: false,
+              tenantAware: true,
+              governanceAware: true,
+              acsAware: true,
+            }}>
+              <p className="text-xl font-black text-on-surface">{activeWorkflows.length} active items</p>
+              <p className="mt-2 text-sm text-outline">Queues are preview-only and require human/governance review before any future execution.</p>
+            </ScopedCard>
           </div>
-        </div>
-      </section>
-      {/* 2. Portfolio Distribution & Yields */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-        {/* Distribution Visual */}
-        <div className="lg:col-span-5 glass-panel p-8 rounded-xl border-white/5">
-          <h3 className="text-lg font-bold text-white mb-8">Portfolio Distribution</h3>
-          <div className="relative flex flex-col items-center justify-center">
-            {/* Radar Chart SVG */}
-            <div className="w-full aspect-square max-w-[320px] relative flex items-center justify-center">
-              <svg className="w-full h-full" viewBox="0 0 200 200">
-                <defs>
-                  <linearGradient id="radarGradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                    <stop offset="0%" stopColor="#818cf8"></stop>
-                    <stop offset="100%" stopColor="#41e4b8"></stop>
-                  </linearGradient>
-                  <filter height="140%" id="glow" width="140%" x="-20%" y="-20%">
-                    <feGaussianBlur result="blur" stdDeviation="3"></feGaussianBlur>
-                    <feComposite in="SourceGraphic" in2="blur" operator="over"></feComposite>
-                  </filter>
-                </defs>
-                {/* Grid Lines (Pentagons) */}
-                <polygon fill="none" points="100,20 176,75 147,165 53,165 24,75" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                <polygon fill="none" points="100,40 157,81 135,149 65,149 43,81" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                <polygon fill="none" points="100,60 138,88 123,133 77,133 62,88" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                <polygon fill="none" points="100,80 119,94 111,117 89,117 81,94" stroke="rgba(148, 163, 184, 0.1)" strokeWidth="1"></polygon>
-                {/* Axis Lines */}
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="100" y1="100" y2="20"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="176" y1="100" y2="75"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="147" y1="100" y2="165"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="53" y1="100" y2="165"></line>
-                <line stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" x1="100" x2="24" y1="100" y2="75"></line>
-                {/* Data Shape (Mining: 85%, Bot: 70%, DeFi: 60%, Gov: 40%, Bus: 55%) */}
-                <polygon fill="url(#radarGradient)" fillOpacity="0.2" filter="url(#glow)" points="100,32 153,83 128,139 81,126 58,86" stroke="url(#radarGradient)" strokeWidth="2"></polygon>
-                {/* Vertices Data Points */}
-                <circle cx="100" cy="32" fill="#818cf8" r="2"></circle>
-                <circle cx="153" cy="83" fill="#61b8da" r="2"></circle>
-                <circle cx="128" cy="139" fill="#41e4b8" r="2"></circle>
-                <circle cx="81" cy="126" fill="#41e4b8" r="2"></circle>
-                <circle cx="58" cy="86" fill="#818cf8" r="2"></circle>
-              </svg>
-              {/* Labels Overlay */}
-              <div className="absolute -top-4 text-[10px] font-bold text-indigo-300 uppercase tracking-tighter">Mining</div>
-              <div className="absolute right-0 top-1/3 translate-x-4 text-[10px] font-bold text-slate-300 uppercase tracking-tighter">Bot Trading</div>
-              <div className="absolute right-8 bottom-0 text-[10px] font-bold text-secondary uppercase tracking-tighter">DeFi</div>
-              <div className="absolute left-8 bottom-0 text-[10px] font-bold text-secondary uppercase tracking-tighter">Governance</div>
-              <div className="absolute left-0 top-1/3 -translate-x-4 text-[10px] font-bold text-indigo-300 uppercase tracking-tighter">Business</div>
-            </div>
-            {/* Data Legend */}
-            <div className="mt-12 grid grid-cols-2 gap-x-8 gap-y-3 w-full max-w-xs mx-auto">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">Mining: 42%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-secondary"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">Bots: 35%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">DeFi: 23%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-slate-500"></div>
-                <span className="text-[10px] text-slate-400 font-medium uppercase">Other: 10%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Yield Products Table */}
-        <div className="lg:col-span-7 bg-surface-container-highest p-8 rounded-xl">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold text-white">Active Yield Streams</h3>
-            <button className="text-indigo-400 text-xs font-bold hover:underline">View All</button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="text-[10px] uppercase tracking-widest text-slate-500 border-b border-white/5">
-                  <th className="pb-4 font-semibold">Product</th>
-                  <th className="pb-4 font-semibold">Allocation</th>
-                  <th className="pb-4 font-semibold">Current Yield</th>
-                  <th className="pb-4 font-semibold">Risk</th>
-                  <th className="pb-4 font-semibold text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                <tr className="border-b border-white/5 hover:bg-surface-bright/20 transition-colors">
-                  <td className="py-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-indigo-500/20 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">bolt</span>
-                    </div>
-                    <span className="font-semibold">Antminer S21 Pool</span>
-                  </td>
-                  <td className="py-4 text-slate-300">$60,000</td>
-                  <td className="py-4 font-bold text-secondary">22.4% APY</td>
-                  <td className="py-4"><span className="px-2 py-0.5 rounded text-[10px] bg-slate-500/10 text-slate-400 font-bold uppercase">Med</span></td>
-                  <td className="py-4 text-right"><span className="w-2 h-2 rounded-full bg-secondary inline-block"></span></td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-surface-bright/20 transition-colors">
-                  <td className="py-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-secondary/20 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-secondary text-lg">smart_toy</span>
-                    </div>
-                    <span className="font-semibold">High-Freq ETH Bot</span>
-                  </td>
-                  <td className="py-4 text-slate-300">$49,500</td>
-                  <td className="py-4 font-bold text-secondary">31.2% ROI</td>
-                  <td className="py-4"><span className="px-2 py-0.5 rounded text-[10px] bg-error/10 text-error font-bold uppercase">High</span></td>
-                  <td className="py-4 text-right"><span className="w-2 h-2 rounded-full bg-secondary inline-block"></span></td>
-                </tr>
-                <tr className="hover:bg-surface-bright/20 transition-colors">
-                  <td className="py-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded bg-tertiary/20 flex items-center justify-center">
-                      <span className="material-symbols-outlined text-tertiary text-lg">account_balance</span>
-                    </div>
-                    <span className="font-semibold">USDC/ETH LP Vault</span>
-                  </td>
-                  <td className="py-4 text-slate-300">$32,850</td>
-                  <td className="py-4 font-bold text-secondary">11.8% APY</td>
-                  <td className="py-4"><span className="px-2 py-0.5 rounded text-[10px] bg-green-500/10 text-green-400 font-bold uppercase">Low</span></td>
-                  <td className="py-4 text-right"><span className="w-2 h-2 rounded-full bg-secondary inline-block"></span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-      {/* 3. Governance & Business Status */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Governance Proposals */}
-        <div className="bg-surface-container-highest p-8 rounded-xl border-white/5">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <span className="material-symbols-outlined text-indigo-400">gavel</span> Active Governance
-            </h3>
-          </div>
-          <div className="space-y-6">
-            <div className="p-4 bg-surface-container rounded-lg border-outline-variant/10">
-              <div className="flex justify-between items-start mb-3">
-                <h4 className="text-sm font-bold text-on-surface">{governanceMock.proposals[0].title}</h4>
-                <span className="px-2 py-1 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300">CORE</span>
-              </div>
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-slate-500">72% Support (6.2M Neurons)</span>
-                <span className="text-slate-500">4 days left</span>
-              </div>
-              <div className="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                <div className="h-full bg-indigo-400 w-[72%]"></div>
-              </div>
-            </div>
-            <div className="p-4 bg-surface-container rounded-lg border-outline-variant/10">
-              <div className="flex justify-between items-start mb-3">
-                <h4 className="text-sm font-bold text-on-surface">AX-105: Dynamic Burn Rate Adjust</h4>
-                <span className="px-2 py-1 rounded text-[10px] font-bold bg-secondary/20 text-secondary">ECON</span>
-              </div>
-              <div className="flex justify-between text-xs mb-2">
-                <span className="text-slate-500">48% Support (4.1M Neurons)</span>
-                <span className="text-slate-500">22 hours left</span>
-              </div>
-              <div className="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                <div className="h-full bg-tertiary w-[48%]"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Business Project Progress */}
-        <div className="bg-surface-container-highest p-8 rounded-xl border-white/5">
-          <h3 className="text-lg font-bold text-white mb-8 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary">rocket_launch</span> Business Progress
-          </h3>
-          <div className="space-y-8">
-            <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="futuristic minimalist datacenter logo indigo glow square" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBObIrk_UpLVWKNmo9VvrJazd40p8gwhaW0pJ_gfvlWw1UPFZh9Dz1_YCHufA0mi2UEaBCegbYHG-qwv_AxYSz3oacnfTbtjTlEG2fQTefT08akVla9K6TrxojNi2VUus6IPyGZ7EQT3B-QCtX2S89UHrk756is_D8ZjXhWfIknbj9u-PoaZqZntoNKRboZ0oOhF7_21GQGQ4QMBL3KEv-RleXtg9cNj7QxR5eN7F2DBTLkIvzBJxmBAX9WQ4RTfr2jKZMsTVFeb58"/>
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-bold">Project Helios: Data Node Cluster</span>
-                  <span className="text-xs font-bold text-secondary">85%</span>
-                </div>
-                <div className="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
-                  <div className="h-full bg-secondary w-[85%]"></div>
-                </div>
-                <p className="text-[10px] text-slate-500 mt-2">Hardware deployment complete. Finalizing software orchestration.</p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-lg bg-surface-container overflow-hidden flex-shrink-0">
-                <img className="w-full h-full object-cover" alt="cybernetic trading terminal interface abstract logo teal glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe8MjOjZzDxlVvH48Wy4E-dTRILxrj4ZAHFB6fhFH0NVTsE_BZIt4QCeNUS3dQ85SLrxTWuBAy87ep8UxcURORQWjG7NUEgsxlX30SAvaY2dvQFEzyw27gQsAP_7LBb0M84jhTOGrJgSOgZTHsTwaHOYLQywpA7kj_32eNUyY32kjeEnbFyytAjOZRRB6CXxtm8gJI2FH9wtAUI3mqLSkhGnq1D4MysZudAjxQeZk6A7qpbCrRQrjmyEq5wkfvtudI6eFJ9_1whB4"/>
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-bold">Project Orion: DEX Aggregator</span>
-                  <span className="text-xs font-bold text-indigo-400">42%</span>
-                </div>
-                <div className="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
-                  <div className="h-full bg-indigo-400 w-[42%]"></div>
-                </div>
-                <p className="text-[10px] text-slate-500 mt-2">Liquidity contract auditing phase. Integration with MCP servers in progress.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+        </ScopeSection>
+
+        <SectionShell scope="protocol" title="Module Scope Registry" description="Minimal route metadata for future normalization and audit work.">
+          <ContentGrid columns="three">
+            {axodusModuleRegistry.map((module) => <RegistryCard key={module.id} module={module} />)}
+          </ContentGrid>
+        </SectionShell>
+    </PageShell>
   );
 };
 

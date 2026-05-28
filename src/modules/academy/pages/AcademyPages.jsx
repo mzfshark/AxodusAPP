@@ -12,6 +12,7 @@ import {
 } from '../components/AcademyUi';
 import { useAcademyCourse, useAcademyData, useAcademyPath } from '../hooks/useAcademyData';
 import { formatNeurons, getAcademyCourseTitle, getAcademyTutor } from '../services/academyService';
+import { ScopeSection } from '@/components/uiScope';
 
 const selectClass = 'rounded-lg border border-white/10 bg-surface-container-low px-3 py-2 text-sm text-on-surface';
 
@@ -64,33 +65,37 @@ export function AcademyHome() {
           </div>
         </AcademyPanel>
       </section>
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {metrics.map((metric) => <AcademyMetricCard key={metric.label} {...metric} />)}
-      </section>
-      <AcademyPanel title="MVP flow coverage" description="End-to-end mock flows that must remain clear before production contracts, treasury execution, or credential issuance are enabled.">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-white/10 text-left text-sm">
-            <thead>
-              <tr className="text-xs uppercase tracking-[0.16em] text-outline">
-                <th className="px-3 py-3">Flow</th>
-                <th className="px-3 py-3">Status</th>
-                <th className="px-3 py-3">Route</th>
-                <th className="px-3 py-3">Evidence</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {academy.flowCoverage.map((flow) => (
-                <tr key={flow.id}>
-                  <td className="px-3 py-4 font-bold text-on-surface">{flow.flow}</td>
-                  <td className="px-3 py-4"><AcademyBadge value={flow.status} /></td>
-                  <td className="px-3 py-4"><Link to={flow.route} className="font-mono text-xs text-primary hover:text-on-surface">{flow.route}</Link></td>
-                  <td className="px-3 py-4 text-outline">{flow.evidence}</td>
+      <ScopeSection scope="user" title="Learner account state" description="Progress, rewards and trust signals belong to the connected user/account scope.">
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {metrics.map((metric) => <AcademyMetricCard key={metric.label} {...metric} />)}
+        </section>
+      </ScopeSection>
+      <ScopeSection scope="protocol" title="Academy protocol flow coverage" description="MVP flow coverage describes module readiness and policy boundaries, not personal ownership.">
+        <AcademyPanel title="MVP flow coverage" description="End-to-end mock flows that must remain clear before production contracts, treasury execution, or credential issuance are enabled.">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-white/10 text-left text-sm">
+              <thead>
+                <tr className="text-xs uppercase tracking-[0.16em] text-outline">
+                  <th className="px-3 py-3">Flow</th>
+                  <th className="px-3 py-3">Status</th>
+                  <th className="px-3 py-3">Route</th>
+                  <th className="px-3 py-3">Evidence</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </AcademyPanel>
+              </thead>
+              <tbody className="divide-y divide-white/10">
+                {academy.flowCoverage.map((flow) => (
+                  <tr key={flow.id}>
+                    <td className="px-3 py-4 font-bold text-on-surface">{flow.flow}</td>
+                    <td className="px-3 py-4"><AcademyBadge value={flow.status} /></td>
+                    <td className="px-3 py-4"><Link to={flow.route} className="font-mono text-xs text-primary hover:text-on-surface">{flow.route}</Link></td>
+                    <td className="px-3 py-4 text-outline">{flow.evidence}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </AcademyPanel>
+      </ScopeSection>
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_1fr]">
         <AcademyPanel title="Featured courses">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

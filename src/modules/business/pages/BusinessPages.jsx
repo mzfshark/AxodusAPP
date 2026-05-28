@@ -40,6 +40,7 @@ import {
   useBusinessWorkflowSummary,
   useBusinessWorkflows
 } from '../hooks/useBusinessData';
+import { ScopeSection } from '@/components/uiScope';
 
 const money = (amount, currency = 'USD') => new Intl.NumberFormat('en-US', { currency, maximumFractionDigits: 0, style: 'currency' }).format(Number(amount || 0));
 
@@ -87,18 +88,29 @@ export function BusinessOverview() {
       title="Business Runtime"
       description="Operational infrastructure, development intake, treasury exposure, ACS visibility, revenue routing and telemetry state rendered from the Business mock runtime."
     >
-      <BusinessSummaryCards cards={[
-        ...dashboard.cards,
-        { id: 'debenture-status', label: 'Debenture Status', value: summary.totalDebentures, detail: 'Debenture lifecycle visibility only; no purchase or issuance is available.', status: 'NOTICE' },
-        { id: 'governance-review-count', label: 'Governance Reviews', value: summary.activeGovernanceReviews, detail: 'Requests currently requiring governance review.', status: 'WARNING' },
-        { id: 'funding-review-count', label: 'Funding Reviews', value: summary.activeFundingReviews, detail: 'Funding records in governance or treasury review.', status: 'WARNING' },
-        { id: 'critical-events', label: 'Critical Events', value: summary.criticalTelemetryEvents, detail: 'Critical or emergency telemetry events visible in the mock runtime.', status: summary.criticalTelemetryEvents ? 'CRITICAL' : 'INFO' }
-        , { id: 'registry-edges', label: 'Registry Edges', value: registry.data.relationshipEdges, detail: 'Read-only graph relationships across Business runtime entities.', status: 'INFO' },
-        { id: 'blocked-workflows', label: 'Blocked Workflows', value: workflows.data.blockedWorkflows, detail: 'Workflow blockers detected from registry and runtime status.', status: workflows.data.blockedWorkflows ? 'WARNING' : 'INFO' },
-        { id: 'runtime-events', label: 'Runtime Events', value: events.data.totalEvents, detail: 'Derived event timeline records across Business entities.', status: 'NOTICE' },
-        { id: 'security-status', label: 'Security Validators', value: summary.securityValidatorStatus?.valid ? 'PASS' : 'REVIEW', detail: 'Non-execution and mock/read-only validator status.', status: summary.securityValidatorStatus?.valid ? 'APPROVED' : 'WARNING' }
-      ]} />
+      <ScopeSection
+        scope="operator"
+        title="Business operations and review control"
+        description="Business runtime cards describe intake, review, blockers and execution boundaries. They are operator-scoped and remain mock/read-only."
+      >
+        <BusinessSummaryCards cards={[
+          ...dashboard.cards,
+          { id: 'debenture-status', label: 'Debenture Status', value: summary.totalDebentures, detail: 'Debenture lifecycle visibility only; no purchase or issuance is available.', status: 'NOTICE' },
+          { id: 'governance-review-count', label: 'Governance Reviews', value: summary.activeGovernanceReviews, detail: 'Requests currently requiring governance review.', status: 'WARNING' },
+          { id: 'funding-review-count', label: 'Funding Reviews', value: summary.activeFundingReviews, detail: 'Funding records in governance or treasury review.', status: 'WARNING' },
+          { id: 'critical-events', label: 'Critical Events', value: summary.criticalTelemetryEvents, detail: 'Critical or emergency telemetry events visible in the mock runtime.', status: summary.criticalTelemetryEvents ? 'CRITICAL' : 'INFO' }
+          , { id: 'registry-edges', label: 'Registry Edges', value: registry.data.relationshipEdges, detail: 'Read-only graph relationships across Business runtime entities.', status: 'INFO' },
+          { id: 'blocked-workflows', label: 'Blocked Workflows', value: workflows.data.blockedWorkflows, detail: 'Workflow blockers detected from registry and runtime status.', status: workflows.data.blockedWorkflows ? 'WARNING' : 'INFO' },
+          { id: 'runtime-events', label: 'Runtime Events', value: events.data.totalEvents, detail: 'Derived event timeline records across Business entities.', status: 'NOTICE' },
+          { id: 'security-status', label: 'Security Validators', value: summary.securityValidatorStatus?.valid ? 'PASS' : 'REVIEW', detail: 'Non-execution and mock/read-only validator status.', status: summary.securityValidatorStatus?.valid ? 'APPROVED' : 'WARNING' }
+        ]} />
+      </ScopeSection>
 
+      <ScopeSection
+        scope="tenant"
+        title="Tenant runtime readiness"
+        description="Runtime health, workflow readiness and registry relationships describe a company/DAO workspace rather than a personal account."
+      >
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <BusinessPanel title="Runtime Health" description="Contract, policy and validator posture from the runtime package.">
           <div className="space-y-3 text-sm">
@@ -125,6 +137,7 @@ export function BusinessOverview() {
           </div>
         </BusinessPanel>
       </section>
+      </ScopeSection>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">

@@ -1,6 +1,7 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
+import { ScopeSection } from '@/components/uiScope';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
@@ -586,14 +587,26 @@ export default function GovernanceDashboard() {
           status={governanceConsole.status}
         />
 
-        <DaoTenantOperationsCenter
-          tenant={governanceConsole.selectedTenant}
-          selectedDao={governanceConsole.selectedDao}
-          selectedChain={governanceConsole.selectedChain}
-          tenantSource={governanceConsole.tenantSource}
-        />
+        <ScopeSection
+          scope="tenant"
+          title="Selected tenant operating context"
+          description="DAO tenant profile, local governance state and treasury posture are scoped to the selected organization."
+        >
+          <DaoTenantOperationsCenter
+            tenant={governanceConsole.selectedTenant}
+            selectedDao={governanceConsole.selectedDao}
+            selectedChain={governanceConsole.selectedChain}
+            tenantSource={governanceConsole.tenantSource}
+          />
+        </ScopeSection>
 
-        <GovernanceExecutorPanel resolution={governanceConsole.executorResolution} source={governanceConsole.executorSource} />
+        <ScopeSection
+          scope="operator"
+          title="Execution control and review"
+          description="Executor readiness, guardrails and operational blockers are operator-scoped preview data."
+        >
+          <GovernanceExecutorPanel resolution={governanceConsole.executorResolution} source={governanceConsole.executorSource} />
+        </ScopeSection>
 
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1fr]">
           <GovernanceHealthPanel

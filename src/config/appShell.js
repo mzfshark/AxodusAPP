@@ -40,6 +40,8 @@ const nuclei = [
     icon: Gauge,
     tone: 'core',
     summary: 'Unified ecosystem operating view',
+    scope: 'protocol',
+    maturity: 'prototype',
   },
   {
     id: 'mining',
@@ -48,6 +50,8 @@ const nuclei = [
     icon: Pickaxe,
     tone: 'infrastructure',
     summary: 'Tokenized mining exposure, provider risk and treasury allocation readiness',
+    scope: 'operator',
+    maturity: 'prototype',
     sections: [
       { to: '/mining', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/mining/providers', label: 'Providers', icon: Pickaxe },
@@ -72,6 +76,8 @@ const nuclei = [
     icon: Banknote,
     tone: 'treasury',
     summary: 'Treasury, vault and protocol finance surfaces',
+    scope: 'protocol',
+    maturity: 'mock',
     sections: [
       { to: '/defi', label: 'Dashboard', icon: LayoutDashboard, end: true },
     ],
@@ -84,6 +90,8 @@ const nuclei = [
     icon: Network,
     tone: 'infrastructure',
     summary: 'Operational intelligence, tenant services and policy visibility',
+    scope: 'operator',
+    maturity: 'prototype',
     sections: [
       { to: '/acs', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/acs/capabilities', label: 'Capabilities', icon: Network },
@@ -104,6 +112,8 @@ const nuclei = [
     icon: Landmark,
     tone: 'constitutional',
     summary: 'DAO tenant operations and constitutional execution',
+    scope: 'tenant',
+    maturity: 'prototype',
     sections: [
       { to: '/governance', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/governance/tenants', label: 'DAO Tenants', icon: UsersRound },
@@ -192,6 +202,8 @@ const nuclei = [
     icon: BriefcaseBusiness,
     tone: 'enterprise',
     summary: 'Operational infrastructure, funding visibility and ACS runtime coordination',
+    scope: 'operator',
+    maturity: 'prototype',
     sections: [
       { to: '/business', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/business/intake', label: 'Intake', icon: FilePlus2 },
@@ -216,6 +228,8 @@ const nuclei = [
     icon: ShoppingCart,
     tone: 'commerce',
     summary: 'Product discovery, licenses and seller operations',
+    scope: 'tenant',
+    maturity: 'prototype',
     sections: [
       { to: '/marketplace', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/marketplace/dashboard', label: 'Dashboard', icon: LibraryBig },
@@ -264,6 +278,8 @@ const nuclei = [
     icon: Building,
     tone: 'agency',
     summary: 'Institutional brand, campaign and partnership operations',
+    scope: 'tenant',
+    maturity: 'prototype',
     sections: [
       { to: '/bba', label: 'Home', icon: LayoutDashboard, end: true },
       { to: '/bba/services', label: 'Services', icon: BriefcaseBusiness },
@@ -280,6 +296,8 @@ const nuclei = [
     icon: GraduationCap,
     tone: 'learning',
     summary: 'Learning, credentials and reward progression',
+    scope: 'user',
+    maturity: 'prototype',
     sections: [
       { to: '/academy', label: 'Home', icon: GraduationCap, end: true },
       { to: '/academy/courses', label: 'Courses', icon: LibraryBig },
@@ -325,6 +343,8 @@ const nuclei = [
     icon: Coins,
     tone: 'liquidity',
     summary: 'Liquidity, routing and token market access',
+    scope: 'protocol',
+    maturity: 'legacy-static',
     sections: [
       { to: '/dex', label: 'Swap', icon: Coins, end: true },
     ],
@@ -336,6 +356,8 @@ const nuclei = [
     icon: Ticket,
     tone: 'campaign',
     summary: 'Draws, prize pools and randomness visibility',
+    scope: 'protocol',
+    maturity: 'prototype',
     sections: [
       { to: '/lottery', label: 'Dashboard', icon: LayoutDashboard, end: true },
       { to: '/lottery/draws', label: 'Draws', icon: Ticket },
@@ -359,9 +381,38 @@ export const appShellNav = {
       icon: Settings,
       tone: 'core',
       summary: 'Preferences, access and account settings',
+      scope: 'user',
+      maturity: 'mock',
     },
   ],
 };
+
+export const appShellGroups = [
+  {
+    id: 'protocol',
+    label: 'Protocol',
+    description: 'Global Axodus protocol and ecosystem surfaces',
+    itemIds: ['overview', 'governance', 'defi', 'dex', 'mining', 'lottery'],
+  },
+  {
+    id: 'user',
+    label: 'User',
+    description: 'Wallet/account, learning and personal access surfaces',
+    itemIds: ['academy', 'marketplace', 'settings'],
+  },
+  {
+    id: 'tenant',
+    label: 'Tenant',
+    description: 'DAO, company and workspace operating surfaces',
+    itemIds: ['business', 'bba'],
+  },
+  {
+    id: 'operations',
+    label: 'Operations',
+    description: 'ACS, runtime safety, review and service observability',
+    itemIds: ['acs'],
+  },
+];
 
 export const shellSearchMeta = {
   icon: Search,

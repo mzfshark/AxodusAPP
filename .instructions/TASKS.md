@@ -6,9 +6,9 @@ Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current phase: Build Recovery Phase
+Current phase: App Shell Normalization Phase
 
-Current priority: Sprint 00A Vercel Build Recovery & Deployment Gate. UI normalization remains pending and must not be marked complete during this sprint.
+Current priority: Sprint 01 App Shell Normalization. Full module redesign remains deferred; current work is shared shell structure and navigation grouping.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -18,7 +18,38 @@ Current priority: Sprint 00A Vercel Build Recovery & Deployment Gate. UI normali
 - Stabilize production build script — 100%
 - Add deploy verification scripts — 100%
 - Document build recovery report — 100%
-- Run final local validation gate — pending
+- Run final local validation gate — 100%
+
+### Sprint 00B — Information Architecture & UI Scope Separation
+
+- Define shared UI scope metadata contract — 100%
+- Add reusable scope badge, section, card and legend components — 100%
+- Add minimal module registry with supported scope metadata — 100%
+- Apply scope separation to dashboard — 100%
+- Apply initial scope separation to Governance, Business, Marketplace and Academy — 100%
+- Document route-level UI scope audit — 100%
+- Validate production build after semantic UI changes — 100%
+
+### Sprint 00C — UI Route & Card Inventory
+
+- Inventory registered routes from `src/routes.jsx` — 100%
+- Inventory major visible cards, panels, widgets, tables and status blocks — 100%
+- Identify mixed-scope pages and recommended future layouts — 100%
+- Identify duplicated UI patterns and shared component targets — 100%
+- Classify major UI data sources and hardcoded domain data risks — 100%
+- Create prioritized UI refactor backlog for Sprint 01 — 100%
+- Validate production build after documentation changes — 100%
+
+### Sprint 01 — App Shell Normalization
+
+- Consolidate global app frame into `AppShell` — 100%
+- Add shared `PageShell`, `PageHeader`, `SectionShell` and `ContentGrid` — 100%
+- Add reusable `CardShell` — 100%
+- Group sidebar navigation by Protocol/User/Tenant/Operations — 100%
+- Normalize header runtime indicators — 100%
+- Apply shared shell/card pattern to main dashboard — 100%
+- Document normalization report — 100%
+- Validate lint/build after shell changes — 100%
 
 ### Module Progress
 
