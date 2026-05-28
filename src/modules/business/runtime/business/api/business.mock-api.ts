@@ -82,6 +82,16 @@ export const BUSINESS_MOCK_API_ROUTES = [
   "GET /api/v1/business/finance/bridge/:entityId/risk-snapshot",
   "GET /api/v1/business/finance/bridge/:entityId/settlement-readiness",
   "GET /api/v1/business/finance/bridge/:entityId/handoff-receipt",
+  "GET /api/v1/business/acs/bridge",
+  "GET /api/v1/business/acs/bridge/summary",
+  "GET /api/v1/business/acs/bridge/:entityId",
+  "GET /api/v1/business/acs/bridge/:entityId/readiness-package",
+  "GET /api/v1/business/acs/bridge/:entityId/provisioning-plan",
+  "GET /api/v1/business/acs/bridge/:entityId/isolation",
+  "GET /api/v1/business/acs/bridge/:entityId/permissions",
+  "GET /api/v1/business/acs/bridge/:entityId/compute",
+  "GET /api/v1/business/acs/bridge/:entityId/human-review",
+  "GET /api/v1/business/acs/bridge/:entityId/handoff-receipt",
   "GET /api/v1/business/audit",
   "GET /api/v1/business/audit/:auditId",
   "GET /api/v1/business/audit/entity/:entityId",
@@ -175,6 +185,17 @@ export const handleBusinessMockApiRequest = (request: BusinessMockApiRequest): B
     if (segments[0] === "treasury" && segments[1] === "exposure" && segments[2]) return fromHandler(businessApiHandlers.getBusinessTreasuryExposureById(segments[2]));
     if (segments[0] === "revenue" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessRevenueRecords());
     if (segments[0] === "revenue" && segments[1]) return fromHandler(businessApiHandlers.getBusinessRevenueRecordById(segments[1]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] === "summary") return fromHandler(businessApiHandlers.getBusinessACSBridgeSummary());
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments.length === 2) return fromHandler(businessApiHandlers.getBusinessACSBridge());
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "readiness-package") return fromHandler(businessApiHandlers.getBusinessACSReadinessPackage(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "provisioning-plan") return fromHandler(businessApiHandlers.getBusinessACSProvisioningPlan(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "isolation") return fromHandler(businessApiHandlers.getBusinessACSIsolationBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "permissions") return fromHandler(businessApiHandlers.getBusinessACSPermissionBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "compute") return fromHandler(businessApiHandlers.getBusinessACSComputeBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "human-review") return fromHandler(businessApiHandlers.getBusinessACSHumanReviewBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "handoff-receipt") return fromHandler(businessApiHandlers.getBusinessACSHandoffReceipt(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "blockers") return fromHandler(businessApiHandlers.getBusinessACSBridgeBlockers(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2]) return fromHandler(businessApiHandlers.getBusinessACSBridgeStatus(segments[2]));
     if (segments[0] === "acs" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessACSRuntimes());
     if (segments[0] === "acs" && segments[1]) return fromHandler(businessApiHandlers.getBusinessACSRuntimeById(segments[1]));
     if (segments[0] === "telemetry" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessTelemetryEvents());
@@ -223,6 +244,17 @@ export const handleBusinessMockApiRequest = (request: BusinessMockApiRequest): B
     if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "handoff-receipt") return fromHandler(businessApiHandlers.getBusinessFinancialHandoffReceipt(segments[2]));
     if (segments[0] === "finance" && segments[1] === "bridge" && segments[2] && segments[3] === "blockers") return fromHandler(businessApiHandlers.getBusinessFinancialBridgeBlockers(segments[2]));
     if (segments[0] === "finance" && segments[1] === "bridge" && segments[2]) return fromHandler(businessApiHandlers.getBusinessFinancialBridgeStatus(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] === "summary") return fromHandler(businessApiHandlers.getBusinessACSBridgeSummary());
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments.length === 2) return fromHandler(businessApiHandlers.getBusinessACSBridge());
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "readiness-package") return fromHandler(businessApiHandlers.getBusinessACSReadinessPackage(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "provisioning-plan") return fromHandler(businessApiHandlers.getBusinessACSProvisioningPlan(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "isolation") return fromHandler(businessApiHandlers.getBusinessACSIsolationBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "permissions") return fromHandler(businessApiHandlers.getBusinessACSPermissionBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "compute") return fromHandler(businessApiHandlers.getBusinessACSComputeBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "human-review") return fromHandler(businessApiHandlers.getBusinessACSHumanReviewBridgeSnapshot(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "handoff-receipt") return fromHandler(businessApiHandlers.getBusinessACSHandoffReceipt(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2] && segments[3] === "blockers") return fromHandler(businessApiHandlers.getBusinessACSBridgeBlockers(segments[2]));
+    if (segments[0] === "acs" && segments[1] === "bridge" && segments[2]) return fromHandler(businessApiHandlers.getBusinessACSBridgeStatus(segments[2]));
     if (segments[0] === "audit" && segments[1] === "entity" && segments[2]) return fromHandler(businessApiHandlers.getBusinessAuditRecordsByEntity(segments[2]));
     if (segments[0] === "audit" && segments[1] === "actor" && segments[2]) return fromHandler(businessApiHandlers.getBusinessAuditRecordsByActor(segments[2]));
     if (segments[0] === "audit" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessAuditRecords());

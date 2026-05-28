@@ -51,6 +51,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     revenue: "VIEW_REVENUE_ROUTING",
     acsRuntimes: "VIEW_ACS_RUNTIME",
     acsReceipts: "VIEW_ACS_RUNTIME",
+    acsBridge: "REQUEST_ACS_SERVICE",
     telemetryEvents: "VIEW_TELEMETRY",
     telemetrySummary: "VIEW_TELEMETRY",
     runtime: "VIEW_TELEMETRY",
@@ -78,6 +79,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     revenue: "FINANCIAL_CORE",
     acsRuntimes: "ACS",
     acsReceipts: "ACS",
+    acsBridge: "ACS",
     telemetryEvents: "BUSINESS_API",
     telemetrySummary: "BUSINESS_API",
     runtime: "BUSINESS_API",
@@ -105,6 +107,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     revenue: "VIEW_REVENUE_ROUTING",
     acsRuntimes: "VIEW_ACS_RUNTIME",
     acsReceipts: "VIEW_ACS_RUNTIME",
+    acsBridge: "PREPARE_ACS_PROVISIONING_REQUEST",
     telemetryEvents: "VIEW_TELEMETRY",
     telemetrySummary: "VIEW_TELEMETRY",
     runtime: "VIEW_TELEMETRY",
@@ -125,7 +128,7 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     executionPolicy: executionPolicyByDomain[domain] ?? "VIEW_TELEMETRY",
     governanceRequirement: ["projects", "federation", "plugins", "funding", "debentures", "drafts", "reviewQueue", "governanceBridge", "financialBridge", "audit", "snapshots"].includes(domain),
     treasuryRequirement: ["funding", "debentures", "treasuryExposure", "revenue", "submissions", "reviewQueue", "financialBridge"].includes(domain),
-    acsRequirement: ["acsRuntimes", "acsReceipts", "drafts", "submissions", "snapshots"].includes(domain)
+    acsRequirement: ["acsRuntimes", "acsReceipts", "acsBridge", "drafts", "submissions", "snapshots"].includes(domain)
   };
 };
 
@@ -147,6 +150,7 @@ const route = (
     draftReadiness: "BusinessReadinessSnapshotRepository",
     submissions: "BusinessSubmissionRepository",
     reviewQueue: "BusinessReviewQueueRepository",
+    acsBridge: "BusinessAuditRepository",
     governanceBridge: "BusinessAuditRepository",
     financialBridge: "BusinessAuditRepository",
     audit: "BusinessAuditRepository",
@@ -177,8 +181,8 @@ const route = (
     acsRequirement: routeSecurity.acsRequirement,
     futureIntegrationTarget: routeSecurity.futureIntegrationTarget,
     futureRepositoryDependency: futureRepositoryDependencyByDomain[domain],
-    auditRequirement: method !== "GET" || ["submissions", "reviewQueue", "governanceBridge", "financialBridge", "audit"].includes(domain),
-    snapshotRequirement: ["drafts", "draftReadiness", "submissions", "reviewQueue", "governanceBridge", "financialBridge", "audit", "snapshots"].includes(domain)
+    auditRequirement: method !== "GET" || ["submissions", "reviewQueue", "acsBridge", "governanceBridge", "financialBridge", "audit"].includes(domain),
+    snapshotRequirement: ["drafts", "draftReadiness", "submissions", "reviewQueue", "acsBridge", "governanceBridge", "financialBridge", "audit", "snapshots"].includes(domain)
   };
 };
 
@@ -288,5 +292,15 @@ export const BUSINESS_ROUTE_DEFINITIONS: BusinessRouteDefinition[] = [
   route("business.financial-bridge.revenue-package", "GET", "financialBridge", "Get revenue routing readiness package for an entity.", "getBusinessRevenueRoutingReadinessPackage", "BusinessRevenueRoutingReadinessPackage | null", "/business/finance/bridge/:entityId/revenue-package"),
   route("business.financial-bridge.risk-snapshot", "GET", "financialBridge", "Get financial risk snapshot for an entity.", "getBusinessFinancialRiskSnapshot", "BusinessFinancialRiskSnapshot | null", "/business/finance/bridge/:entityId/risk-snapshot"),
   route("business.financial-bridge.settlement-readiness", "GET", "financialBridge", "Get settlement readiness snapshot for an entity.", "getBusinessSettlementReadinessSnapshot", "BusinessSettlementReadinessSnapshot | null", "/business/finance/bridge/:entityId/settlement-readiness"),
-  route("business.financial-bridge.handoff", "GET", "financialBridge", "Get mock financial handoff receipt for an entity.", "getBusinessFinancialHandoffReceipt", "BusinessFinancialHandoffReceipt | null", "/business/finance/bridge/:entityId/handoff-receipt")
+  route("business.financial-bridge.handoff", "GET", "financialBridge", "Get mock financial handoff receipt for an entity.", "getBusinessFinancialHandoffReceipt", "BusinessFinancialHandoffReceipt | null", "/business/finance/bridge/:entityId/handoff-receipt"),
+  route("business.acs-bridge.list", "GET", "acsBridge", "Get mock ACS bridge summary.", "getBusinessACSBridge", "BusinessACSBridgeSummary"),
+  route("business.acs-bridge.summary", "GET", "acsBridge", "Get mock ACS bridge summary.", "getBusinessACSBridgeSummary", "BusinessACSBridgeSummary", "/business/acs/bridge/summary"),
+  route("business.acs-bridge.status", "GET", "acsBridge", "Get ACS bridge status for an entity.", "getBusinessACSBridgeStatus", "BusinessACSBridgeStatus", "/business/acs/bridge/:entityId"),
+  route("business.acs-bridge.readiness-package", "GET", "acsBridge", "Get ACS readiness package for an entity.", "getBusinessACSReadinessPackage", "BusinessACSReadinessPackage | null", "/business/acs/bridge/:entityId/readiness-package"),
+  route("business.acs-bridge.provisioning-plan", "GET", "acsBridge", "Get mock ACS provisioning plan for an entity.", "getBusinessACSProvisioningPlan", "BusinessACSProvisioningPlan | null", "/business/acs/bridge/:entityId/provisioning-plan"),
+  route("business.acs-bridge.isolation", "GET", "acsBridge", "Get ACS isolation snapshot for an entity.", "getBusinessACSIsolationBridgeSnapshot", "BusinessACSIsolationSnapshot | null", "/business/acs/bridge/:entityId/isolation"),
+  route("business.acs-bridge.permissions", "GET", "acsBridge", "Get ACS permission snapshot for an entity.", "getBusinessACSPermissionBridgeSnapshot", "BusinessACSPermissionSnapshot | null", "/business/acs/bridge/:entityId/permissions"),
+  route("business.acs-bridge.compute", "GET", "acsBridge", "Get ACS compute snapshot for an entity.", "getBusinessACSComputeBridgeSnapshot", "BusinessACSComputeSnapshot | null", "/business/acs/bridge/:entityId/compute"),
+  route("business.acs-bridge.human-review", "GET", "acsBridge", "Get ACS human review snapshot for an entity.", "getBusinessACSHumanReviewBridgeSnapshot", "BusinessACSHumanReviewSnapshot | null", "/business/acs/bridge/:entityId/human-review"),
+  route("business.acs-bridge.handoff", "GET", "acsBridge", "Get mock ACS handoff receipt for an entity.", "getBusinessACSHandoffReceipt", "BusinessACSHandoffReceipt | null", "/business/acs/bridge/:entityId/handoff-receipt")
 ];

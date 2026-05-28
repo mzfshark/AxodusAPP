@@ -77,6 +77,10 @@ export function useBusinessACSReadinessModel() {
   return useQuery({ queryKey: ['business', 'acs-readiness'], queryFn: businessRuntimeClient.getACSReadinessModel });
 }
 
+export function useBusinessACSBridge() {
+  return useQuery({ queryKey: ['business', 'acs-bridge'], queryFn: businessRuntimeClient.getACSBridgeModel });
+}
+
 export function useBusinessProjectRegistry(projectId) {
   return useQuery({ enabled: Boolean(projectId), queryKey: ['business', 'registry', 'project', projectId], queryFn: () => businessRuntimeClient.getProjectRegistryView(projectId) });
 }

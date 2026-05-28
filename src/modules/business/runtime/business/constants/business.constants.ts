@@ -34,6 +34,7 @@ export const BUSINESS_ROUTE_CATALOG = {
   revenue: "/business/revenue",
   acsRuntimes: "/business/acs/runtimes",
   acsReceipts: "/business/acs/receipts",
+  acsBridge: "/business/acs/bridge",
   telemetryEvents: "/business/telemetry/events",
   telemetrySummary: "/business/telemetry/summary",
   runtime: "/business/runtime",

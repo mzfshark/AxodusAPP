@@ -13,6 +13,7 @@ import {
   BusinessTelemetryFeed
 } from '../components/BusinessUi';
 import {
+  useBusinessACSBridge,
   useBusinessACSReadinessModel,
   useBusinessACSRuntimes,
   useBusinessAccessModel,
@@ -1304,11 +1305,14 @@ export function BusinessACS() {
 
 export function BusinessACSReadiness() {
   const readiness = useBusinessACSReadinessModel();
-  if (readiness.isLoading) return <BusinessLoadingState />;
-  if (readiness.isError) return <BusinessErrorState message="Business ACS readiness unavailable." />;
+  const bridge = useBusinessACSBridge();
+  if (readiness.isLoading || bridge.isLoading) return <BusinessLoadingState />;
+  if (readiness.isError || bridge.isError) return <BusinessErrorState message="Business ACS readiness unavailable." />;
 
   const model = readiness.data;
+  const bridgeModel = bridge.data;
   const summary = model.summary;
+  const bridgeSummary = bridgeModel.summary;
 
   return (
     <BusinessPageShell
@@ -1319,7 +1323,11 @@ export function BusinessACSReadiness() {
         { id: 'acs-runtimes', label: 'ACS Runtimes', value: summary.totalRuntimes, detail: 'Mock ACS runtime records visible from Business runtime.', status: 'INFO' },
         { id: 'acs-projects', label: 'ACS Projects', value: summary.acsRequiredProjects, detail: 'Projects requiring ACS visibility or review.', status: 'NOTICE' },
         { id: 'acs-receipts', label: 'Receipts', value: summary.orchestrationReceipts, detail: 'Orchestration receipts are mock audit references only.', status: 'NOTICE' },
-        { id: 'acs-readiness', label: 'Readiness Score', value: `${summary.readinessScore}%`, detail: `${summary.blockedACSActions} ACS actions are forbidden in current runtime.`, status: summary.readinessScore >= 80 ? 'APPROVED' : 'WARNING' }
+        { id: 'acs-readiness', label: 'Readiness Score', value: `${summary.readinessScore}%`, detail: `${summary.blockedACSActions} ACS actions are forbidden in current runtime.`, status: summary.readinessScore >= 80 ? 'APPROVED' : 'WARNING' },
+        { id: 'acs-bridge-packages', label: 'Bridge Packages', value: bridgeSummary.totalEntities, detail: 'Entities with ACS readiness packages or explicit not-required status.', status: 'INFO' },
+        { id: 'acs-handoff-receipts', label: 'Handoff Receipts', value: bridgeModel.receipts.length, detail: 'Receipts are local simulation artifacts only.', status: 'NOTICE' },
+        { id: 'acs-bridge-blockers', label: 'Bridge Blockers', value: bridgeSummary.blockerCount, detail: 'ACS blockers must be resolved before future real integration.', status: bridgeSummary.blockerCount > 0 ? 'WARNING' : 'APPROVED' },
+        { id: 'acs-external-effects', label: 'External Effects', value: bridgeModel.externalSideEffects ? 'YES' : 'NO', detail: 'Bridge is mock/read-only/simulation-only.', status: bridgeModel.externalSideEffects ? 'CRITICAL' : 'APPROVED' }
       ]} />
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -1327,6 +1335,7 @@ export function BusinessACSReadiness() {
           <DetailList items={[
             { label: 'Runtime mode', value: model.mock && model.readOnly ? 'mock/read-only' : 'review' },
             { label: 'Provisioning', value: 'disabled' },
+            { label: 'ACS bridge', value: bridgeModel.externalSideEffects ? 'review required' : 'No external ACS provisioning' },
             { label: 'Autonomous execution', value: 'disabled' },
             { label: 'Security validators', value: model.securityValidatorStatus.valid ? 'PASS' : 'REVIEW' }
           ]} />
@@ -1367,6 +1376,115 @@ export function BusinessACSReadiness() {
           ]}
         />
       </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Bridge Packages" description="Readiness packages prepared for future ACS review. They do not provision MCP, start agents or access memory.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.packages}
+            columns={[
+              { key: 'packageId', label: 'Package', render: idCell('packageId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'entityType', label: 'Type', render: statusCell('entityType') },
+              { key: 'runtimeType', label: 'Runtime', render: statusCell('runtimeType') },
+              { key: 'isolationProfile', label: 'Isolation', render: statusCell('isolationProfile') },
+              { key: 'humanReviewRequired', label: 'Human review', render: (row) => <span className="text-outline">{String(row.humanReviewRequired)}</span> },
+              { key: 'blockers', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockers.length}</strong> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Provisioning Plans" description="Provisioning plans are architectural previews only. No deployment, compute allocation or ACS service call is enabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.provisioningPlans}
+            columns={[
+              { key: 'planId', label: 'Plan', render: idCell('planId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'runtimeType', label: 'Runtime', render: statusCell('runtimeType') },
+              { key: 'deploymentScope', label: 'Scope', render: statusCell('deploymentScope') },
+              { key: 'memoryScope', label: 'Memory', render: statusCell('memoryScope') },
+              { key: 'humanReviewGates', label: 'Human gates', render: (row) => <span className="text-outline">{row.humanReviewGates.join(' / ')}</span> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Isolation Snapshots" description="Isolation boundaries captured for review without changing tenant or memory boundaries.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.isolationSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'isolationProfile', label: 'Isolation', render: statusCell('isolationProfile') },
+              { key: 'memoryBoundary', label: 'Memory', render: statusCell('memoryBoundary') },
+              { key: 'tenantBoundary', label: 'Tenant boundary', render: statusCell('tenantBoundary') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Permission Snapshots" description="Permission profiles are visible snapshots. No permission escalation is possible from Business.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.permissionSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'permissionProfile', label: 'Profile', render: (row) => <span className="text-outline">{row.permissionProfile.join(' / ')}</span> },
+              { key: 'autonomousExecutionAllowed', label: 'Autonomous', render: (row) => <span className="text-outline">{String(row.autonomousExecutionAllowed)}</span> },
+              { key: 'escalationAllowed', label: 'Escalation', render: (row) => <span className="text-outline">{String(row.escalationAllowed)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Compute Snapshots" description="Compute data is planning visibility only. No capacity is allocated or scaled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.computeSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'computeProfile', label: 'Profile', render: statusCell('computeProfile') },
+              { key: 'cpuUnits', label: 'CPU', render: (row) => <span className="text-outline">{row.cpuUnits}</span> },
+              { key: 'memoryMb', label: 'Memory MB', render: (row) => <span className="text-outline">{row.memoryMb}</span> },
+              { key: 'monthlyBudgetAmount', label: 'Monthly budget', render: (row) => <span className="text-outline">{money(row.monthlyBudgetAmount, row.currency)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Human Review Snapshots" description="Human review gates required before any future ACS integration can leave simulation mode.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.humanReviewSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'required', label: 'Required', render: (row) => <span className="text-outline">{String(row.required)}</span> },
+              { key: 'requirements', label: 'Requirements', render: (row) => <span className="text-outline">{row.requirements.map((requirement) => requirement.action).join(' / ') || 'none'}</span> },
+              { key: 'gates', label: 'Gates', render: (row) => <span className="text-outline">{row.gates.join(' / ') || 'none'}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Handoff Receipts" description="Handoff receipts prove only that Business prepared a mock ACS review package. They do not call external ACS services.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.receipts}
+            columns={[
+              { key: 'handoffReceiptId', label: 'Receipt', render: idCell('handoffReceiptId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'acsBridgeStatus', label: 'Status', render: statusCell('acsBridgeStatus') },
+              { key: 'requiredACSActions', label: 'Required actions', render: (row) => <span className="text-outline">{row.requiredACSActions.join(' / ')}</span> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Bridge Blockers" description="Blocked ACS actions remain visible and non-executable. Provisioning, deployment, memory access and permission escalation stay disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.blockers}
+            columns={[
+              { key: 'blockerId', label: 'Blocker', render: idCell('blockerId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'code', label: 'Code', render: statusCell('code') },
+              { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+              { key: 'message', label: 'Message', render: textCell('message') },
+              { key: 'resolution', label: 'Resolution', render: textCell('resolution') }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <BusinessPanel title="ACS Runtime Status" description="Runtime status, type, owner and project linkage. This is not a deployment or provisioning surface.">

@@ -34,6 +34,7 @@ import { getPermissionMatrixSummary } from "../permissions/business.permission-m
 import { getExecutionPolicySummary } from "../policies/business.execution-policy.js";
 import { getSecurityValidatorStatus } from "../security/business.security-validators.js";
 import { getBusinessApiRuntimeContractSummary } from "./business.api-summary.js";
+import * as acsBridgeHandlers from "./business.acs-bridge.handlers.js";
 import * as draftHandlers from "./business.draft.handlers.js";
 import * as submissionHandlers from "./business.submission.handlers.js";
 import * as reviewQueueHandlers from "./business.review-queue.handlers.js";
@@ -206,6 +207,7 @@ export const businessApiHandlers = {
   getBusinessFederationParticipants,
   getBusinessIdentities,
   getBusinessRuntimeSummary,
+  ...acsBridgeHandlers,
   ...draftHandlers,
   ...submissionHandlers,
   ...reviewQueueHandlers,

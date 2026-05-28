@@ -418,6 +418,14 @@ describe('AxodusAPP Business routes', () => {
     expect(await screen.findByRole('heading', { name: /ACS Readiness/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ACS Safety Status/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ACS Required Projects/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Bridge Packages/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Provisioning Plans/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Isolation Snapshots/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Permission Snapshots/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Compute Snapshots/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Human Review Snapshots/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Handoff Receipts/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /ACS Bridge Blockers/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ACS Runtime Status/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ACS Isolation Profiles/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ACS Permission Profiles/i })).toBeInTheDocument();
@@ -431,6 +439,9 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getAllByText(/READ_ENTERPRISE_SCOPE/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/receipt-business-intake-1/i)).toBeInTheDocument();
     expect(screen.getAllByText(/PROVISION_ACS_RUNTIME/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/PROVISION_MCP_REAL/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/No ACS provisioning|No external ACS provisioning/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/External effects/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
     expect(screen.queryByRole('button', { name: /provision mcp|start agent|deploy acs|access memory|execute workflow|escalate permissions|bypass human review/i })).not.toBeInTheDocument();
   });
