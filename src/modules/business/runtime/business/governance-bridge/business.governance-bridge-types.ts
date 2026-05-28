@@ -2,7 +2,6 @@ import type { BusinessCapability } from "../capabilities/business.capabilities.j
 import type { ConstitutionalCompatibility, FederationStanding, GovernanceRestriction } from "../contracts/governance.contract.js";
 import type { BusinessPermissionDecision } from "../permissions/business.permissions.js";
 import type { BusinessExecutionPolicy } from "../policies/business.execution-policy.js";
-import type { BusinessReviewBlocker } from "../review/business.review-types.js";
 import type { RiskTier } from "../types/business.enums.js";
 import type { BusinessId, GovernanceReference } from "../types/business.types.js";
 

@@ -4,7 +4,6 @@ import { getBusinessRuntimeSummary } from "../services/business.service.js";
 import type {
   BusinessDashboardCard,
   BusinessDashboardModel,
-  BusinessId,
   BusinessLifecycleTableRow,
   BusinessRiskIndicator,
   MoneyAmount

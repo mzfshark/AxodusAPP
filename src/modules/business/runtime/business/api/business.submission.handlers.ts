@@ -1,5 +1,4 @@
 import {
-  getDraftSubmissionHistory,
   getDraftSubmissionReceipt,
   listDraftSubmissionReceipts
 } from "../submission/business.submission-receipts.js";
