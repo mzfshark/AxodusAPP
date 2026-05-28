@@ -6,9 +6,9 @@ Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current phase: Module Workbench Normalization Phase
+Current phase: Governance Tenant Console Deepening Phase
 
-Current priority: Sprint 04 Module Workbench Normalization. Governance and Business now start rendering as scoped workbenches before deeper Marketplace and Academy passes.
+Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is being established as the reference tenant-aware console pattern.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -86,6 +86,21 @@ Current priority: Sprint 04 Module Workbench Normalization. Governance and Busin
 - Extend module metadata for workbench scope support — 100%
 - Document module workbench normalization report — 100%
 - Validate lint/build after module workbench changes — 100%
+
+### Sprint 05 — Governance Tenant Console Deepening
+
+- Add Governance console composition model — 100%
+- Add Governance Context Header — 100%
+- Add Axodus Root vs selected tenant authority split — 100%
+- Add Constitutional Governance section — 100%
+- Add Local Governance section — 100%
+- Add Tenant Governance Identity panel — 100%
+- Add Proposal State Summary — 100%
+- Add User Participation panel — 100%
+- Add Governance Readiness panel — 100%
+- Add ACS Review State panel — 100%
+- Document Governance Tenant Console deepening report — 100%
+- Validate lint/build after Governance console deepening — 100%
 
 ### Module Progress
 

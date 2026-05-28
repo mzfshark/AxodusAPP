@@ -3,10 +3,15 @@ import ChainRoleBadge from '../components/ChainRoleBadge';
 import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
 import { PageShell } from '@/components/layout';
 import { ScopeSection } from '@/components/uiScope';
-import { WorkbenchSummarySection } from '@/components/workbench';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';
+import ConstitutionalGovernanceSection from '../components/ConstitutionalGovernanceSection';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
+import GovernanceAuthoritySplit from '../components/GovernanceAuthoritySplit';
+import GovernanceContextHeader from '../components/GovernanceContextHeader';
+import GovernanceOperationsReviewSection from '../components/GovernanceOperationsReviewSection';
+import GovernanceUserParticipationPanel from '../components/GovernanceUserParticipationPanel';
+import LocalGovernanceSection from '../components/LocalGovernanceSection';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
 import { shouldUseGovernanceMocks } from '../api/mockGovernanceData';
@@ -15,7 +20,8 @@ import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 import { useProposalDrafts } from '../hooks/useProposalDrafts';
 import { acsMock } from '@/data/mock';
 import { TenantIdentityPanel } from '@/components/tenant';
-import { buildGovernanceWorkbenchModel } from '../governanceWorkbenchModel';
+import { useTenantContext } from '@/runtime/tenantContext';
+import { buildGovernanceConsoleModel } from '../governanceConsoleModel';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -558,6 +564,7 @@ function ConstitutionalGuardrailsPanel({
 }
 
 export default function GovernanceDashboard() {
+  const { selectedTenant: appTenant } = useTenantContext();
   const { chains, summary, source, status, error } = useChainRegistry();
   const governanceConsole = useGovernanceConsole(chains);
   const proposalDrafts = useProposalDrafts({
@@ -567,12 +574,13 @@ export default function GovernanceDashboard() {
   });
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
   const visibleProposals = [...proposalDrafts.drafts, ...governanceConsole.proposals];
-  const workbench = buildGovernanceWorkbenchModel({
+  const consoleModel = buildGovernanceConsoleModel({
     chains,
-    governanceConsole,
-    proposalDrafts,
     summary,
     source,
+    governanceConsole,
+    proposalDrafts,
+    appTenant,
   });
 
   return (
@@ -586,40 +594,19 @@ export default function GovernanceDashboard() {
     >
         <SourceBanner source={source} status={status} error={error} />
 
+        <GovernanceContextHeader context={consoleModel.context} />
+
         <TenantIdentityPanel moduleId="governance" />
 
-        <WorkbenchSummarySection
-          scope="protocol"
-          title="Protocol governance layer"
-          description="Constitutional standing, federation registry, chain registry and guardrail reason codes apply to Axodus as a protocol."
-          cards={workbench.protocolCards}
-          columns="three"
-        />
+        <GovernanceAuthoritySplit authority={consoleModel.authoritySplit} />
 
-        <WorkbenchSummarySection
-          scope="tenant"
-          title="Tenant governance workspace"
-          description="Selected DAO/Sub-DAO state, local proposals, treasury policy and tenant readiness are shown separately from protocol state."
-          cards={workbench.tenantCards}
-          columns="three"
-        />
+        <ConstitutionalGovernanceSection constitutional={consoleModel.constitutional} />
 
-        <WorkbenchSummarySection
-          scope="user"
-          title="My governance context"
-          description="Wallet and tenant-role information is user-scoped and does not grant execution by itself."
-          cards={workbench.userCards}
-          columns="two"
-        />
+        <LocalGovernanceSection local={consoleModel.local} proposals={consoleModel.proposals} />
 
-        <WorkbenchSummarySection
-          scope="operator"
-          title="Governance operations and review"
-          description="Execution readiness, required approvals and blocked actions are operator-scoped preview data."
-          cards={workbench.operationsCards}
-          executionMode="simulation"
-          columns="two"
-        />
+        <GovernanceUserParticipationPanel participation={consoleModel.userParticipation} />
+
+        <GovernanceOperationsReviewSection readiness={consoleModel.readiness} acsReview={consoleModel.acsReview} />
 
         <DaoContextSelector
           daos={governanceConsole.daos}

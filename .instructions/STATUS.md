@@ -2,7 +2,7 @@
 
 Last updated: 2026-05-27
 
-Current phase: Module Workbench Normalization Phase
+Current phase: Governance Tenant Console Deepening Phase
 
 ## Deployment Gate
 
@@ -13,6 +13,7 @@ Current phase: Module Workbench Normalization Phase
 - Sprint 02 introduces a frontend selected tenant runtime with mock tenant accounts and UI binding.
 - Sprint 03 recomposes the dashboard into Protocol, User, Tenant and Operations sections with a separate composition layer.
 - Sprint 04 starts normalizing module pages into scoped workbenches, beginning with Governance and Business.
+- Sprint 05 deepens Governance as the reference tenant-aware console pattern for Axodus Root, tenant-local governance, readiness and ACS review.
 - UI normalization is not complete and remains deferred until scope semantics and the production build gate are stable.
 - Business runtime imports must resolve inside AxodusAPP for Vercel-compatible isolated builds.
 
@@ -75,3 +76,12 @@ Current phase: Module Workbench Normalization Phase
 - Governance and Business workbench data composition is kept outside raw JSX in module-level model files.
 - Marketplace, Academy, Defi, DEX, Mining, Lottery, MCPs and Trading still need deeper module-level workbench passes.
 - Full UI normalization is not complete.
+
+## Governance Tenant Console Position
+
+- `/governance/console` now shows a dedicated Governance Context Header.
+- Axodus Root constitutional authority is visually separated from selected tenant/Sub-DAO local governance.
+- Constitutional Governance and Local Governance render as distinct sections.
+- Tenant governance identity, proposal state summary, user participation, readiness and ACS review are explicit.
+- Governance execution remains read-only, preview, simulation or executable-disabled.
+- Governance is now the reference pattern for future Business, Treasury, Marketplace, Academy and Trading tenant-aware module UX.

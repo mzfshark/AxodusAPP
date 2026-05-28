@@ -148,6 +148,32 @@
 
 ---
 
+## Sprint 05 — Governance Tenant Console Deepening
+
+### Objectives
+
+- make Governance the reference implementation for tenant-aware module UX
+- clarify Axodus Root constitutional authority versus selected tenant local governance
+- separate Constitutional Governance, Local Governance, User Participation and Operations/ACS Review
+- make proposal state, readiness state and ACS review state visually distinct
+- keep governance execution disabled, read-only, preview or simulation
+
+### Deliverables
+
+- Governance console composition layer
+- Governance context header
+- Axodus Root vs selected tenant authority split
+- Constitutional Governance section
+- Local Governance section
+- Tenant Governance Identity panel
+- Proposal State Summary
+- Governance Readiness panel
+- ACS Review State panel
+- User Participation panel
+- Governance Tenant Console deepening report under `.instructions/reports`
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives
