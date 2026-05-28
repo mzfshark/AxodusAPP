@@ -12,7 +12,9 @@ export const createBusinessApiMeta = (): BusinessApiMeta => {
     source: BUSINESS_API_SOURCE,
     version: BUSINESS_API_VERSION,
     mock: true,
-    readOnly: true
+    readOnly: true,
+    simulationOnly: true,
+    executionMode: "MOCK_READ_ONLY"
   };
 };
 

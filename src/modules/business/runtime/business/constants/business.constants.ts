@@ -35,7 +35,16 @@ export const BUSINESS_ROUTE_CATALOG = {
   acsRuntimes: "/business/acs/runtimes",
   acsReceipts: "/business/acs/receipts",
   telemetryEvents: "/business/telemetry/events",
-  telemetrySummary: "/business/telemetry/summary"
+  telemetrySummary: "/business/telemetry/summary",
+  runtime: "/business/runtime",
+  drafts: "/business/drafts",
+  draftStore: "/business/draft-store",
+  draftReadiness: "/business/drafts/readiness",
+  submissions: "/business/submissions",
+  reviewQueue: "/business/review-queue",
+  governanceBridge: "/business/governance/bridge",
+  audit: "/business/audit",
+  snapshots: "/business/snapshots"
 } as const;
 
 export const BUSINESS_ACTIVE_STATUS_GROUPS = {

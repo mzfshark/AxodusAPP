@@ -33,6 +33,13 @@ import { getBusinessEventSummary } from "../events/business.event-selectors.js";
 import { getPermissionMatrixSummary } from "../permissions/business.permission-matrix.js";
 import { getExecutionPolicySummary } from "../policies/business.execution-policy.js";
 import { getSecurityValidatorStatus } from "../security/business.security-validators.js";
+import { getBusinessApiRuntimeContractSummary } from "./business.api-summary.js";
+import * as draftHandlers from "./business.draft.handlers.js";
+import * as submissionHandlers from "./business.submission.handlers.js";
+import * as reviewQueueHandlers from "./business.review-queue.handlers.js";
+import * as auditHandlers from "./business.audit.handlers.js";
+import * as snapshotHandlers from "./business.snapshot.handlers.js";
+import * as governanceBridgeHandlers from "./business.governance-bridge.handlers.js";
 import type {
   ACSRuntime,
   BusinessDashboardModel,
@@ -166,6 +173,7 @@ export const getBusinessRuntimeSummary = (): BusinessApiResponse<BusinessApiRunt
         mock: true,
         readOnly: true
       },
+      apiContractSummary: getBusinessApiRuntimeContractSummary(),
       dashboard: getBusinessDashboardModel()
     },
     { links: { self: "/business/telemetry/summary" } }
@@ -196,7 +204,13 @@ export const businessApiHandlers = {
   getBusinessTelemetryEventById,
   getBusinessFederationParticipants,
   getBusinessIdentities,
-  getBusinessRuntimeSummary
+  getBusinessRuntimeSummary,
+  ...draftHandlers,
+  ...submissionHandlers,
+  ...reviewQueueHandlers,
+  ...auditHandlers,
+  ...snapshotHandlers,
+  ...governanceBridgeHandlers
 };
 
 export type BusinessApiHandlerName = keyof typeof businessApiHandlers;

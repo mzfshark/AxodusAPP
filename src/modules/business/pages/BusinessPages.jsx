@@ -24,6 +24,7 @@ import {
   useBusinessEventSummary,
   useBusinessFinanceRiskModel,
   useBusinessFundingRecords,
+  useBusinessGovernanceBridge,
   useBusinessGovernanceReadiness,
   useBusinessOverview,
   useBusinessPlugins,
@@ -959,10 +960,12 @@ export function BusinessAccess() {
 
 export function BusinessGovernanceReadiness() {
   const governance = useBusinessGovernanceReadiness();
-  if (governance.isLoading) return <BusinessLoadingState />;
-  if (governance.isError) return <BusinessErrorState message="Business governance readiness unavailable." />;
+  const bridge = useBusinessGovernanceBridge();
+  if (governance.isLoading || bridge.isLoading) return <BusinessLoadingState />;
+  if (governance.isError || bridge.isError) return <BusinessErrorState message="Business governance readiness unavailable." />;
 
   const model = governance.data;
+  const bridgeModel = bridge.data;
   const proposalRows = model.projects.map((project) => ({
     id: `${project.projectId}-proposal`,
     projectId: project.projectId,
@@ -992,8 +995,58 @@ export function BusinessGovernanceReadiness() {
         { id: 'governance-projects', label: 'Governance Projects', value: model.projects.length, detail: 'Projects requiring governance visibility or review.', status: 'WARNING' },
         { id: 'governance-drafts', label: 'Governance Drafts', value: model.drafts.length, detail: 'Stored local drafts requiring governance context.', status: model.drafts.length ? 'WARNING' : 'INFO' },
         { id: 'governance-blockers', label: 'Blockers', value: model.totalBlockers, detail: 'Restrictions and workflow blockers requiring review.', status: model.totalBlockers ? 'CRITICAL' : 'INFO' },
-        { id: 'governance-score', label: 'Readiness Score', value: `${model.readinessScore}%`, detail: 'Computed readiness only; no approval is executed.', status: model.readinessScore < 70 ? 'WARNING' : 'NOTICE' }
+        { id: 'governance-score', label: 'Readiness Score', value: `${model.readinessScore}%`, detail: 'Computed readiness only; no approval is executed.', status: model.readinessScore < 70 ? 'WARNING' : 'NOTICE' },
+        { id: 'bridge-packages', label: 'Bridge Packages', value: bridgeModel.summary.totalEntities, detail: 'Mock governance readiness packages prepared by runtime.', status: 'NOTICE' },
+        { id: 'bridge-handoffs', label: 'Handoff Receipts', value: bridgeModel.receipts.length, detail: 'Simulation-only handoff receipts; no DAO submission exists.', status: 'INFO' },
+        { id: 'mock-proposals', label: 'Mock Proposal Refs', value: bridgeModel.summary.mockProposalReferences, detail: 'References are local mock artifacts only.', status: 'INFO' },
+        { id: 'external-effects', label: 'External Effects', value: bridgeModel.externalSideEffects ? 'YES' : 'NO', detail: 'Governance bridge cannot create proposals, vote or execute.', status: bridgeModel.externalSideEffects ? 'CRITICAL' : 'APPROVED' }
       ]} />
+
+      <BusinessPanel title="Governance Bridge Packages" description="Mock handoff packages prepare Business context for future Governance integration without creating proposals.">
+        <BusinessLifecycleTable
+          rows={bridgeModel.packages}
+          columns={[
+            { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+            { key: 'entityType', label: 'Type', render: textCell('entityType') },
+            { key: 'projectId', label: 'Project', render: (row) => row.projectId ? <Link className="font-mono text-xs font-bold text-primary" to={`/business/projects/${row.projectId}`}>{row.projectId}</Link> : <span className="text-outline">draft</span> },
+            { key: 'governanceRequired', label: 'Governance', render: (row) => <span className="text-outline">{String(row.governanceRequired)}</span> },
+            { key: 'constitutionalCompatibility', label: 'Compatibility', render: (row) => <BusinessStatusBadge status={row.constitutionalCompatibility.constitutionalCompatibility} /> },
+            { key: 'federationStanding', label: 'Federation', render: (row) => <BusinessStatusBadge status={row.federationStanding.standing} /> },
+            { key: 'blockers', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockers.length}</strong> },
+            { key: 'mockProposalReference', label: 'Mock proposal', render: (row) => <span className="font-mono text-xs text-outline">{row.mockProposalReference.proposalId}</span> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Governance Handoff Receipts" description="Receipts are simulation-only and include blocked real governance actions.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.receipts}
+            columns={[
+              { key: 'handoffReceiptId', label: 'Receipt', render: idCell('handoffReceiptId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'handoffStatus', label: 'Status', render: statusCell('handoffStatus') },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Bridge Blockers" description="Governance bridge blockers must be resolved before any future real handoff can be considered.">
+          {bridgeModel.blockers.length ? (
+            <BusinessLifecycleTable
+              rows={bridgeModel.blockers}
+              columns={[
+                { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+                { key: 'source', label: 'Source', render: statusCell('source') },
+                { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+                { key: 'message', label: 'Blocker', render: textCell('message') }
+              ]}
+            />
+          ) : (
+            <p className="text-sm text-outline">No governance bridge blockers detected in the current mock runtime.</p>
+          )}
+        </BusinessPanel>
+      </section>
 
       <BusinessPanel title="Governance Required Projects" description="Projects where governance review, constitutional compatibility or restrictions must be visible before any future transition.">
         <BusinessLifecycleTable

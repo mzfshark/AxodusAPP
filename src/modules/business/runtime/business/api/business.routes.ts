@@ -5,7 +5,7 @@ import type { BusinessRuntimeAction } from "../policies/business.execution-polic
 import type { BusinessApiHandlerName } from "./business.handlers.js";
 import type { BusinessApiExecutionMode } from "./business.response.types.js";
 
-export type BusinessRouteMethod = "GET" | "POST" | "PATCH";
+export type BusinessRouteMethod = "GET" | "POST" | "PATCH" | "DELETE";
 
 export interface BusinessRouteDefinition {
   id: string;
@@ -19,6 +19,9 @@ export interface BusinessRouteDefinition {
   executionMode: BusinessApiExecutionMode;
   futureBackendReady: boolean;
   mockOnly: true;
+  readOnly: true;
+  simulationOnly: true;
+  externalSideEffects: false;
   executionEnabled: false;
   requiredCapability: BusinessCapability;
   permissionMode: BusinessPermissionMode;
@@ -27,12 +30,15 @@ export interface BusinessRouteDefinition {
   treasuryRequirement: boolean;
   acsRequirement: boolean;
   futureIntegrationTarget: "GOVERNANCE" | "TREASURY" | "FINANCIAL_CORE" | "DEBENTURE_ENGINE" | "ACS" | "IDENTITY" | "BUSINESS_API";
+  futureRepositoryDependency?: string;
+  auditRequirement: boolean;
+  snapshotRequirement: boolean;
 }
 
 const apiPathFor = (path: string): string => `/api/v1${path}`;
 
 const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
-  const capabilityByDomain: Record<keyof typeof BUSINESS_ROUTE_CATALOG, BusinessCapability> = {
+  const capabilityByDomain: Partial<Record<keyof typeof BUSINESS_ROUTE_CATALOG, BusinessCapability>> = {
     requests: "SUBMIT_BUSINESS_REQUEST",
     projects: "VIEW_GOVERNANCE_REFERENCES",
     assets: "PREPARE_ASSET_REGISTRATION",
@@ -46,10 +52,19 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     acsRuntimes: "VIEW_ACS_RUNTIME",
     acsReceipts: "VIEW_ACS_RUNTIME",
     telemetryEvents: "VIEW_TELEMETRY",
-    telemetrySummary: "VIEW_TELEMETRY"
+    telemetrySummary: "VIEW_TELEMETRY",
+    runtime: "VIEW_TELEMETRY",
+    drafts: "SUBMIT_BUSINESS_REQUEST",
+    draftStore: "SUBMIT_BUSINESS_REQUEST",
+    draftReadiness: "SUBMIT_BUSINESS_REQUEST",
+    submissions: "SUBMIT_BUSINESS_REQUEST",
+    reviewQueue: "SUBMIT_BUSINESS_REQUEST",
+    governanceBridge: "PREPARE_PROJECT_FOR_GOVERNANCE",
+    audit: "VIEW_GOVERNANCE_REFERENCES",
+    snapshots: "VIEW_GOVERNANCE_REFERENCES"
   };
 
-  const integrationTargetByDomain: Record<keyof typeof BUSINESS_ROUTE_CATALOG, BusinessRouteDefinition["futureIntegrationTarget"]> = {
+  const integrationTargetByDomain: Partial<Record<keyof typeof BUSINESS_ROUTE_CATALOG, BusinessRouteDefinition["futureIntegrationTarget"]>> = {
     requests: "BUSINESS_API",
     projects: "BUSINESS_API",
     assets: "BUSINESS_API",
@@ -63,10 +78,19 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     acsRuntimes: "ACS",
     acsReceipts: "ACS",
     telemetryEvents: "BUSINESS_API",
-    telemetrySummary: "BUSINESS_API"
+    telemetrySummary: "BUSINESS_API",
+    runtime: "BUSINESS_API",
+    drafts: "BUSINESS_API",
+    draftStore: "BUSINESS_API",
+    draftReadiness: "BUSINESS_API",
+    submissions: "BUSINESS_API",
+    reviewQueue: "BUSINESS_API",
+    governanceBridge: "GOVERNANCE",
+    audit: "BUSINESS_API",
+    snapshots: "BUSINESS_API"
   };
 
-  const executionPolicyByDomain: Record<keyof typeof BUSINESS_ROUTE_CATALOG, BusinessRuntimeAction> = {
+  const executionPolicyByDomain: Partial<Record<keyof typeof BUSINESS_ROUTE_CATALOG, BusinessRuntimeAction>> = {
     requests: "CREATE_BUSINESS_REQUEST",
     projects: "PREPARE_GOVERNANCE_REVIEW",
     assets: "REGISTER_OPERATIONAL_ASSET_DRAFT",
@@ -80,16 +104,25 @@ const routeSecurityByDomain = (domain: keyof typeof BUSINESS_ROUTE_CATALOG) => {
     acsRuntimes: "VIEW_ACS_RUNTIME",
     acsReceipts: "VIEW_ACS_RUNTIME",
     telemetryEvents: "VIEW_TELEMETRY",
-    telemetrySummary: "VIEW_TELEMETRY"
+    telemetrySummary: "VIEW_TELEMETRY",
+    runtime: "VIEW_TELEMETRY",
+    drafts: "CREATE_BUSINESS_REQUEST",
+    draftStore: "CREATE_BUSINESS_REQUEST",
+    draftReadiness: "CREATE_BUSINESS_REQUEST",
+    submissions: "CREATE_BUSINESS_REQUEST",
+    reviewQueue: "CREATE_BUSINESS_REQUEST",
+    governanceBridge: "PREPARE_GOVERNANCE_REVIEW",
+    audit: "VIEW_GOVERNANCE_REFERENCES",
+    snapshots: "VIEW_GOVERNANCE_REFERENCES"
   };
 
   return {
-    requiredCapability: capabilityByDomain[domain],
-    futureIntegrationTarget: integrationTargetByDomain[domain],
-    executionPolicy: executionPolicyByDomain[domain],
-    governanceRequirement: ["projects", "federation", "plugins", "funding", "debentures"].includes(domain),
-    treasuryRequirement: ["funding", "debentures", "treasuryExposure", "revenue"].includes(domain),
-    acsRequirement: ["acsRuntimes", "acsReceipts"].includes(domain)
+    requiredCapability: capabilityByDomain[domain] ?? "VIEW_TELEMETRY",
+    futureIntegrationTarget: integrationTargetByDomain[domain] ?? "BUSINESS_API",
+    executionPolicy: executionPolicyByDomain[domain] ?? "VIEW_TELEMETRY",
+    governanceRequirement: ["projects", "federation", "plugins", "funding", "debentures", "drafts", "reviewQueue", "governanceBridge", "audit", "snapshots"].includes(domain),
+    treasuryRequirement: ["funding", "debentures", "treasuryExposure", "revenue", "submissions", "reviewQueue"].includes(domain),
+    acsRequirement: ["acsRuntimes", "acsReceipts", "drafts", "submissions", "snapshots"].includes(domain)
   };
 };
 
@@ -105,6 +138,16 @@ const route = (
   const routePath = path ?? BUSINESS_ROUTE_CATALOG[domain];
   const routeSecurity = routeSecurityByDomain(domain);
   const mutationRoute = method !== "GET";
+  const futureRepositoryDependencyByDomain: Partial<Record<keyof typeof BUSINESS_ROUTE_CATALOG, string>> = {
+    drafts: "BusinessDraftRepository",
+    draftStore: "BusinessDraftRepository",
+    draftReadiness: "BusinessReadinessSnapshotRepository",
+    submissions: "BusinessSubmissionRepository",
+    reviewQueue: "BusinessReviewQueueRepository",
+    governanceBridge: "BusinessAuditRepository",
+    audit: "BusinessAuditRepository",
+    snapshots: "BusinessSnapshotRepository"
+  };
 
   return {
     id,
@@ -118,6 +161,9 @@ const route = (
     executionMode: "MOCK_READ_ONLY",
     futureBackendReady: true,
     mockOnly: true,
+    readOnly: true,
+    simulationOnly: true,
+    externalSideEffects: false,
     executionEnabled: false,
     requiredCapability: routeSecurity.requiredCapability,
     permissionMode: mutationRoute ? "FORBIDDEN" : "VIEW",
@@ -125,7 +171,10 @@ const route = (
     governanceRequirement: routeSecurity.governanceRequirement,
     treasuryRequirement: routeSecurity.treasuryRequirement,
     acsRequirement: routeSecurity.acsRequirement,
-    futureIntegrationTarget: routeSecurity.futureIntegrationTarget
+    futureIntegrationTarget: routeSecurity.futureIntegrationTarget,
+    futureRepositoryDependency: futureRepositoryDependencyByDomain[domain],
+    auditRequirement: method !== "GET" || ["submissions", "reviewQueue", "governanceBridge", "audit"].includes(domain),
+    snapshotRequirement: ["drafts", "draftReadiness", "submissions", "reviewQueue", "governanceBridge", "audit", "snapshots"].includes(domain)
   };
 };
 
@@ -179,5 +228,50 @@ export const BUSINESS_ROUTE_DEFINITIONS: BusinessRouteDefinition[] = [
   route("business.funding.patch", "PATCH", "funding", "Future funding status update contract; disabled in mock runtime.", "NOT_IMPLEMENTED_READ_ONLY_CONTRACT", "FundingRecord", "/business/funding/:fundingId/status"),
   route("business.debentures.patch", "PATCH", "debentures", "Future debenture status update contract; disabled in mock runtime.", "NOT_IMPLEMENTED_READ_ONLY_CONTRACT", "DebentureRecord", "/business/debentures/:debentureId/status"),
   route("business.treasury.patch", "PATCH", "treasuryExposure", "Future treasury exposure status update contract; disabled in mock runtime.", "NOT_IMPLEMENTED_READ_ONLY_CONTRACT", "TreasuryExposure", "/business/treasury/exposure/:exposureId/status"),
-  route("business.revenue.patch", "PATCH", "revenue", "Future revenue status update contract; disabled in mock runtime.", "NOT_IMPLEMENTED_READ_ONLY_CONTRACT", "RevenueRecord", "/business/revenue/:revenueId/status")
+  route("business.revenue.patch", "PATCH", "revenue", "Future revenue status update contract; disabled in mock runtime.", "NOT_IMPLEMENTED_READ_ONLY_CONTRACT", "RevenueRecord", "/business/revenue/:revenueId/status"),
+  route("business.drafts.list", "GET", "drafts", "List local/mock Business draft records.", "getBusinessDrafts", "BusinessDraftStoreRecord[]"),
+  route("business.drafts.detail", "GET", "drafts", "Get one local/mock Business draft record.", "getBusinessDraftById", "BusinessDraftStoreRecord | null", "/business/drafts/:draftId"),
+  route("business.drafts.preview", "GET", "drafts", "Get draft preview model.", "getBusinessDraftPreview", "BusinessDraftPreviewModel | null", "/business/drafts/:draftId/preview"),
+  route("business.drafts.readiness", "GET", "draftReadiness", "Get draft readiness review.", "getBusinessDraftReadiness", "BusinessDraftReadinessReview | null", "/business/drafts/:draftId/readiness"),
+  route("business.drafts.validation", "GET", "drafts", "Get draft structural validation.", "getBusinessDraftValidation", "BusinessDraftValidationResult | null", "/business/drafts/:draftId/validation"),
+  route("business.drafts.runtime-review", "GET", "drafts", "Get draft runtime review.", "getBusinessDraftRuntimeReview", "BusinessDraftRuntimeReview | null", "/business/drafts/:draftId/runtime-review"),
+  route("business.draft-store.list", "GET", "draftStore", "List local/mock draft store records.", "listBusinessDraftStoreRecords", "BusinessDraftStoreRecord[]"),
+  route("business.draft-store.detail", "GET", "draftStore", "Get local/mock draft store record.", "getBusinessDraftStoreRecordById", "BusinessDraftStoreRecord | null", "/business/draft-store/:draftId"),
+  route("business.draft-store.create", "POST", "draftStore", "Create local/mock draft store record; simulation-only, no backend persistence guarantee.", "createBusinessDraftStoreRecordMock", "BusinessDraftStoreRecord"),
+  route("business.draft-store.patch", "PATCH", "draftStore", "Update local/mock draft store record; simulation-only, no backend persistence guarantee.", "updateBusinessDraftStoreRecordMock", "BusinessDraftStoreRecord | null", "/business/draft-store/:draftId"),
+  route("business.draft-store.delete", "DELETE", "draftStore", "Discard local/mock draft store record; simulation-only, no backend persistence guarantee.", "deleteBusinessDraftStoreRecordMock", "{ deleted: boolean } | null", "/business/draft-store/:draftId"),
+  route("business.submissions.simulate", "POST", "submissions", "Simulate draft submission; mock/local only with no external side effects.", "simulateBusinessDraftSubmissionHandler", "BusinessDraftSubmissionResult", "/business/drafts/:draftId/simulate-submission"),
+  route("business.submissions.list", "GET", "submissions", "List mock submission receipts.", "listBusinessDraftSubmissions", "BusinessDraftSubmissionReceipt[]"),
+  route("business.submissions.detail", "GET", "submissions", "Get one mock submission receipt.", "getBusinessDraftSubmissionById", "BusinessDraftSubmissionReceipt | null", "/business/submissions/:submissionId"),
+  route("business.submissions.receipt", "GET", "submissions", "Get one mock submission receipt envelope.", "getBusinessDraftSubmissionReceipt", "BusinessDraftSubmissionReceipt | null", "/business/submissions/:submissionId/receipt"),
+  route("business.submissions.history", "GET", "submissions", "Get mock submission history for a draft.", "getBusinessDraftSubmissionHistory", "BusinessDraftSubmission", "/business/drafts/:draftId/submission-history"),
+  route("business.review-queue.list", "GET", "reviewQueue", "List mock review queue items.", "getBusinessReviewQueue", "BusinessReviewQueueItem[]"),
+  route("business.review-queue.summary", "GET", "reviewQueue", "Get mock review queue summary.", "getBusinessReviewQueueSummary", "BusinessReviewQueueSummary", "/business/review-queue/summary"),
+  route("business.review-queue.ready", "GET", "reviewQueue", "List mock ready-for-review queue items.", "getReadyForReviewQueueItems", "BusinessReviewQueueItem[]", "/business/review-queue/ready"),
+  route("business.review-queue.blocked", "GET", "reviewQueue", "List mock blocked review queue items.", "getBlockedReviewQueueItems", "BusinessReviewQueueItem[]", "/business/review-queue/blocked"),
+  route("business.review-queue.status", "GET", "reviewQueue", "List mock review queue items by status.", "getReviewQueueItemsByStatusHandler", "BusinessReviewQueueItem[]", "/business/review-queue/status/:status"),
+  route("business.review-queue.review-type", "GET", "reviewQueue", "List mock review queue items by review type.", "getReviewQueueItemsByReviewTypeHandler", "BusinessReviewQueueItem[]", "/business/review-queue/review-type/:reviewType"),
+  route("business.review-queue.priority", "GET", "reviewQueue", "List mock review queue items by priority.", "getReviewQueueItemsByPriorityHandler", "BusinessReviewQueueItem[]", "/business/review-queue/priority/:priority"),
+  route("business.review-queue.detail", "GET", "reviewQueue", "Get one mock review queue item.", "getBusinessReviewQueueItemById", "BusinessReviewQueueItem | null", "/business/review-queue/:queueItemId"),
+  route("business.audit.list", "GET", "audit", "List derived mock audit records.", "getBusinessAuditRecords", "BusinessAuditRecord[]"),
+  route("business.audit.detail", "GET", "audit", "Get derived mock audit record.", "getBusinessAuditRecordById", "BusinessAuditRecord | null", "/business/audit/:auditId"),
+  route("business.audit.entity", "GET", "audit", "List derived mock audit records by entity.", "getBusinessAuditRecordsByEntity", "BusinessAuditRecord[]", "/business/audit/entity/:entityId"),
+  route("business.audit.actor", "GET", "audit", "List derived mock audit records by actor.", "getBusinessAuditRecordsByActor", "BusinessAuditRecord[]", "/business/audit/actor/:actorId"),
+  route("business.snapshots.list", "GET", "snapshots", "List derived mock snapshots.", "getBusinessSnapshots", "BusinessSnapshot[]"),
+  route("business.snapshots.entity", "GET", "snapshots", "List derived mock snapshots by entity.", "getBusinessSnapshotsByEntity", "BusinessSnapshot[] | null", "/business/snapshots/entity/:entityId"),
+  route("business.snapshots.identity", "GET", "snapshots", "Get mock identity snapshot.", "getBusinessIdentitySnapshot", "BusinessIdentitySnapshot | null", "/business/snapshots/identity/:entityId"),
+  route("business.snapshots.permissions", "GET", "snapshots", "Get mock permission snapshot.", "getBusinessPermissionSnapshot", "BusinessPermissionSnapshot | null", "/business/snapshots/permissions/:entityId"),
+  route("business.snapshots.capabilities", "GET", "snapshots", "Get mock capability snapshot.", "getBusinessCapabilitySnapshot", "BusinessCapabilitySnapshot | null", "/business/snapshots/capabilities/:entityId"),
+  route("business.snapshots.execution-policy", "GET", "snapshots", "Get mock execution policy snapshot.", "getBusinessExecutionPolicySnapshot", "BusinessExecutionPolicySnapshot | null", "/business/snapshots/execution-policy/:entityId"),
+  route("business.snapshots.governance", "GET", "snapshots", "Get mock governance readiness snapshot.", "getBusinessGovernanceSnapshot", "BusinessGovernanceSnapshot | null", "/business/snapshots/governance/:entityId"),
+  route("business.snapshots.treasury", "GET", "snapshots", "Get mock treasury readiness snapshot.", "getBusinessTreasurySnapshot", "BusinessTreasurySnapshot | null", "/business/snapshots/treasury/:entityId"),
+  route("business.snapshots.acs", "GET", "snapshots", "Get mock ACS readiness snapshot.", "getBusinessACSSnapshot", "BusinessACSSnapshot | null", "/business/snapshots/acs/:entityId"),
+  route("business.governance-bridge.list", "GET", "governanceBridge", "Get mock governance bridge summary.", "getBusinessGovernanceBridge", "BusinessGovernanceBridgeSummary"),
+  route("business.governance-bridge.summary", "GET", "governanceBridge", "Get mock governance bridge summary.", "getBusinessGovernanceBridgeSummary", "BusinessGovernanceBridgeSummary", "/business/governance/bridge/summary"),
+  route("business.governance-bridge.status", "GET", "governanceBridge", "Get governance bridge status for an entity.", "getBusinessGovernanceBridgeStatus", "BusinessGovernanceBridgeStatus", "/business/governance/bridge/:entityId"),
+  route("business.governance-bridge.package", "GET", "governanceBridge", "Get governance readiness package for an entity.", "getBusinessGovernanceReadinessPackage", "BusinessGovernanceReadinessPackage | null", "/business/governance/bridge/:entityId/package"),
+  route("business.governance-bridge.handoff", "GET", "governanceBridge", "Get mock governance handoff receipt for an entity.", "getBusinessGovernanceHandoffReceipt", "BusinessGovernanceHandoffReceipt | null", "/business/governance/bridge/:entityId/handoff-receipt"),
+  route("business.governance-bridge.compatibility", "GET", "governanceBridge", "Get constitutional compatibility snapshot for an entity.", "getBusinessGovernanceCompatibility", "BusinessGovernanceCompatibilitySnapshot | null", "/business/governance/bridge/:entityId/compatibility"),
+  route("business.governance-bridge.restrictions", "GET", "governanceBridge", "Get governance restriction snapshot for an entity.", "getBusinessGovernanceRestrictions", "BusinessGovernanceRestrictionSnapshot | null", "/business/governance/bridge/:entityId/restrictions"),
+  route("business.governance-bridge.proposal-reference", "GET", "governanceBridge", "Get mock proposal reference for an entity.", "getBusinessGovernanceProposalReference", "BusinessGovernanceProposalReference | null", "/business/governance/bridge/:entityId/proposal-reference")
 ];

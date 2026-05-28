@@ -1,4 +1,7 @@
 import type { BusinessDashboardModel, BusinessId } from "../types/business.types.js";
+import type { BusinessCapability } from "../capabilities/business.capabilities.js";
+import type { BusinessPermissionDecision } from "../permissions/business.permissions.js";
+import type { BusinessExecutionPolicy } from "../policies/business.execution-policy.js";
 
 export const BUSINESS_API_VERSION = "v1";
 export const BUSINESS_API_SOURCE = "@axodus/business-runtime";
@@ -13,6 +16,8 @@ export interface BusinessApiMeta {
   version: typeof BUSINESS_API_VERSION;
   mock: true;
   readOnly: true;
+  simulationOnly: true;
+  executionMode: BusinessApiExecutionMode;
 }
 
 export interface BusinessApiError {
@@ -20,6 +25,9 @@ export interface BusinessApiError {
   message: string;
   severity: BusinessApiErrorSeverity;
   details?: Record<string, unknown>;
+  resolution: string;
+  mock: true;
+  readOnly: true;
 }
 
 export interface BusinessApiRuntimeContext {
@@ -41,6 +49,23 @@ export interface BusinessApiTelemetry {
   latestEventId?: BusinessId;
 }
 
+export interface BusinessApiSecurityContext {
+  nonExecutionGuarantee: "NO_GOVERNANCE_TREASURY_DEBENTURE_ACS_CONTRACT_OR_BILLING_EXECUTION";
+  forbiddenActions: string[];
+  requiredCapabilities: BusinessCapability[];
+  permissionDecision: BusinessPermissionDecision;
+  executionPolicy: BusinessExecutionPolicy;
+  mockRuntime: true;
+  externalSideEffects: false;
+}
+
+export interface BusinessApiExecutionContext {
+  executionMode: BusinessApiExecutionMode;
+  simulationOnly: true;
+  externalSideEffects: false;
+  mockMutation: boolean;
+}
+
 export interface BusinessApiResponse<TData> {
   data: TData;
   meta: BusinessApiMeta;
@@ -48,6 +73,8 @@ export interface BusinessApiResponse<TData> {
   links?: BusinessApiLinks;
   telemetry?: BusinessApiTelemetry;
   runtime?: BusinessApiRuntimeContext;
+  security?: BusinessApiSecurityContext;
+  execution?: BusinessApiExecutionContext;
 }
 
 export interface BusinessApiRuntimeSummary {
@@ -108,6 +135,23 @@ export interface BusinessApiRuntimeSummary {
     bySource: Record<string, number>;
     mock: true;
     readOnly: true;
+  };
+  apiContractSummary: {
+    draftCount: number;
+    validDraftCount: number;
+    blockedDraftCount: number;
+    submissionSimulationCount: number;
+    submissionReceiptCount: number;
+    reviewQueueCount: number;
+    readyForReviewCount: number;
+    blockedReviewCount: number;
+    auditRecordCount: number;
+    snapshotCount: number;
+    mockMutationCount: number;
+    externalExecutionCount: 0;
+    mock: true;
+    readOnly: true;
+    simulationOnly: true;
   };
   dashboard: BusinessDashboardModel;
 }

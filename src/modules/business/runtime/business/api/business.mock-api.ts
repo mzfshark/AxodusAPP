@@ -7,14 +7,6 @@ import { BUSINESS_TRANSITION_GUARD_CATEGORIES } from "../state/business.guards.j
 import { BUSINESS_TRANSITION_MAPS } from "../state/business.transitions.js";
 import { getBusinessRuntimeSummary as getBusinessRuntimeCoreSummary } from "../services/business.service.js";
 import { listBusinessWorkflows, getBusinessWorkflowSummary } from "../workflows/business.workflow-selectors.js";
-import {
-  createDraftStoreRecord,
-  deleteDraftStoreRecord,
-  getDraftStoreRecordById,
-  listDraftStoreRecords,
-  updateDraftStoreRecord,
-  validateDraftById
-} from "../drafts/business.draft-store.js";
 import type { BusinessDraft, BusinessDraftStorePatch } from "../drafts/business.draft-types.js";
 import { businessApiErrors } from "./business.errors.js";
 import { businessApiResponse } from "./business.responses.js";
@@ -47,10 +39,52 @@ export const BUSINESS_MOCK_API_ROUTES = [
   "GET /api/v1/business/runtime",
   "GET /api/v1/business/drafts",
   "GET /api/v1/business/drafts/:draftId",
+  "GET /api/v1/business/drafts/:draftId/preview",
+  "GET /api/v1/business/drafts/:draftId/readiness",
   "GET /api/v1/business/drafts/:draftId/validation",
+  "GET /api/v1/business/drafts/:draftId/runtime-review",
   "POST /api/v1/business/drafts",
   "PATCH /api/v1/business/drafts/:draftId",
-  "DELETE /api/v1/business/drafts/:draftId"
+  "DELETE /api/v1/business/drafts/:draftId",
+  "GET /api/v1/business/draft-store",
+  "GET /api/v1/business/draft-store/:draftId",
+  "POST /api/v1/business/draft-store",
+  "PATCH /api/v1/business/draft-store/:draftId",
+  "DELETE /api/v1/business/draft-store/:draftId",
+  "POST /api/v1/business/drafts/:draftId/simulate-submission",
+  "GET /api/v1/business/submissions",
+  "GET /api/v1/business/submissions/:submissionId",
+  "GET /api/v1/business/submissions/:submissionId/receipt",
+  "GET /api/v1/business/drafts/:draftId/submission-history",
+  "GET /api/v1/business/review-queue",
+  "GET /api/v1/business/review-queue/summary",
+  "GET /api/v1/business/review-queue/ready",
+  "GET /api/v1/business/review-queue/blocked",
+  "GET /api/v1/business/review-queue/status/:status",
+  "GET /api/v1/business/review-queue/review-type/:reviewType",
+  "GET /api/v1/business/review-queue/priority/:priority",
+  "GET /api/v1/business/review-queue/:queueItemId",
+  "GET /api/v1/business/governance/bridge",
+  "GET /api/v1/business/governance/bridge/summary",
+  "GET /api/v1/business/governance/bridge/:entityId",
+  "GET /api/v1/business/governance/bridge/:entityId/package",
+  "GET /api/v1/business/governance/bridge/:entityId/handoff-receipt",
+  "GET /api/v1/business/governance/bridge/:entityId/compatibility",
+  "GET /api/v1/business/governance/bridge/:entityId/restrictions",
+  "GET /api/v1/business/governance/bridge/:entityId/proposal-reference",
+  "GET /api/v1/business/audit",
+  "GET /api/v1/business/audit/:auditId",
+  "GET /api/v1/business/audit/entity/:entityId",
+  "GET /api/v1/business/audit/actor/:actorId",
+  "GET /api/v1/business/snapshots",
+  "GET /api/v1/business/snapshots/entity/:entityId",
+  "GET /api/v1/business/snapshots/identity/:entityId",
+  "GET /api/v1/business/snapshots/permissions/:entityId",
+  "GET /api/v1/business/snapshots/capabilities/:entityId",
+  "GET /api/v1/business/snapshots/execution-policy/:entityId",
+  "GET /api/v1/business/snapshots/governance/:entityId",
+  "GET /api/v1/business/snapshots/treasury/:entityId",
+  "GET /api/v1/business/snapshots/acs/:entityId"
 ] as const;
 
 const normalizePath = (path: string): string => {
@@ -72,7 +106,9 @@ const ok = <TData>(data: TData, path: string): BusinessMockApiResult<TData> => (
 });
 
 const fromHandler = <TData>(response: BusinessApiResponse<TData>): BusinessMockApiResult<TData> => ({
-  statusCode: response.errors.length > 0 && response.data === null ? 404 : 200,
+  statusCode: response.errors.length > 0 && response.data === null
+    ? response.errors.some((error) => error.code.includes("INVALID")) ? 400 : 404
+    : response.errors.some((error) => error.code === "SUBMISSION_SIMULATION_BLOCKED") ? 409 : 200,
   response
 });
 
@@ -135,6 +171,50 @@ export const handleBusinessMockApiRequest = (request: BusinessMockApiRequest): B
     if (segments[0] === "telemetry" && segments[1]) return fromHandler(businessApiHandlers.getBusinessTelemetryEventById(segments[1]));
     if (segments[0] === "federation") return fromHandler(businessApiHandlers.getBusinessFederationParticipants());
     if (segments[0] === "identities") return fromHandler(businessApiHandlers.getBusinessIdentities());
+    if (segments[0] === "drafts" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessDrafts());
+    if (segments[0] === "drafts" && segments[1] && segments[2] === "preview") return fromHandler(businessApiHandlers.getBusinessDraftPreview(segments[1]));
+    if (segments[0] === "drafts" && segments[1] && segments[2] === "readiness") return fromHandler(businessApiHandlers.getBusinessDraftReadiness(segments[1]));
+    if (segments[0] === "drafts" && segments[1] && segments[2] === "validation") return fromHandler(businessApiHandlers.getBusinessDraftValidation(segments[1]));
+    if (segments[0] === "drafts" && segments[1] && segments[2] === "runtime-review") return fromHandler(businessApiHandlers.getBusinessDraftRuntimeReview(segments[1]));
+    if (segments[0] === "drafts" && segments[1] && segments[2] === "submission-history") return fromHandler(businessApiHandlers.getBusinessDraftSubmissionHistory(segments[1]));
+    if (segments[0] === "drafts" && segments[1]) return fromHandler(businessApiHandlers.getBusinessDraftById(segments[1]));
+    if (segments[0] === "draft-store" && segments.length === 1) return fromHandler(businessApiHandlers.listBusinessDraftStoreRecords());
+    if (segments[0] === "draft-store" && segments[1]) return fromHandler(businessApiHandlers.getBusinessDraftStoreRecordById(segments[1]));
+    if (segments[0] === "submissions" && segments.length === 1) return fromHandler(businessApiHandlers.listBusinessDraftSubmissions());
+    if (segments[0] === "submissions" && segments[1] && segments[2] === "receipt") return fromHandler(businessApiHandlers.getBusinessDraftSubmissionReceipt(segments[1]));
+    if (segments[0] === "submissions" && segments[1] && segments[2] === "review-queue-item") return fromHandler(businessApiHandlers.getBusinessSubmissionReviewQueueItem(segments[1]));
+    if (segments[0] === "submissions" && segments[1]) return fromHandler(businessApiHandlers.getBusinessDraftSubmissionById(segments[1]));
+    if (segments[0] === "review-queue" && segments[1] === "summary") return fromHandler(businessApiHandlers.getBusinessReviewQueueSummary());
+    if (segments[0] === "review-queue" && segments[1] === "ready") return fromHandler(businessApiHandlers.getReadyForReviewQueueItems());
+    if (segments[0] === "review-queue" && segments[1] === "blocked") return fromHandler(businessApiHandlers.getBlockedReviewQueueItems());
+    if (segments[0] === "review-queue" && segments[1] === "status" && segments[2]) return fromHandler(businessApiHandlers.getReviewQueueItemsByStatusHandler(segments[2] as never));
+    if (segments[0] === "review-queue" && segments[1] === "review-type" && segments[2]) return fromHandler(businessApiHandlers.getReviewQueueItemsByReviewTypeHandler(segments[2] as never));
+    if (segments[0] === "review-queue" && segments[1] === "priority" && segments[2]) return fromHandler(businessApiHandlers.getReviewQueueItemsByPriorityHandler(segments[2] as never));
+    if (segments[0] === "review-queue" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessReviewQueue());
+    if (segments[0] === "review-queue" && segments[1]) return fromHandler(businessApiHandlers.getBusinessReviewQueueItemById(segments[1]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] === "summary") return fromHandler(businessApiHandlers.getBusinessGovernanceBridgeSummary());
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments.length === 2) return fromHandler(businessApiHandlers.getBusinessGovernanceBridge());
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "package") return fromHandler(businessApiHandlers.getBusinessGovernanceReadinessPackage(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "handoff-receipt") return fromHandler(businessApiHandlers.getBusinessGovernanceHandoffReceipt(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "compatibility") return fromHandler(businessApiHandlers.getBusinessGovernanceCompatibility(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "restrictions") return fromHandler(businessApiHandlers.getBusinessGovernanceRestrictions(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "proposal-reference") return fromHandler(businessApiHandlers.getBusinessGovernanceProposalReference(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "federation-standing") return fromHandler(businessApiHandlers.getBusinessGovernanceFederationStanding(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2] && segments[3] === "blockers") return fromHandler(businessApiHandlers.getBusinessGovernanceBridgeBlockers(segments[2]));
+    if (segments[0] === "governance" && segments[1] === "bridge" && segments[2]) return fromHandler(businessApiHandlers.getBusinessGovernanceBridgeStatus(segments[2]));
+    if (segments[0] === "audit" && segments[1] === "entity" && segments[2]) return fromHandler(businessApiHandlers.getBusinessAuditRecordsByEntity(segments[2]));
+    if (segments[0] === "audit" && segments[1] === "actor" && segments[2]) return fromHandler(businessApiHandlers.getBusinessAuditRecordsByActor(segments[2]));
+    if (segments[0] === "audit" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessAuditRecords());
+    if (segments[0] === "audit" && segments[1]) return fromHandler(businessApiHandlers.getBusinessAuditRecordById(segments[1]));
+    if (segments[0] === "snapshots" && segments[1] === "entity" && segments[2]) return fromHandler(businessApiHandlers.getBusinessSnapshotsByEntity(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "identity" && segments[2]) return fromHandler(businessApiHandlers.getBusinessIdentitySnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "permissions" && segments[2]) return fromHandler(businessApiHandlers.getBusinessPermissionSnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "capabilities" && segments[2]) return fromHandler(businessApiHandlers.getBusinessCapabilitySnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "execution-policy" && segments[2]) return fromHandler(businessApiHandlers.getBusinessExecutionPolicySnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "governance" && segments[2]) return fromHandler(businessApiHandlers.getBusinessGovernanceSnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "treasury" && segments[2]) return fromHandler(businessApiHandlers.getBusinessTreasurySnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments[1] === "acs" && segments[2]) return fromHandler(businessApiHandlers.getBusinessACSSnapshot(segments[2]));
+    if (segments[0] === "snapshots" && segments.length === 1) return fromHandler(businessApiHandlers.getBusinessSnapshots());
     if (segments[0] === "registry") return ok(getBusinessRegistrySummary(), path);
     if (segments[0] === "workflows") return ok({ summary: getBusinessWorkflowSummary(), workflows: listBusinessWorkflows(), mock: true, readOnly: true }, path);
     if (segments[0] === "events") return ok({ summary: getBusinessEventSummary(), events: getBusinessRuntimeEvents(), mock: true, readOnly: true }, path);
@@ -153,35 +233,26 @@ export const handleBusinessMockApiRequest = (request: BusinessMockApiRequest): B
         path
       );
     }
-    if (segments[0] === "drafts" && segments.length === 1) return ok(listDraftStoreRecords(), path);
-    if (segments[0] === "drafts" && segments[1] && segments[2] === "validation") {
-      const validation = validateDraftById(segments[1]);
-      return validation ? ok(validation, path) : fromHandler(businessApiResponse(null, { errors: [businessApiErrors.notFound("BusinessDraftStoreRecord", segments[1])], links: { self: path } }));
-    }
-    if (segments[0] === "drafts" && segments[1]) {
-      const record = getDraftStoreRecordById(segments[1]);
-      return record ? ok(record, path) : fromHandler(businessApiResponse(null, { errors: [businessApiErrors.notFound("BusinessDraftStoreRecord", segments[1])], links: { self: path } }));
-    }
   }
 
-  if (method === "POST" && segments[0] === "drafts" && segments.length === 1) {
+  if (method === "POST" && ((segments[0] === "drafts" && segments.length === 1) || (segments[0] === "draft-store" && segments.length === 1))) {
     const draft = draftFromBody(request.body);
     if (!draft) return invalidRequest(path, "POST /drafts requires a BusinessDraft payload.", { expected: "BusinessDraft or { draft: BusinessDraft }" });
-    return { statusCode: 201, response: businessApiResponse(createDraftStoreRecord(draft), { links: { self: path } }) };
+    return { statusCode: 201, response: businessApiHandlers.createBusinessDraftStoreRecordMock(draft) };
   }
 
-  if (method === "PATCH" && segments[0] === "drafts" && segments[1]) {
+  if (method === "POST" && segments[0] === "drafts" && segments[1] && segments[2] === "simulate-submission") {
+    return fromHandler(businessApiHandlers.simulateBusinessDraftSubmissionHandler(segments[1]));
+  }
+
+  if (method === "PATCH" && (segments[0] === "drafts" || segments[0] === "draft-store") && segments[1]) {
     const patch = draftPatchFromBody(request.body);
     if (!patch) return invalidRequest(path, "PATCH /drafts/:draftId requires a valid BusinessDraftStorePatch payload.");
-    const record = updateDraftStoreRecord(segments[1], patch);
-    return record ? ok(record, path) : fromHandler(businessApiResponse(null, { errors: [businessApiErrors.notFound("BusinessDraftStoreRecord", segments[1])], links: { self: path } }));
+    return fromHandler(businessApiHandlers.updateBusinessDraftStoreRecordMock(segments[1], patch));
   }
 
-  if (method === "DELETE" && segments[0] === "drafts" && segments[1]) {
-    const deleted = deleteDraftStoreRecord(segments[1]);
-    return deleted
-      ? ok({ deleted: true, draftId: segments[1], mock: true, readOnly: true }, path)
-      : fromHandler(businessApiResponse(null, { errors: [businessApiErrors.notFound("BusinessDraftStoreRecord", segments[1])], links: { self: path } }));
+  if (method === "DELETE" && (segments[0] === "drafts" || segments[0] === "draft-store") && segments[1]) {
+    return fromHandler(businessApiHandlers.deleteBusinessDraftStoreRecordMock(segments[1]));
   }
 
   return notFound(method, path);
