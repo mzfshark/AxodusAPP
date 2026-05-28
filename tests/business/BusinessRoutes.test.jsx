@@ -171,12 +171,64 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getByRole('heading', { name: /Readiness Review/i })).toBeInTheDocument();
     expect(screen.getByText(/Next Recommended Step/i)).toBeInTheDocument();
     expect(screen.getByText(/Disabled Future Actions/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Submission Simulation/i })).toBeInTheDocument();
     expect(screen.getByText(/STRUCTURAL_READINESS/i)).toBeInTheDocument();
     expect(screen.getByText(/SECURITY_READINESS/i)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /submit to dao|issue debenture|move treasury|deploy acs|create contract|buy|invest now/i })).not.toBeInTheDocument();
 
     expect(businessRuntimeClient.deleteDraftStoreRecord(record.id)).toBe(true);
     expect(businessRuntimeClient.listDraftStoreRecords()).toHaveLength(0);
+  });
+
+  test('simulates draft submission locally and renders a mock receipt', async () => {
+    businessRuntimeClient.resetDraftStore();
+    const draft = businessRuntimeClient.createDraftTemplate('ACS_SERVICE_REQUEST');
+    draft.values = {
+      requesterIdentity: 'id-enterprise-sample',
+      acsRuntimeType: 'DEDICATED_BUSINESS_RUNTIME',
+      isolationProfile: 'TENANT_ISOLATED',
+      memoryScope: 'PROJECT_SCOPED_MEMORY',
+      permissionProfile: 'READ_ONLY_ANALYSIS',
+      computeProfile: 'STANDARD_REVIEW_RUNTIME',
+      humanReviewRequirement: true,
+      workflowObjective: 'Classify ACS scope for future review',
+      operatingScope: 'ENTERPRISE',
+      telemetryRequirements: 'Runtime telemetry'
+    };
+    const record = businessRuntimeClient.createDraftStoreRecord(draft);
+
+    expect(businessRuntimeClient.canSimulateDraftSubmission(record.id)).toBe(true);
+    expect(businessRuntimeClient.validateDraftSubmissionReadiness(record.id).status).toBe('SUBMISSION_READY');
+
+    const result = businessRuntimeClient.simulateDraftSubmission(record.id);
+    expect(result.success).toBe(true);
+    renderBusinessRoute(`/business/intake/preview/${record.id}`, '/business/intake/preview/:draftId', <BusinessIntakePage />);
+
+    expect(await screen.findByRole('heading', { name: /Business Intake/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Simulate Submission/i })).toBeInTheDocument();
+    expect(await screen.findByTestId('business-submission-receipt')).toBeInTheDocument();
+    expect(screen.getByText(/Submission Receipt/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/QUEUED_FOR_REVIEW|Review Queue Item/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/ACS_REVIEW/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Open Review Queue/i)).toBeInTheDocument();
+    expect(screen.getByText(/no backend mutation/i)).toBeInTheDocument();
+    expect(businessRuntimeClient.getDraftSubmissionHistory(record.id)).toHaveLength(1);
+    expect(businessRuntimeClient.getDraftSubmissionStatus(record.id)).toBe('QUEUED_FOR_REVIEW');
+    expect(screen.queryByRole('button', { name: /submit to dao|issue debenture|move treasury|deploy acs|create contract|buy|invest now|approve request|create proposal/i })).not.toBeInTheDocument();
+  });
+
+  test('blocked drafts show simulation blockers without simulate action', async () => {
+    businessRuntimeClient.resetDraftStore();
+    const record = businessRuntimeClient.createDraftStoreRecord(businessRuntimeClient.createDraftTemplate('GENERAL_BUSINESS_REQUEST'));
+
+    expect(businessRuntimeClient.canSimulateDraftSubmission(record.id)).toBe(false);
+
+    renderBusinessRoute(`/business/intake/preview/${record.id}`, '/business/intake/preview/:draftId', <BusinessIntakePage />);
+
+    expect(await screen.findByRole('heading', { name: /Business Intake/i })).toBeInTheDocument();
+    expect(screen.getByText(/Simulation Blockers/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Draft is structurally invalid/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole('button', { name: /Simulate Submission/i })).not.toBeInTheDocument();
   });
 
   test('renders review queue with summary, filters, blockers and preview links', async () => {

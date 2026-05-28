@@ -501,6 +501,19 @@ export const businessRuntimeClient = {
     reviewTypes: BUSINESS_REVIEW_TYPES,
     priorities: BUSINESS_REVIEW_PRIORITIES
   }),
+  getSubmissionOptions: () => ({
+    statuses: BUSINESS_DRAFT_SUBMISSION_STATUSES,
+    submissionTypes: BUSINESS_DRAFT_SUBMISSION_TYPES
+  }),
+  canSimulateDraftSubmission,
+  validateDraftSubmissionReadiness,
+  simulateDraftSubmission: simulateBusinessDraftSubmission,
+  getDraftSubmissionStatus,
+  getDraftSubmissionReceipt,
+  listDraftSubmissionReceipts,
+  getSubmissionReviewQueueItem,
+  getDraftSubmissionHistory,
+  getBusinessDraftSubmission,
   getWorkflowForProject,
   getWorkflowTemplate,
   getWorkflowReadiness,
@@ -639,7 +652,11 @@ export const businessRuntimeClient = {
   deleteDraftStoreRecord,
   getDraftPreviewById,
   validateDraftById,
-  resetDraftStore: resetBusinessDraftStore,
+  resetSubmissionReceipts: resetDraftSubmissionReceipts,
+  resetDraftStore: () => {
+    resetBusinessDraftStore();
+    resetDraftSubmissionReceipts();
+  },
   getApiMode: () => ({
     enabled: businessUseApi,
     baseUrl: businessApiBaseUrl || null,
