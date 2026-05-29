@@ -13,7 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import useDarkMode from '../hooks/useDarkMode';
-import { appShellNav } from '../config/appShell';
+import { appShellGroups, appShellNav } from '../config/appShell';
 
 const navLinkClass = ({ isActive }) =>
   `app-sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg ${
@@ -34,36 +34,38 @@ function hasNucleusNavigation(item) {
 }
 
 function NavItems({ activeShellItem, isCollapsed, onNavigate }) {
-  return (
-    <>
-      {appShellNav.primary.map((item) => (
-        <NavLink
-          key={item.id}
-          to={item.routeBase}
-          onClick={() => onNavigate?.(item)}
-          className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
-          data-nav-nucleus={item.id}
-          title={isCollapsed ? item.label : undefined}
-        >
-          <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-          <span className="app-sidebar-link-label">{item.label}</span>
-        </NavLink>
-      ))}
+  const allItems = [...appShellNav.primary, ...appShellNav.secondary];
+  const itemById = new Map(allItems.map((item) => [item.id, item]));
 
-      {appShellNav.secondary.map((item) => (
-        <NavLink
-          key={item.id}
-          to={item.routeBase}
-          onClick={() => onNavigate?.(item)}
-          className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
-          data-nav-nucleus={item.id}
-          title={isCollapsed ? item.label : undefined}
-        >
-          <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-          <span className="app-sidebar-link-label">{item.label}</span>
-        </NavLink>
-      ))}
-    </>
+  return (
+    <div className="app-sidebar-groups">
+      {appShellGroups.map((group) => {
+        const items = group.itemIds.map((id) => itemById.get(id)).filter(Boolean);
+        if (!items.length) return null;
+
+        return (
+          <section key={group.id} className="app-sidebar-group" aria-label={`${group.label} navigation`}>
+            <p className="app-sidebar-section-label app-sidebar-group-label">{group.label}</p>
+            <div className="flex flex-col gap-1">
+              {items.map((item) => (
+                <NavLink
+                  key={item.id}
+                  to={item.routeBase}
+                  onClick={() => onNavigate?.(item)}
+                  className={() => navLinkClass({ isActive: activeShellItem?.id === item.id })}
+                  data-nav-nucleus={item.id}
+                  data-nav-scope={group.id}
+                  title={isCollapsed ? item.label : undefined}
+                >
+                  <item.icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+                  <span className="app-sidebar-link-label">{item.label}</span>
+                </NavLink>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+    </div>
   );
 }
 
@@ -295,7 +297,7 @@ export default function Sidebar({ activeShellItem }) {
                 />
               ) : (
                 <>
-                  <nav className="flex flex-col gap-1">
+                  <nav>
                     <NavItems activeShellItem={activeShellItem} onNavigate={handleGlobalNavigate} />
                   </nav>
                   <div className="mt-auto pt-6 px-2">
@@ -336,7 +338,7 @@ export default function Sidebar({ activeShellItem }) {
             />
           ) : (
             <>
-              <nav className="flex flex-col gap-1">
+              <nav>
                 <NavItems activeShellItem={activeShellItem} isCollapsed={isCollapsed} onNavigate={handleGlobalNavigate} />
               </nav>
               <div className="mt-auto pt-6 px-2">

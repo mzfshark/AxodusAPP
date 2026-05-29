@@ -1,9 +1,17 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
+import { PageShell } from '@/components/layout';
+import { ScopeSection } from '@/components/uiScope';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';
+import ConstitutionalGovernanceSection from '../components/ConstitutionalGovernanceSection';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
+import GovernanceAuthoritySplit from '../components/GovernanceAuthoritySplit';
+import GovernanceContextHeader from '../components/GovernanceContextHeader';
+import GovernanceOperationsReviewSection from '../components/GovernanceOperationsReviewSection';
+import GovernanceUserParticipationPanel from '../components/GovernanceUserParticipationPanel';
+import LocalGovernanceSection from '../components/LocalGovernanceSection';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
 import { shouldUseGovernanceMocks } from '../api/mockGovernanceData';
@@ -11,6 +19,9 @@ import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 import { useProposalDrafts } from '../hooks/useProposalDrafts';
 import { acsMock } from '@/data/mock';
+import { TenantIdentityPanel } from '@/components/tenant';
+import { useTenantContext } from '@/runtime/tenantContext';
+import { buildGovernanceConsoleModel } from '../governanceConsoleModel';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -553,6 +564,7 @@ function ConstitutionalGuardrailsPanel({
 }
 
 export default function GovernanceDashboard() {
+  const { selectedTenant: appTenant } = useTenantContext();
   const { chains, summary, source, status, error } = useChainRegistry();
   const governanceConsole = useGovernanceConsole(chains);
   const proposalDrafts = useProposalDrafts({
@@ -562,21 +574,39 @@ export default function GovernanceDashboard() {
   });
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
   const visibleProposals = [...proposalDrafts.drafts, ...governanceConsole.proposals];
+  const consoleModel = buildGovernanceConsoleModel({
+    chains,
+    summary,
+    source,
+    governanceConsole,
+    proposalDrafts,
+    appTenant,
+  });
 
   return (
-    <main className="min-h-full bg-background p-4 md:p-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Governance</span>
-            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">DAO Tenant Operations Center</h1>
-            <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
-              Governed business-unit control room for tenant DAOs, constitutional authority, treasury state, products, agents, proposals and execution receipts.
-            </p>
-          </div>
-        </header>
-
+    <PageShell
+      title="DAO Tenant Operations Center"
+      subtitle="Governed business-unit control room for tenant DAOs, constitutional authority, treasury state, products, agents, proposals and execution receipts."
+      module="Governance Workbench"
+      scope="tenant"
+      maturity="prototype"
+      executionMode="preview"
+    >
         <SourceBanner source={source} status={status} error={error} />
+
+        <GovernanceContextHeader context={consoleModel.context} />
+
+        <TenantIdentityPanel moduleId="governance" />
+
+        <GovernanceAuthoritySplit authority={consoleModel.authoritySplit} />
+
+        <ConstitutionalGovernanceSection constitutional={consoleModel.constitutional} />
+
+        <LocalGovernanceSection local={consoleModel.local} proposals={consoleModel.proposals} />
+
+        <GovernanceUserParticipationPanel participation={consoleModel.userParticipation} />
+
+        <GovernanceOperationsReviewSection readiness={consoleModel.readiness} acsReview={consoleModel.acsReview} />
 
         <DaoContextSelector
           daos={governanceConsole.daos}
@@ -586,14 +616,26 @@ export default function GovernanceDashboard() {
           status={governanceConsole.status}
         />
 
-        <DaoTenantOperationsCenter
-          tenant={governanceConsole.selectedTenant}
-          selectedDao={governanceConsole.selectedDao}
-          selectedChain={governanceConsole.selectedChain}
-          tenantSource={governanceConsole.tenantSource}
-        />
+        <ScopeSection
+          scope="tenant"
+          title="Selected tenant operating context"
+          description="DAO tenant profile, local governance state and treasury posture are scoped to the selected organization."
+        >
+          <DaoTenantOperationsCenter
+            tenant={governanceConsole.selectedTenant}
+            selectedDao={governanceConsole.selectedDao}
+            selectedChain={governanceConsole.selectedChain}
+            tenantSource={governanceConsole.tenantSource}
+          />
+        </ScopeSection>
 
-        <GovernanceExecutorPanel resolution={governanceConsole.executorResolution} source={governanceConsole.executorSource} />
+        <ScopeSection
+          scope="operator"
+          title="Execution control and review"
+          description="Executor readiness, guardrails and operational blockers are operator-scoped preview data."
+        >
+          <GovernanceExecutorPanel resolution={governanceConsole.executorResolution} source={governanceConsole.executorSource} />
+        </ScopeSection>
 
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1fr]">
           <GovernanceHealthPanel
@@ -687,7 +729,6 @@ export default function GovernanceDashboard() {
         />
 
         <ChainRegistryTable chains={chains} />
-      </div>
-    </main>
+    </PageShell>
   );
 }

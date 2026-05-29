@@ -3,6 +3,7 @@ import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
 import { FeaturedTenantCard, GovernanceStatusCard, MetricSummaryCard } from '../components/cards';
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { governanceTenantsMock } from '@/data/mock';
+import { ScopeSection } from '@/components/uiScope';
 
 function formatCurrency(value) {
   return new Intl.NumberFormat('en-US', {
@@ -51,21 +52,33 @@ export default function GovernanceLanding() {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-          <MetricSummaryCard label="Total TVL" value={formatCurrency(treasuryMetrics.totalTreasuryTvl)} detail="CORE + tenant treasury footprint" tone="success" />
-          <MetricSummaryCard label="DAO Tenants" value={federationStats.tenantCount} detail="Federated economic organizations" />
-          <MetricSummaryCard label="Axodus CORE APR" value={formatPercent(coreMetrics.apr)} detail="Federal baseline" tone="success" />
-          <MetricSummaryCard label="Open Proposals" value={governanceMetrics.openProposals} detail="Active governance actions" tone="warning" />
-          <MetricSummaryCard label="Recently Finalized" value={governanceMetrics.recentlyFinalizedProposals} detail="Recent proposal outcomes" />
-        </section>
+        <ScopeSection
+          scope="protocol"
+          title="Protocol governance state"
+          description="Constitutional standing, federation metrics and chain registry data apply to Axodus as a protocol, not to a single wallet or tenant."
+        >
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <MetricSummaryCard label="Total TVL" value={formatCurrency(treasuryMetrics.totalTreasuryTvl)} detail="CORE + tenant treasury footprint" tone="success" />
+            <MetricSummaryCard label="DAO Tenants" value={federationStats.tenantCount} detail="Federated economic organizations" />
+            <MetricSummaryCard label="Axodus CORE APR" value={formatPercent(coreMetrics.apr)} detail="Federal baseline" tone="success" />
+            <MetricSummaryCard label="Open Proposals" value={governanceMetrics.openProposals} detail="Active governance actions" tone="warning" />
+            <MetricSummaryCard label="Recently Finalized" value={governanceMetrics.recentlyFinalizedProposals} detail="Recent proposal outcomes" />
+          </section>
 
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <GovernanceStatusCard label="Federal Treasury Status" value={coreMetrics.treasuryHealth} detail="Rendered from mock registry state" severity="warning" />
-          <GovernanceStatusCard label="Active Chains" value={summary.totalChains} detail={`Execution source: ${executionChain?.name ?? 'pending'}`} severity="info" />
-          <GovernanceStatusCard label="Governance Health" value={governanceMetrics.governanceHealth} detail={`Registry source: ${source}`} severity="success" />
-          <GovernanceStatusCard label="Constitutional Standing" value={coreMetrics.governanceStatus} detail="Federal DAO standing" severity="success" />
-        </section>
+          <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <GovernanceStatusCard label="Federal Treasury Status" value={coreMetrics.treasuryHealth} detail="Rendered from mock registry state" severity="warning" />
+            <GovernanceStatusCard label="Active Chains" value={summary.totalChains} detail={`Execution source: ${executionChain?.name ?? 'pending'}`} severity="info" />
+            <GovernanceStatusCard label="Governance Health" value={governanceMetrics.governanceHealth} detail={`Registry source: ${source}`} severity="success" />
+            <GovernanceStatusCard label="Constitutional Standing" value={coreMetrics.governanceStatus} detail="Federal DAO standing" severity="success" />
+          </section>
+        </ScopeSection>
 
+        <ScopeSection
+          scope="tenant"
+          title="Featured DAO tenants"
+          description="Tenant previews represent federated organizations, not the protocol root."
+          actions={<Link to="/governance/tenants" className="rounded-lg border border-white/10 px-3 py-2 text-sm font-black text-on-surface">View all tenants</Link>}
+        >
         <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
@@ -75,9 +88,6 @@ export default function GovernanceLanding() {
                 Preview of up to three tenants selected by mock/admin data. Full discovery and filters live in DAO Tenants.
               </p>
             </div>
-            <Link to="/governance/tenants" className="rounded-lg border border-white/10 px-3 py-2 text-sm font-black text-on-surface">
-              View all tenants
-            </Link>
           </div>
           <div className="mt-5 grid gap-4 lg:grid-cols-3">
             {featuredTenants.map((tenant) => (
@@ -85,6 +95,7 @@ export default function GovernanceLanding() {
             ))}
           </div>
         </section>
+        </ScopeSection>
 
         <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">

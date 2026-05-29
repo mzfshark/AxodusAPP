@@ -13,6 +13,7 @@ import {
   BusinessTelemetryFeed
 } from '../components/BusinessUi';
 import {
+  useBusinessACSBridge,
   useBusinessACSReadinessModel,
   useBusinessACSRuntimes,
   useBusinessAccessModel,
@@ -22,8 +23,10 @@ import {
   useBusinessCriticalEvents,
   useBusinessEvents,
   useBusinessEventSummary,
+  useBusinessFinancialBridge,
   useBusinessFinanceRiskModel,
   useBusinessFundingRecords,
+  useBusinessGovernanceBridge,
   useBusinessGovernanceReadiness,
   useBusinessOverview,
   useBusinessPlugins,
@@ -40,6 +43,11 @@ import {
   useBusinessWorkflowSummary,
   useBusinessWorkflows
 } from '../hooks/useBusinessData';
+import { ScopeSection } from '@/components/uiScope';
+import { TenantIdentityPanel } from '@/components/tenant';
+import { WorkbenchSummarySection } from '@/components/workbench';
+import { useTenantContext } from '@/runtime/tenantContext';
+import { buildBusinessWorkbenchModel } from '../businessWorkbenchModel';
 
 const money = (amount, currency = 'USD') => new Intl.NumberFormat('en-US', { currency, maximumFractionDigits: 0, style: 'currency' }).format(Number(amount || 0));
 
@@ -74,6 +82,7 @@ export function BusinessOverview() {
   const registry = useBusinessRegistrySummary();
   const workflows = useBusinessWorkflowSummary();
   const events = useBusinessEventSummary();
+  const { selectedTenant } = useTenantContext();
 
   if (overview.isLoading || runtime.isLoading || projects.isLoading || assets.isLoading || treasury.isLoading || telemetry.isLoading || registry.isLoading || workflows.isLoading || events.isLoading) return <BusinessLoadingState />;
   const failed = queryFailed(overview, runtime, projects, assets, treasury, telemetry, registry, workflows, events);
@@ -81,24 +90,78 @@ export function BusinessOverview() {
 
   const dashboard = overview.data;
   const summary = runtime.data;
+  const workbench = buildBusinessWorkbenchModel({
+    dashboard,
+    summary,
+    registry,
+    workflows,
+    events,
+    selectedTenant,
+  });
 
   return (
     <BusinessPageShell
       title="Business Runtime"
       description="Operational infrastructure, development intake, treasury exposure, ACS visibility, revenue routing and telemetry state rendered from the Business mock runtime."
     >
-      <BusinessSummaryCards cards={[
-        ...dashboard.cards,
-        { id: 'debenture-status', label: 'Debenture Status', value: summary.totalDebentures, detail: 'Debenture lifecycle visibility only; no purchase or issuance is available.', status: 'NOTICE' },
-        { id: 'governance-review-count', label: 'Governance Reviews', value: summary.activeGovernanceReviews, detail: 'Requests currently requiring governance review.', status: 'WARNING' },
-        { id: 'funding-review-count', label: 'Funding Reviews', value: summary.activeFundingReviews, detail: 'Funding records in governance or treasury review.', status: 'WARNING' },
-        { id: 'critical-events', label: 'Critical Events', value: summary.criticalTelemetryEvents, detail: 'Critical or emergency telemetry events visible in the mock runtime.', status: summary.criticalTelemetryEvents ? 'CRITICAL' : 'INFO' }
-        , { id: 'registry-edges', label: 'Registry Edges', value: registry.data.relationshipEdges, detail: 'Read-only graph relationships across Business runtime entities.', status: 'INFO' },
-        { id: 'blocked-workflows', label: 'Blocked Workflows', value: workflows.data.blockedWorkflows, detail: 'Workflow blockers detected from registry and runtime status.', status: workflows.data.blockedWorkflows ? 'WARNING' : 'INFO' },
-        { id: 'runtime-events', label: 'Runtime Events', value: events.data.totalEvents, detail: 'Derived event timeline records across Business entities.', status: 'NOTICE' },
-        { id: 'security-status', label: 'Security Validators', value: summary.securityValidatorStatus?.valid ? 'PASS' : 'REVIEW', detail: 'Non-execution and mock/read-only validator status.', status: summary.securityValidatorStatus?.valid ? 'APPROVED' : 'WARNING' }
-      ]} />
+      <TenantIdentityPanel moduleId="business" />
 
+      <WorkbenchSummarySection
+        scope="protocol"
+        title="Business protocol service model"
+        description="Business defines the protocol-level operating model for company/workspace intake, funding visibility and runtime safety."
+        cards={workbench.protocolCards}
+        columns="three"
+      />
+
+      <WorkbenchSummarySection
+        scope="tenant"
+        title="Tenant business workspace"
+        description="Projects, assets, workflows and readiness describe the selected company/Sub-DAO workspace."
+        cards={workbench.tenantCards}
+        columns="three"
+      />
+
+      <WorkbenchSummarySection
+        scope="user"
+        title="My business role"
+        description="User role and permissions are shown from mock tenant context and remain read-only."
+        cards={workbench.userCards}
+        columns="two"
+      />
+
+      <WorkbenchSummarySection
+        scope="operator"
+        title="Business operations and ACS review"
+        description="Blocked workflows, runtime events and risk visibility are operator-scoped and non-executable."
+        cards={workbench.operationsCards}
+        executionMode="simulation"
+        columns="three"
+      />
+
+      <ScopeSection
+        scope="operator"
+        title="Business operations and review control"
+        description="Business runtime cards describe intake, review, blockers and execution boundaries. They are operator-scoped and remain mock/read-only."
+      >
+        <BusinessSummaryCards cards={[
+          ...dashboard.cards,
+          { id: 'debenture-status', label: 'Debenture Status', value: summary.totalDebentures, detail: 'Debenture lifecycle visibility only; no purchase or issuance is available.', status: 'NOTICE' },
+          { id: 'governance-review-count', label: 'Governance Reviews', value: summary.activeGovernanceReviews, detail: 'Requests currently requiring governance review.', status: 'WARNING' },
+          { id: 'funding-review-count', label: 'Funding Reviews', value: summary.activeFundingReviews, detail: 'Funding records in governance or treasury review.', status: 'WARNING' },
+          { id: 'critical-events', label: 'Critical Events', value: summary.criticalTelemetryEvents, detail: 'Critical or emergency telemetry events visible in the mock runtime.', status: summary.criticalTelemetryEvents ? 'CRITICAL' : 'INFO' }
+          , { id: 'registry-edges', label: 'Registry Edges', value: registry.data.relationshipEdges, detail: 'Read-only graph relationships across Business runtime entities.', status: 'INFO' },
+          { id: 'blocked-workflows', label: 'Blocked Workflows', value: workflows.data.blockedWorkflows, detail: 'Workflow blockers detected from registry and runtime status.', status: workflows.data.blockedWorkflows ? 'WARNING' : 'INFO' },
+          { id: 'runtime-events', label: 'Runtime Events', value: events.data.totalEvents, detail: 'Derived event timeline records across Business entities.', status: 'NOTICE' },
+          { id: 'security-status', label: 'Security Validators', value: summary.securityValidatorStatus?.valid ? 'PASS' : 'REVIEW', detail: 'Non-execution and mock/read-only validator status.', status: summary.securityValidatorStatus?.valid ? 'APPROVED' : 'WARNING' }
+        ]} />
+      </ScopeSection>
+
+      <ScopeSection
+        scope="tenant"
+        title="Tenant runtime readiness"
+        description="Runtime health, workflow readiness and registry relationships describe a company/DAO workspace rather than a personal account."
+      >
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <BusinessPanel title="Runtime Health" description="Contract, policy and validator posture from the runtime package.">
           <div className="space-y-3 text-sm">
@@ -125,6 +188,7 @@ export function BusinessOverview() {
           </div>
         </BusinessPanel>
       </section>
+      </ScopeSection>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
@@ -258,10 +322,12 @@ export function BusinessTreasury() {
 
 export function BusinessFinance() {
   const finance = useBusinessFinanceRiskModel();
-  if (finance.isLoading) return <BusinessLoadingState />;
-  if (finance.isError) return <BusinessErrorState message="Business finance risk model unavailable." />;
+  const bridge = useBusinessFinancialBridge();
+  if (finance.isLoading || bridge.isLoading) return <BusinessLoadingState />;
+  if (finance.isError || bridge.isError) return <BusinessErrorState message="Business finance risk model unavailable." />;
 
   const model = finance.data;
+  const bridgeModel = bridge.data;
   const summary = model.summary;
   const routingSummaryRows = Object.entries(model.revenueRoutingSummary).map(([key, value]) => ({
     id: key,
@@ -278,8 +344,95 @@ export function BusinessFinance() {
         { id: 'finance-exposure', label: 'Treasury Exposure', value: money(summary.totalTreasuryExposure, summary.currency), detail: `${money(summary.totalConsumedExposure, summary.currency)} consumed in visible mock exposure records.`, status: 'WARNING' },
         { id: 'finance-funding', label: 'Funding Records', value: summary.fundingRecords, detail: 'Funding lifecycle records with simulated eligibility decisions.', status: 'NOTICE' },
         { id: 'finance-debentures', label: 'Debentures', value: summary.debentures, detail: `${summary.convertibleDebentures} convertible / ${summary.nonConvertibleDebentures} non-convertible planning records.`, status: 'WARNING' },
-        { id: 'finance-readiness', label: 'Readiness Score', value: `${summary.financialReadinessScore}%`, detail: `${summary.blockedFinancialActions} financial actions are blocked or require approval.`, status: summary.financialReadinessScore >= 80 ? 'APPROVED' : 'WARNING' }
+        { id: 'finance-readiness', label: 'Readiness Score', value: `${summary.financialReadinessScore}%`, detail: `${summary.blockedFinancialActions} financial actions are blocked or require approval.`, status: summary.financialReadinessScore >= 80 ? 'APPROVED' : 'WARNING' },
+        { id: 'bridge-packages', label: 'Bridge Packages', value: bridgeModel.summary.totalEntities, detail: 'Mock financial readiness packages prepared by runtime.', status: 'NOTICE' },
+        { id: 'bridge-handoffs', label: 'Handoff Receipts', value: bridgeModel.receipts.length, detail: 'Simulation-only handoff receipts; no financial integration is called.', status: 'INFO' },
+        { id: 'bridge-blockers', label: 'Bridge Blockers', value: bridgeModel.summary.blockerCount, detail: 'Financial bridge blockers and non-executable safety warnings.', status: bridgeModel.summary.blockerCount ? 'WARNING' : 'APPROVED' },
+        { id: 'external-finance-effects', label: 'External Effects', value: bridgeModel.externalSideEffects ? 'YES' : 'NO', detail: 'Financial bridge cannot move funds, issue debentures, settle or call contracts.', status: bridgeModel.externalSideEffects ? 'CRITICAL' : 'APPROVED' }
       ]} />
+
+      <BusinessPanel title="Financial Bridge Packages" description="Mock handoff packages prepare treasury, funding, debenture, revenue and settlement context for future financial integrations without execution.">
+        <BusinessLifecycleTable
+          rows={bridgeModel.packages}
+          columns={[
+            { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+            { key: 'entityType', label: 'Type', render: textCell('entityType') },
+            { key: 'projectId', label: 'Project', render: (row) => row.projectId ? <Link className="font-mono text-xs font-bold text-primary" to={`/business/projects/${row.projectId}`}>{row.projectId}</Link> : <span className="text-outline">draft</span> },
+            { key: 'bridgeStatus', label: 'Bridge status', render: statusCell('bridgeStatus') },
+            { key: 'riskSnapshot', label: 'Exposure', render: (row) => <span className="text-outline">{money(row.riskSnapshot.treasuryExposureAmount, row.treasuryPackage?.currency || 'USD')}</span> },
+            { key: 'settlementReadiness', label: 'Settlement ready', render: (row) => <span className="text-outline">{String(row.settlementReadiness.settlementReady)}</span> },
+            { key: 'blockers', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockers.length}</strong> },
+            { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Financial Handoff Receipts" description="Receipts are simulation-only and explicitly block real treasury, debenture, revenue, settlement, swap and contract actions.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.receipts}
+            columns={[
+              { key: 'handoffReceiptId', label: 'Receipt', render: idCell('handoffReceiptId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'financialBridgeStatus', label: 'Status', render: statusCell('financialBridgeStatus') },
+              { key: 'requiredFinancialActions', label: 'Required reviews', render: (row) => <strong className="text-on-surface">{row.requiredFinancialActions.length}</strong> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Financial Bridge Blockers" description="Bridge blockers must be resolved before any future real financial handoff can be considered.">
+          {bridgeModel.blockers.length ? (
+            <BusinessLifecycleTable
+              rows={bridgeModel.blockers}
+              columns={[
+                { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+                { key: 'source', label: 'Source', render: statusCell('source') },
+                { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+                { key: 'message', label: 'Blocker', render: textCell('message') }
+              ]}
+            />
+          ) : (
+            <p className="text-sm text-outline">No blocking financial bridge issues detected in the current mock runtime.</p>
+          )}
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <BusinessPanel title="Treasury Readiness Packages" description="Treasury package visibility only; allocation and consumption remain disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.treasuryPackages}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'requestedAmount', label: 'Requested', render: (row) => <span className="text-outline">{money(row.requestedAmount, row.currency)}</span> },
+              { key: 'approvedAmountMock', label: 'Approved mock', render: (row) => <span className="text-outline">{money(row.approvedAmountMock, row.currency)}</span> },
+              { key: 'riskTier', label: 'Risk', render: riskCell() }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Debenture Readiness Packages" description="Debenture package visibility only; issuance, purchase, conversion and APR payment remain disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.debenturePackages}
+            columns={[
+              { key: 'debentureId', label: 'Debenture', render: idCell('debentureId') },
+              { key: 'targetAmount', label: 'Target', render: (row) => <span className="text-outline">{money(row.targetAmount, row.currency)}</span> },
+              { key: 'raisedAmountMock', label: 'Raised mock', render: (row) => <span className="text-outline">{money(row.raisedAmountMock, row.currency)}</span> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Revenue Routing Readiness" description="Revenue routing package visibility only; settlement and distribution remain disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.revenuePackages}
+            columns={[
+              { key: 'assetId', label: 'Asset', render: idCell('assetId') },
+              { key: 'netAmountMock', label: 'Net mock', render: (row) => <span className="text-outline">{money(row.netAmountMock, 'USD')}</span> },
+              { key: 'settlementReadiness', label: 'Settlement', render: statusCell('settlementReadiness') },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <BusinessPanel title="Treasury Safety Status" description="Financial adapters are mock/read-only. No allocation, settlement or distribution can execute from this console.">
@@ -898,10 +1051,12 @@ export function BusinessAccess() {
 
 export function BusinessGovernanceReadiness() {
   const governance = useBusinessGovernanceReadiness();
-  if (governance.isLoading) return <BusinessLoadingState />;
-  if (governance.isError) return <BusinessErrorState message="Business governance readiness unavailable." />;
+  const bridge = useBusinessGovernanceBridge();
+  if (governance.isLoading || bridge.isLoading) return <BusinessLoadingState />;
+  if (governance.isError || bridge.isError) return <BusinessErrorState message="Business governance readiness unavailable." />;
 
   const model = governance.data;
+  const bridgeModel = bridge.data;
   const proposalRows = model.projects.map((project) => ({
     id: `${project.projectId}-proposal`,
     projectId: project.projectId,
@@ -931,8 +1086,58 @@ export function BusinessGovernanceReadiness() {
         { id: 'governance-projects', label: 'Governance Projects', value: model.projects.length, detail: 'Projects requiring governance visibility or review.', status: 'WARNING' },
         { id: 'governance-drafts', label: 'Governance Drafts', value: model.drafts.length, detail: 'Stored local drafts requiring governance context.', status: model.drafts.length ? 'WARNING' : 'INFO' },
         { id: 'governance-blockers', label: 'Blockers', value: model.totalBlockers, detail: 'Restrictions and workflow blockers requiring review.', status: model.totalBlockers ? 'CRITICAL' : 'INFO' },
-        { id: 'governance-score', label: 'Readiness Score', value: `${model.readinessScore}%`, detail: 'Computed readiness only; no approval is executed.', status: model.readinessScore < 70 ? 'WARNING' : 'NOTICE' }
+        { id: 'governance-score', label: 'Readiness Score', value: `${model.readinessScore}%`, detail: 'Computed readiness only; no approval is executed.', status: model.readinessScore < 70 ? 'WARNING' : 'NOTICE' },
+        { id: 'bridge-packages', label: 'Bridge Packages', value: bridgeModel.summary.totalEntities, detail: 'Mock governance readiness packages prepared by runtime.', status: 'NOTICE' },
+        { id: 'bridge-handoffs', label: 'Handoff Receipts', value: bridgeModel.receipts.length, detail: 'Simulation-only handoff receipts; no DAO submission exists.', status: 'INFO' },
+        { id: 'mock-proposals', label: 'Mock Proposal Refs', value: bridgeModel.summary.mockProposalReferences, detail: 'References are local mock artifacts only.', status: 'INFO' },
+        { id: 'external-effects', label: 'External Effects', value: bridgeModel.externalSideEffects ? 'YES' : 'NO', detail: 'Governance bridge cannot create proposals, vote or execute.', status: bridgeModel.externalSideEffects ? 'CRITICAL' : 'APPROVED' }
       ]} />
+
+      <BusinessPanel title="Governance Bridge Packages" description="Mock handoff packages prepare Business context for future Governance integration without creating proposals.">
+        <BusinessLifecycleTable
+          rows={bridgeModel.packages}
+          columns={[
+            { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+            { key: 'entityType', label: 'Type', render: textCell('entityType') },
+            { key: 'projectId', label: 'Project', render: (row) => row.projectId ? <Link className="font-mono text-xs font-bold text-primary" to={`/business/projects/${row.projectId}`}>{row.projectId}</Link> : <span className="text-outline">draft</span> },
+            { key: 'governanceRequired', label: 'Governance', render: (row) => <span className="text-outline">{String(row.governanceRequired)}</span> },
+            { key: 'constitutionalCompatibility', label: 'Compatibility', render: (row) => <BusinessStatusBadge status={row.constitutionalCompatibility.constitutionalCompatibility} /> },
+            { key: 'federationStanding', label: 'Federation', render: (row) => <BusinessStatusBadge status={row.federationStanding.standing} /> },
+            { key: 'blockers', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockers.length}</strong> },
+            { key: 'mockProposalReference', label: 'Mock proposal', render: (row) => <span className="font-mono text-xs text-outline">{row.mockProposalReference.proposalId}</span> }
+          ]}
+        />
+      </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="Governance Handoff Receipts" description="Receipts are simulation-only and include blocked real governance actions.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.receipts}
+            columns={[
+              { key: 'handoffReceiptId', label: 'Receipt', render: idCell('handoffReceiptId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'handoffStatus', label: 'Status', render: statusCell('handoffStatus') },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="Bridge Blockers" description="Governance bridge blockers must be resolved before any future real handoff can be considered.">
+          {bridgeModel.blockers.length ? (
+            <BusinessLifecycleTable
+              rows={bridgeModel.blockers}
+              columns={[
+                { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+                { key: 'source', label: 'Source', render: statusCell('source') },
+                { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+                { key: 'message', label: 'Blocker', render: textCell('message') }
+              ]}
+            />
+          ) : (
+            <p className="text-sm text-outline">No governance bridge blockers detected in the current mock runtime.</p>
+          )}
+        </BusinessPanel>
+      </section>
 
       <BusinessPanel title="Governance Required Projects" description="Projects where governance review, constitutional compatibility or restrictions must be visible before any future transition.">
         <BusinessLifecycleTable
@@ -1100,11 +1305,14 @@ export function BusinessACS() {
 
 export function BusinessACSReadiness() {
   const readiness = useBusinessACSReadinessModel();
-  if (readiness.isLoading) return <BusinessLoadingState />;
-  if (readiness.isError) return <BusinessErrorState message="Business ACS readiness unavailable." />;
+  const bridge = useBusinessACSBridge();
+  if (readiness.isLoading || bridge.isLoading) return <BusinessLoadingState />;
+  if (readiness.isError || bridge.isError) return <BusinessErrorState message="Business ACS readiness unavailable." />;
 
   const model = readiness.data;
+  const bridgeModel = bridge.data;
   const summary = model.summary;
+  const bridgeSummary = bridgeModel.summary;
 
   return (
     <BusinessPageShell
@@ -1115,7 +1323,11 @@ export function BusinessACSReadiness() {
         { id: 'acs-runtimes', label: 'ACS Runtimes', value: summary.totalRuntimes, detail: 'Mock ACS runtime records visible from Business runtime.', status: 'INFO' },
         { id: 'acs-projects', label: 'ACS Projects', value: summary.acsRequiredProjects, detail: 'Projects requiring ACS visibility or review.', status: 'NOTICE' },
         { id: 'acs-receipts', label: 'Receipts', value: summary.orchestrationReceipts, detail: 'Orchestration receipts are mock audit references only.', status: 'NOTICE' },
-        { id: 'acs-readiness', label: 'Readiness Score', value: `${summary.readinessScore}%`, detail: `${summary.blockedACSActions} ACS actions are forbidden in current runtime.`, status: summary.readinessScore >= 80 ? 'APPROVED' : 'WARNING' }
+        { id: 'acs-readiness', label: 'Readiness Score', value: `${summary.readinessScore}%`, detail: `${summary.blockedACSActions} ACS actions are forbidden in current runtime.`, status: summary.readinessScore >= 80 ? 'APPROVED' : 'WARNING' },
+        { id: 'acs-bridge-packages', label: 'Bridge Packages', value: bridgeSummary.totalEntities, detail: 'Entities with ACS readiness packages or explicit not-required status.', status: 'INFO' },
+        { id: 'acs-handoff-receipts', label: 'Handoff Receipts', value: bridgeModel.receipts.length, detail: 'Receipts are local simulation artifacts only.', status: 'NOTICE' },
+        { id: 'acs-bridge-blockers', label: 'Bridge Blockers', value: bridgeSummary.blockerCount, detail: 'ACS blockers must be resolved before future real integration.', status: bridgeSummary.blockerCount > 0 ? 'WARNING' : 'APPROVED' },
+        { id: 'acs-external-effects', label: 'External Effects', value: bridgeModel.externalSideEffects ? 'YES' : 'NO', detail: 'Bridge is mock/read-only/simulation-only.', status: bridgeModel.externalSideEffects ? 'CRITICAL' : 'APPROVED' }
       ]} />
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-3">
@@ -1123,6 +1335,7 @@ export function BusinessACSReadiness() {
           <DetailList items={[
             { label: 'Runtime mode', value: model.mock && model.readOnly ? 'mock/read-only' : 'review' },
             { label: 'Provisioning', value: 'disabled' },
+            { label: 'ACS bridge', value: bridgeModel.externalSideEffects ? 'review required' : 'No external ACS provisioning' },
             { label: 'Autonomous execution', value: 'disabled' },
             { label: 'Security validators', value: model.securityValidatorStatus.valid ? 'PASS' : 'REVIEW' }
           ]} />
@@ -1163,6 +1376,115 @@ export function BusinessACSReadiness() {
           ]}
         />
       </BusinessPanel>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Bridge Packages" description="Readiness packages prepared for future ACS review. They do not provision MCP, start agents or access memory.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.packages}
+            columns={[
+              { key: 'packageId', label: 'Package', render: idCell('packageId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'entityType', label: 'Type', render: statusCell('entityType') },
+              { key: 'runtimeType', label: 'Runtime', render: statusCell('runtimeType') },
+              { key: 'isolationProfile', label: 'Isolation', render: statusCell('isolationProfile') },
+              { key: 'humanReviewRequired', label: 'Human review', render: (row) => <span className="text-outline">{String(row.humanReviewRequired)}</span> },
+              { key: 'blockers', label: 'Blockers', render: (row) => <strong className="text-on-surface">{row.blockers.length}</strong> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Provisioning Plans" description="Provisioning plans are architectural previews only. No deployment, compute allocation or ACS service call is enabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.provisioningPlans}
+            columns={[
+              { key: 'planId', label: 'Plan', render: idCell('planId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'runtimeType', label: 'Runtime', render: statusCell('runtimeType') },
+              { key: 'deploymentScope', label: 'Scope', render: statusCell('deploymentScope') },
+              { key: 'memoryScope', label: 'Memory', render: statusCell('memoryScope') },
+              { key: 'humanReviewGates', label: 'Human gates', render: (row) => <span className="text-outline">{row.humanReviewGates.join(' / ')}</span> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Isolation Snapshots" description="Isolation boundaries captured for review without changing tenant or memory boundaries.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.isolationSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'isolationProfile', label: 'Isolation', render: statusCell('isolationProfile') },
+              { key: 'memoryBoundary', label: 'Memory', render: statusCell('memoryBoundary') },
+              { key: 'tenantBoundary', label: 'Tenant boundary', render: statusCell('tenantBoundary') }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Permission Snapshots" description="Permission profiles are visible snapshots. No permission escalation is possible from Business.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.permissionSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'permissionProfile', label: 'Profile', render: (row) => <span className="text-outline">{row.permissionProfile.join(' / ')}</span> },
+              { key: 'autonomousExecutionAllowed', label: 'Autonomous', render: (row) => <span className="text-outline">{String(row.autonomousExecutionAllowed)}</span> },
+              { key: 'escalationAllowed', label: 'Escalation', render: (row) => <span className="text-outline">{String(row.escalationAllowed)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Compute Snapshots" description="Compute data is planning visibility only. No capacity is allocated or scaled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.computeSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'computeProfile', label: 'Profile', render: statusCell('computeProfile') },
+              { key: 'cpuUnits', label: 'CPU', render: (row) => <span className="text-outline">{row.cpuUnits}</span> },
+              { key: 'memoryMb', label: 'Memory MB', render: (row) => <span className="text-outline">{row.memoryMb}</span> },
+              { key: 'monthlyBudgetAmount', label: 'Monthly budget', render: (row) => <span className="text-outline">{money(row.monthlyBudgetAmount, row.currency)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Human Review Snapshots" description="Human review gates required before any future ACS integration can leave simulation mode.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.humanReviewSnapshots}
+            columns={[
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'required', label: 'Required', render: (row) => <span className="text-outline">{String(row.required)}</span> },
+              { key: 'requirements', label: 'Requirements', render: (row) => <span className="text-outline">{row.requirements.map((requirement) => requirement.action).join(' / ') || 'none'}</span> },
+              { key: 'gates', label: 'Gates', render: (row) => <span className="text-outline">{row.gates.join(' / ') || 'none'}</span> }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
+
+      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <BusinessPanel title="ACS Handoff Receipts" description="Handoff receipts prove only that Business prepared a mock ACS review package. They do not call external ACS services.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.receipts}
+            columns={[
+              { key: 'handoffReceiptId', label: 'Receipt', render: idCell('handoffReceiptId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'acsBridgeStatus', label: 'Status', render: statusCell('acsBridgeStatus') },
+              { key: 'requiredACSActions', label: 'Required actions', render: (row) => <span className="text-outline">{row.requiredACSActions.join(' / ')}</span> },
+              { key: 'blockedActions', label: 'Blocked actions', render: (row) => <strong className="text-on-surface">{row.blockedActions.length}</strong> },
+              { key: 'externalSideEffects', label: 'External effects', render: (row) => <span className="text-outline">{String(row.externalSideEffects)}</span> }
+            ]}
+          />
+        </BusinessPanel>
+        <BusinessPanel title="ACS Bridge Blockers" description="Blocked ACS actions remain visible and non-executable. Provisioning, deployment, memory access and permission escalation stay disabled.">
+          <BusinessLifecycleTable
+            rows={bridgeModel.blockers}
+            columns={[
+              { key: 'blockerId', label: 'Blocker', render: idCell('blockerId') },
+              { key: 'entityId', label: 'Entity', render: idCell('entityId') },
+              { key: 'code', label: 'Code', render: statusCell('code') },
+              { key: 'severity', label: 'Severity', render: (row) => <BusinessSeverityBadge severity={row.severity} /> },
+              { key: 'message', label: 'Message', render: textCell('message') },
+              { key: 'resolution', label: 'Resolution', render: textCell('resolution') }
+            ]}
+          />
+        </BusinessPanel>
+      </section>
 
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <BusinessPanel title="ACS Runtime Status" description="Runtime status, type, owner and project linkage. This is not a deployment or provisioning surface.">

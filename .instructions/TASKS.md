@@ -6,9 +6,9 @@ Last updated: 2026-05-27
 
 Overall AxodusAPP completion: 36%
 
-Current phase: Build Recovery Phase
+Current phase: Governance Tenant Console Deepening Phase
 
-Current priority: Sprint 00A Vercel Build Recovery & Deployment Gate. UI normalization remains pending and must not be marked complete during this sprint.
+Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is being established as the reference tenant-aware console pattern.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -18,7 +18,89 @@ Current priority: Sprint 00A Vercel Build Recovery & Deployment Gate. UI normali
 - Stabilize production build script — 100%
 - Add deploy verification scripts — 100%
 - Document build recovery report — 100%
-- Run final local validation gate — pending
+- Run final local validation gate — 100%
+
+### Sprint 00B — Information Architecture & UI Scope Separation
+
+- Define shared UI scope metadata contract — 100%
+- Add reusable scope badge, section, card and legend components — 100%
+- Add minimal module registry with supported scope metadata — 100%
+- Apply scope separation to dashboard — 100%
+- Apply initial scope separation to Governance, Business, Marketplace and Academy — 100%
+- Document route-level UI scope audit — 100%
+- Validate production build after semantic UI changes — 100%
+
+### Sprint 00C — UI Route & Card Inventory
+
+- Inventory registered routes from `src/routes.jsx` — 100%
+- Inventory major visible cards, panels, widgets, tables and status blocks — 100%
+- Identify mixed-scope pages and recommended future layouts — 100%
+- Identify duplicated UI patterns and shared component targets — 100%
+- Classify major UI data sources and hardcoded domain data risks — 100%
+- Create prioritized UI refactor backlog for Sprint 01 — 100%
+- Validate production build after documentation changes — 100%
+
+### Sprint 01 — App Shell Normalization
+
+- Consolidate global app frame into `AppShell` — 100%
+- Add shared `PageShell`, `PageHeader`, `SectionShell` and `ContentGrid` — 100%
+- Add reusable `CardShell` — 100%
+- Group sidebar navigation by Protocol/User/Tenant/Operations — 100%
+- Normalize header runtime indicators — 100%
+- Apply shared shell/card pattern to main dashboard — 100%
+- Document normalization report — 100%
+- Validate lint/build after shell changes — 100%
+
+### Sprint 02 — Tenant Context Runtime
+
+- Define shared tenant type model — 100%
+- Add mock tenant registry — 100%
+- Add tenant context provider, hook and registry helpers — 100%
+- Add tenant-aware runtime module registry — 100%
+- Add TenantSelector to global header — 100%
+- Add TenantIdentityPanel reusable component — 100%
+- Apply tenant context to dashboard, Governance, Business, Marketplace and Academy — 100%
+- Document Tenant Context Runtime report — 100%
+- Validate lint/build after tenant runtime changes — 100%
+
+### Sprint 03 — Dashboard Recomposition
+
+- Create dashboard module and composition layer — 100%
+- Split dashboard into Protocol, User, Tenant and Operations sections — 100%
+- Add module maturity summary — 100%
+- Show selected tenant context on dashboard — 100%
+- Separate wallet/user summary from protocol state — 100%
+- Separate operator/readiness summary from public protocol state — 100%
+- Replace large dashboard JSX data composition with `dashboardComposition.js` — 100%
+- Document kept/moved/deferred dashboard cards — 100%
+- Validate lint/build after dashboard recomposition — 100%
+
+### Sprint 04 — Module Workbench Normalization
+
+- Inspect Governance, Business, Marketplace, Academy and Trading route surfaces — 100%
+- Add shared workbench summary helper — 100%
+- Add Governance workbench composition model — 100%
+- Normalize Governance console into Protocol/User/Tenant/Operations summaries — 100%
+- Add Business workbench composition model — 100%
+- Normalize Business overview into Protocol/User/Tenant/Operations summaries — 100%
+- Extend module metadata for workbench scope support — 100%
+- Document module workbench normalization report — 100%
+- Validate lint/build after module workbench changes — 100%
+
+### Sprint 05 — Governance Tenant Console Deepening
+
+- Add Governance console composition model — 100%
+- Add Governance Context Header — 100%
+- Add Axodus Root vs selected tenant authority split — 100%
+- Add Constitutional Governance section — 100%
+- Add Local Governance section — 100%
+- Add Tenant Governance Identity panel — 100%
+- Add Proposal State Summary — 100%
+- Add User Participation panel — 100%
+- Add Governance Readiness panel — 100%
+- Add ACS Review State panel — 100%
+- Document Governance Tenant Console deepening report — 100%
+- Validate lint/build after Governance console deepening — 100%
 
 ### Module Progress
 

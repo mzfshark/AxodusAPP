@@ -1,5 +1,7 @@
 import { BUSINESS_API_RUNTIME_CONTEXT, createBusinessApiMeta } from "./business.meta.js";
-import type { BusinessApiError, BusinessApiLinks, BusinessApiResponse, BusinessApiTelemetry } from "./business.response.types.js";
+import { createBusinessApiExecutionContext, createBusinessApiSecurityContext } from "./business.api-security.js";
+import type { BusinessRuntimeAction } from "../policies/business.execution-policy.js";
+import type { BusinessApiError, BusinessApiExecutionContext, BusinessApiLinks, BusinessApiResponse, BusinessApiSecurityContext, BusinessApiTelemetry } from "./business.response.types.js";
 
 const clone = <T>(value: T): T => structuredClone(value);
 
@@ -9,6 +11,10 @@ export const businessApiResponse = <TData>(
     errors?: BusinessApiError[];
     links?: BusinessApiLinks;
     telemetry?: BusinessApiTelemetry;
+    security?: BusinessApiSecurityContext;
+    execution?: BusinessApiExecutionContext;
+    action?: BusinessRuntimeAction;
+    mockMutation?: boolean;
   } = {}
 ): BusinessApiResponse<TData> => ({
   data: clone(data),
@@ -16,7 +22,9 @@ export const businessApiResponse = <TData>(
   errors: options.errors ?? [],
   links: options.links,
   telemetry: options.telemetry,
-  runtime: BUSINESS_API_RUNTIME_CONTEXT
+  runtime: BUSINESS_API_RUNTIME_CONTEXT,
+  security: options.security ?? createBusinessApiSecurityContext(options.action),
+  execution: options.execution ?? createBusinessApiExecutionContext(options.mockMutation ?? false)
 });
 
 export const businessApiNotFoundResponse = (

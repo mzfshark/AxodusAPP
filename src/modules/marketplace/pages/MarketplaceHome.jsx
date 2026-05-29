@@ -6,6 +6,8 @@ import MarketplaceProductCard from '../components/MarketplaceProductCard';
 import MarketplaceListingsTable from '../components/MarketplaceListingsTable';
 import MarketplaceBadge from '../components/MarketplaceBadge';
 import { useMarketplaceData } from '../hooks/useMarketplaceData';
+import { ScopeSection } from '@/components/uiScope';
+import { TenantIdentityPanel } from '@/components/tenant';
 
 export default function MarketplaceHome() {
   const marketplace = useMarketplaceData();
@@ -22,22 +24,25 @@ export default function MarketplaceHome() {
         title="Governance-Aware NFT Marketplace"
         description="AxodusAPP integrated marketplace for ERC721/1155 assets, fixed listings, auctions, bids, licenses, Greenfield delivery previews, and governance validation states."
       />
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {metrics.map((metric) => <MarketplaceMetricCard key={metric.label} {...metric} />)}
-      </section>
-      <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <MarketplaceMetricCard label="Orders in review" value={marketplace.metrics.ordersPendingReview} detail="Mock orders awaiting governance validation." />
-        <MarketplaceMetricCard label="Restricted subscriptions" value={marketplace.metrics.subscriptionsRestricted} detail="Access lifecycle needs review." />
-        <MarketplaceMetricCard label="Treasury routes in review" value={marketplace.metrics.treasuryRoutesUnderReview} detail="Accounting hooks not cleared." />
-        <MarketplaceMetricCard label="Publisher blockers" value={marketplace.metrics.publisherTasksBlocked} detail="Metadata or plugin blockers." />
-      </section>
+      <TenantIdentityPanel moduleId="marketplace" />
+      <ScopeSection scope="tenant" title="Tenant marketplace registry" description="Listings, NFT-bound products and treasury destinations belong to DAO/seller tenants.">
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {metrics.map((metric) => <MarketplaceMetricCard key={metric.label} {...metric} />)}
+        </section>
+      </ScopeSection>
+      <ScopeSection scope="operator" title="Marketplace operations review" description="Orders, restricted subscriptions, treasury reviews and publisher blockers are operator-scoped control data.">
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <MarketplaceMetricCard label="Orders in review" value={marketplace.metrics.ordersPendingReview} detail="Mock orders awaiting governance validation." />
+          <MarketplaceMetricCard label="Restricted subscriptions" value={marketplace.metrics.subscriptionsRestricted} detail="Access lifecycle needs review." />
+          <MarketplaceMetricCard label="Treasury routes in review" value={marketplace.metrics.treasuryRoutesUnderReview} detail="Accounting hooks not cleared." />
+          <MarketplaceMetricCard label="Publisher blockers" value={marketplace.metrics.publisherTasksBlocked} detail="Metadata or plugin blockers." />
+        </section>
+      </ScopeSection>
       <section className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
         <div className="space-y-4">
-          <div>
-            <h2 className="text-xl font-bold text-on-surface">Operational registry</h2>
-            <p className="mt-1 text-sm text-outline">DAO ownership, treasury destination, ACS review, and execution scope are first-class listing metadata.</p>
-          </div>
-          <MarketplaceListingsTable products={marketplace.products} />
+          <ScopeSection scope="tenant" title="Operational registry" description="DAO ownership, treasury destination, ACS review, and execution scope are first-class listing metadata.">
+            <MarketplaceListingsTable products={marketplace.products} />
+          </ScopeSection>
         </div>
         <aside className="rounded-lg border border-white/10 bg-surface-container-low p-5">
           <h2 className="text-xl font-bold text-on-surface">Phase 2 boundaries</h2>

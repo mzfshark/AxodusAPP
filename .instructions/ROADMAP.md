@@ -19,6 +19,161 @@
 
 ---
 
+## Sprint 00B — Information Architecture & UI Scope Separation
+
+### Objectives
+
+- introduce protocol, user, tenant and operator information scopes before visual polish
+- stop dashboard and module cards from mixing ownership context without labels
+- add reusable scope UI primitives without redesigning the full app shell
+- document route-level scope risks and future normalization direction
+
+### Deliverables
+
+- shared UI scope metadata types
+- scope badge, section, scoped card and legend components
+- minimal module registry with scope capability metadata
+- dashboard split into Protocol Overview, My Axodus, Tenant Console and Operations
+- initial scoped treatment for Governance, Business, Marketplace and Academy
+- UI scope audit report under `.instructions/reports`
+
+---
+
+## Sprint 00C — UI Route & Card Inventory
+
+### Objectives
+
+- inventory the current SPA route surface before app shell normalization
+- classify major UI cards, panels, widgets, tables and status blocks
+- identify mixed protocol/user/tenant/operator pages
+- document duplicated UI patterns and data-source risks
+- create the refactor backlog for Sprint 01
+
+### Deliverables
+
+- route inventory report under `.instructions/reports`
+- card and panel inventory report under `.instructions/reports`
+- mixed scope report under `.instructions/reports`
+- duplication report under `.instructions/reports`
+- data source inventory under `.instructions/reports`
+- prioritized UI refactor backlog for Sprint 01
+
+---
+
+## Sprint 01 — App Shell Normalization
+
+### Objectives
+
+- make AxodusAPP render through one shared global shell
+- group navigation by Protocol, User, Tenant and Operations
+- add reusable page, section, grid and card shell primitives
+- normalize the dashboard as the first shell adoption target
+- keep module redesign and domain cleanup deferred
+
+### Deliverables
+
+- `AppShell`, `PageShell`, `PageHeader`, `SectionShell`, `ContentGrid`
+- reusable `CardShell`
+- sidebar grouped by information architecture scope
+- header runtime indicators for scope, maturity and read-only mode
+- app shell normalization report under `.instructions/reports`
+- passing lint/build validation
+
+---
+
+## Sprint 02 — Tenant Context Runtime
+
+### Objectives
+
+- make selected tenant a first-class frontend runtime concept
+- represent Sub-DAOs, companies, agencies, products and sandbox workspaces as tenant accounts
+- expose selected tenant in the global app shell
+- provide reusable tenant identity panels for major routes
+- add tenant-aware module metadata without backend tenancy
+
+### Deliverables
+
+- tenant type model
+- mock tenant registry
+- `TenantProvider`, tenant hook and registry helpers
+- global tenant selector
+- reusable tenant identity panel
+- tenant-aware module registry
+- dashboard, Governance, Business, Marketplace and Academy tenant context visibility
+- Tenant Context Runtime report under `.instructions/reports`
+
+---
+
+## Sprint 03 — Dashboard Recomposition
+
+### Objectives
+
+- turn the dashboard into the front door of AxodusAPP
+- organize the dashboard by Protocol, User, Tenant and Operations
+- compose dashboard data outside raw JSX
+- summarize module maturity and readiness
+- keep execution surfaces disabled and route users to deeper module consoles
+
+### Deliverables
+
+- dashboard module under `src/modules/dashboard`
+- dashboard composition layer
+- Protocol Overview section
+- My Axodus section
+- Tenant Console Summary section
+- Operations Center section
+- Module Maturity Summary
+- Dashboard recomposition report under `.instructions/reports`
+
+---
+
+## Sprint 04 — Module Workbench Normalization
+
+### Objectives
+
+- start turning module pages into auditable workbenches
+- separate protocol, user, tenant and operator information inside high-priority modules
+- preserve existing MVP module information while adding clearer semantic hierarchy
+- keep execution surfaces read-only, preview, simulation or disabled
+
+### Deliverables
+
+- shared workbench summary section helper
+- Governance workbench composition model
+- Business workbench composition model
+- Governance console scoped into Protocol, User, Tenant and Operations summaries
+- Business overview scoped into Protocol, User, Tenant and Operations summaries
+- module metadata extended for workbench rendering
+- module workbench normalization report under `.instructions/reports`
+
+---
+
+## Sprint 05 — Governance Tenant Console Deepening
+
+### Objectives
+
+- make Governance the reference implementation for tenant-aware module UX
+- clarify Axodus Root constitutional authority versus selected tenant local governance
+- separate Constitutional Governance, Local Governance, User Participation and Operations/ACS Review
+- make proposal state, readiness state and ACS review state visually distinct
+- keep governance execution disabled, read-only, preview or simulation
+
+### Deliverables
+
+- Governance console composition layer
+- Governance context header
+- Axodus Root vs selected tenant authority split
+- Constitutional Governance section
+- Local Governance section
+- Tenant Governance Identity panel
+- Proposal State Summary
+- Governance Readiness panel
+- ACS Review State panel
+- User Participation panel
+- Governance Tenant Console deepening report under `.instructions/reports`
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

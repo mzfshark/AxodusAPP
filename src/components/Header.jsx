@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Bell, Settings } from 'lucide-react';
 import WalletConnectButton from './WalletConnectButton';
 import { shellSearchMeta } from '../config/appShell';
+import ScopeBadge from './uiScope/ScopeBadge';
+import { TenantSelector } from './tenant';
 
 export default function Header({ activeShellItem }) {
   const SearchIcon = shellSearchMeta.icon;
@@ -31,7 +33,12 @@ export default function Header({ activeShellItem }) {
         </div>
 
         <div className="app-header-actions">
-          <span className="app-neurons-balance text-accent font-bold">$NEURONS: $9,857.18</span>
+          <div className="app-header-indicators" aria-label="Application runtime indicators">
+            {activeShellItem?.scope ? <ScopeBadge scope={activeShellItem.scope} /> : null}
+            <span className="ax-meta-chip">{activeShellItem?.maturity ?? 'prototype'}</span>
+            <span className="ax-meta-chip">read-only</span>
+          </div>
+          <TenantSelector compact />
           <div className="flex items-center gap-3 text-slate-400">
             <button className="app-icon-button" aria-label="Notifications">
               <Bell className="h-5 w-5" aria-hidden="true" />
