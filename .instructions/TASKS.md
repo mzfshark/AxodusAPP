@@ -2,13 +2,13 @@
 
 ## Progress Snapshot
 
-Last updated: 2026-05-27
+Last updated: 2026-05-29
 
-Overall AxodusAPP completion: 36%
+Overall AxodusAPP completion: 38%
 
-Current phase: Governance Tenant Console Deepening Phase
+Current phase: Validation Recovered / Integration Shell Phase
 
-Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is being established as the reference tenant-aware console pattern.
+Current priority: Governance real-data integration can proceed next. Frontend validation is recovered, but production execution remains disabled.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -101,6 +101,21 @@ Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is b
 - Add ACS Review State panel — 100%
 - Document Governance Tenant Console deepening report — 100%
 - Validate lint/build after Governance console deepening — 100%
+
+### REQUEST 02 — AxodusAPP Test Stabilization Sprint
+
+- Inspect test/provider structure — 100%
+- Add shared render helper with TenantProvider support — 100%
+- Fix Academy TenantProvider test failure — 100%
+- Fix Marketplace TenantProvider test failure — 100%
+- Fix Business TenantProvider test failure found during full suite — 100%
+- Fix duplicated Governance “Featured DAO Tenants” selector — 100%
+- Stabilize Governance Operations Center smoke selector scope and timeout — 100%
+- Resolve WalletConnect/Vitest `@walletconnect/logger` packaging issue — 100%
+- Re-run focused Academy, Marketplace, Governance and Business tests — 100%
+- Re-run `npm run build` — 100%
+- Re-run full `npm test` — 100%
+- Create test stabilization report — 100%
 
 ### Module Progress
 

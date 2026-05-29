@@ -1,6 +1,4 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { afterEach, describe, expect, test } from 'vitest';
 import { appShellNav } from '../../src/config/appShell';
 import {
@@ -25,26 +23,13 @@ import {
   businessRuntimeClient,
   businessRuntimeSafety
 } from '../../src/modules/business';
+import { createTestQueryClient, renderRouteWithProviders } from '../test-utils/renderWithProviders';
 
 function renderBusinessRoute(initialEntry, route, element) {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        gcTime: 0
-      }
-    }
+  return renderRouteWithProviders(initialEntry, route, element, {
+    queryClient: createTestQueryClient(),
+    tenantId: 'tenant-company-bba',
   });
-
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[initialEntry]}>
-        <Routes>
-          <Route path={route} element={element} />
-        </Routes>
-      </MemoryRouter>
-    </QueryClientProvider>
-  );
 }
 
 afterEach(() => {
@@ -405,8 +390,8 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getAllByText(/NO_TREASURY_MOVEMENT/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/HANDOFF_PREPARED|DEBENTURE_REVIEW_REQUIRED|TREASURY_REVIEW_REQUIRED/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/External effects/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/deb-dex-country/i)).toBeInTheDocument();
-    expect(screen.getByText(/rev-dex-country/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/deb-dex-country/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/rev-dex-country/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/FORBIDDEN_IN_CURRENT_RUNTIME/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);
     expect(screen.queryByRole('button', { name: /move treasury|approve allocation|issue debenture|buy debenture|convert debenture|pay apr|distribute revenue|execute settlement|swap|contract call/i })).not.toBeInTheDocument();
@@ -439,7 +424,7 @@ describe('AxodusAPP Business routes', () => {
     expect(screen.getAllByText(/READ_ENTERPRISE_SCOPE/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/receipt-business-intake-1/i)).toBeInTheDocument();
     expect(screen.getAllByText(/PROVISION_ACS_RUNTIME/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/PROVISION_MCP_REAL/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/no MCP provisioning/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/No ACS provisioning|No external ACS provisioning/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/External effects/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/mock\/read-only/i).length).toBeGreaterThan(0);

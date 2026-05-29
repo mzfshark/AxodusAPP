@@ -1,8 +1,8 @@
 # AxodusAPP Status
 
-Last updated: 2026-05-27
+Last updated: 2026-05-29
 
-Current phase: Governance Tenant Console Deepening Phase
+Current phase: Validation Recovered / Integration Shell Phase
 
 ## Deployment Gate
 
@@ -14,11 +14,19 @@ Current phase: Governance Tenant Console Deepening Phase
 - Sprint 03 recomposes the dashboard into Protocol, User, Tenant and Operations sections with a separate composition layer.
 - Sprint 04 starts normalizing module pages into scoped workbenches, beginning with Governance and Business.
 - Sprint 05 deepens Governance as the reference tenant-aware console pattern for Axodus Root, tenant-local governance, readiness and ACS review.
+- REQUEST 02 stabilizes the frontend test suite and recovers validation after tenant context, Governance smoke and WalletConnect/Vitest failures.
 - UI normalization is not complete and remains deferred until scope semantics and the production build gate are stable.
 - Business runtime imports must resolve inside AxodusAPP for Vercel-compatible isolated builds.
 
 ## Current Build Position
 
+- `npm run build` passes as of 2026-05-29.
+- `npm test` passes as of 2026-05-29 with 29 test files and 130 tests passing.
+- AxodusAPP Status: VALIDATION RECOVERED.
+- Frontend Role: INTEGRATION SHELL.
+- Production Status: NOT PRODUCTION READY.
+- Execution Status: DISABLED.
+- Real-data Integration: NEXT SPRINT.
 - Local WSL build succeeds with the sibling `/Business` workspace present.
 - Isolated app-only build reproduced the Vercel failure before the fix because `../Business/src/index.ts` was missing.
 - The build gate is considered safe only after `pnpm run build` and `pnpm run verify:build` pass from the AxodusAPP root.

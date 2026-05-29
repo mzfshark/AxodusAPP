@@ -1,4 +1,5 @@
-import { ContentGrid, SectionShell } from '@/components/layout';
+import ContentGrid from '@/components/layout/ContentGrid';
+import SectionShell from '@/components/layout/SectionShell';
 import { CardShell } from '@/components/ui';
 
 export default function WorkbenchSummarySection({

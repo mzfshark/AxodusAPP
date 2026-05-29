@@ -1,7 +1,7 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
 import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
-import { PageShell } from '@/components/layout';
+import PageShell from '@/components/layout/PageShell';
 import { ScopeSection } from '@/components/uiScope';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';

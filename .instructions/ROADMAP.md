@@ -174,6 +174,28 @@
 
 ---
 
+## REQUEST 02 — AxodusAPP Test Stabilization Sprint
+
+### Objectives
+
+- recover frontend validation after TenantProvider, Governance smoke and WalletConnect/Vitest failures
+- keep AxodusAPP as a frontend integration shell
+- preserve meaningful test coverage without enabling execution
+- prepare the app for the next real-data Governance integration sprint
+
+### Deliverables
+
+- shared test render helper with TenantProvider support
+- Academy, Marketplace and Business tests wrapped in realistic tenant context
+- deterministic Governance smoke selectors
+- test-only WalletConnect logger stabilization
+- direct layout imports where modules do not need AppShell/wallet runtime
+- passing `npm run build`
+- passing `npm test`
+- test stabilization report under `.instructions/reports`
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives
