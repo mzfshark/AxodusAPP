@@ -1,8 +1,8 @@
 # AxodusAPP Status
 
-Last updated: 2026-05-29
+Last updated: 2026-06-02
 
-Current phase: Validation Recovered / Integration Shell Phase
+Current phase: Governance Read-Only Integration Planning Complete / Integration Shell Phase
 
 ## Deployment Gate
 
@@ -15,6 +15,7 @@ Current phase: Validation Recovered / Integration Shell Phase
 - Sprint 04 starts normalizing module pages into scoped workbenches, beginning with Governance and Business.
 - Sprint 05 deepens Governance as the reference tenant-aware console pattern for Axodus Root, tenant-local governance, readiness and ACS review.
 - REQUEST 02 stabilizes the frontend test suite and recovers validation after tenant context, Governance smoke and WalletConnect/Vitest failures.
+- REQUEST 17 plans AxodusAPP Governance read-only consumption after the approved Governance backend read-only gate. Implementation remains not started and is limited to future local/mock read-only adapter, provider, hooks and display components.
 - UI normalization is not complete and remains deferred until scope semantics and the production build gate are stable.
 - Business runtime imports must resolve inside AxodusAPP for Vercel-compatible isolated builds.
 
@@ -22,6 +23,8 @@ Current phase: Validation Recovered / Integration Shell Phase
 
 - `npm run build` passes as of 2026-05-29.
 - `npm test` passes as of 2026-05-29 with 29 test files and 130 tests passing.
+- REQUEST 17 validation on 2026-06-02: `npm run build` passed via WSL.
+- REQUEST 17 validation on 2026-06-02: `npm test -- --run` completed with 129 passing and 1 unrelated Marketplace assertion failure in `tests/marketplace/MarketplaceListingRoyaltyRuntime.test.ts`.
 - AxodusAPP Status: VALIDATION RECOVERED.
 - Frontend Role: INTEGRATION SHELL.
 - Production Status: NOT PRODUCTION READY.
@@ -93,3 +96,11 @@ Current phase: Validation Recovered / Integration Shell Phase
 - Tenant governance identity, proposal state summary, user participation, readiness and ACS review are explicit.
 - Governance execution remains read-only, preview, simulation or executable-disabled.
 - Governance is now the reference pattern for future Business, Treasury, Marketplace, Academy and Trading tenant-aware module UX.
+
+## Governance Read-Only Integration Planning Position
+
+- REQUEST 17 planning report exists at `.instructions/reports/AXODUSAPP_GOVERNANCE_READONLY_INTEGRATION_PLANNING_REPORT_2026-05-29.md`.
+- The existing Governance module, tenant runtime and routes were inventoried for future read-only integration.
+- Future REQUEST 18 should adapt the existing module with a frontend-local Governance read-only mock adapter/provider rather than creating a disconnected module.
+- Future REQUEST 18 may consume local mock data shaped after Governance backend read models, but must not call backend HTTP APIs because Governance query routes/controllers are not implemented.
+- Forbidden surfaces remain blocked: proposal mutation, voting, review/approval mutation, execution, wallet signing, treasury execution, on-chain writes, DB adapters, migrations and production config.

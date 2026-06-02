@@ -2,13 +2,13 @@
 
 ## Progress Snapshot
 
-Last updated: 2026-05-29
+Last updated: 2026-06-02
 
-Overall AxodusAPP completion: 38%
+Overall AxodusAPP completion: 39%
 
-Current phase: Validation Recovered / Integration Shell Phase
+Current phase: Governance Read-Only Integration Planning Complete / Integration Shell Phase
 
-Current priority: Governance real-data integration can proceed next. Frontend validation is recovered, but production execution remains disabled.
+Current priority: REQUEST 18 may implement a local/mock/read-only Governance adapter/provider after REQUEST 17 planning. Frontend validation is recovered except for a current unrelated Marketplace assertion failure observed during REQUEST 17, and production execution remains disabled.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -117,6 +117,34 @@ Current priority: Governance real-data integration can proceed next. Frontend va
 - Re-run full `npm test` — 100%
 - Create test stabilization report — 100%
 
+### REQUEST 17 - AxodusAPP Governance Read-Only Integration Planning
+
+- Confirm AxodusAPP repo baseline, branch and commit - 100%
+- Confirm Governance backend read-only gate baseline - 100%
+- Run AxodusAPP build validation - 100%
+- Run AxodusAPP test validation and document unrelated Marketplace assertion failure - 100%
+- Run Governance backend typecheck, unit tests and validate - 100%
+- Inventory existing AxodusAPP Governance routes, pages, hooks, mocks and tenant runtime - 100%
+- Inventory Governance backend read-model/query/indexing artifacts - 100%
+- Define allowed read-only screens and forbidden action surfaces - 100%
+- Define read model consumption map and mock data strategy - 100%
+- Define provider/hook/component/routing strategy for REQUEST 18 - 100%
+- Define UI safety labels, freshness behavior and error/empty/loading states - 100%
+- Define tenant assumptions and sensitivity policy - 100%
+- Define REQUEST 18 testing strategy and implementation gate - 100%
+- Create planning report - 100%
+- Update AxodusAPP, Governance and global docs - 100%
+
+### REQUEST 18 - AxodusAPP Governance Read-Only Mock Integration Implementation
+
+- Implement frontend-local Governance read-only mock adapter - 0%
+- Implement frontend-local read-model shaped fixtures - 0%
+- Implement read-only provider/hooks using existing TenantProvider - 0%
+- Implement display-only proposal list/detail/summary/emergency/freshness components - 0%
+- Wire only approved read-only routes or panels - 0%
+- Add tests proving no backend fetch, wallet writer, transaction adapter or mutation path is invoked - 0%
+- Keep query APIs, backend integration, proposal execution, treasury execution and on-chain writes disabled - 0%
+
 ### Module Progress
 
 - Governance module: 95%
@@ -141,9 +169,10 @@ Current priority: Governance real-data integration can proceed next. Frontend va
 
 ### Active Governance Priorities
 
-1. Add real indexer reconciliation for createProposal after on-chain/plugin adapters are connected.
-2. Connect DAO tenant accounts to indexed DAO, plugin deployment, treasury policy, member/role, agent assignment and receipt sources.
-3. Move remaining backend work into a non-detached sprint branch before staging.
+1. Implement REQUEST 18 as frontend-local/mock/read-only Governance read model consumption only.
+2. Keep existing createProposal, wallet writer and transaction adapter paths outside the read-only integration.
+3. Resolve or separately triage the unrelated Marketplace auction lifecycle assertion before using full frontend tests as a clean pass gate.
+4. Defer real backend/API Governance integration until query routes/controllers and authorization gates are explicitly approved.
 
 ---
 

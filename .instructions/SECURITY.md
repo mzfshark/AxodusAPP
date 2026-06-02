@@ -166,6 +166,37 @@ The app should support:
 
 ---
 
+# Governance Read-Only Integration Security
+
+The REQUEST 17 plan authorizes only future frontend-local/mock/read-only Governance rendering.
+
+REQUEST 18 must not:
+
+- call Governance backend HTTP APIs
+- create proposal mutation paths
+- cast votes
+- record reviews or approvals
+- record decisions
+- trigger execution
+- invoke wallet signing
+- invoke transaction adapters
+- move treasury funds
+- perform on-chain writes
+- expose raw evidence, sensitive risk notes, permission context, private actor identity or internal correlation IDs
+
+Every Governance read-only surface must label:
+
+- local/mock data source
+- read-only status
+- freshness state
+- proposal execution disabled
+- treasury execution disabled
+- wallet signing disabled
+
+AxodusAPP must remain an integration shell. Governance remains the authority boundary.
+
+---
+
 # Final Principle
 
 Users must always understand:

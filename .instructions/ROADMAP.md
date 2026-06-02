@@ -196,6 +196,48 @@
 
 ---
 
+## REQUEST 17 - AxodusAPP Governance Read-Only Integration Planning
+
+### Objectives
+
+- plan the first AxodusAPP consumption path for the approved Governance read-only backend foundation
+- keep AxodusAPP as an integration shell, not a Governance source of truth
+- map backend read models to frontend routes and display-only components
+- define tenant mapping, sensitivity policy, freshness display and local mock strategy
+- gate REQUEST 18 before any implementation begins
+
+### Deliverables
+
+- planning report under `.instructions/reports`
+- existing Governance routes, hooks, mocks and tenant runtime inventoried
+- read model consumption map for proposal list, proposal detail, timeline, decisions, emergency actions and tenant summary
+- frontend-local mock adapter/provider strategy
+- forbidden mutation, wallet, backend HTTP and execution boundaries documented
+- REQUEST 18 implementation gate documented
+
+---
+
+## REQUEST 18 - AxodusAPP Governance Read-Only Mock Integration Implementation
+
+### Objectives
+
+- implement only the frontend-local/mock/read-only Governance integration planned in REQUEST 17
+- adapt the existing Governance module rather than introducing a disconnected parallel module
+- expose read-model-shaped local fixtures through a read-only provider/hook layer
+- render tenant-scoped proposal and governance state with explicit mock/read-only labels
+- prove no backend fetch, wallet writer, transaction adapter, mutation or execution path is invoked
+
+### Deliverables
+
+- frontend-local Governance read-only mock adapter
+- read-model-shaped mock fixtures
+- read-only provider/hooks bound to `TenantProvider`
+- display-only read model panels and freshness states
+- focused Vitest/RTL coverage
+- no backend HTTP integration, API routes, DB adapters, migrations, wallet signing or execution
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

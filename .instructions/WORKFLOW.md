@@ -145,3 +145,26 @@ Examples:
 - staking
 - liquidity provision
 - governance voting
+
+---
+
+# Governance Read-Only Integration Workflow
+
+REQUEST 18 must follow the REQUEST 17 plan:
+
+1. Start from the existing Governance module and existing `TenantProvider`.
+2. Use frontend-local read-model-shaped mock data only.
+3. Add provider/hooks that expose read-only query methods only.
+4. Render proposal list, proposal detail, tenant summary and emergency state as display-only views.
+5. Show freshness, mock/read-only and execution-disabled labels.
+6. Test that backend fetch, wallet writer, transaction adapter, mutation and execution paths are not called.
+
+Forbidden until a later approved gate:
+
+- Governance backend HTTP integration
+- query API routes/controllers
+- proposal submission as authority
+- voting/review/decision mutation
+- wallet signing
+- treasury execution
+- on-chain writes
