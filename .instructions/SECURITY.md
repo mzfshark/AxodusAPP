@@ -203,7 +203,17 @@ REQUEST 18 implementation status:
 - backend HTTP integration remains not implemented;
 - wallet signing, transaction adapters, proposal execution, treasury execution and on-chain writes remain disabled.
 
-Before any real backend integration, REQUEST 19 must plan the read-only backend API boundary, authorization, sensitivity filtering and tenant scoping.
+REQUEST 19 planning status:
+
+- Governance backend read-only API boundary is planned;
+- current AxodusAPP adapter remains local/mock/read-only;
+- future HTTP adapter must preserve the read-only interface;
+- initial future HTTP consumption is limited to tenant summary, proposal list, proposal detail and emergency actions;
+- audit trail and actor activity remain restricted/deferred;
+- no real Governance backend client is implemented;
+- no mutation, wallet signing, treasury execution or on-chain flow is implemented.
+
+Before any real backend integration, backend contract types, route/controller gates, authorization behavior and AxodusAPP HTTP client behavior must be separately approved.
 
 ---
 

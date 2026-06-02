@@ -243,6 +243,17 @@
 ### Objectives
 
 - plan a safe backend HTTP read-model API boundary before AxodusAPP leaves local mock mode
+- keep AxodusAPP on the local `MockGovernanceReadOnlyAdapter` until backend contracts and routes receive later gates
+
+### Status
+
+COMPLETE - PLAN MODE ONLY
+
+REQUEST 19 planned backend read-only `GET /api/governance/v1/tenants/:tenantId/*` candidates, response envelopes, tenant/auth context, sensitivity policy, stale/fresh handling and future AxodusAPP `HttpGovernanceReadOnlyAdapter` migration. No AxodusAPP HTTP client was implemented.
+
+### Next Step
+
+REQUEST 20 - Governance Read-Only API Contract Types Implementation. AxodusAPP should continue using the local mock adapter until backend contract types and a later HTTP route/client gate are approved.
 - define route/controller/query-service contracts without implementing production execution
 - define tenant scoping, sensitivity filtering, stale data behavior and authorization requirements
 - plan how AxodusAPP will later swap its local mock adapter for a backend read-only client

@@ -177,4 +177,13 @@ REQUEST 18 implementation status:
 - `/governance` exposes a read-only backend foundation panel;
 - tests assert forbidden mutation methods and action buttons are absent.
 
-The next workflow step is REQUEST 19 planning. Do not replace the local mock adapter with backend HTTP calls until a backend read-only API boundary is planned and approved.
+REQUEST 19 planning status:
+
+- backend read-only API boundary is planned in the Governance workspace;
+- AxodusAPP remains on the local `MockGovernanceReadOnlyAdapter`;
+- future `HttpGovernanceReadOnlyAdapter` must preserve the same read-only interface;
+- initial future backend consumption should be limited to tenant summary, proposal list, proposal detail and emergency actions;
+- audit trail and actor activity are restricted/deferred;
+- no real backend client, mutation API, wallet signing, treasury execution or on-chain write is implemented.
+
+The next workflow step is REQUEST 20 backend API contract types. Do not replace the local mock adapter with backend HTTP calls until backend contracts, routes and AxodusAPP HTTP client receive later approved gates.
