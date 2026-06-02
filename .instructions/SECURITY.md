@@ -195,6 +195,16 @@ Every Governance read-only surface must label:
 
 AxodusAPP must remain an integration shell. Governance remains the authority boundary.
 
+REQUEST 18 implementation status:
+
+- local/mock/read-only Governance rendering is implemented;
+- adapter and hooks expose read-only methods only;
+- `/governance/proposals/:proposalId` is a read-only display route;
+- backend HTTP integration remains not implemented;
+- wallet signing, transaction adapters, proposal execution, treasury execution and on-chain writes remain disabled.
+
+Before any real backend integration, REQUEST 19 must plan the read-only backend API boundary, authorization, sensitivity filtering and tenant scoping.
+
 ---
 
 # Final Principle

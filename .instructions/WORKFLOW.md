@@ -168,3 +168,13 @@ Forbidden until a later approved gate:
 - wallet signing
 - treasury execution
 - on-chain writes
+
+REQUEST 18 implementation status:
+
+- local mock fixtures exist under `src/modules/governance/readOnly`;
+- read-only adapter/provider/hooks exist;
+- `/governance/proposals` and `/governance/proposals/:proposalId` are read-only surfaces;
+- `/governance` exposes a read-only backend foundation panel;
+- tests assert forbidden mutation methods and action buttons are absent.
+
+The next workflow step is REQUEST 19 planning. Do not replace the local mock adapter with backend HTTP calls until a backend read-only API boundary is planned and approved.

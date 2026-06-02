@@ -69,8 +69,8 @@ export function getListingRuntimeState(product: ListingProductLike, now: Date = 
   };
 }
 
-export function getBidRuntimePreview(product: ListingProductLike, amount?: number) {
-  const listingRuntime = getListingRuntimeState(product);
+export function getBidRuntimePreview(product: ListingProductLike, amount?: number, now: Date = new Date()) {
+  const listingRuntime = getListingRuntimeState(product, now);
   const minimumBid = getMinimumBid(product);
   const numericAmount = Number(amount ?? minimumBid ?? 0);
   const lifecycle = resolveBidLifecycle({

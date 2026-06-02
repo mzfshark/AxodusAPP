@@ -238,6 +238,27 @@
 
 ---
 
+## REQUEST 19 - Governance Backend Read-Only API Boundary Planning
+
+### Objectives
+
+- plan a safe backend HTTP read-model API boundary before AxodusAPP leaves local mock mode
+- define route/controller/query-service contracts without implementing production execution
+- define tenant scoping, sensitivity filtering, stale data behavior and authorization requirements
+- plan how AxodusAPP will later swap its local mock adapter for a backend read-only client
+- keep mutation, wallet signing, treasury execution and on-chain writes disabled
+
+### Deliverables
+
+- backend API boundary planning report
+- allowed read-only endpoint list
+- forbidden mutation/action endpoint list
+- AxodusAPP client migration strategy
+- authorization/sensitivity checklist
+- validation and implementation gates for the first backend read-only API sprint
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives

@@ -6,9 +6,9 @@ Last updated: 2026-06-02
 
 Overall AxodusAPP completion: 39%
 
-Current phase: Governance Read-Only Integration Planning Complete / Integration Shell Phase
+Current phase: Governance Read-Only Mock Integration Implemented / Integration Shell Phase
 
-Current priority: REQUEST 18 may implement a local/mock/read-only Governance adapter/provider after REQUEST 17 planning. Frontend validation is recovered except for a current unrelated Marketplace assertion failure observed during REQUEST 17, and production execution remains disabled.
+Current priority: REQUEST 19 should plan Governance backend read-only API boundaries before any real backend integration. REQUEST 18 implemented local/mock/read-only Governance rendering and production execution remains disabled.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -137,13 +137,21 @@ Current priority: REQUEST 18 may implement a local/mock/read-only Governance ada
 
 ### REQUEST 18 - AxodusAPP Governance Read-Only Mock Integration Implementation
 
-- Implement frontend-local Governance read-only mock adapter - 0%
-- Implement frontend-local read-model shaped fixtures - 0%
-- Implement read-only provider/hooks using existing TenantProvider - 0%
-- Implement display-only proposal list/detail/summary/emergency/freshness components - 0%
-- Wire only approved read-only routes or panels - 0%
-- Add tests proving no backend fetch, wallet writer, transaction adapter or mutation path is invoked - 0%
-- Keep query APIs, backend integration, proposal execution, treasury execution and on-chain writes disabled - 0%
+- Implement frontend-local Governance read-only mock adapter - 100%
+- Implement frontend-local read-model shaped fixtures - 100%
+- Implement read-only provider/hooks using existing TenantProvider - 100%
+- Implement display-only proposal list/detail/summary/emergency/freshness components - 100%
+- Wire only approved read-only routes or panels - 100%
+- Add tests proving no backend fetch, wallet writer, transaction adapter or mutation path is invoked - 100%
+- Stabilize unrelated Marketplace auction lifecycle assertion with deterministic mock time - 100%
+- Keep query APIs, backend integration, proposal execution, treasury execution and on-chain writes disabled - 100%
+
+### REQUEST 19 - Governance Backend Read-Only API Boundary Planning
+
+- Plan backend HTTP read-model query API boundaries - 0%
+- Plan tenant scoping and authorization behavior for API exposure - 0%
+- Plan AxodusAPP transition from local mock adapter to backend read-only client - 0%
+- Keep mutation APIs, execution, treasury, wallet signing and on-chain writes disabled - 0%
 
 ### Module Progress
 
@@ -169,9 +177,9 @@ Current priority: REQUEST 18 may implement a local/mock/read-only Governance ada
 
 ### Active Governance Priorities
 
-1. Implement REQUEST 18 as frontend-local/mock/read-only Governance read model consumption only.
+1. Plan REQUEST 19 Governance backend read-only API boundary before any real AxodusAPP backend integration.
 2. Keep existing createProposal, wallet writer and transaction adapter paths outside the read-only integration.
-3. Resolve or separately triage the unrelated Marketplace auction lifecycle assertion before using full frontend tests as a clean pass gate.
+3. Preserve `/governance/proposals/:proposalId` as read-only until mutation/execution receives a separate approved gate.
 4. Defer real backend/API Governance integration until query routes/controllers and authorization gates are explicitly approved.
 
 ---

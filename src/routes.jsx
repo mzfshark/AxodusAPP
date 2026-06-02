@@ -85,7 +85,7 @@ import {
 } from "./modules/marketplace";
 import Dex from "./pages/Dex";
 import Mcps from "./pages/Mcps";
-import { DaoTenantDetail, GovernanceDashboard, GovernanceLanding, GovernanceTenants, ProposalDetail } from "./modules/governance";
+import { DaoTenantDetail, GovernanceDashboard, GovernanceLanding, GovernanceReadOnlyProposalListPage, GovernanceTenants, ProposalDetail } from "./modules/governance";
 import { BbaCampaigns, BbaGovernance, BbaHome, BbaPartnerships, BbaPortfolio, BbaServices } from "./modules/bba";
 import {
   LotteryDashboard,
@@ -163,6 +163,7 @@ const router = createBrowserRouter([
       { path: "governance/tenants", element: <GovernanceTenants /> },
       { path: "governance/dao/:daoId", element: <DaoTenantDetail /> },
       { path: "governance/console", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
+      { path: "governance/proposals", element: <ProtectedRoute><GovernanceReadOnlyProposalListPage /></ProtectedRoute> },
       { path: "governance/proposals/:proposalId", element: <ProtectedRoute><ProposalDetail /></ProtectedRoute> },
       { path: "dao", element: <ProtectedRoute><GovernanceDashboard /></ProtectedRoute> },
       { path: "mining", element: <MiningOverview /> },
