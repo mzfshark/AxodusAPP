@@ -195,3 +195,14 @@ REQUEST 20 implementation status:
 - no `HttpGovernanceReadOnlyAdapter` or real backend client exists.
 
 The next workflow step is REQUEST 21 backend transport boundary planning. Do not replace the local mock adapter with backend HTTP calls until route/controller implementation and AxodusAPP HTTP client behavior receive later approved gates.
+
+REQUEST 21 planning status:
+
+- Governance backend read-only transport boundary is planned, not implemented;
+- future backend transport should remain a GET-only Koa delivery layer over `GovernanceReadModelQueryService`;
+- initial future transport surfaces are tenant summary, proposal list, proposal detail, proposal timeline, decision history and emergency actions;
+- audit trail and actor activity remain restricted/deferred;
+- AxodusAPP still uses the local `MockGovernanceReadOnlyAdapter`;
+- no `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet writer, mutation or execution path is implemented.
+
+The next workflow step is REQUEST 22 backend transport contract test planning. AxodusAPP HTTP adapter work must remain a separate future request after backend transport exists and is validated.

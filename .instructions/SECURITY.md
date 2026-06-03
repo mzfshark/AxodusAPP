@@ -224,6 +224,17 @@ REQUEST 20 implementation status:
 
 Before any real backend integration, route/controller gates, authorization behavior at transport level and AxodusAPP HTTP client behavior must be separately approved.
 
+REQUEST 21 planning status:
+
+- Governance backend read-only transport boundary is planned, not implemented;
+- future transport must stay GET-only and read-only;
+- initial future AxodusAPP HTTP candidates remain tenant summary, proposal list, proposal detail and emergency actions;
+- proposal timeline and decision history require careful internal-read treatment;
+- audit trail and actor activity remain restricted/deferred and must not be initial AxodusAPP HTTP surfaces;
+- AxodusAPP real HTTP client remains blocked until backend route registry tests, forbidden endpoint assertions, response envelope behavior and stale/fresh behavior are approved.
+
+AxodusAPP must not introduce backend fetches, mutation methods, wallet signing, treasury execution or on-chain writes as part of REQUEST 21 or REQUEST 22.
+
 ---
 
 # Final Principle

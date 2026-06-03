@@ -265,20 +265,30 @@ Governance backend now exposes static TypeScript contract exports for future rea
 
 ### Next Step
 
-REQUEST 21 - Governance Read-Only API Transport Boundary Planning. AxodusAPP remains on local mock fixtures until a later backend transport and frontend HTTP adapter gate is approved.
-- define route/controller/query-service contracts without implementing production execution
-- define tenant scoping, sensitivity filtering, stale data behavior and authorization requirements
-- plan how AxodusAPP will later swap its local mock adapter for a backend read-only client
-- keep mutation, wallet signing, treasury execution and on-chain writes disabled
+REQUEST 21 - Governance Read-Only API Transport Boundary Planning.
+
+## REQUEST 21 - Governance Read-Only API Transport Boundary Planning
+
+### Status
+
+COMPLETE - PLAN MODE ONLY
+
+Governance backend transport boundary is planned, but not implemented. The plan keeps future HTTP transport as a thin read-only Koa layer over `GovernanceReadModelQueryService`, with initial GET-only surfaces limited to tenant summary, proposal list, proposal detail, proposal timeline, decision history and emergency actions. Audit trail and actor activity remain restricted/deferred.
+
+AxodusAPP remains on local mock fixtures and `MockGovernanceReadOnlyAdapter`. No `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet signing, treasury execution or on-chain write is implemented.
+
+### Next Step
+
+REQUEST 22 - Governance Read-Only API Transport Contract Test Planning. AxodusAPP remains out of scope until backend route registry tests, forbidden endpoint assertions, context extraction tests and serialization tests are planned and later implemented.
 
 ### Deliverables
 
-- backend API boundary planning report
-- allowed read-only endpoint list
-- forbidden mutation/action endpoint list
-- AxodusAPP client migration strategy
-- authorization/sensitivity checklist
-- validation and implementation gates for the first backend read-only API sprint
+- Governance transport boundary planning report
+- future GET-only transport endpoint list
+- restricted/deferred audit and actor endpoint policy
+- forbidden mutation/action route guard strategy
+- AxodusAPP HTTP client gate kept separate
+- REQUEST 22 test-planning gate for backend transport
 
 ---
 
