@@ -186,4 +186,12 @@ REQUEST 19 planning status:
 - audit trail and actor activity are restricted/deferred;
 - no real backend client, mutation API, wallet signing, treasury execution or on-chain write is implemented.
 
-The next workflow step is REQUEST 20 backend API contract types. Do not replace the local mock adapter with backend HTTP calls until backend contracts, routes and AxodusAPP HTTP client receive later approved gates.
+REQUEST 20 implementation status:
+
+- Governance backend static read-only API contract types now exist in the Governance backend;
+- endpoint constants, response envelopes, error/status mappings and pure endpoint helpers are contract-only;
+- no Governance HTTP routes, controllers, backend handlers or server wiring were implemented;
+- AxodusAPP still uses the local `MockGovernanceReadOnlyAdapter`;
+- no `HttpGovernanceReadOnlyAdapter` or real backend client exists.
+
+The next workflow step is REQUEST 21 backend transport boundary planning. Do not replace the local mock adapter with backend HTTP calls until route/controller implementation and AxodusAPP HTTP client behavior receive later approved gates.

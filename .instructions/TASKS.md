@@ -156,9 +156,15 @@ Current priority: REQUEST 19 should plan Governance backend read-only API bounda
 
 ### REQUEST 20 - Governance Read-Only API Contract Types Implementation
 
-- Implement backend API contract types/constants only after approval - 0%
-- Keep AxodusAPP HTTP client out of scope until backend contracts are approved - 0%
-- Preserve no mutation, wallet, treasury or on-chain behavior - 0%
+- Implement backend API contract types/constants only after approval - 100%
+- Keep AxodusAPP HTTP client out of scope until backend transport/client gates are approved - 100%
+- Preserve no mutation, wallet, treasury or on-chain behavior - 100%
+
+### REQUEST 21 - Governance Read-Only API Transport Boundary Planning
+
+- Plan how backend contracts may later become HTTP transport - 0%
+- Keep AxodusAPP real HTTP adapter out of scope until transport boundary is approved - 0%
+- Preserve current `MockGovernanceReadOnlyAdapter` until a later client implementation gate - 0%
 - Keep mutation APIs, execution, treasury, wallet signing and on-chain writes disabled - 0%
 
 ### Module Progress
@@ -185,7 +191,7 @@ Current priority: REQUEST 19 should plan Governance backend read-only API bounda
 
 ### Active Governance Priorities
 
-1. Prepare for REQUEST 20 Governance read-only API contract types after backend boundary planning.
+1. Prepare for REQUEST 21 Governance read-only API transport boundary planning after backend contract types.
 2. Keep existing createProposal, wallet writer and transaction adapter paths outside the read-only integration.
 3. Preserve `/governance/proposals/:proposalId` as read-only until mutation/execution receives a separate approved gate.
 4. Defer real backend/API Governance integration until query routes/controllers and authorization gates are explicitly approved.

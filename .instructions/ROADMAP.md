@@ -254,6 +254,18 @@ REQUEST 19 planned backend read-only `GET /api/governance/v1/tenants/:tenantId/*
 ### Next Step
 
 REQUEST 20 - Governance Read-Only API Contract Types Implementation. AxodusAPP should continue using the local mock adapter until backend contract types and a later HTTP route/client gate are approved.
+
+## REQUEST 20 - Governance Read-Only API Contract Types
+
+### Status
+
+COMPLETE - BACKEND CONTRACTS ONLY
+
+Governance backend now exposes static TypeScript contract exports for future read-only API transport: endpoint constants, GET-only metadata, forbidden endpoint guards, query/path types, response envelopes, error/status mapping and pure helpers. AxodusAPP still does not consume these contracts through HTTP.
+
+### Next Step
+
+REQUEST 21 - Governance Read-Only API Transport Boundary Planning. AxodusAPP remains on local mock fixtures until a later backend transport and frontend HTTP adapter gate is approved.
 - define route/controller/query-service contracts without implementing production execution
 - define tenant scoping, sensitivity filtering, stale data behavior and authorization requirements
 - plan how AxodusAPP will later swap its local mock adapter for a backend read-only client

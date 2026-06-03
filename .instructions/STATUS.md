@@ -17,7 +17,7 @@ Current phase: Governance Read-Only Mock Integration Implemented / Integration S
 - REQUEST 02 stabilizes the frontend test suite and recovers validation after tenant context, Governance smoke and WalletConnect/Vitest failures.
 - REQUEST 17 planned AxodusAPP Governance read-only consumption after the approved Governance backend read-only gate.
 - REQUEST 18 implements the first AxodusAPP-local/mock/read-only Governance adapter, fixtures, provider/hooks, components and routes without backend HTTP integration or mutation authority.
-- REQUEST 19 planned the future Governance backend read-only API boundary from the backend side. AxodusAPP remains on local/mock/read-only fixtures and has no real Governance backend HTTP client yet.
+- REQUEST 19 planned the future Governance backend read-only API boundary from the backend side. REQUEST 20 implemented backend static API contract types. AxodusAPP remains on local/mock/read-only fixtures and has no real Governance backend HTTP client yet.
 - UI normalization is not complete and remains deferred until scope semantics and the production build gate are stable.
 - Business runtime imports must resolve inside AxodusAPP for Vercel-compatible isolated builds.
 
@@ -122,6 +122,7 @@ Current phase: Governance Read-Only Mock Integration Implemented / Integration S
 
 - REQUEST 19 planning report exists in the Governance workspace at `.instructions/reports/GOVERNANCE_BACKEND_READONLY_API_BOUNDARY_PLANNING_REPORT_2026-05-29.md`.
 - Future backend candidates are read-only `GET /api/governance/v1/tenants/:tenantId/*` endpoints for tenant summary, proposals, proposal detail, timelines, decisions and emergency actions.
+- REQUEST 20 backend API contract types now exist in Governance under `src/read-models/api-contracts`.
 - Restricted audit trail and actor activity endpoints are not initial AxodusAPP consumption surfaces.
 - Future AxodusAPP migration should introduce an `HttpGovernanceReadOnlyAdapter` that preserves the current read-only adapter interface.
 - Current adapter remains `MockGovernanceReadOnlyAdapter`.

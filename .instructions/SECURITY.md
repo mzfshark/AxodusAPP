@@ -213,7 +213,16 @@ REQUEST 19 planning status:
 - no real Governance backend client is implemented;
 - no mutation, wallet signing, treasury execution or on-chain flow is implemented.
 
-Before any real backend integration, backend contract types, route/controller gates, authorization behavior and AxodusAPP HTTP client behavior must be separately approved.
+REQUEST 20 implementation status:
+
+- Governance backend read-only API contract types are implemented as static TypeScript contracts;
+- allowed endpoint constants are `GET`-only and contract-only;
+- forbidden mutation/execution endpoint patterns are documented as a guard;
+- response envelopes and error/status mappings are static contracts;
+- no Governance HTTP API, controller, route, backend handler or server wiring is implemented;
+- no AxodusAPP real backend client is implemented.
+
+Before any real backend integration, route/controller gates, authorization behavior at transport level and AxodusAPP HTTP client behavior must be separately approved.
 
 ---
 
