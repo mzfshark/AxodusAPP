@@ -137,3 +137,31 @@ Current phase: Governance Read-Only Mock Integration Implemented / Integration S
 - Future backend transport should expose only GET tenant summary, proposal list, proposal detail, proposal timeline, decision history and emergency actions after a separate implementation gate.
 - Audit trail and actor activity remain restricted/deferred and are not initial AxodusAPP HTTP surfaces.
 - AxodusAPP HTTP client remains blocked until backend transport contract tests are implemented and pass, backend transport is separately implemented and approved, response envelopes are stable, stale/fresh behavior is tested and CORS/dev origin policy is approved.
+
+## Nucleus Maturity
+
+Current Level: L4
+Level Name: Visível no App
+Confidence: High
+Portfolio State: ADVANCE
+
+Evidence:
+- Frontend validation recovery is documented.
+- App shell, tenant runtime, module routes, Governance local/mock/read-only provider, adapter, fixtures, and proposal pages exist.
+- Governance surface has a mature local/mock/read-only subtrack, but the overall app has uneven module maturity.
+
+Main Blockers:
+- Real backend integration is not implemented.
+- Governance HTTP client remains blocked until backend transport gates are approved and implemented.
+- Wallet, settlement, treasury, marketplace minting, DEX swap, live trading, and production transaction flows remain disabled.
+
+Next Target Level: L5
+
+Next Recommended Work:
+- Balanced read-only contract alignment across modules after portfolio allocation.
+
+Execution Boundaries:
+- Production execution: DISABLED
+- Treasury execution: DISABLED
+- Wallet signing: DISABLED
+- On-chain writes: DISABLED
