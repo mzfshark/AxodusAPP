@@ -235,6 +235,16 @@ REQUEST 21 planning status:
 
 AxodusAPP must not introduce backend fetches, mutation methods, wallet signing, treasury execution or on-chain writes as part of REQUEST 21 or REQUEST 22.
 
+REQUEST 22 planning status:
+
+- Governance backend transport contract test strategy is planned;
+- REQUEST 23 should remain backend-only and pure/static;
+- AxodusAPP HTTP client remains blocked;
+- audit trail and actor activity remain restricted/deferred and must not be requested by AxodusAPP;
+- the current frontend source of display data remains local/mock/read-only fixtures.
+
+AxodusAPP must not introduce backend fetches, mutation methods, wallet signing, treasury execution or on-chain writes as part of REQUEST 23. Future HTTP adapter work requires a separate approval after backend transport exists and is validated.
+
 ---
 
 # Final Principle

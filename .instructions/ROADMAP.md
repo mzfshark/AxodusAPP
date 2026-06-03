@@ -290,6 +290,18 @@ REQUEST 22 - Governance Read-Only API Transport Contract Test Planning. AxodusAP
 - AxodusAPP HTTP client gate kept separate
 - REQUEST 22 test-planning gate for backend transport
 
+## REQUEST 22 - Governance Read-Only API Transport Contract Test Planning
+
+Status: COMPLETE - PLAN MODE ONLY
+
+Governance backend transport contract test strategy is planned in the Governance workspace. The selected next path is backend-only pure/static route registry contract tests before any HTTP transport implementation.
+
+AxodusAPP remains on local fixtures and `MockGovernanceReadOnlyAdapter`. No `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet signing, treasury execution or on-chain write is implemented.
+
+Next safe step:
+
+REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementation. This is backend-only and should not change AxodusAPP source or introduce real backend client behavior.
+
 ---
 
 ## Phase 1 — App Foundation

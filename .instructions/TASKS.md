@@ -2,13 +2,13 @@
 
 ## Progress Snapshot
 
-Last updated: 2026-06-02
+Last updated: 2026-06-03
 
 Overall AxodusAPP completion: 39%
 
 Current phase: Governance Read-Only Mock Integration Implemented / Integration Shell Phase
 
-Current priority: REQUEST 19 should plan Governance backend read-only API boundaries before any real backend integration. REQUEST 18 implemented local/mock/read-only Governance rendering and production execution remains disabled.
+Current priority: REQUEST 23 should implement backend-only pure/static Governance read-only API transport contract tests before any real backend integration. REQUEST 18 implemented local/mock/read-only Governance rendering and production execution remains disabled.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -169,9 +169,18 @@ Current priority: REQUEST 19 should plan Governance backend read-only API bounda
 
 ### REQUEST 22 - Governance Read-Only API Transport Contract Test Planning
 
-- Plan backend route registry snapshot tests before transport implementation - 0%
-- Plan forbidden mutation/execution endpoint assertions - 0%
-- Plan context extraction and serialization tests - 0%
+- Plan backend route registry snapshot tests before transport implementation - 100%
+- Plan forbidden mutation/execution endpoint assertions - 100%
+- Plan context extraction and serialization tests - 100%
+- Keep AxodusAPP HTTP client out of scope - 100%
+- Preserve current `MockGovernanceReadOnlyAdapter` until a later client implementation gate - 100%
+
+### REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementation
+
+- Implement backend-only pure/static route registry contract tests - 0%
+- Assert GET-only route definitions and forbidden endpoint absence - 0%
+- Assert restricted audit/actor endpoints remain non-initial or absent - 0%
+- Assert endpoint-to-query-service mapping and no-side-effect guards - 0%
 - Keep AxodusAPP HTTP client out of scope - 0%
 - Preserve current `MockGovernanceReadOnlyAdapter` until a later client implementation gate - 0%
 
@@ -199,7 +208,7 @@ Current priority: REQUEST 19 should plan Governance backend read-only API bounda
 
 ### Active Governance Priorities
 
-1. Prepare for REQUEST 22 Governance read-only API transport contract test planning after backend transport boundary planning.
+1. Prepare for REQUEST 23 Governance read-only API transport contract test harness implementation in the backend only.
 2. Keep existing createProposal, wallet writer and transaction adapter paths outside the read-only integration.
 3. Preserve `/governance/proposals/:proposalId` as read-only until mutation/execution receives a separate approved gate.
 4. Defer real backend/API Governance integration until query routes/controllers, route registry guards and authorization gates are explicitly approved.

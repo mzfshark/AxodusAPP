@@ -206,3 +206,13 @@ REQUEST 21 planning status:
 - no `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet writer, mutation or execution path is implemented.
 
 The next workflow step is REQUEST 22 backend transport contract test planning. AxodusAPP HTTP adapter work must remain a separate future request after backend transport exists and is validated.
+
+REQUEST 22 planning status:
+
+- Governance backend transport contract test strategy is planned, not implemented in AxodusAPP;
+- REQUEST 23 should implement backend-only pure/static route registry contract tests;
+- AxodusAPP remains on the local `MockGovernanceReadOnlyAdapter`;
+- no `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet writer, mutation or execution path is implemented;
+- real backend integration remains blocked until backend transport exists, tests pass and a separate AxodusAPP HTTP client gate is approved.
+
+The next AxodusAPP-relevant workflow remains observation only. REQUEST 23 is backend-only and must not replace local mock read-only data with HTTP calls.
