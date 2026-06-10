@@ -231,3 +231,37 @@ Validation:
 - `pnpm run typecheck`: PASS
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
+## AXAPP-REQ-03 Nucleus Detail View
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a read-only nucleus detail view at `/portfolio/:nucleusId`.
+
+Scope:
+
+- consumes the AXAPP-REQ-01 Portfolio Registry Service;
+- resolves supported nucleus route ids against service-returned nuclei before calling `getNucleusById()`;
+- displays status, L-level, D-level, risk, readiness and ownership;
+- displays active blockers, blocked action context and risk areas;
+- displays incoming/outgoing dependencies and dependency burden;
+- displays official opportunities, evidence quality and readiness status;
+- displays authority classification with execution and production disabled.
+
+Execution Boundaries:
+
+- Nucleus detail view: READ_ONLY_ONLY
+- Real API integration: NOT IMPLEMENTED
+- Mutation methods: NOT IMPLEMENTED
+- Wallet signing: DISABLED
+- Treasury/trading/settlement/payout/provisioning behavior: DISABLED
+- Production readiness: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings

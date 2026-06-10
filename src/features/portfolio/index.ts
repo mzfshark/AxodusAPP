@@ -19,7 +19,11 @@ export {
   PortfolioMaturityDistribution,
   PortfolioMetricCard,
   PortfolioOverviewDashboard,
+  NucleusSummaryCard,
 } from './components';
+export {
+  NucleusDetailView,
+} from './pages';
 export type {
   DevelopmentLevel,
   ExecutionAuthoritySummary,

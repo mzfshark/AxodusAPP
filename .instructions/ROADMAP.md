@@ -528,3 +528,30 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - opportunity registry viewer;
 - authority dashboard;
 - formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-03 - Nucleus Detail View
+
+### Objectives
+
+- add a read-only detail page for each Axodus nucleus;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- expose status, maturity, readiness, ownership, blockers, dependencies, opportunities and authority;
+- keep the view free of execution, approval, trading, swap, settlement, withdrawal, signing, deployment, payment and provisioning behavior.
+
+### Deliverables
+
+- `NucleusDetailView` under `src/features/portfolio/pages`;
+- `NucleusSummaryCard` under `src/features/portfolio/components`;
+- `/portfolio/:nucleusId` route integration;
+- detail links from the portfolio maturity distribution;
+- focused tests under `tests/portfolio/NucleusDetailView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_03_NUCLEUS_DETAIL_VIEW.md`.
+
+### Deferred
+
+- dependency graph viewer;
+- opportunity registry viewer;
+- authority dashboard;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.

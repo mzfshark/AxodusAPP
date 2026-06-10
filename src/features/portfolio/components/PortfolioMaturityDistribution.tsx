@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import ContentGrid from '@/components/layout/ContentGrid';
 import { CardShell } from '@/components/ui';
 import type { PortfolioNucleusSummary } from '../types';
@@ -34,9 +35,9 @@ export default function PortfolioMaturityDistribution({
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {group.nuclei.map((nucleus) => (
-                <span key={nucleus.nucleus} className="ax-meta-chip">
+                <Link key={nucleus.nucleus} to={`/portfolio/${encodeURIComponent(nucleus.nucleus)}`} className="ax-meta-chip">
                   {nucleus.nucleus}
-                </span>
+                </Link>
               ))}
             </div>
           </div>

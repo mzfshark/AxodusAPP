@@ -467,3 +467,21 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Update AXAPP-REQ-02 instruction and report artifacts - 100%
 - Run focused dashboard and service tests - 100%
 - Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-03 - Nucleus Detail View
+
+- Inspect current AxodusAPP portfolio components, routes, service and tests - 100%
+- Add read-only `NucleusDetailView` page under `src/features/portfolio/pages` - 100%
+- Add `NucleusSummaryCard` component - 100%
+- Display active blockers, blocked action context and risk areas - 100%
+- Display incoming/outgoing dependencies and dependency burden - 100%
+- Display official opportunities with evidence quality/readiness status - 100%
+- Display ownership and authority summary with execution/production disabled - 100%
+- Add `/portfolio/:nucleusId` route - 100%
+- Add detail links from portfolio maturity distribution - 100%
+- Add focused Nucleus Detail View tests - 100%
+- Update AXAPP-REQ-03 instruction and report artifacts - 100%
+- Run focused detail/overview/service tests - 100%
+- Run typecheck/lint/build validation - 100%

@@ -55,3 +55,26 @@ Deferred gaps:
 - opportunity registry viewer not yet implemented;
 - authority dashboard not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
+
+## AXAPP-REQ-03 Nucleus Detail View
+
+Current handoff state: DETAIL_VIEW_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/pages/NucleusDetailView.tsx`
+- `src/features/portfolio/components/NucleusSummaryCard.tsx`
+- route: `/portfolio/:nucleusId`
+
+Use this page as the read-only nucleus inspection view. Future dependency and opportunity visualizations should continue to consume `portfolioRegistryService`.
+
+Next recommended request:
+
+- AXAPP-REQ-04 - Dependency Graph Viewer
+
+Deferred gaps:
+
+- dependency graph viewer not yet implemented;
+- opportunity registry viewer not yet implemented;
+- authority dashboard not yet implemented;
+- formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
