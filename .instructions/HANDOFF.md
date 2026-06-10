@@ -79,6 +79,29 @@ Deferred gaps:
 - full graph data expansion beyond current representative service records not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
 
+## AXAPP-REQ-05 Opportunity Registry Viewer
+
+Current handoff state: OPPORTUNITY_REGISTRY_VIEWER_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/pages/OpportunityRegistryView.tsx`
+- `src/features/portfolio/components/OpportunityRegistry.tsx`
+- route: `/portfolio/opportunities`
+
+Use this page as the read-only opportunity registry viewer. It exposes official opportunity summary counts, filterable opportunity records, selected opportunity intelligence and authority boundaries without approval, promotion or workflow execution.
+
+Next recommended request:
+
+- AXAPP-REQ-06 - Boundary & Authority Dashboard
+
+Deferred gaps:
+
+- boundary and authority dashboard not yet implemented;
+- richer opportunity detail routes not yet implemented;
+- full dependency expansion beyond current representative service records not yet implemented;
+- formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
+
 ## AXAPP-REQ-03 Nucleus Detail View
 
 Current handoff state: DETAIL_VIEW_ESTABLISHED

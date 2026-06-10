@@ -201,6 +201,42 @@ Validation:
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
 
+## AXAPP-REQ-05 Opportunity Registry Viewer
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a read-only opportunity registry viewer at `/portfolio/opportunities`.
+
+Scope:
+
+- consumes `portfolioRegistryService.getOpportunities()` and related read-only registry service methods;
+- displays the official 25 opportunity summary from the service-backed snapshot;
+- displays opportunity name, owning nucleus, readiness, evidence quality, risk classification, dependency count and current status;
+- provides safe client-side filtering by nucleus, readiness, risk and evidence quality;
+- displays selected opportunity detail with description, owner, dependencies, readiness, risk, authority requirements and blockers;
+- displays explicit no approval, no promotion and no execution authority boundary notice.
+
+Execution Boundaries:
+
+- Opportunity registry viewer: VISIBILITY_ONLY
+- Approval authority: DISABLED
+- Promotion authority: DISABLED
+- Workflow execution: DISABLED
+- Real API integration: NOT IMPLEMENTED
+- Registry mutation: NOT IMPLEMENTED
+- Production behavior: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/OpportunityRegistryView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/DependencyGraphView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
 ## AXAPP-REQ-04 Dependency Graph Viewer
 
 Status: IMPLEMENTED / VALIDATED

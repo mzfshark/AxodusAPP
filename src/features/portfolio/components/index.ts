@@ -4,3 +4,4 @@ export { default as PortfolioMetricCard } from './PortfolioMetricCard';
 export { default as PortfolioOverviewDashboard } from './PortfolioOverviewDashboard';
 export { default as NucleusSummaryCard } from './NucleusSummaryCard';
 export { default as DependencyGraph } from './DependencyGraph';
+export { default as OpportunityRegistry } from './OpportunityRegistry';

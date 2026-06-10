@@ -21,10 +21,12 @@ export {
   PortfolioOverviewDashboard,
   NucleusSummaryCard,
   DependencyGraph,
+  OpportunityRegistry,
 } from './components';
 export {
   NucleusDetailView,
   DependencyGraphView,
+  OpportunityRegistryView,
 } from './pages';
 export type {
   DevelopmentLevel,

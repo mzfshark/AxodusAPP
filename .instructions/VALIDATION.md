@@ -87,3 +87,27 @@ Validation boundaries:
 - no package files changed;
 - graph viewer consumes only the portfolio registry service and static CROSS-REQ-02 chain labels already represented in portfolio instructions;
 - no live API, dependency resolution, workflow trigger, authority grant, registry mutation, wallet, treasury, trading, settlement, payout, provisioning or on-chain behavior is implemented.
+
+## AXAPP-REQ-05 Opportunity Registry Viewer
+
+Validation status: PASS_WITH_EXISTING_WARNINGS
+
+Commands:
+
+| Command | Result | Notes |
+|---|---|---|
+| `pnpm exec vitest run tests/portfolio/OpportunityRegistryView.test.tsx` | PASS | 1 test file, 4 tests passed. |
+| `pnpm exec vitest run tests/portfolio/DependencyGraphView.test.tsx` | PASS | 1 test file, 4 tests passed. |
+| `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx` | PASS | 1 test file, 4 tests passed. |
+| `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx` | PASS | 1 test file, 4 tests passed. |
+| `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts` | PASS | 1 test file, 7 tests passed. |
+| `pnpm run typecheck` | PASS | No TypeScript errors. |
+| `pnpm run lint` | PASS_WITH_WARNING | Existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`. |
+| `pnpm run build` | PASS_WITH_WARNINGS | Existing large chunk and plugin timing warnings from Vite/Rolldown output. |
+
+Validation boundaries:
+
+- no dependencies installed;
+- no package files changed;
+- opportunity registry viewer consumes only the portfolio registry service;
+- no approval, promotion, workflow execution, live API, authority grant, registry mutation, wallet, treasury, trading, settlement, payout, provisioning or on-chain behavior is implemented.

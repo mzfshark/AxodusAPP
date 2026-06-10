@@ -56,6 +56,7 @@ const nuclei = [
     sections: [
       { to: '/portfolio', label: 'Overview', icon: LayoutDashboard, end: true },
       { to: '/portfolio/dependencies', label: 'Dependencies', icon: Network },
+      { to: '/portfolio/opportunities', label: 'Opportunities', icon: Search },
       { to: '/portfolio/Business', label: 'Nucleus Detail', icon: LibraryBig },
     ],
   },

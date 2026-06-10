@@ -503,3 +503,21 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Update AXAPP-REQ-04 instruction and report artifacts - 100%
 - Run focused graph/detail/overview/service tests - 100%
 - Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-05 - Opportunity Registry Viewer
+
+- Inspect AxodusAPP portfolio service, route structure, tests and CROSS-REQ-01 opportunity data - 100%
+- Add read-only `OpportunityRegistryView` page under `src/features/portfolio/pages` - 100%
+- Add `OpportunityRegistry` component under `src/features/portfolio/components` - 100%
+- Display official 25 opportunity summary - 100%
+- Display opportunity name, owning nucleus, readiness, evidence quality, risk classification, dependency count and current status - 100%
+- Add client-side filters by nucleus, readiness, risk and evidence quality - 100%
+- Add selected opportunity detail panel - 100%
+- Add no approval, no promotion and no execution authority boundary notice - 100%
+- Add `/portfolio/opportunities` route and portfolio navigation entry - 100%
+- Add focused Opportunity Registry View tests - 100%
+- Update AXAPP-REQ-05 instruction and report artifacts - 100%
+- Run focused opportunity/portfolio regression tests - 100%
+- Run typecheck/lint/build validation - 100%

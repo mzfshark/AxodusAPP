@@ -582,3 +582,31 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - authority dashboard;
 - full graph data expansion beyond the current representative service records;
 - formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-05 - Opportunity Registry Viewer
+
+### Objectives
+
+- create a read-only opportunity registry viewer for official Axodus portfolio opportunities;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- expose opportunity product intelligence with owner, readiness, evidence, risk, dependency and boundary context;
+- provide safe client-side filtering without server/API requirements;
+- keep the viewer free of approvals, promotion actions, workflow execution, registry mutation and authority grants.
+
+### Deliverables
+
+- `OpportunityRegistryView` under `src/features/portfolio/pages`;
+- `OpportunityRegistry` under `src/features/portfolio/components`;
+- `/portfolio/opportunities` route integration before `/portfolio/:nucleusId`;
+- Portfolio navigation entry for Opportunities;
+- focused tests under `tests/portfolio/OpportunityRegistryView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_05_OPPORTUNITY_REGISTRY_VIEWER.md`.
+
+### Deferred
+
+- boundary and authority dashboard;
+- richer opportunity detail routes;
+- full dependency expansion beyond current representative service records;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
