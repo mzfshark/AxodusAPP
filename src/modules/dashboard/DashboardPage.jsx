@@ -1,5 +1,5 @@
 import { ScopeLegend } from '@/components/uiScope';
-import { PageShell } from '@/components/layout';
+import PageShell from '@/components/layout/PageShell';
 import { useTenantContext } from '@/runtime/tenantContext';
 import { useWallet } from '@/hooks/useWallet';
 import { buildDashboardComposition } from './dashboardComposition';

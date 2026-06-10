@@ -18,7 +18,7 @@ describe('Marketplace listing and royalty runtime', () => {
   test('models auction and bid lifecycle previews', () => {
     const product = marketplaceMock.products.find((item) => item.auction)!;
     const listing = getListingRuntimeState(product, new Date('2026-05-20T12:00:00.000Z'));
-    const bid = getBidRuntimePreview(product, 100);
+    const bid = getBidRuntimePreview(product, 100, new Date('2026-05-20T12:00:00.000Z'));
 
     expect(listing.listingType).toBe('english-auction');
     expect(listing.lifecycle).toBe('pending');

@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 import { academyMock } from '../../src/data/mock';
 import {
@@ -14,15 +13,12 @@ import {
   AcademyProgressEngine,
   AcademyRewards,
 } from '../../src/modules/academy';
+import { renderRouteWithProviders } from '../test-utils/renderWithProviders';
 
 function renderWithRoute(initialEntry, route, element) {
-  render(
-    <MemoryRouter initialEntries={[initialEntry]}>
-      <Routes>
-        <Route path={route} element={element} />
-      </Routes>
-    </MemoryRouter>,
-  );
+  renderRouteWithProviders(initialEntry, route, element, {
+    tenantId: 'tenant-subdao-governance-labs',
+  });
 }
 
 describe('Academy module', () => {

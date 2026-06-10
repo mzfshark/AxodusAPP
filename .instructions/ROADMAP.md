@@ -174,6 +174,136 @@
 
 ---
 
+## REQUEST 02 — AxodusAPP Test Stabilization Sprint
+
+### Objectives
+
+- recover frontend validation after TenantProvider, Governance smoke and WalletConnect/Vitest failures
+- keep AxodusAPP as a frontend integration shell
+- preserve meaningful test coverage without enabling execution
+- prepare the app for the next real-data Governance integration sprint
+
+### Deliverables
+
+- shared test render helper with TenantProvider support
+- Academy, Marketplace and Business tests wrapped in realistic tenant context
+- deterministic Governance smoke selectors
+- test-only WalletConnect logger stabilization
+- direct layout imports where modules do not need AppShell/wallet runtime
+- passing `npm run build`
+- passing `npm test`
+- test stabilization report under `.instructions/reports`
+
+---
+
+## REQUEST 17 - AxodusAPP Governance Read-Only Integration Planning
+
+### Objectives
+
+- plan the first AxodusAPP consumption path for the approved Governance read-only backend foundation
+- keep AxodusAPP as an integration shell, not a Governance source of truth
+- map backend read models to frontend routes and display-only components
+- define tenant mapping, sensitivity policy, freshness display and local mock strategy
+- gate REQUEST 18 before any implementation begins
+
+### Deliverables
+
+- planning report under `.instructions/reports`
+- existing Governance routes, hooks, mocks and tenant runtime inventoried
+- read model consumption map for proposal list, proposal detail, timeline, decisions, emergency actions and tenant summary
+- frontend-local mock adapter/provider strategy
+- forbidden mutation, wallet, backend HTTP and execution boundaries documented
+- REQUEST 18 implementation gate documented
+
+---
+
+## REQUEST 18 - AxodusAPP Governance Read-Only Mock Integration Implementation
+
+### Objectives
+
+- implement only the frontend-local/mock/read-only Governance integration planned in REQUEST 17
+- adapt the existing Governance module rather than introducing a disconnected parallel module
+- expose read-model-shaped local fixtures through a read-only provider/hook layer
+- render tenant-scoped proposal and governance state with explicit mock/read-only labels
+- prove no backend fetch, wallet writer, transaction adapter, mutation or execution path is invoked
+
+### Deliverables
+
+- frontend-local Governance read-only mock adapter
+- read-model-shaped mock fixtures
+- read-only provider/hooks bound to `TenantProvider`
+- display-only read model panels and freshness states
+- focused Vitest/RTL coverage
+- no backend HTTP integration, API routes, DB adapters, migrations, wallet signing or execution
+
+---
+
+## REQUEST 19 - Governance Backend Read-Only API Boundary Planning
+
+### Objectives
+
+- plan a safe backend HTTP read-model API boundary before AxodusAPP leaves local mock mode
+- keep AxodusAPP on the local `MockGovernanceReadOnlyAdapter` until backend contracts and routes receive later gates
+
+### Status
+
+COMPLETE - PLAN MODE ONLY
+
+REQUEST 19 planned backend read-only `GET /api/governance/v1/tenants/:tenantId/*` candidates, response envelopes, tenant/auth context, sensitivity policy, stale/fresh handling and future AxodusAPP `HttpGovernanceReadOnlyAdapter` migration. No AxodusAPP HTTP client was implemented.
+
+### Next Step
+
+REQUEST 20 - Governance Read-Only API Contract Types Implementation. AxodusAPP should continue using the local mock adapter until backend contract types and a later HTTP route/client gate are approved.
+
+## REQUEST 20 - Governance Read-Only API Contract Types
+
+### Status
+
+COMPLETE - BACKEND CONTRACTS ONLY
+
+Governance backend now exposes static TypeScript contract exports for future read-only API transport: endpoint constants, GET-only metadata, forbidden endpoint guards, query/path types, response envelopes, error/status mapping and pure helpers. AxodusAPP still does not consume these contracts through HTTP.
+
+### Next Step
+
+REQUEST 21 - Governance Read-Only API Transport Boundary Planning.
+
+## REQUEST 21 - Governance Read-Only API Transport Boundary Planning
+
+### Status
+
+COMPLETE - PLAN MODE ONLY
+
+Governance backend transport boundary is planned, but not implemented. The plan keeps future HTTP transport as a thin read-only Koa layer over `GovernanceReadModelQueryService`, with initial GET-only surfaces limited to tenant summary, proposal list, proposal detail, proposal timeline, decision history and emergency actions. Audit trail and actor activity remain restricted/deferred.
+
+AxodusAPP remains on local mock fixtures and `MockGovernanceReadOnlyAdapter`. No `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet signing, treasury execution or on-chain write is implemented.
+
+### Next Step
+
+REQUEST 22 - Governance Read-Only API Transport Contract Test Planning. AxodusAPP remains out of scope until backend route registry tests, forbidden endpoint assertions, context extraction tests and serialization tests are planned and later implemented.
+
+### Deliverables
+
+- Governance transport boundary planning report
+- future GET-only transport endpoint list
+- restricted/deferred audit and actor endpoint policy
+- forbidden mutation/action route guard strategy
+- AxodusAPP HTTP client gate kept separate
+- REQUEST 22 test-planning gate for backend transport
+
+## REQUEST 22 - Governance Read-Only API Transport Contract Test Planning
+
+Status: COMPLETE - PLAN MODE ONLY
+
+Governance backend transport contract test strategy is planned in the Governance workspace. The selected next path is backend-only pure/static route registry contract tests before any HTTP transport implementation.
+
+AxodusAPP remains on local fixtures and `MockGovernanceReadOnlyAdapter`. No `HttpGovernanceReadOnlyAdapter`, backend fetch, wallet signing, treasury execution or on-chain write is implemented.
+
+Next safe step:
+
+REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementation. This is backend-only and should not change AxodusAPP source or introduce real backend client behavior.
+
+---
+
 ## Phase 1 — App Foundation
 
 ### Objectives
@@ -339,3 +469,144 @@
 - unified reporting
 - DAO operator console
 - enterprise portal
+
+---
+
+## AXAPP-REQ-01 - Portfolio Registry Consumer Layer
+
+### Objectives
+
+- establish AxodusAPP as the first read-only consumer of global portfolio registry artifacts;
+- keep portfolio consumption local/static and deterministic;
+- expose L-level, D-level, blockers, opportunities, dependencies, ownership and authority summaries without UI dashboards;
+- preserve no-execution, no-wallet, no-production and no-mutation boundaries.
+
+### Deliverables
+
+- portfolio types under `src/features/portfolio/types.ts`;
+- local static portfolio fixture under `src/features/portfolio/portfolioRegistry.fixture.ts`;
+- source adapter under `src/features/portfolio/portfolioSourceAdapter.ts`;
+- read-only service under `src/features/portfolio/portfolioRegistryService.ts`;
+- boundary guards under `src/features/portfolio/portfolioBoundaries.ts`;
+- focused consumer-layer tests under `tests/portfolio/portfolioRegistryService.test.ts`;
+- implementation report under `.instructions/reports/AXAPP_REQ_01_PORTFOLIO_REGISTRY_CONSUMER_LAYER.md`.
+
+### Deferred
+
+- Portfolio overview dashboard;
+- nucleus detail views;
+- dependency graph viewer;
+- opportunity registry viewer;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-02 - Portfolio Overview Dashboard
+
+### Objectives
+
+- create the first user-facing portfolio control center in AxodusAPP;
+- consume only the AXAPP-REQ-01 portfolio registry service;
+- show portfolio metrics, L-level distribution, D-level distribution and boundary status;
+- keep the dashboard read-only with no execution, wallet, treasury, trading, settlement, payout or production behavior.
+
+### Deliverables
+
+- `PortfolioOverviewDashboard` under `src/features/portfolio/components`;
+- reusable `PortfolioMetricCard`;
+- `PortfolioMaturityDistribution`;
+- `PortfolioBoundaryNotice`;
+- `/portfolio` page and route;
+- app shell navigation entry for Portfolio;
+- focused dashboard tests under `tests/portfolio/PortfolioOverviewDashboard.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_02_PORTFOLIO_OVERVIEW_DASHBOARD.md`.
+
+### Deferred
+
+- nucleus detail views;
+- dependency graph viewer;
+- opportunity registry viewer;
+- authority dashboard;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-03 - Nucleus Detail View
+
+### Objectives
+
+- add a read-only detail page for each Axodus nucleus;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- expose status, maturity, readiness, ownership, blockers, dependencies, opportunities and authority;
+- keep the view free of execution, approval, trading, swap, settlement, withdrawal, signing, deployment, payment and provisioning behavior.
+
+### Deliverables
+
+- `NucleusDetailView` under `src/features/portfolio/pages`;
+- `NucleusSummaryCard` under `src/features/portfolio/components`;
+- `/portfolio/:nucleusId` route integration;
+- detail links from the portfolio maturity distribution;
+- focused tests under `tests/portfolio/NucleusDetailView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_03_NUCLEUS_DETAIL_VIEW.md`.
+
+### Deferred
+
+- dependency graph viewer;
+- opportunity registry viewer;
+- authority dashboard;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-04 - Dependency Graph Viewer
+
+### Objectives
+
+- create a read-only dependency exploration page for the Axodus portfolio;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- expose official dependency count, representative dependency records, critical chains, burden and hub signals;
+- keep the graph visualization-only with no integration execution, dependency resolution, API enablement, workflow triggering, authority grant or registry mutation.
+
+### Deliverables
+
+- `DependencyGraphView` under `src/features/portfolio/pages`;
+- `DependencyGraph` under `src/features/portfolio/components`;
+- `/portfolio/dependencies` route integration before `/portfolio/:nucleusId`;
+- Portfolio navigation entry for Dependencies;
+- focused tests under `tests/portfolio/DependencyGraphView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_04_DEPENDENCY_GRAPH_VIEWER.md`.
+
+### Deferred
+
+- opportunity registry viewer;
+- authority dashboard;
+- full graph data expansion beyond the current representative service records;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-05 - Opportunity Registry Viewer
+
+### Objectives
+
+- create a read-only opportunity registry viewer for official Axodus portfolio opportunities;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- expose opportunity product intelligence with owner, readiness, evidence, risk, dependency and boundary context;
+- provide safe client-side filtering without server/API requirements;
+- keep the viewer free of approvals, promotion actions, workflow execution, registry mutation and authority grants.
+
+### Deliverables
+
+- `OpportunityRegistryView` under `src/features/portfolio/pages`;
+- `OpportunityRegistry` under `src/features/portfolio/components`;
+- `/portfolio/opportunities` route integration before `/portfolio/:nucleusId`;
+- Portfolio navigation entry for Opportunities;
+- focused tests under `tests/portfolio/OpportunityRegistryView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_05_OPPORTUNITY_REGISTRY_VIEWER.md`.
+
+### Deferred
+
+- boundary and authority dashboard;
+- richer opportunity detail routes;
+- full dependency expansion beyond current representative service records;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.

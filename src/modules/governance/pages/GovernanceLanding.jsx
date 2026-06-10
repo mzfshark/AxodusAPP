@@ -4,6 +4,7 @@ import { FeaturedTenantCard, GovernanceStatusCard, MetricSummaryCard } from '../
 import { useChainRegistry } from '../hooks/useChainRegistry';
 import { governanceTenantsMock } from '@/data/mock';
 import { ScopeSection } from '@/components/uiScope';
+import { GovernanceReadOnlyOverviewPanel } from '../readOnly';
 
 function formatCurrency(value) {
   return new Intl.NumberFormat('en-US', {
@@ -111,6 +112,14 @@ export default function GovernanceLanding() {
           </section>
           <ConstitutionalLayerPanel chain={executionChain} />
         </section>
+
+        <ScopeSection
+          scope="tenant"
+          title="Read-only Governance backend foundation"
+          description="Local mock read-model rendering for the selected tenant. This is not a backend API integration and cannot mutate Governance state."
+        >
+          <GovernanceReadOnlyOverviewPanel />
+        </ScopeSection>
       </div>
     </main>
   );

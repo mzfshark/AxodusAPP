@@ -1,9 +1,9 @@
-import { render, screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen, within } from '@testing-library/react';
 import { beforeAll, describe, expect, test, vi } from 'vitest';
 import Sidebar from '../../src/components/Sidebar';
 import { appShellNav } from '../../src/config/appShell';
 import { MarketplaceDashboard, MarketplaceHome } from '../../src/modules/marketplace';
+import { renderWithProviders } from '../test-utils/renderWithProviders';
 
 const marketplaceShell = appShellNav.primary.find((item) => item.id === 'marketplace');
 
@@ -21,7 +21,10 @@ beforeAll(() => {
 });
 
 function renderWithRouter(ui, initialEntry = '/marketplace') {
-  render(<MemoryRouter initialEntries={[initialEntry]}>{ui}</MemoryRouter>);
+  renderWithProviders(ui, {
+    initialEntries: [initialEntry],
+    tenantId: 'tenant-company-bba',
+  });
 }
 
 describe('Marketplace navigation cleanup', () => {

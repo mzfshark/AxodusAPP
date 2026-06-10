@@ -1,4 +1,5 @@
-import { ContentGrid, SectionShell } from '@/components/layout';
+import ContentGrid from '@/components/layout/ContentGrid';
+import SectionShell from '@/components/layout/SectionShell';
 import GovernanceAcsReviewPanel from './GovernanceAcsReviewPanel';
 import GovernanceReadinessPanel from './GovernanceReadinessPanel';
 

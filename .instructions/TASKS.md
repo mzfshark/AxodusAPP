@@ -2,13 +2,13 @@
 
 ## Progress Snapshot
 
-Last updated: 2026-05-27
+Last updated: 2026-06-03
 
-Overall AxodusAPP completion: 36%
+Overall AxodusAPP completion: 39%
 
-Current phase: Governance Tenant Console Deepening Phase
+Current phase: Governance Read-Only Mock Integration Implemented / Integration Shell Phase
 
-Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is being established as the reference tenant-aware console pattern.
+Current priority: REQUEST 23 should implement backend-only pure/static Governance read-only API transport contract tests before any real backend integration. REQUEST 18 implemented local/mock/read-only Governance rendering and production execution remains disabled.
 
 ### Sprint 00A — Vercel Build Recovery & Deployment Gate
 
@@ -102,6 +102,88 @@ Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is b
 - Document Governance Tenant Console deepening report — 100%
 - Validate lint/build after Governance console deepening — 100%
 
+### REQUEST 02 — AxodusAPP Test Stabilization Sprint
+
+- Inspect test/provider structure — 100%
+- Add shared render helper with TenantProvider support — 100%
+- Fix Academy TenantProvider test failure — 100%
+- Fix Marketplace TenantProvider test failure — 100%
+- Fix Business TenantProvider test failure found during full suite — 100%
+- Fix duplicated Governance “Featured DAO Tenants” selector — 100%
+- Stabilize Governance Operations Center smoke selector scope and timeout — 100%
+- Resolve WalletConnect/Vitest `@walletconnect/logger` packaging issue — 100%
+- Re-run focused Academy, Marketplace, Governance and Business tests — 100%
+- Re-run `npm run build` — 100%
+- Re-run full `npm test` — 100%
+- Create test stabilization report — 100%
+
+### REQUEST 17 - AxodusAPP Governance Read-Only Integration Planning
+
+- Confirm AxodusAPP repo baseline, branch and commit - 100%
+- Confirm Governance backend read-only gate baseline - 100%
+- Run AxodusAPP build validation - 100%
+- Run AxodusAPP test validation and document unrelated Marketplace assertion failure - 100%
+- Run Governance backend typecheck, unit tests and validate - 100%
+- Inventory existing AxodusAPP Governance routes, pages, hooks, mocks and tenant runtime - 100%
+- Inventory Governance backend read-model/query/indexing artifacts - 100%
+- Define allowed read-only screens and forbidden action surfaces - 100%
+- Define read model consumption map and mock data strategy - 100%
+- Define provider/hook/component/routing strategy for REQUEST 18 - 100%
+- Define UI safety labels, freshness behavior and error/empty/loading states - 100%
+- Define tenant assumptions and sensitivity policy - 100%
+- Define REQUEST 18 testing strategy and implementation gate - 100%
+- Create planning report - 100%
+- Update AxodusAPP, Governance and global docs - 100%
+
+### REQUEST 18 - AxodusAPP Governance Read-Only Mock Integration Implementation
+
+- Implement frontend-local Governance read-only mock adapter - 100%
+- Implement frontend-local read-model shaped fixtures - 100%
+- Implement read-only provider/hooks using existing TenantProvider - 100%
+- Implement display-only proposal list/detail/summary/emergency/freshness components - 100%
+- Wire only approved read-only routes or panels - 100%
+- Add tests proving no backend fetch, wallet writer, transaction adapter or mutation path is invoked - 100%
+- Stabilize unrelated Marketplace auction lifecycle assertion with deterministic mock time - 100%
+- Keep query APIs, backend integration, proposal execution, treasury execution and on-chain writes disabled - 100%
+
+### REQUEST 19 - Governance Backend Read-Only API Boundary Planning
+
+- Plan backend HTTP read-model query API boundaries - 100%
+- Plan tenant scoping and authorization behavior for API exposure - 100%
+- Plan AxodusAPP transition from local mock adapter to backend read-only client - 100%
+- Document initial AxodusAPP backend consumption candidates: tenant summary, proposal list/detail and emergency actions - 100%
+- Keep current adapter local/mock/read-only with no HTTP client - 100%
+
+### REQUEST 20 - Governance Read-Only API Contract Types Implementation
+
+- Implement backend API contract types/constants only after approval - 100%
+- Keep AxodusAPP HTTP client out of scope until backend transport/client gates are approved - 100%
+- Preserve no mutation, wallet, treasury or on-chain behavior - 100%
+
+### REQUEST 21 - Governance Read-Only API Transport Boundary Planning
+
+- Plan how backend contracts may later become HTTP transport - 100%
+- Keep AxodusAPP real HTTP adapter out of scope until transport boundary is approved - 100%
+- Preserve current `MockGovernanceReadOnlyAdapter` until a later client implementation gate - 100%
+- Keep mutation APIs, execution, treasury, wallet signing and on-chain writes disabled - 100%
+
+### REQUEST 22 - Governance Read-Only API Transport Contract Test Planning
+
+- Plan backend route registry snapshot tests before transport implementation - 100%
+- Plan forbidden mutation/execution endpoint assertions - 100%
+- Plan context extraction and serialization tests - 100%
+- Keep AxodusAPP HTTP client out of scope - 100%
+- Preserve current `MockGovernanceReadOnlyAdapter` until a later client implementation gate - 100%
+
+### REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementation
+
+- Implement backend-only pure/static route registry contract tests - 0%
+- Assert GET-only route definitions and forbidden endpoint absence - 0%
+- Assert restricted audit/actor endpoints remain non-initial or absent - 0%
+- Assert endpoint-to-query-service mapping and no-side-effect guards - 0%
+- Keep AxodusAPP HTTP client out of scope - 0%
+- Preserve current `MockGovernanceReadOnlyAdapter` until a later client implementation gate - 0%
+
 ### Module Progress
 
 - Governance module: 95%
@@ -126,9 +208,10 @@ Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is b
 
 ### Active Governance Priorities
 
-1. Add real indexer reconciliation for createProposal after on-chain/plugin adapters are connected.
-2. Connect DAO tenant accounts to indexed DAO, plugin deployment, treasury policy, member/role, agent assignment and receipt sources.
-3. Move remaining backend work into a non-detached sprint branch before staging.
+1. Prepare for REQUEST 23 Governance read-only API transport contract test harness implementation in the backend only.
+2. Keep existing createProposal, wallet writer and transaction adapter paths outside the read-only integration.
+3. Preserve `/governance/proposals/:proposalId` as read-only until mutation/execution receives a separate approved gate.
+4. Defer real backend/API Governance integration until query routes/controllers, route registry guards and authorization gates are explicitly approved.
 
 ---
 
@@ -350,3 +433,91 @@ Current priority: Sprint 05 Governance Tenant Console Deepening. Governance is b
 - Validate wallet state handling — 46%
 - Validate session persistence — 24%
 - Validate sensitive UI flows — 48%
+
+---
+
+## AXAPP-REQ-01 - Portfolio Registry Consumer Layer
+
+- Inspect AxodusAPP workspace, `.instructions`, Git status and current scripts - 100%
+- Inspect global portfolio artifacts under `/opt/Axodus/.instructions` - 100%
+- Confirm `/opt/Axodus` is not a Git repository and source artifacts are local/unversioned - 100%
+- Add typed portfolio registry models - 100%
+- Add static local read-only fixture with 14 nuclei and required portfolio summary counts - 100%
+- Add local source adapter without live API, browser filesystem reads or credentials - 100%
+- Add read-only service methods for snapshot, nuclei, blockers, opportunities, dependencies and authority - 100%
+- Add guards for read-only, no execution authority and no production readiness - 100%
+- Add focused Vitest coverage for consumer contract and forbidden mutation methods - 100%
+- Update AXAPP-REQ-01 instruction and report artifacts - 100%
+- Run focused consumer-layer tests - 100%
+- Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-02 - Portfolio Overview Dashboard
+
+- Inspect AxodusAPP routing, component structure, layout system and tests - 100%
+- Inspect AXAPP-REQ-01 portfolio service and tests - 100%
+- Add Portfolio Overview Dashboard component - 100%
+- Add reusable portfolio metric card component - 100%
+- Add L-level and D-level maturity distribution component - 100%
+- Add read-only portfolio boundary notice component - 100%
+- Add `/portfolio` page and route - 100%
+- Add Portfolio navigation entry in the app shell - 100%
+- Add focused Portfolio Overview Dashboard tests - 100%
+- Update AXAPP-REQ-02 instruction and report artifacts - 100%
+- Run focused dashboard and service tests - 100%
+- Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-03 - Nucleus Detail View
+
+- Inspect current AxodusAPP portfolio components, routes, service and tests - 100%
+- Add read-only `NucleusDetailView` page under `src/features/portfolio/pages` - 100%
+- Add `NucleusSummaryCard` component - 100%
+- Display active blockers, blocked action context and risk areas - 100%
+- Display incoming/outgoing dependencies and dependency burden - 100%
+- Display official opportunities with evidence quality/readiness status - 100%
+- Display ownership and authority summary with execution/production disabled - 100%
+- Add `/portfolio/:nucleusId` route - 100%
+- Add detail links from portfolio maturity distribution - 100%
+- Add focused Nucleus Detail View tests - 100%
+- Update AXAPP-REQ-03 instruction and report artifacts - 100%
+- Run focused detail/overview/service tests - 100%
+- Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-04 - Dependency Graph Viewer
+
+- Inspect AxodusAPP portfolio service, route structure, tests and CROSS-REQ-02 dependency summary - 100%
+- Add read-only `DependencyGraphView` page under `src/features/portfolio/pages` - 100%
+- Add `DependencyGraph` component under `src/features/portfolio/components` - 100%
+- Display official 58 dependency summary and representative service records - 100%
+- Display source nucleus, target nucleus, dependency type, severity and blocking status - 100%
+- Display required critical dependency chains - 100%
+- Display LOW, MEDIUM, HIGH and CRITICAL dependency burden per nucleus - 100%
+- Display ecosystem hub view for Core, Governance, Business, Defi and AxodusAPP - 100%
+- Add `/portfolio/dependencies` route and portfolio navigation entry - 100%
+- Add focused Dependency Graph View tests - 100%
+- Update AXAPP-REQ-04 instruction and report artifacts - 100%
+- Run focused graph/detail/overview/service tests - 100%
+- Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-05 - Opportunity Registry Viewer
+
+- Inspect AxodusAPP portfolio service, route structure, tests and CROSS-REQ-01 opportunity data - 100%
+- Add read-only `OpportunityRegistryView` page under `src/features/portfolio/pages` - 100%
+- Add `OpportunityRegistry` component under `src/features/portfolio/components` - 100%
+- Display official 25 opportunity summary - 100%
+- Display opportunity name, owning nucleus, readiness, evidence quality, risk classification, dependency count and current status - 100%
+- Add client-side filters by nucleus, readiness, risk and evidence quality - 100%
+- Add selected opportunity detail panel - 100%
+- Add no approval, no promotion and no execution authority boundary notice - 100%
+- Add `/portfolio/opportunities` route and portfolio navigation entry - 100%
+- Add focused Opportunity Registry View tests - 100%
+- Update AXAPP-REQ-05 instruction and report artifacts - 100%
+- Run focused opportunity/portfolio regression tests - 100%
+- Run typecheck/lint/build validation - 100%

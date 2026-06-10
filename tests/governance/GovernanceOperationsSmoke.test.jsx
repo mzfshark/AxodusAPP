@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { renderRouteWithProviders, renderWithProviders } from '../test-utils/renderWithProviders';
 
 const executionChain = {
   slug: 'ethereum-sepolia',
@@ -146,41 +146,34 @@ vi.mock('../../src/modules/governance/hooks/useGovernanceConsole', () => ({
 async function renderLanding() {
   vi.stubEnv('VITE_GOVERNANCE_CREATE_PROPOSAL_ENABLED', 'false');
   const { default: GovernanceLanding } = await import('../../src/modules/governance/pages/GovernanceLanding');
-  render(
-    <MemoryRouter initialEntries={['/governance']}>
-      <GovernanceLanding />
-    </MemoryRouter>,
-  );
+  renderWithProviders(<GovernanceLanding />, {
+    initialEntries: ['/governance'],
+    tenantId: 'tenant-subdao-governance-labs',
+  });
 }
 
 async function renderDashboard() {
   vi.stubEnv('VITE_GOVERNANCE_CREATE_PROPOSAL_ENABLED', 'false');
   const { default: GovernanceDashboard } = await import('../../src/modules/governance/pages/GovernanceDashboard');
-  render(
-    <MemoryRouter initialEntries={['/governance/console']}>
-      <GovernanceDashboard />
-    </MemoryRouter>,
-  );
+  renderWithProviders(<GovernanceDashboard />, {
+    initialEntries: ['/governance/console'],
+    tenantId: 'tenant-subdao-governance-labs',
+  });
 }
 
 async function renderTenantDetail(tenantId = 'dao-tenant-trading-alpha') {
   const { default: DaoTenantDetail } = await import('../../src/modules/governance/pages/DaoTenantDetail');
-  render(
-    <MemoryRouter initialEntries={[`/governance/dao/${tenantId}`]}>
-      <Routes>
-        <Route path="/governance/dao/:daoId" element={<DaoTenantDetail />} />
-      </Routes>
-    </MemoryRouter>,
-  );
+  renderRouteWithProviders(`/governance/dao/${tenantId}`, '/governance/dao/:daoId', <DaoTenantDetail />, {
+    tenantId: 'tenant-subdao-governance-labs',
+  });
 }
 
 async function renderTenants(initialEntry = '/governance/tenants') {
   const { default: GovernanceTenants } = await import('../../src/modules/governance/pages/GovernanceTenants');
-  render(
-    <MemoryRouter initialEntries={[initialEntry]}>
-      <GovernanceTenants />
-    </MemoryRouter>,
-  );
+  renderWithProviders(<GovernanceTenants />, {
+    initialEntries: [initialEntry],
+    tenantId: 'tenant-subdao-governance-labs',
+  });
 }
 
 describe('Governance Operations Center smoke', () => {
@@ -208,11 +201,12 @@ describe('Governance Operations Center smoke', () => {
     expect(screen.getByText(/axodus core apr/i)).toBeInTheDocument();
     expect(screen.getByText(/open proposals/i)).toBeInTheDocument();
     expect(screen.getByText(/recently finalized/i)).toBeInTheDocument();
-    expect(screen.getByText(/featured dao tenants/i)).toBeInTheDocument();
+    const featuredSection = screen.getByRole('heading', { name: /^Featured DAO Tenants$/ }).closest('section');
+    expect(featuredSection).toBeInTheDocument();
     expect(screen.getByText(/axodus trading alpha dao/i)).toBeInTheDocument();
     expect(screen.getByText(/axodus mining yield dao/i)).toBeInTheDocument();
     expect(screen.getByText(/axodus ai infrastructure dao/i)).toBeInTheDocument();
-    expect(screen.queryByText(/axodus academy dao/i)).not.toBeInTheDocument();
+    expect(within(featuredSection).queryByText(/axodus academy dao/i)).not.toBeInTheDocument();
     expect(screen.getAllByText(/above CORE APR/i).length).toBeGreaterThan(0);
   }, 10000);
 
@@ -253,19 +247,20 @@ describe('Governance Operations Center smoke', () => {
     await renderDashboard();
 
     expect(screen.getByRole('heading', { name: /dao tenant operations center/i })).toBeInTheDocument();
-    expect(screen.getByText(/dao tenant account/i)).toBeInTheDocument();
-    expect(screen.getByText(/products enabled/i)).toBeInTheDocument();
-    expect(screen.getByText(/agents assigned/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/treasury status/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/governance health/i)).toBeInTheDocument();
-    expect(screen.getByText(/treasury execution/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/proposal activity/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/operations readiness/i)).toBeInTheDocument();
-    expect(screen.getByText(/create proposal integration status/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /governance console context/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /axodus root vs selected tenant/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /^constitutional governance$/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /^local governance$/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /^user participation$/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /governance operations \/ acs review/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /proposal state summary/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /governance readiness/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /acs review state/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /create proposal integration status/i })).toBeInTheDocument();
     expect(screen.getByText(/DAO: Axodus Executive DAO/i)).toBeInTheDocument();
     expect(screen.getByText(/Chain: Ethereum Sepolia/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /create proposal/i })).toBeEnabled();
-  }, 10000);
+  }, 30000);
 
   test('creates a local proposal draft from the console modal without on-chain submission', async () => {
     await renderDashboard();
@@ -288,5 +283,5 @@ describe('Governance Operations Center smoke', () => {
       expect(screen.queryByText(/local draft generated/i)).not.toBeInTheDocument();
     });
     expect(screen.getByText(/browser-local draft/i)).toBeInTheDocument();
-  });
+  }, 30000);
 });

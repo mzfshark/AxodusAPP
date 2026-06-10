@@ -68,6 +68,11 @@ export default defineConfig({
     pool: 'vmThreads',
     maxWorkers: 1,
     fileParallelism: false,
+    server: {
+      deps: {
+        inline: ['@walletconnect/logger'],
+      },
+    },
   },
   envPrefix: ['VITE_', 'REACT_APP_']
 });
