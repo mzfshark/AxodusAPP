@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import { DefiDashboard } from "./modules/defi";
 import Settings from "./pages/Settings";
 import Overview from "./pages/Overview";
+import PortfolioOverview from "./pages/PortfolioOverview";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
 import {
   BusinessACS,
@@ -117,6 +118,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Overview /> },
       { path: "connect", element: <ConnectWalletPage /> },
+      { path: "portfolio", element: <PortfolioOverview /> },
       { path: "account", element: <BusinessOverview /> },
       { path: "business", element: <BusinessOverview /> },
       { path: "business/intake", element: <BusinessIntakePage /> },

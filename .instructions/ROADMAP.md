@@ -498,3 +498,33 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - dependency graph viewer;
 - opportunity registry viewer;
 - formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-02 - Portfolio Overview Dashboard
+
+### Objectives
+
+- create the first user-facing portfolio control center in AxodusAPP;
+- consume only the AXAPP-REQ-01 portfolio registry service;
+- show portfolio metrics, L-level distribution, D-level distribution and boundary status;
+- keep the dashboard read-only with no execution, wallet, treasury, trading, settlement, payout or production behavior.
+
+### Deliverables
+
+- `PortfolioOverviewDashboard` under `src/features/portfolio/components`;
+- reusable `PortfolioMetricCard`;
+- `PortfolioMaturityDistribution`;
+- `PortfolioBoundaryNotice`;
+- `/portfolio` page and route;
+- app shell navigation entry for Portfolio;
+- focused dashboard tests under `tests/portfolio/PortfolioOverviewDashboard.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_02_PORTFOLIO_OVERVIEW_DASHBOARD.md`.
+
+### Deferred
+
+- nucleus detail views;
+- dependency graph viewer;
+- opportunity registry viewer;
+- authority dashboard;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.

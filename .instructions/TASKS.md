@@ -450,3 +450,20 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Update AXAPP-REQ-01 instruction and report artifacts - 100%
 - Run focused consumer-layer tests - 100%
 - Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-02 - Portfolio Overview Dashboard
+
+- Inspect AxodusAPP routing, component structure, layout system and tests - 100%
+- Inspect AXAPP-REQ-01 portfolio service and tests - 100%
+- Add Portfolio Overview Dashboard component - 100%
+- Add reusable portfolio metric card component - 100%
+- Add L-level and D-level maturity distribution component - 100%
+- Add read-only portfolio boundary notice component - 100%
+- Add `/portfolio` page and route - 100%
+- Add Portfolio navigation entry in the app shell - 100%
+- Add focused Portfolio Overview Dashboard tests - 100%
+- Update AXAPP-REQ-02 instruction and report artifacts - 100%
+- Run focused dashboard and service tests - 100%
+- Run typecheck/lint/build validation - 100%

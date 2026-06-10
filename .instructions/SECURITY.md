@@ -291,3 +291,33 @@ Required guard fields:
 - `mutationEnabled: false`
 
 The consumer layer must fail closed if any snapshot grants execution authority, production readiness or mutation capability.
+
+---
+
+# Portfolio Overview Dashboard Security
+
+AXAPP-REQ-02 authorizes only a read-only dashboard over the AXAPP-REQ-01 portfolio registry service.
+
+Allowed:
+
+- render portfolio summary metrics;
+- render L-level and D-level maturity distribution;
+- render blocked action and boundary conflict counts;
+- render execution authority disabled and production readiness disabled status;
+- route `/portfolio` as a read-only protocol page.
+
+Forbidden:
+
+- importing raw fixture data directly into the dashboard;
+- live API calls;
+- mutation endpoints or forms;
+- wallet signing;
+- transaction adapters;
+- governance execution;
+- treasury movement;
+- trading, swaps, settlement, payouts or minting;
+- ACS provisioning;
+- production credentials;
+- production readiness claims.
+
+The dashboard must display restrictive boundary language and must not expose buttons or links that imply execution, trading, swapping, settlement, payout, withdrawal, wallet signing, contract deployment or transaction approval.

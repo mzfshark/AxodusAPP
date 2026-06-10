@@ -14,6 +14,12 @@ export {
   localPortfolioSourceAdapter,
   LocalPortfolioSourceAdapter,
 } from './portfolioSourceAdapter';
+export {
+  PortfolioBoundaryNotice,
+  PortfolioMaturityDistribution,
+  PortfolioMetricCard,
+  PortfolioOverviewDashboard,
+} from './components';
 export type {
   DevelopmentLevel,
   ExecutionAuthoritySummary,

@@ -200,3 +200,34 @@ Validation:
 - `pnpm run typecheck`: PASS
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
+## AXAPP-REQ-02 Portfolio Overview Dashboard
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a user-facing Portfolio Overview Dashboard at `/portfolio`.
+
+Scope:
+
+- consumes the AXAPP-REQ-01 Portfolio Registry Consumer Layer;
+- displays nuclei, opportunity, dependency, blocked action and boundary conflict metrics;
+- displays L-level and D-level distributions calculated from the service snapshot;
+- displays Business and AxodusAPP maturity signals;
+- displays explicit read-only, no execution authority and no production readiness boundary notice.
+
+Execution Boundaries:
+
+- Portfolio dashboard: READ_ONLY_ONLY
+- Real API integration: NOT IMPLEMENTED
+- Mutation methods: NOT IMPLEMENTED
+- Wallet signing: DISABLED
+- Treasury/trading/settlement/payout behavior: DISABLED
+- Production readiness: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings

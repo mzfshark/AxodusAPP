@@ -28,3 +28,30 @@ Deferred gaps:
 - dependency graph viewer not implemented;
 - opportunity registry viewer not implemented;
 - Business-to-AxodusAPP consumer contract still requires formalization in AXAPP-REQ-07.
+
+## AXAPP-REQ-02 Portfolio Overview Dashboard
+
+Current handoff state: DASHBOARD_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/components/PortfolioOverviewDashboard.tsx`
+- `src/features/portfolio/components/PortfolioMetricCard.tsx`
+- `src/features/portfolio/components/PortfolioMaturityDistribution.tsx`
+- `src/features/portfolio/components/PortfolioBoundaryNotice.tsx`
+- `src/pages/PortfolioOverview.jsx`
+- route: `/portfolio`
+
+Use this page as the first read-only portfolio control center. Future portfolio UI work should continue to consume `portfolioRegistryService` rather than importing raw fixture data.
+
+Next recommended request:
+
+- AXAPP-REQ-03 - Nucleus Detail View
+
+Deferred gaps:
+
+- nucleus detail views not yet implemented;
+- dependency graph viewer not yet implemented;
+- opportunity registry viewer not yet implemented;
+- authority dashboard not yet implemented;
+- formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.

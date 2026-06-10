@@ -13,6 +13,7 @@ import {
   Landmark,
   LibraryBig,
   ListChecks,
+  Map,
   Network,
   PackageCheck,
   Pickaxe,
@@ -42,6 +43,19 @@ const nuclei = [
     summary: 'Unified ecosystem operating view',
     scope: 'protocol',
     maturity: 'prototype',
+  },
+  {
+    id: 'portfolio',
+    label: 'Portfolio',
+    routeBase: '/portfolio',
+    icon: Map,
+    tone: 'core',
+    summary: 'Read-only ecosystem maturity, dependency and authority overview',
+    scope: 'protocol',
+    maturity: 'D3',
+    sections: [
+      { to: '/portfolio', label: 'Overview', icon: LayoutDashboard, end: true },
+    ],
   },
   {
     id: 'mining',
@@ -392,7 +406,7 @@ export const appShellGroups = [
     id: 'protocol',
     label: 'Protocol',
     description: 'Global Axodus protocol and ecosystem surfaces',
-    itemIds: ['overview', 'governance', 'defi', 'dex', 'mining', 'lottery'],
+    itemIds: ['overview', 'portfolio', 'governance', 'defi', 'dex', 'mining', 'lottery'],
   },
   {
     id: 'user',
