@@ -255,3 +255,39 @@ Users must always understand:
 - where they are doing it
 - who controls the action
 - what the risks are
+
+---
+
+# Portfolio Registry Consumer Layer Security
+
+AXAPP-REQ-01 authorizes only static local read-only portfolio registry consumption.
+
+Allowed:
+
+- import local static fixture data;
+- expose read-only typed models;
+- return copied portfolio snapshots through read-only service methods;
+- display or prepare future display of portfolio status, maturity, blockers, opportunities, dependencies, ownership and authority summaries.
+
+Forbidden:
+
+- live API calls;
+- browser runtime filesystem reads;
+- mutation endpoints;
+- wallet signing;
+- transaction adapters;
+- governance execution;
+- treasury movement;
+- trading, swaps, settlement, payouts or minting;
+- ACS provisioning;
+- production credentials;
+- production readiness claims.
+
+Required guard fields:
+
+- `isReadOnly: true`
+- `executionAuthorized: false`
+- `productionReady: false`
+- `mutationEnabled: false`
+
+The consumer layer must fail closed if any snapshot grants execution authority, production readiness or mutation capability.

@@ -165,3 +165,38 @@ Execution Boundaries:
 - Treasury execution: DISABLED
 - Wallet signing: DISABLED
 - On-chain writes: DISABLED
+
+## AXAPP-REQ-01 Portfolio Registry Consumer Layer
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a product-side Portfolio Registry Consumer Layer under `src/features/portfolio`.
+
+Scope:
+
+- static local fixture based on `/opt/Axodus/.instructions` portfolio artifacts;
+- typed read-only portfolio snapshot;
+- read-only source adapter and service;
+- boundary guards for read-only, no execution authority and no production readiness;
+- focused Vitest coverage for the consumer contract.
+
+Global source versioning note:
+
+- `/opt/Axodus` is not a Git repository;
+- source portfolio artifacts are local/unversioned until a portfolio documentation repository is selected.
+
+Execution Boundaries:
+
+- Portfolio registry consumption: READ_ONLY_ONLY
+- Dashboards: NOT IMPLEMENTED
+- Real API integration: NOT IMPLEMENTED
+- Wallet signing: DISABLED
+- Treasury/trading/settlement/payout behavior: DISABLED
+- Production readiness: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings

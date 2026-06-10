@@ -433,3 +433,20 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Validate wallet state handling — 46%
 - Validate session persistence — 24%
 - Validate sensitive UI flows — 48%
+
+---
+
+## AXAPP-REQ-01 - Portfolio Registry Consumer Layer
+
+- Inspect AxodusAPP workspace, `.instructions`, Git status and current scripts - 100%
+- Inspect global portfolio artifacts under `/opt/Axodus/.instructions` - 100%
+- Confirm `/opt/Axodus` is not a Git repository and source artifacts are local/unversioned - 100%
+- Add typed portfolio registry models - 100%
+- Add static local read-only fixture with 14 nuclei and required portfolio summary counts - 100%
+- Add local source adapter without live API, browser filesystem reads or credentials - 100%
+- Add read-only service methods for snapshot, nuclei, blockers, opportunities, dependencies and authority - 100%
+- Add guards for read-only, no execution authority and no production readiness - 100%
+- Add focused Vitest coverage for consumer contract and forbidden mutation methods - 100%
+- Update AXAPP-REQ-01 instruction and report artifacts - 100%
+- Run focused consumer-layer tests - 100%
+- Run typecheck/lint/build validation - 100%

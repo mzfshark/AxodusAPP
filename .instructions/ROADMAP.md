@@ -469,3 +469,32 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - unified reporting
 - DAO operator console
 - enterprise portal
+
+---
+
+## AXAPP-REQ-01 - Portfolio Registry Consumer Layer
+
+### Objectives
+
+- establish AxodusAPP as the first read-only consumer of global portfolio registry artifacts;
+- keep portfolio consumption local/static and deterministic;
+- expose L-level, D-level, blockers, opportunities, dependencies, ownership and authority summaries without UI dashboards;
+- preserve no-execution, no-wallet, no-production and no-mutation boundaries.
+
+### Deliverables
+
+- portfolio types under `src/features/portfolio/types.ts`;
+- local static portfolio fixture under `src/features/portfolio/portfolioRegistry.fixture.ts`;
+- source adapter under `src/features/portfolio/portfolioSourceAdapter.ts`;
+- read-only service under `src/features/portfolio/portfolioRegistryService.ts`;
+- boundary guards under `src/features/portfolio/portfolioBoundaries.ts`;
+- focused consumer-layer tests under `tests/portfolio/portfolioRegistryService.test.ts`;
+- implementation report under `.instructions/reports/AXAPP_REQ_01_PORTFOLIO_REGISTRY_CONSUMER_LAYER.md`.
+
+### Deferred
+
+- Portfolio overview dashboard;
+- nucleus detail views;
+- dependency graph viewer;
+- opportunity registry viewer;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
