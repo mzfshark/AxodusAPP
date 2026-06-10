@@ -55,6 +55,7 @@ const nuclei = [
     maturity: 'D3',
     sections: [
       { to: '/portfolio', label: 'Overview', icon: LayoutDashboard, end: true },
+      { to: '/portfolio/dependencies', label: 'Dependencies', icon: Network },
       { to: '/portfolio/Business', label: 'Nucleus Detail', icon: LibraryBig },
     ],
   },

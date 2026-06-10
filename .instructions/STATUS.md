@@ -201,6 +201,41 @@ Validation:
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
 
+## AXAPP-REQ-04 Dependency Graph Viewer
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a read-only dependency graph viewer at `/portfolio/dependencies`.
+
+Scope:
+
+- consumes `portfolioRegistryService.getDependencies()` and the AXAPP-REQ-01 portfolio snapshot;
+- displays the official 58 dependency summary from the service-backed snapshot;
+- displays source nucleus, target nucleus, dependency type, severity and blocking status;
+- displays the highest-risk critical chains from CROSS-REQ-02 as visualization-only dependency intelligence;
+- displays dependency burden as LOW, MEDIUM, HIGH and CRITICAL per nucleus;
+- highlights Core, Governance, Business, Defi and AxodusAPP as likely ecosystem hubs based on representative service records and critical-chain mentions.
+
+Execution Boundaries:
+
+- Dependency graph viewer: VISUALIZATION_ONLY
+- Dependency resolution: NOT IMPLEMENTED
+- Real API integration: NOT IMPLEMENTED
+- Registry mutation: NOT IMPLEMENTED
+- Workflow triggering: DISABLED
+- Authority grants: DISABLED
+- Production behavior: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/DependencyGraphView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
 ## AXAPP-REQ-02 Portfolio Overview Dashboard
 
 Status: IMPLEMENTED / VALIDATED

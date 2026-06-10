@@ -485,3 +485,21 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Update AXAPP-REQ-03 instruction and report artifacts - 100%
 - Run focused detail/overview/service tests - 100%
 - Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-04 - Dependency Graph Viewer
+
+- Inspect AxodusAPP portfolio service, route structure, tests and CROSS-REQ-02 dependency summary - 100%
+- Add read-only `DependencyGraphView` page under `src/features/portfolio/pages` - 100%
+- Add `DependencyGraph` component under `src/features/portfolio/components` - 100%
+- Display official 58 dependency summary and representative service records - 100%
+- Display source nucleus, target nucleus, dependency type, severity and blocking status - 100%
+- Display required critical dependency chains - 100%
+- Display LOW, MEDIUM, HIGH and CRITICAL dependency burden per nucleus - 100%
+- Display ecosystem hub view for Core, Governance, Business, Defi and AxodusAPP - 100%
+- Add `/portfolio/dependencies` route and portfolio navigation entry - 100%
+- Add focused Dependency Graph View tests - 100%
+- Update AXAPP-REQ-04 instruction and report artifacts - 100%
+- Run focused graph/detail/overview/service tests - 100%
+- Run typecheck/lint/build validation - 100%

@@ -3,3 +3,4 @@ export { default as PortfolioMaturityDistribution } from './PortfolioMaturityDis
 export { default as PortfolioMetricCard } from './PortfolioMetricCard';
 export { default as PortfolioOverviewDashboard } from './PortfolioOverviewDashboard';
 export { default as NucleusSummaryCard } from './NucleusSummaryCard';
+export { default as DependencyGraph } from './DependencyGraph';

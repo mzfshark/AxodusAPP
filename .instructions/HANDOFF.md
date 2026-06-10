@@ -56,6 +56,29 @@ Deferred gaps:
 - authority dashboard not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
 
+## AXAPP-REQ-04 Dependency Graph Viewer
+
+Current handoff state: DEPENDENCY_GRAPH_VIEWER_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/pages/DependencyGraphView.tsx`
+- `src/features/portfolio/components/DependencyGraph.tsx`
+- route: `/portfolio/dependencies`
+
+Use this page as the read-only dependency graph viewer. It exposes official dependency summary counts, representative service dependency records, critical chain visualization, burden classification and ecosystem hub signals without resolving dependencies or invoking integrations.
+
+Next recommended request:
+
+- AXAPP-REQ-05 - Opportunity Registry Viewer
+
+Deferred gaps:
+
+- opportunity registry viewer not yet implemented;
+- authority dashboard not yet implemented;
+- full graph data expansion beyond current representative service records not yet implemented;
+- formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
+
 ## AXAPP-REQ-03 Nucleus Detail View
 
 Current handoff state: DETAIL_VIEW_ESTABLISHED

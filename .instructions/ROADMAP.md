@@ -555,3 +555,30 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - opportunity registry viewer;
 - authority dashboard;
 - formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-04 - Dependency Graph Viewer
+
+### Objectives
+
+- create a read-only dependency exploration page for the Axodus portfolio;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- expose official dependency count, representative dependency records, critical chains, burden and hub signals;
+- keep the graph visualization-only with no integration execution, dependency resolution, API enablement, workflow triggering, authority grant or registry mutation.
+
+### Deliverables
+
+- `DependencyGraphView` under `src/features/portfolio/pages`;
+- `DependencyGraph` under `src/features/portfolio/components`;
+- `/portfolio/dependencies` route integration before `/portfolio/:nucleusId`;
+- Portfolio navigation entry for Dependencies;
+- focused tests under `tests/portfolio/DependencyGraphView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_04_DEPENDENCY_GRAPH_VIEWER.md`.
+
+### Deferred
+
+- opportunity registry viewer;
+- authority dashboard;
+- full graph data expansion beyond the current representative service records;
+- formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.

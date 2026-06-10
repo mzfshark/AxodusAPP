@@ -20,9 +20,11 @@ export {
   PortfolioMetricCard,
   PortfolioOverviewDashboard,
   NucleusSummaryCard,
+  DependencyGraph,
 } from './components';
 export {
   NucleusDetailView,
+  DependencyGraphView,
 } from './pages';
 export type {
   DevelopmentLevel,

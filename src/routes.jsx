@@ -7,7 +7,7 @@ import { DefiDashboard } from "./modules/defi";
 import Settings from "./pages/Settings";
 import Overview from "./pages/Overview";
 import PortfolioOverview from "./pages/PortfolioOverview";
-import { NucleusDetailView } from "./features/portfolio";
+import { DependencyGraphView, NucleusDetailView } from "./features/portfolio";
 import ConnectWalletPage from "./pages/ConnectWalletPage";
 import {
   BusinessACS,
@@ -120,6 +120,7 @@ const router = createBrowserRouter([
       { index: true, element: <Overview /> },
       { path: "connect", element: <ConnectWalletPage /> },
       { path: "portfolio", element: <PortfolioOverview /> },
+      { path: "portfolio/dependencies", element: <DependencyGraphView /> },
       { path: "portfolio/:nucleusId", element: <NucleusDetailView /> },
       { path: "account", element: <BusinessOverview /> },
       { path: "business", element: <BusinessOverview /> },
