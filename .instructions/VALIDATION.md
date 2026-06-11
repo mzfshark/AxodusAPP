@@ -157,3 +157,24 @@ Validation boundaries:
 - no package files changed;
 - contract reuses existing portfolio registry types and service-backed snapshot;
 - no API, sync service, polling, backend integration, mutation flow, execution authority, production behavior, wallet signing, treasury movement, trading, settlement, payout, provisioning or on-chain behavior is implemented.
+
+## AXAPP-REQ-08 Integration Readiness Assessment and Portfolio Handoff
+
+Validation status: PASS_WITH_EXISTING_WARNINGS
+
+Commands:
+
+| Command | Result | Notes |
+|---|---|---|
+| `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts tests/portfolio/PortfolioOverviewDashboard.test.tsx tests/portfolio/NucleusDetailView.test.tsx tests/portfolio/DependencyGraphView.test.tsx tests/portfolio/OpportunityRegistryView.test.tsx tests/portfolio/AuthorityDashboardView.test.tsx tests/portfolio/businessPortfolioContract.test.ts` | PASS | 7 test files, 32 tests passed. |
+| `pnpm run typecheck` | PASS | No TypeScript errors. |
+| `pnpm run lint` | PASS_WITH_WARNING | Existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`. |
+| `pnpm run build` | PASS_WITH_WARNINGS | Existing large chunk and plugin timing warnings from Vite/Rolldown output. |
+
+Validation boundaries:
+
+- no dependencies installed;
+- no package files changed;
+- audit-only documentation updates;
+- no product features added;
+- no API, provider, integration, wallet functionality, governance execution, treasury movement, trading, swap, settlement, payout, ACS provisioning, production credential or production readiness behavior implemented.

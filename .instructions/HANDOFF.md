@@ -171,3 +171,35 @@ Deferred gaps:
 - future live/API transport not implemented;
 - polling, synchronization, backend integration and production credentials remain prohibited;
 - authority-changing, wallet, treasury, trading, settlement, payout, provisioning and on-chain workflows remain prohibited.
+
+## AXAPP-REQ-08 Integration Readiness Assessment and Portfolio Handoff
+
+Current handoff state: PORTFOLIO_INTELLIGENCE_L4_CONSOLIDATED
+
+Assessment:
+
+- `PROMOTE_TO_L4_CONSOLIDATED`
+
+Product state:
+
+- Portfolio Consumer Layer established.
+- Portfolio Overview Dashboard established.
+- Nucleus Detail View established.
+- Dependency Graph Viewer established.
+- Opportunity Registry Viewer established.
+- Boundary & Authority Dashboard established.
+- Business Consumer Contract established.
+
+Use AxodusAPP as the read-only portfolio intelligence hub for future portfolio planning and consolidation cycles.
+
+Next recommended portfolio action:
+
+- Marketplace L4 Consolidation
+
+Deferred gaps:
+
+- production readiness remains unclaimed;
+- live/API portfolio transport remains unimplemented;
+- full dependency graph expansion remains future work;
+- full blocked action and boundary conflict registry expansion remains future work;
+- execution, wallet, treasury, trading, swaps, settlement, payouts, ACS provisioning and on-chain writes remain prohibited.
