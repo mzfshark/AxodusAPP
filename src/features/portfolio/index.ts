@@ -15,6 +15,12 @@ export {
   LocalPortfolioSourceAdapter,
 } from './portfolioSourceAdapter';
 export {
+  assertBusinessPortfolioConsumerContract,
+  businessPortfolioConsumerContract,
+  businessPortfolioRefreshPolicy,
+  validateBusinessPortfolioConsumerContract,
+} from './contracts';
+export {
   PortfolioBoundaryNotice,
   PortfolioMaturityDistribution,
   PortfolioMetricCard,
@@ -44,3 +50,16 @@ export type {
   PortfolioRegistrySnapshot,
   PortfolioSource,
 } from './types';
+export type {
+  BusinessPortfolioBoundaryGuarantees,
+  BusinessPortfolioConsumerContract,
+  BusinessPortfolioContractCheckName,
+  BusinessPortfolioContractValidationCheck,
+  BusinessPortfolioContractValidationResult,
+  BusinessPortfolioRefreshPolicy,
+  PortfolioAuthorityRecord,
+  PortfolioContractParticipant,
+  PortfolioDependencyRecord,
+  PortfolioNucleusRecord,
+  PortfolioOpportunityRecord,
+} from './contracts';

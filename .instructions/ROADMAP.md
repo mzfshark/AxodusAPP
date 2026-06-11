@@ -638,3 +638,33 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - full blocked action registry data expansion beyond current official summary counts;
 - full boundary conflict registry data expansion beyond current official summary counts;
 - any authority-changing workflow.
+
+---
+
+## AXAPP-REQ-07 - Business to AxodusAPP Consumer Contract
+
+### Objectives
+
+- formalize Business as the producer of portfolio intelligence and AxodusAPP as the read-only consumer;
+- define consumer contract read models using existing portfolio registry types;
+- validate read-only, execution-disabled, production-disabled and authority-disabled guarantees;
+- define manual snapshot refresh policy without polling, backend sync, API integration or production credentials;
+- document product-facing architecture boundaries for future portfolio transport work.
+
+### Deliverables
+
+- `businessPortfolioContract` under `src/features/portfolio/contracts`;
+- `businessPortfolioContractValidator` under `src/features/portfolio/contracts`;
+- `businessPortfolioRefreshPolicy` under `src/features/portfolio/contracts`;
+- contract exports from `src/features/portfolio/index.ts`;
+- product architecture document under `docs/architecture/business-axodusapp-consumer-contract.md`;
+- focused tests under `tests/portfolio/businessPortfolioContract.test.ts`;
+- implementation report under `.instructions/reports/AXAPP_REQ_07_BUSINESS_AXODUSAPP_CONSUMER_CONTRACT.md`.
+
+### Deferred
+
+- AXAPP-REQ-08 Integration Readiness Assessment;
+- any live/API transport;
+- polling or synchronization;
+- production credentials;
+- mutation, execution, wallet, treasury, trading, settlement, payout, provisioning or on-chain behavior.

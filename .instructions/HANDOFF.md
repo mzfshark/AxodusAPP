@@ -147,3 +147,27 @@ Deferred gaps:
 - opportunity registry viewer not yet implemented;
 - authority dashboard not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
+
+## AXAPP-REQ-07 Business to AxodusAPP Consumer Contract
+
+Current handoff state: BUSINESS_CONSUMER_CONTRACT_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/contracts/businessPortfolioContract.ts`
+- `src/features/portfolio/contracts/businessPortfolioContractValidator.ts`
+- `src/features/portfolio/contracts/businessPortfolioRefreshPolicy.ts`
+- `docs/architecture/business-axodusapp-consumer-contract.md`
+
+Use this contract as the formal Business-to-AxodusAPP portfolio intelligence boundary. Business remains the producer. AxodusAPP remains the read-only consumer and must continue to consume the Portfolio Registry Consumer Layer rather than creating live APIs or raw fixture bypasses.
+
+Next recommended request:
+
+- AXAPP-REQ-08 - Integration Readiness Assessment
+
+Deferred gaps:
+
+- sprint-level integration readiness assessment not yet completed;
+- future live/API transport not implemented;
+- polling, synchronization, backend integration and production credentials remain prohibited;
+- authority-changing, wallet, treasury, trading, settlement, payout, provisioning and on-chain workflows remain prohibited.

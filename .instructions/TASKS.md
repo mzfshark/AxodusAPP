@@ -539,3 +539,19 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Update AXAPP-REQ-06 instruction and report artifacts - 100%
 - Run focused authority/portfolio regression tests - 100%
 - Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-07 - Business to AxodusAPP Consumer Contract
+
+- Inspect AxodusAPP workspace, `.instructions`, Git status and portfolio artifacts - 100%
+- Reuse existing AXAPP-REQ-01 portfolio registry types for contract read models - 100%
+- Add `businessPortfolioContract` with producer, consumer, read model and boundary definitions - 100%
+- Add `businessPortfolioContractValidator` for read-only, execution-disabled, production-disabled and authority-disabled checks - 100%
+- Add `businessPortfolioRefreshPolicy` with manual snapshot refresh and no-runtime boundaries - 100%
+- Export contract artifacts from the portfolio feature barrel - 100%
+- Add product architecture documentation for the Business-to-AxodusAPP consumer contract - 100%
+- Add focused contract tests - 100%
+- Update AXAPP-REQ-07 instruction and report artifacts - 100%
+- Run focused contract and service regression tests - 100%
+- Run typecheck/lint/build validation - 100%

@@ -417,3 +417,22 @@ Sprint 03 governance, ACS, and tenant federation boundaries:
 ## Long-Term Architecture Goal
 
 AxodusAPP should become a modular ecosystem shell where new Axodus nuclei can be added as first-class modules without rewriting the application core.
+
+---
+
+## Portfolio Business Consumer Contract Architecture
+
+AXAPP-REQ-07 formalizes the Business-to-AxodusAPP portfolio intelligence boundary.
+
+Business is the portfolio intelligence producer. AxodusAPP is the read-only consumer.
+
+Contract artifacts live under `src/features/portfolio/contracts` and reuse the existing AXAPP-REQ-01 portfolio registry types instead of introducing parallel data models.
+
+Architecture rules:
+
+- contract read models must map to existing portfolio registry types;
+- validation must remain pure and local;
+- refresh policy must remain manual snapshot refresh;
+- future API readiness is documentation-only until a separate approved request;
+- no polling, synchronization, backend integration, production credentials or mutation behavior may be introduced by the contract layer;
+- no wallet, governance execution, treasury movement, trading, settlement, payout, ACS provisioning, contract deployment or on-chain writes are enabled.
