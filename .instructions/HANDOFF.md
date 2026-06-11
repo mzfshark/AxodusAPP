@@ -102,6 +102,29 @@ Deferred gaps:
 - full dependency expansion beyond current representative service records not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
 
+## AXAPP-REQ-06 Boundary & Authority Dashboard
+
+Current handoff state: AUTHORITY_DASHBOARD_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/pages/AuthorityDashboardView.tsx`
+- `src/features/portfolio/components/AuthorityDashboard.tsx`
+- route: `/portfolio/authority`
+
+Use this page as the read-only authority and boundary dashboard. It exposes execution authority, blocked action and boundary conflict summaries without granting authority, executing workflows or resolving blockers.
+
+Next recommended request:
+
+- AXAPP-REQ-07 - Business <-> AxodusAPP Consumer Contract
+
+Deferred gaps:
+
+- Business-to-AxodusAPP consumer contract not yet implemented;
+- full blocked action registry data expansion beyond current official summary counts not yet implemented;
+- full boundary conflict registry data expansion beyond current official summary counts not yet implemented;
+- authority-changing workflows remain prohibited.
+
 ## AXAPP-REQ-03 Nucleus Detail View
 
 Current handoff state: DETAIL_VIEW_ESTABLISHED

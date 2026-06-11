@@ -201,6 +201,44 @@ Validation:
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
 
+## AXAPP-REQ-06 Boundary & Authority Dashboard
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a read-only Authority & Boundary Dashboard at `/portfolio/authority`.
+
+Scope:
+
+- consumes `portfolioRegistryService.getExecutionAuthority()` and the AXAPP-REQ-01 portfolio snapshot;
+- displays an execution authority matrix across 14 nuclei;
+- displays authority status, execution classification, production classification and boundary classification;
+- displays portfolio-wide ecosystem authority summary with zero execution, production and treasury authorization;
+- displays the official 26 blocked action count grouped by governance, treasury, trading, settlement, payout, wallet and production categories;
+- displays the official 14 boundary tension count grouped by ownership, execution, treasury, custody, wallet and governance categories;
+- displays prominent no-authority boundary notice.
+
+Execution Boundaries:
+
+- Authority dashboard: VISIBILITY_ONLY
+- Governance execution: DISABLED
+- Treasury execution: DISABLED
+- Production authority: DISABLED
+- Authority grants: DISABLED
+- Registry mutation: NOT IMPLEMENTED
+- Workflow execution: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/AuthorityDashboardView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/OpportunityRegistryView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/DependencyGraphView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
 ## AXAPP-REQ-05 Opportunity Registry Viewer
 
 Status: IMPLEMENTED / VALIDATED

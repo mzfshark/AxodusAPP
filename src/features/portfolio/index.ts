@@ -22,11 +22,13 @@ export {
   NucleusSummaryCard,
   DependencyGraph,
   OpportunityRegistry,
+  AuthorityDashboard,
 } from './components';
 export {
   NucleusDetailView,
   DependencyGraphView,
   OpportunityRegistryView,
+  AuthorityDashboardView,
 } from './pages';
 export type {
   DevelopmentLevel,

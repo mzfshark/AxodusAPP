@@ -5,3 +5,4 @@ export { default as PortfolioOverviewDashboard } from './PortfolioOverviewDashbo
 export { default as NucleusSummaryCard } from './NucleusSummaryCard';
 export { default as DependencyGraph } from './DependencyGraph';
 export { default as OpportunityRegistry } from './OpportunityRegistry';
+export { default as AuthorityDashboard } from './AuthorityDashboard';

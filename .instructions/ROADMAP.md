@@ -610,3 +610,31 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - richer opportunity detail routes;
 - full dependency expansion beyond current representative service records;
 - formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-06 - Boundary & Authority Dashboard
+
+### Objectives
+
+- create a read-only visual dashboard for ecosystem authority and boundary status;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- answer who owns, who approves, who executes, what remains blocked and what remains gated;
+- expose blocked action and boundary conflict summaries without resolving blockers;
+- keep the dashboard free of authority grants, governance execution, treasury execution, production authority, registry mutation and workflow execution.
+
+### Deliverables
+
+- `AuthorityDashboardView` under `src/features/portfolio/pages`;
+- `AuthorityDashboard` under `src/features/portfolio/components`;
+- `/portfolio/authority` route integration before `/portfolio/:nucleusId`;
+- Portfolio navigation entry for Authority;
+- focused tests under `tests/portfolio/AuthorityDashboardView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_06_BOUNDARY_AUTHORITY_DASHBOARD.md`.
+
+### Deferred
+
+- Business-to-AxodusAPP consumer contract;
+- full blocked action registry data expansion beyond current official summary counts;
+- full boundary conflict registry data expansion beyond current official summary counts;
+- any authority-changing workflow.

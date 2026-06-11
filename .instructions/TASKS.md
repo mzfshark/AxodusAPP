@@ -521,3 +521,21 @@ Current priority: REQUEST 23 should implement backend-only pure/static Governanc
 - Update AXAPP-REQ-05 instruction and report artifacts - 100%
 - Run focused opportunity/portfolio regression tests - 100%
 - Run typecheck/lint/build validation - 100%
+
+---
+
+## AXAPP-REQ-06 - Boundary & Authority Dashboard
+
+- Inspect AxodusAPP portfolio service, route structure, tests and CROSS authority/boundary artifacts - 100%
+- Add read-only `AuthorityDashboardView` page under `src/features/portfolio/pages` - 100%
+- Add `AuthorityDashboard` component under `src/features/portfolio/components` - 100%
+- Display execution authority matrix - 100%
+- Display ecosystem authority summary with zero execution, production and treasury authorization - 100%
+- Display 26 blocked actions grouped by required categories - 100%
+- Display 14 boundary tensions grouped by required categories - 100%
+- Add no authority, no governance execution, no treasury execution and no production authority notice - 100%
+- Add `/portfolio/authority` route and portfolio navigation entry - 100%
+- Add focused Authority Dashboard tests - 100%
+- Update AXAPP-REQ-06 instruction and report artifacts - 100%
+- Run focused authority/portfolio regression tests - 100%
+- Run typecheck/lint/build validation - 100%
