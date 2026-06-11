@@ -102,6 +102,29 @@ Deferred gaps:
 - full dependency expansion beyond current representative service records not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
 
+## AXAPP-REQ-06 Boundary & Authority Dashboard
+
+Current handoff state: AUTHORITY_DASHBOARD_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/pages/AuthorityDashboardView.tsx`
+- `src/features/portfolio/components/AuthorityDashboard.tsx`
+- route: `/portfolio/authority`
+
+Use this page as the read-only authority and boundary dashboard. It exposes execution authority, blocked action and boundary conflict summaries without granting authority, executing workflows or resolving blockers.
+
+Next recommended request:
+
+- AXAPP-REQ-07 - Business <-> AxodusAPP Consumer Contract
+
+Deferred gaps:
+
+- Business-to-AxodusAPP consumer contract not yet implemented;
+- full blocked action registry data expansion beyond current official summary counts not yet implemented;
+- full boundary conflict registry data expansion beyond current official summary counts not yet implemented;
+- authority-changing workflows remain prohibited.
+
 ## AXAPP-REQ-03 Nucleus Detail View
 
 Current handoff state: DETAIL_VIEW_ESTABLISHED
@@ -124,3 +147,59 @@ Deferred gaps:
 - opportunity registry viewer not yet implemented;
 - authority dashboard not yet implemented;
 - formal Business-to-AxodusAPP consumer contract remains for AXAPP-REQ-07.
+
+## AXAPP-REQ-07 Business to AxodusAPP Consumer Contract
+
+Current handoff state: BUSINESS_CONSUMER_CONTRACT_ESTABLISHED
+
+Product surface:
+
+- `src/features/portfolio/contracts/businessPortfolioContract.ts`
+- `src/features/portfolio/contracts/businessPortfolioContractValidator.ts`
+- `src/features/portfolio/contracts/businessPortfolioRefreshPolicy.ts`
+- `docs/architecture/business-axodusapp-consumer-contract.md`
+
+Use this contract as the formal Business-to-AxodusAPP portfolio intelligence boundary. Business remains the producer. AxodusAPP remains the read-only consumer and must continue to consume the Portfolio Registry Consumer Layer rather than creating live APIs or raw fixture bypasses.
+
+Next recommended request:
+
+- AXAPP-REQ-08 - Integration Readiness Assessment
+
+Deferred gaps:
+
+- sprint-level integration readiness assessment not yet completed;
+- future live/API transport not implemented;
+- polling, synchronization, backend integration and production credentials remain prohibited;
+- authority-changing, wallet, treasury, trading, settlement, payout, provisioning and on-chain workflows remain prohibited.
+
+## AXAPP-REQ-08 Integration Readiness Assessment and Portfolio Handoff
+
+Current handoff state: PORTFOLIO_INTELLIGENCE_L4_CONSOLIDATED
+
+Assessment:
+
+- `PROMOTE_TO_L4_CONSOLIDATED`
+
+Product state:
+
+- Portfolio Consumer Layer established.
+- Portfolio Overview Dashboard established.
+- Nucleus Detail View established.
+- Dependency Graph Viewer established.
+- Opportunity Registry Viewer established.
+- Boundary & Authority Dashboard established.
+- Business Consumer Contract established.
+
+Use AxodusAPP as the read-only portfolio intelligence hub for future portfolio planning and consolidation cycles.
+
+Next recommended portfolio action:
+
+- Marketplace L4 Consolidation
+
+Deferred gaps:
+
+- production readiness remains unclaimed;
+- live/API portfolio transport remains unimplemented;
+- full dependency graph expansion remains future work;
+- full blocked action and boundary conflict registry expansion remains future work;
+- execution, wallet, treasury, trading, swaps, settlement, payouts, ACS provisioning and on-chain writes remain prohibited.

@@ -610,3 +610,92 @@ REQUEST 23 - Governance Read-Only API Transport Contract Test Harness Implementa
 - richer opportunity detail routes;
 - full dependency expansion beyond current representative service records;
 - formal Business-to-AxodusAPP consumer contract in AXAPP-REQ-07.
+
+---
+
+## AXAPP-REQ-06 - Boundary & Authority Dashboard
+
+### Objectives
+
+- create a read-only visual dashboard for ecosystem authority and boundary status;
+- consume only the portfolio registry service created in AXAPP-REQ-01;
+- answer who owns, who approves, who executes, what remains blocked and what remains gated;
+- expose blocked action and boundary conflict summaries without resolving blockers;
+- keep the dashboard free of authority grants, governance execution, treasury execution, production authority, registry mutation and workflow execution.
+
+### Deliverables
+
+- `AuthorityDashboardView` under `src/features/portfolio/pages`;
+- `AuthorityDashboard` under `src/features/portfolio/components`;
+- `/portfolio/authority` route integration before `/portfolio/:nucleusId`;
+- Portfolio navigation entry for Authority;
+- focused tests under `tests/portfolio/AuthorityDashboardView.test.tsx`;
+- implementation report under `.instructions/reports/AXAPP_REQ_06_BOUNDARY_AUTHORITY_DASHBOARD.md`.
+
+### Deferred
+
+- Business-to-AxodusAPP consumer contract;
+- full blocked action registry data expansion beyond current official summary counts;
+- full boundary conflict registry data expansion beyond current official summary counts;
+- any authority-changing workflow.
+
+---
+
+## AXAPP-REQ-07 - Business to AxodusAPP Consumer Contract
+
+### Objectives
+
+- formalize Business as the producer of portfolio intelligence and AxodusAPP as the read-only consumer;
+- define consumer contract read models using existing portfolio registry types;
+- validate read-only, execution-disabled, production-disabled and authority-disabled guarantees;
+- define manual snapshot refresh policy without polling, backend sync, API integration or production credentials;
+- document product-facing architecture boundaries for future portfolio transport work.
+
+### Deliverables
+
+- `businessPortfolioContract` under `src/features/portfolio/contracts`;
+- `businessPortfolioContractValidator` under `src/features/portfolio/contracts`;
+- `businessPortfolioRefreshPolicy` under `src/features/portfolio/contracts`;
+- contract exports from `src/features/portfolio/index.ts`;
+- product architecture document under `docs/architecture/business-axodusapp-consumer-contract.md`;
+- focused tests under `tests/portfolio/businessPortfolioContract.test.ts`;
+- implementation report under `.instructions/reports/AXAPP_REQ_07_BUSINESS_AXODUSAPP_CONSUMER_CONTRACT.md`.
+
+### Deferred
+
+- AXAPP-REQ-08 Integration Readiness Assessment;
+- any live/API transport;
+- polling or synchronization;
+- production credentials;
+- mutation, execution, wallet, treasury, trading, settlement, payout, provisioning or on-chain behavior.
+
+---
+
+## AXAPP-REQ-08 - Integration Readiness Assessment and Portfolio Handoff
+
+### Status
+
+COMPLETE - AUDIT/HANDOFF ONLY
+
+### Outcome
+
+`PROMOTE_TO_L4_CONSOLIDATED`
+
+### Scope
+
+- audited AXAPP-REQ-01 through AXAPP-REQ-07;
+- confirmed portfolio intelligence hub deliverables;
+- confirmed validation evidence;
+- confirmed boundaries remain preserved;
+- created integration readiness, handoff and maturity assessment artifacts.
+
+### Next Portfolio Cycle
+
+Recommended:
+
+- Marketplace L4 Consolidation
+
+Rationale:
+
+- Marketplace remains L4 Candidate with payment, settlement, minting, wallet and treasury blockers;
+- AxodusAPP now has enough portfolio intelligence visibility to support a focused Marketplace consolidation cycle without enabling execution.

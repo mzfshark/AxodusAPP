@@ -1,8 +1,8 @@
 # AxodusAPP Status
 
-Last updated: 2026-06-02
+Last updated: 2026-06-10
 
-Current phase: Governance Read-Only Mock Integration Implemented / Integration Shell Phase
+Current phase: AxodusAPP Portfolio Integration Expansion / Portfolio Intelligence L4 Consolidated
 
 ## Deployment Gate
 
@@ -201,6 +201,44 @@ Validation:
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
 
+## AXAPP-REQ-06 Boundary & Authority Dashboard
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a read-only Authority & Boundary Dashboard at `/portfolio/authority`.
+
+Scope:
+
+- consumes `portfolioRegistryService.getExecutionAuthority()` and the AXAPP-REQ-01 portfolio snapshot;
+- displays an execution authority matrix across 14 nuclei;
+- displays authority status, execution classification, production classification and boundary classification;
+- displays portfolio-wide ecosystem authority summary with zero execution, production and treasury authorization;
+- displays the official 26 blocked action count grouped by governance, treasury, trading, settlement, payout, wallet and production categories;
+- displays the official 14 boundary tension count grouped by ownership, execution, treasury, custody, wallet and governance categories;
+- displays prominent no-authority boundary notice.
+
+Execution Boundaries:
+
+- Authority dashboard: VISIBILITY_ONLY
+- Governance execution: DISABLED
+- Treasury execution: DISABLED
+- Production authority: DISABLED
+- Authority grants: DISABLED
+- Registry mutation: NOT IMPLEMENTED
+- Workflow execution: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/AuthorityDashboardView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/OpportunityRegistryView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/DependencyGraphView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
 ## AXAPP-REQ-05 Opportunity Registry Viewer
 
 Status: IMPLEMENTED / VALIDATED
@@ -333,6 +371,67 @@ Validation:
 - `pnpm exec vitest run tests/portfolio/NucleusDetailView.test.tsx`: PASS
 - `pnpm exec vitest run tests/portfolio/PortfolioOverviewDashboard.test.tsx`: PASS
 - `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
+## AXAPP-REQ-07 Business to AxodusAPP Consumer Contract
+
+Status: IMPLEMENTED / VALIDATED
+
+AxodusAPP now has a formal read-only consumer contract for Business-produced portfolio intelligence.
+
+Scope:
+
+- defines Business as portfolio intelligence producer and AxodusAPP as read-only consumer;
+- reuses AXAPP-REQ-01 portfolio registry types as contract read models;
+- exports `PortfolioRegistrySnapshot`, `PortfolioNucleusRecord`, `PortfolioOpportunityRecord`, `PortfolioDependencyRecord` and `PortfolioAuthorityRecord` aliases;
+- adds a pure validator for read-only, no-execution, no-production and no-authority guarantees;
+- defines a manual snapshot refresh policy without polling, backend sync, API integration or production credentials;
+- documents the contract under `docs/architecture/business-axodusapp-consumer-contract.md`.
+
+Execution Boundaries:
+
+- Contract type layer: READ_ONLY_ONLY
+- API integration: NOT IMPLEMENTED
+- Runtime polling: NOT IMPLEMENTED
+- Backend synchronization: NOT IMPLEMENTED
+- Mutation methods: NOT IMPLEMENTED
+- Execution authority: DISABLED
+- Production readiness: DISABLED
+- Wallet, treasury, trading, settlement, payout, provisioning and on-chain behavior: DISABLED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/businessPortfolioContract.test.ts`: PASS
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts`: PASS
+- `pnpm run typecheck`: PASS
+- `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
+- `pnpm run build`: PASS with existing large chunk/plugin timing warnings
+
+## AXAPP-REQ-08 Integration Readiness Assessment and Portfolio Handoff
+
+Status: COMPLETE / VALIDATED
+
+Assessment: PROMOTE_TO_L4_CONSOLIDATED
+
+Scope:
+
+- audited AXAPP-REQ-01 through AXAPP-REQ-07 implementation artifacts;
+- confirmed all planned portfolio integration deliverables exist;
+- confirmed portfolio intelligence is consumable through AxodusAPP;
+- confirmed read-only, execution-disabled and production-disabled boundaries remain preserved;
+- recommended AxodusAPP as L4 Consolidated for the portfolio intelligence domain only.
+
+Maturity Position:
+
+- Previous portfolio intelligence level: L4 Readiness
+- Recommended portfolio intelligence level: L4 Consolidated
+- Production readiness: NOT CLAIMED
+
+Validation:
+
+- `pnpm exec vitest run tests/portfolio/portfolioRegistryService.test.ts tests/portfolio/PortfolioOverviewDashboard.test.tsx tests/portfolio/NucleusDetailView.test.tsx tests/portfolio/DependencyGraphView.test.tsx tests/portfolio/OpportunityRegistryView.test.tsx tests/portfolio/AuthorityDashboardView.test.tsx tests/portfolio/businessPortfolioContract.test.ts`: PASS
 - `pnpm run typecheck`: PASS
 - `pnpm run lint`: PASS with one existing Fast Refresh warning in `src/modules/acs/components/AcsUi.jsx`
 - `pnpm run build`: PASS with existing large chunk/plugin timing warnings
