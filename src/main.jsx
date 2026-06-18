@@ -5,6 +5,7 @@ import routes from './routes';
 import { AppKitProvider } from './providers/AppKitProvider';
 import { RouterProvider } from 'react-router-dom'; 
 import ErrorBoundary from './ErrorBoundary';
+import { TenantProvider } from './runtime/tenantContext';
 import './styles/Global.css';
 
 // Diagnóstico global para produção
@@ -43,7 +44,9 @@ if (!rootElement) {
     <React.StrictMode>
       <ErrorBoundary>
         <AppKitProvider>
-          <RouterProvider router={routes} />
+          <TenantProvider>
+            <RouterProvider router={routes} />
+          </TenantProvider>
         </AppKitProvider>
       </ErrorBoundary>
     </React.StrictMode>

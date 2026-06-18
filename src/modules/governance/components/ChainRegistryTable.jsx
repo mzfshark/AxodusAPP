@@ -1,5 +1,7 @@
+import { Fragment } from 'react';
 import CapabilityPill from './CapabilityPill';
 import ChainRoleBadge from './ChainRoleBadge';
+import ConstitutionalLayerPanel from './ConstitutionalLayerPanel';
 import { GovernanceStandingSummary, ReasonSeverityBadge } from './GovernanceStanding';
 
 function formatPlugins(chain) {
@@ -37,57 +39,64 @@ export default function ChainRegistryTable({ chains }) {
           </thead>
           <tbody>
             {chains.map((chain) => (
-              <tr key={chain.slug ?? chain.network} className="border-b border-white/5 last:border-b-0 hover:bg-white/[0.02]">
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-surface-container-high text-xs font-black text-cyan-200">
-                      {chain.nativeCurrency?.symbol?.slice(0, 3) ?? 'DAO'}
-                    </div>
-                    <div>
-                      <div className="font-bold text-on-surface">{chain.name}</div>
-                      <div className="font-mono text-[11px] text-slate-500">
-                        #{chain.chainId} · {chain.network}
+              <Fragment key={chain.slug ?? chain.network}>
+                <tr className="border-b border-white/5 hover:bg-white/[0.02]">
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-surface-container-high text-xs font-black text-cyan-200">
+                        {chain.nativeCurrency?.symbol?.slice(0, 3) ?? 'DAO'}
+                      </div>
+                      <div>
+                        <div className="font-bold text-on-surface">{chain.name}</div>
+                        <div className="font-mono text-[11px] text-slate-500">
+                          #{chain.chainId} · {chain.network}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-5 py-4">
-                  <div className="flex flex-wrap gap-2">
-                    {(chain.roles ?? []).map((role) => (
-                      <ChainRoleBadge key={role} role={role} />
-                    ))}
-                  </div>
-                </td>
-                <td className="px-5 py-4">
-                  <div className="font-bold text-on-surface">{chain.adapter}</div>
-                  <div className="text-xs text-slate-500">{chain.legacyHarmonyAdapter ? 'Legacy Harmony' : chain.family}</div>
-                </td>
-                <td className="px-5 py-4">
-                  <div className="font-mono text-xs text-on-surface">{chain.finality?.confirmationBlocks ?? '-'} blocks</div>
-                  <div className="text-xs text-slate-500">window {chain.finality?.reorgWindowBlocks ?? '-'}</div>
-                </td>
-                <td className="px-5 py-4">
-                  <GovernanceStandingSummary chain={chain} compact />
-                </td>
-                <td className="px-5 py-4">
-                  <div className="flex flex-wrap gap-2">
-                    <CapabilityPill enabled={chain.capabilities?.voting} label="Voting" />
-                    <CapabilityPill enabled={chain.capabilities?.treasury} label="Treasury" />
-                    <CapabilityPill enabled={chain.capabilities?.remoteExecution} label="Remote exec" />
-                    <CapabilityPill enabled={chain.capabilities?.constitutionalConditions} label="Conditions" />
-                  </div>
-                </td>
-                <td className="px-5 py-4 text-xs text-on-surface-variant">{formatPlugins(chain)}</td>
-                <td className="px-5 py-4">
-                  <div className="text-xs text-on-surface-variant">{chain.indexingStatus?.status ?? 'Not indexed'}</div>
-                  {chain.indexingStatus?.reasonCode ? (
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-[10px] uppercase text-slate-400">{chain.indexingStatus.reasonCode}</span>
-                      <ReasonSeverityBadge severity={chain.indexingStatus.reasonSeverity} />
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="flex flex-wrap gap-2">
+                      {(chain.roles ?? []).map((role) => (
+                        <ChainRoleBadge key={role} role={role} />
+                      ))}
                     </div>
-                  ) : null}
-                </td>
-              </tr>
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="font-bold text-on-surface">{chain.adapter}</div>
+                    <div className="text-xs text-slate-500">{chain.legacyHarmonyAdapter ? 'Legacy Harmony' : chain.family}</div>
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="font-mono text-xs text-on-surface">{chain.finality?.confirmationBlocks ?? '-'} blocks</div>
+                    <div className="text-xs text-slate-500">window {chain.finality?.reorgWindowBlocks ?? '-'}</div>
+                  </td>
+                  <td className="px-5 py-4">
+                    <GovernanceStandingSummary chain={chain} compact />
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="flex flex-wrap gap-2">
+                      <CapabilityPill enabled={chain.capabilities?.voting} label="Voting" />
+                      <CapabilityPill enabled={chain.capabilities?.treasury} label="Treasury" />
+                      <CapabilityPill enabled={chain.capabilities?.remoteExecution} label="Remote exec" />
+                      <CapabilityPill enabled={chain.capabilities?.constitutionalConditions} label="Conditions" />
+                    </div>
+                  </td>
+                  <td className="px-5 py-4 text-xs text-on-surface-variant">{formatPlugins(chain)}</td>
+                  <td className="px-5 py-4">
+                    <div className="text-xs text-on-surface-variant">{chain.indexingStatus?.status ?? 'Not indexed'}</div>
+                    {chain.indexingStatus?.reasonCode ? (
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-[10px] uppercase text-slate-400">{chain.indexingStatus.reasonCode}</span>
+                        <ReasonSeverityBadge severity={chain.indexingStatus.reasonSeverity} />
+                      </div>
+                    ) : null}
+                  </td>
+                </tr>
+                <tr className="border-b border-white/5 last:border-b-0">
+                  <td colSpan={8} className="px-5 pb-5">
+                    <ConstitutionalLayerPanel chain={chain} compact />
+                  </td>
+                </tr>
+              </Fragment>
             ))}
           </tbody>
         </table>

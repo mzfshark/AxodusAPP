@@ -1,8 +1,17 @@
 import ChainRegistryTable from '../components/ChainRegistryTable';
 import ChainRoleBadge from '../components/ChainRoleBadge';
+import ConstitutionalLayerPanel from '../components/ConstitutionalLayerPanel';
+import PageShell from '@/components/layout/PageShell';
+import { ScopeSection } from '@/components/uiScope';
 import CreateProposalIntegrationStatus from '../components/CreateProposalIntegrationStatus';
 import DaoContextSelector from '../components/DaoContextSelector';
+import ConstitutionalGovernanceSection from '../components/ConstitutionalGovernanceSection';
 import { GovernanceLayerCard, GovernanceStandingSummary, ReasonSeverityBadge } from '../components/GovernanceStanding';
+import GovernanceAuthoritySplit from '../components/GovernanceAuthoritySplit';
+import GovernanceContextHeader from '../components/GovernanceContextHeader';
+import GovernanceOperationsReviewSection from '../components/GovernanceOperationsReviewSection';
+import GovernanceUserParticipationPanel from '../components/GovernanceUserParticipationPanel';
+import LocalGovernanceSection from '../components/LocalGovernanceSection';
 import ProposalList from '../components/ProposalList';
 import SubDaoExplorer from '../components/SubDaoExplorer';
 import { shouldUseGovernanceMocks } from '../api/mockGovernanceData';
@@ -10,6 +19,9 @@ import { useChainRegistry } from '../hooks/useChainRegistry';
 import { useGovernanceConsole } from '../hooks/useGovernanceConsole';
 import { useProposalDrafts } from '../hooks/useProposalDrafts';
 import { acsMock } from '@/data/mock';
+import { TenantIdentityPanel } from '@/components/tenant';
+import { useTenantContext } from '@/runtime/tenantContext';
+import { buildGovernanceConsoleModel } from '../governanceConsoleModel';
 
 function StatCard({ icon, label, value, detail }) {
   return (
@@ -175,6 +187,240 @@ function ObservabilityPanel({ summary }) {
   );
 }
 
+function TenantMetric({ label, value, detail }) {
+  return (
+    <div className="rounded-md bg-surface-container-high p-3">
+      <div className="text-[10px] font-black uppercase text-slate-500">{label}</div>
+      <div className="mt-1 text-lg font-black text-on-surface">{value}</div>
+      {detail ? <div className="mt-1 text-xs text-on-surface-variant">{detail}</div> : null}
+    </div>
+  );
+}
+
+function TenantPills({ items = [], emptyLabel }) {
+  if (!items.length) {
+    return <div className="text-xs text-on-surface-variant">{emptyLabel}</div>;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <span key={item} className="rounded-md border border-white/10 bg-surface-container-high px-2 py-1 text-[11px] font-bold text-slate-300">
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function GovernanceExecutorPanel({ resolution, source }) {
+  const executor = resolution?.executor;
+  const reasonCodes = resolution?.reasonCodes ?? executor?.reasonCodes ?? [];
+
+  return (
+    <section className="rounded-lg border border-amber-300/15 bg-surface-container-highest">
+      <div className="flex flex-col gap-3 border-b border-white/5 px-5 py-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-on-surface">Canonical Governance Executor</h2>
+          <p className="mt-1 text-xs leading-5 text-on-surface-variant">
+            Read-only executor reference for DAO/tenant routing. This is not a wallet, signer, production address or execution trigger.
+          </p>
+        </div>
+        <span className="rounded-md border border-amber-300/20 bg-amber-950/20 px-3 py-1 text-xs font-black uppercase text-amber-100">
+          {executor?.executionMode ?? 'not resolved'}
+        </span>
+      </div>
+
+      {executor ? (
+        <div className="grid gap-3 p-5 md:grid-cols-3">
+          <TenantMetric label="Executor" value={executor.executorId} detail={executor.governanceExecutorRef} />
+          <TenantMetric label="Status" value={executor.executorStatus} detail={`scope: ${executor.executorScope}`} />
+          <TenantMetric label="Policy version" value={executor.policyVersion} detail={source ?? 'governance-api'} />
+          <TenantMetric label="Address status" value={executor.addressStatus} detail={executor.address ?? 'No address configured'} />
+          <TenantMetric label="Production executor" value={executor.isProductionExecutor ? 'yes' : 'no'} detail="safe implementation boundary" />
+          <TenantMetric
+            label="Blocked"
+            value={resolution.blocked ? 'yes' : 'no'}
+            detail={executor.emergencyDisabled ? 'emergency disabled' : 'policy evaluated'}
+          />
+          <TenantMetric label="Proposal support" value={resolution.supported ? 'supported' : 'restricted'} detail="selected executor resolution" />
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4 md:col-span-3">
+            <div className="text-xs font-black uppercase text-slate-500">Supported proposal types</div>
+            <div className="mt-3">
+              <TenantPills items={executor.supportedProposalTypes} emptyLabel="No proposal types configured." />
+            </div>
+          </div>
+          <div className="rounded-lg border border-amber-300/15 bg-amber-950/10 p-4 md:col-span-3">
+            <div className="text-xs font-black uppercase text-amber-100">Execution authority boundary</div>
+            <p className="mt-2 text-sm leading-6 text-amber-50/80">
+              {executor.authorityBoundary ??
+                'Executor status is informational only. Governance runtime, contracts, indexers and receipts must prove execution.'}
+            </p>
+          </div>
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4 md:col-span-3">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div className="text-xs font-black uppercase text-slate-500">Executor reason codes</div>
+              <span className="w-fit rounded-md border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
+                {reasonCodes.length} reason{reasonCodes.length === 1 ? '' : 's'}
+              </span>
+            </div>
+            {reasonCodes.length ? (
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {reasonCodes.map((reason, index) => (
+                  <div key={`${reason.reasonCode}-${index}`} className="rounded-md border border-white/5 bg-background/30 p-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-black uppercase text-on-surface">{reason.reasonCode}</span>
+                      <ReasonSeverityBadge severity={reason.reasonSeverity} />
+                    </div>
+                    <div className="mt-2 text-xs leading-5 text-on-surface-variant">
+                      {reason.message ?? reason.source ?? 'Governance executor registry'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-3 text-xs text-on-surface-variant">No executor reason codes are currently exposed.</div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="p-5 text-sm text-on-surface-variant">No canonical executor reference is resolved for this tenant.</div>
+      )}
+    </section>
+  );
+}
+
+function DaoTenantOperationsCenter({ tenant, selectedDao, selectedChain, tenantSource }) {
+  if (!tenant) {
+    return (
+      <section className="rounded-lg border border-white/5 bg-surface-container-highest p-5">
+        <h2 className="text-lg font-bold text-on-surface">DAO Tenant Operations Center</h2>
+        <p className="mt-2 text-sm text-on-surface-variant">No DAO tenant account is selected.</p>
+      </section>
+    );
+  }
+
+  const standing = typeof tenant.constitutionalStanding === 'string' ? tenant.constitutionalStanding : tenant.constitutionalStanding?.status;
+
+  return (
+    <section className="rounded-lg border border-cyan-300/15 bg-surface-container-highest">
+      <div className="flex flex-col gap-4 border-b border-white/5 px-5 py-5 xl:flex-row xl:items-start xl:justify-between">
+        <div>
+          <span className="text-xs font-black uppercase tracking-[0.18em] text-cyan-200">DAO Tenant Account</span>
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-on-surface">{tenant.name}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-on-surface-variant">
+            Operational business account governed under Axodus constitutional authority. Registry, standing, guardrails, products, agents,
+            proposals and receipts are rendered as tenant context.
+          </p>
+        </div>
+        <div className="grid min-w-0 gap-2 text-xs sm:grid-cols-2 xl:w-[360px]">
+          <TenantMetric label="Tenant type" value={tenant.tenantType} detail={tenant.legalOrPublicName} />
+          <TenantMetric label="Source" value={tenantSource ?? tenant.source ?? 'observed'} detail="rendered state only" />
+        </div>
+      </div>
+
+      <div className="grid gap-4 p-5 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid gap-3 md:grid-cols-2">
+          <TenantMetric label="Constitutional standing" value={standing ?? 'under-review'} detail={`Governance status: ${tenant.governanceStatus}`} />
+          <TenantMetric label="Federation tier" value={tenant.federationTier} detail={tenant.constitutionalAuthority?.authorityModel} />
+          <TenantMetric label="Local governance model" value={tenant.localGovernanceModel ?? selectedDao?.votingType ?? 'Not indexed'} detail={tenant.constitutionalAuthority?.layer} />
+          <TenantMetric
+            label="Treasury status"
+            value={tenant.treasury?.policyStatus ?? 'not-configured'}
+            detail={tenant.treasury?.address ? `${tenant.treasury.address.slice(0, 8)}...${tenant.treasury.address.slice(-6)}` : 'No treasury address indexed'}
+          />
+          <TenantMetric label="Members / roles" value={tenant.members?.total ?? 0} detail={(tenant.members?.roles ?? []).join(', ') || 'No roles indexed'} />
+          <TenantMetric label="Execution context" value={selectedChain?.name ?? 'No chain'} detail={selectedChain?.network ?? selectedDao?.network} />
+        </div>
+
+        <div className="grid gap-3">
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-xs font-black uppercase text-slate-500">Products enabled</div>
+            <div className="mt-3">
+              <TenantPills items={tenant.productsEnabled} emptyLabel="No products indexed for this tenant." />
+            </div>
+          </div>
+          <div className="rounded-lg border border-white/5 bg-surface-container-high p-4">
+            <div className="text-xs font-black uppercase text-slate-500">Agents assigned</div>
+            <div className="mt-3">
+              <TenantPills items={tenant.agentsAssigned} emptyLabel="No agents assigned to this tenant." />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-3 border-t border-white/5 p-5 md:grid-cols-4">
+        <TenantMetric label="Active proposals" value={tenant.activeProposals} />
+        <TenantMetric label="Pending operations" value={tenant.pendingOperations} />
+        <TenantMetric label="Execution receipts" value={tenant.executionReceipts} />
+        <TenantMetric label="Guardrail reasons" value={(tenant.reasonCodes ?? []).length} />
+      </div>
+    </section>
+  );
+}
+
+function GovernanceHealthPanel({ tenant, selectedChain, proposals, plugins, guardrailReasons }) {
+  const standing = typeof tenant?.constitutionalStanding === 'string' ? tenant.constitutionalStanding : tenant?.constitutionalStanding?.status;
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="border-b border-white/5 px-5 py-4">
+        <h2 className="text-lg font-bold text-on-surface">Governance Health</h2>
+        <p className="mt-1 text-xs text-on-surface-variant">Compact operational health for the selected DAO tenant workspace.</p>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-5">
+        <TenantMetric label="Standing" value={standing ?? 'under-review'} detail={tenant?.constitutionalAuthority?.authorityModel} />
+        <TenantMetric label="Governance uptime" value="observed" detail={tenant?.source ?? 'tenant source'} />
+        <TenantMetric label="Execution status" value={selectedChain?.capabilities?.execution ? 'available' : 'restricted'} detail={selectedChain?.name ?? 'No chain'} />
+        <TenantMetric label="Proposal activity" value={proposals.length} detail="active/indexed + local" />
+        <TenantMetric label="Guardrail reasons" value={guardrailReasons.length} detail={`${plugins.length} plugin sources`} />
+      </div>
+    </section>
+  );
+}
+
+function TreasuryExecutionPanel({ tenant, selectedChain }) {
+  const pendingExecutions = tenant?.pendingOperations ?? 0;
+  const receipts = tenant?.executionReceipts ?? 0;
+  const treasury = tenant?.treasury ?? {};
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="border-b border-white/5 px-5 py-4">
+        <h2 className="text-lg font-bold text-on-surface">Treasury Execution</h2>
+        <p className="mt-1 text-xs text-on-surface-variant">Treasury status, execution queue and receipt visibility for the selected tenant.</p>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-4">
+        <TenantMetric label="Treasury health" value={treasury.policyStatus ?? 'not-configured'} detail="policy status" />
+        <TenantMetric label="Pending executions" value={pendingExecutions} detail="tenant operations" />
+        <TenantMetric label="Execution receipts" value={receipts} detail="indexed or observed" />
+        <TenantMetric label="Execution chain" value={selectedChain?.name ?? 'Not indexed'} detail={treasury.chainId ? `chainId ${treasury.chainId}` : selectedChain?.network} />
+      </div>
+    </section>
+  );
+}
+
+function ProposalActivityPanel({ proposals }) {
+  const active = proposals.filter((proposal) => ['active', 'under review', 'ready for review', 'local draft'].includes(String(proposal.status ?? '').toLowerCase())).length;
+  const treasuryImpact = proposals.filter((proposal) => String(proposal.category ?? proposal.actionType ?? '').toLowerCase().includes('treasury')).length;
+  const withReasonCodes = proposals.filter((proposal) => (proposal.reasonCodes ?? proposal.createProposalRequest?.guardrails?.reasonCodes ?? []).length > 0).length;
+
+  return (
+    <section className="rounded-lg border border-white/5 bg-surface-container-highest">
+      <div className="border-b border-white/5 px-5 py-4">
+        <h2 className="text-lg font-bold text-on-surface">Proposal Activity</h2>
+        <p className="mt-1 text-xs text-on-surface-variant">Operational proposal state with treasury and guardrail context.</p>
+      </div>
+      <div className="grid gap-3 p-5 md:grid-cols-4">
+        <TenantMetric label="Active proposals" value={active} detail={`${proposals.length} total visible`} />
+        <TenantMetric label="Treasury impact" value={treasuryImpact} detail="category/action metadata" />
+        <TenantMetric label="Reason-coded" value={withReasonCodes} detail="guardrail visible" />
+        <TenantMetric label="Execution ETA" value="indexer-bound" detail="requires proposal receipts" />
+      </div>
+    </section>
+  );
+}
+
 function readinessTone(status) {
   if (status === 'ready') return 'border-emerald-300/20 bg-emerald-950/20 text-emerald-100';
   if (status === 'dev') return 'border-cyan-300/20 bg-cyan-950/20 text-cyan-100';
@@ -318,6 +564,7 @@ function ConstitutionalGuardrailsPanel({
 }
 
 export default function GovernanceDashboard() {
+  const { selectedTenant: appTenant } = useTenantContext();
   const { chains, summary, source, status, error } = useChainRegistry();
   const governanceConsole = useGovernanceConsole(chains);
   const proposalDrafts = useProposalDrafts({
@@ -327,21 +574,39 @@ export default function GovernanceDashboard() {
   });
   const executionChain = chains.find((chain) => chain.roles?.includes('execution'));
   const visibleProposals = [...proposalDrafts.drafts, ...governanceConsole.proposals];
+  const consoleModel = buildGovernanceConsoleModel({
+    chains,
+    summary,
+    source,
+    governanceConsole,
+    proposalDrafts,
+    appTenant,
+  });
 
   return (
-    <main className="min-h-full bg-background p-4 md:p-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Governance</span>
-            <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">Governance Operations Center</h1>
-            <p className="mt-2 max-w-3xl text-sm text-on-surface-variant">
-              Connected observability surface for constitutional governance, federation state, local governance and multichain execution readiness.
-            </p>
-          </div>
-        </header>
-
+    <PageShell
+      title="DAO Tenant Operations Center"
+      subtitle="Governed business-unit control room for tenant DAOs, constitutional authority, treasury state, products, agents, proposals and execution receipts."
+      module="Governance Workbench"
+      scope="tenant"
+      maturity="prototype"
+      executionMode="preview"
+    >
         <SourceBanner source={source} status={status} error={error} />
+
+        <GovernanceContextHeader context={consoleModel.context} />
+
+        <TenantIdentityPanel moduleId="governance" />
+
+        <GovernanceAuthoritySplit authority={consoleModel.authoritySplit} />
+
+        <ConstitutionalGovernanceSection constitutional={consoleModel.constitutional} />
+
+        <LocalGovernanceSection local={consoleModel.local} proposals={consoleModel.proposals} />
+
+        <GovernanceUserParticipationPanel participation={consoleModel.userParticipation} />
+
+        <GovernanceOperationsReviewSection readiness={consoleModel.readiness} acsReview={consoleModel.acsReview} />
 
         <DaoContextSelector
           daos={governanceConsole.daos}
@@ -350,6 +615,40 @@ export default function GovernanceDashboard() {
           selectedChain={governanceConsole.selectedChain}
           status={governanceConsole.status}
         />
+
+        <ScopeSection
+          scope="tenant"
+          title="Selected tenant operating context"
+          description="DAO tenant profile, local governance state and treasury posture are scoped to the selected organization."
+        >
+          <DaoTenantOperationsCenter
+            tenant={governanceConsole.selectedTenant}
+            selectedDao={governanceConsole.selectedDao}
+            selectedChain={governanceConsole.selectedChain}
+            tenantSource={governanceConsole.tenantSource}
+          />
+        </ScopeSection>
+
+        <ScopeSection
+          scope="operator"
+          title="Execution control and review"
+          description="Executor readiness, guardrails and operational blockers are operator-scoped preview data."
+        >
+          <GovernanceExecutorPanel resolution={governanceConsole.executorResolution} source={governanceConsole.executorSource} />
+        </ScopeSection>
+
+        <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_1fr]">
+          <GovernanceHealthPanel
+            tenant={governanceConsole.selectedTenant}
+            selectedChain={governanceConsole.selectedChain}
+            proposals={visibleProposals}
+            plugins={governanceConsole.plugins}
+            guardrailReasons={governanceConsole.selectedGuardrailReasons}
+          />
+          <TreasuryExecutionPanel tenant={governanceConsole.selectedTenant} selectedChain={governanceConsole.selectedChain} />
+        </section>
+
+        <ProposalActivityPanel proposals={visibleProposals} />
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard icon="lan" label="Registered chains" value={summary.totalChains} detail={`${summary.evmCount} EVM core networks`} />
@@ -365,6 +664,8 @@ export default function GovernanceDashboard() {
 
         <ObservabilityPanel summary={summary} />
 
+        <ConstitutionalLayerPanel chain={governanceConsole.selectedChain ?? executionChain} />
+
         <GovernanceReadinessPanel
           registryStatus={status}
           registrySource={source}
@@ -376,7 +677,11 @@ export default function GovernanceDashboard() {
           canCreateProposal={governanceConsole.canCreateProposal}
         />
 
-        <CreateProposalIntegrationStatus proposalDrafts={proposalDrafts.drafts} />
+        <CreateProposalIntegrationStatus
+          proposalDrafts={proposalDrafts.drafts}
+          selectedDao={governanceConsole.selectedDao}
+          selectedChain={governanceConsole.selectedChain}
+        />
 
         <ConstitutionalGuardrailsPanel reasons={summary.guardrailReasons} />
 
@@ -424,7 +729,6 @@ export default function GovernanceDashboard() {
         />
 
         <ChainRegistryTable chains={chains} />
-      </div>
-    </main>
+    </PageShell>
   );
 }

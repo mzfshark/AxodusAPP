@@ -1,3 +1,4 @@
+import ConstitutionalLayerPanel from './ConstitutionalLayerPanel';
 import { GovernanceStandingSummary } from './GovernanceStanding';
 import RegistryGuardrailsPanel from './RegistryGuardrailsPanel';
 
@@ -29,6 +30,7 @@ export default function ProposalGovernanceContextPanel({ chain, registryGuardrai
         <DetailField label="Remote execution" value={capabilityLabel(chain?.capabilities?.remoteExecution)} />
         <DetailField label="Local governance models" value={chain?.capabilities?.localGovernanceModels?.join(', ') ?? 'Not indexed'} />
         <DetailField label="Indexer reason code" value={chain?.indexingStatus?.reasonCode ?? 'No active guardrail reason'} />
+        <ConstitutionalLayerPanel chain={chain} compact />
         <RegistryGuardrailsPanel reasons={registryGuardrailReasons} />
       </div>
     </aside>

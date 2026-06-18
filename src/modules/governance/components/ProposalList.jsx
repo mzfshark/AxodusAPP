@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useMemo, useState } from 'react';
+import ConstitutionalLayerPanel from './ConstitutionalLayerPanel';
 import ProposalCreateDraftModal from './ProposalCreateDraftModal';
 import {
   formatProposalDate,
@@ -40,10 +41,28 @@ function ProposalMeta({ label, value }) {
   );
 }
 
+function GovernanceSourceList({ sources = [] }) {
+  if (!sources.length) return null;
+
+  return (
+    <div className="mt-3 rounded-lg border border-white/5 bg-surface-container-high p-3">
+      <div className="text-[10px] font-black uppercase text-slate-500">Observed governance sources</div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {sources.map((source) => (
+          <span key={source.key} className="rounded border border-white/10 px-2 py-1 text-[11px] font-bold text-slate-300">
+            {source.key}: {source.status}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function LocalDraftInspection({ proposal }) {
   const request = proposal?.createProposalRequest;
   const reasons = request?.guardrails?.reasonCodes ?? [];
   const receipt = proposal?.submissionReceipt;
+  const receiptReasons = receipt?.reasonCodes ?? [];
   const submissionError = proposal?.submissionError;
 
   if (!request) {
@@ -61,6 +80,25 @@ function LocalDraftInspection({ proposal }) {
         <ProposalMeta label="Submission mode" value={request.submissionMode} />
         <ProposalMeta label="DAO" value={request.dao?.name ?? 'Not indexed'} />
         <ProposalMeta label="Chain" value={request.chain?.network ?? 'Not indexed'} />
+        <ProposalMeta label="Plugin adapter" value={request.plugin?.createProposalAdapter?.family ?? request.adapterPayload?.adapterFamily ?? 'Not indexed'} />
+        <ProposalMeta label="Adapter intent" value={request.plugin?.createProposalAdapter?.executionIntent ?? request.adapterPayload?.executionIntent ?? 'Not indexed'} />
+        <ProposalMeta label="Backend adapter" value={request.plugin?.createProposalAdapter?.expectedBackendAdapter ?? request.adapterPayload?.expectedBackendAdapter ?? 'Not indexed'} />
+      </div>
+      <GovernanceSourceList sources={request.governanceContext?.observedSources ?? []} />
+      <div className="mt-3">
+        <ConstitutionalLayerPanel
+          chain={{
+            name: request.chain?.name,
+            network: request.chain?.network,
+            roles: request.governanceContext?.federationModel?.federationRoles ?? [],
+            governanceStatus: request.chain?.governanceStatus,
+            federationMember: request.chain?.federationMember,
+            federationTier: request.chain?.federationTier,
+            constitutionalStanding: request.chain?.constitutionalStanding,
+            constitutionalLayer: request.governanceContext?.constitutionalLayer ?? request.chain?.constitutionalLayer,
+          }}
+          compact
+        />
       </div>
       <div className="mt-3 grid gap-2">
         {reasons.map((reason) => (
@@ -82,9 +120,29 @@ function LocalDraftInspection({ proposal }) {
             <ProposalMeta label="Receipt" value={receipt.id} />
             <ProposalMeta label="Status" value={receipt.status} />
             <ProposalMeta label="Indexer" value={receipt.indexerReconciliation?.status ?? 'Not indexed'} />
+            <ProposalMeta label="Storage" value={receipt.storageMode ?? receipt.storage?.mode ?? 'Not indexed'} />
+            <ProposalMeta label="Source" value={receipt.source ?? receipt.storage?.source ?? 'Not indexed'} />
+            <ProposalMeta label="Observed request" value={receipt.indexerReconciliation?.observedRequestId ?? receipt.id ?? 'Not indexed'} />
           </div>
           <p className="mt-2 text-xs leading-5 text-emerald-50">{receipt.message}</p>
           <p className="mt-1 font-mono text-[11px] text-emerald-100">{receipt.indexerReconciliation?.reasonCode}</p>
+          {receipt.storage?.message ? <p className="mt-1 text-xs leading-5 text-emerald-100/80">{receipt.storage.message}</p> : null}
+          {receiptReasons.length > 0 ? (
+            <div className="mt-3 grid gap-2">
+              {receiptReasons.map((reason) => (
+                <div key={`${receipt.id}-${reason.reasonCode}-${reason.source}`} className="rounded-md border border-emerald-300/10 bg-emerald-950/10 px-3 py-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[11px] font-black uppercase text-emerald-50">{reason.reasonCode}</span>
+                    <span className="rounded border border-emerald-300/20 px-2 py-0.5 text-[10px] font-black uppercase text-emerald-100">
+                      {reason.reasonSeverity ?? 'info'}
+                    </span>
+                  </div>
+                  {reason.message ? <p className="mt-1 text-xs leading-5 text-emerald-100/80">{reason.message}</p> : null}
+                  {reason.source ? <p className="mt-1 text-[11px] uppercase text-emerald-100/70">{reason.source}</p> : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       ) : null}
       {submissionError ? (
@@ -112,7 +170,11 @@ function LocalDraftActions({ proposal, inspected, onInspect, onMarkReadyForRevie
 
   const submissionMode = proposal.createProposalRequest?.submissionMode ?? proposal.submissionMode ?? 'mock-review';
   const liveBackendMode = submissionMode === 'backend';
-  const submitted = Boolean(proposal.submissionReceipt) || proposal.submissionState === 'mock-submitted' || proposal.submissionState === 'backend-submitted';
+  const submitted =
+    Boolean(proposal.submissionReceipt) ||
+    proposal.submissionState === 'mock-submitted' ||
+    proposal.submissionState === 'backend-submitted' ||
+    proposal.submissionState === 'backend-review-queued';
   const submitting = proposal.submissionState === 'submitting';
   const failed = proposal.submissionState === 'submit-failed';
   const reviewReady = proposal.submissionState === 'ready-for-review' || failed || submitted;

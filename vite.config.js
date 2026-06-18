@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
+const businessRuntimeAlias = path.resolve(__dirname, './src/modules/business/runtime/index.ts');
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -15,7 +17,8 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@styles': path.resolve(__dirname, './src/styles'),
-      '@config': path.resolve(__dirname, './src/appkit.config.js' )
+      '@config': path.resolve(__dirname, './src/appkit.config.js' ),
+      '@axodus/business-runtime': businessRuntimeAlias
     }
   },
   server: {
@@ -41,6 +44,7 @@ export default defineConfig({
     url: process.env.VITE_PUBLIC_URL || "http://localhost:5174", // fallback local
   },
   optimizeDeps: {
+    exclude: ['@axodus/business-runtime'],
     include: [
       '@reown/appkit',
       '@reown/appkit/react',
@@ -64,6 +68,11 @@ export default defineConfig({
     pool: 'vmThreads',
     maxWorkers: 1,
     fileParallelism: false,
+    server: {
+      deps: {
+        inline: ['@walletconnect/logger'],
+      },
+    },
   },
   envPrefix: ['VITE_', 'REACT_APP_']
 });

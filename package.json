@@ -7,10 +7,16 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_OPTIONS='--max-old-space-size=4096' vite",
-    "build": "rm -rf dist/ && NODE_OPTIONS='--max-old-space-size=4096' vite build --debug",
+    "dev:mining-stack": "bash scripts/dev-mining-stack.sh",
+    "clean": "rm -rf dist",
+    "build": "pnpm run clean && vite build",
+    "build:debug": "vite build --debug --clearScreen false",
+    "verify:build": "pnpm run build",
+    "verify:deploy": "pnpm run typecheck && pnpm run lint && pnpm run build",
     "preview": "vite preview",
     "serve": "serve -s dist -l 4000",
     "test": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
     "generate:tokenlist": "node scripts/generate-tokenlists.js",
@@ -53,7 +59,7 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.3",
-    "vite": "^8.0.11"
+    "vite": "^8.0.16"
   },
   "author": "mzfshark",
   "license": "MIT",

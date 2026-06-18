@@ -4,6 +4,7 @@ const devMockEnabled = import.meta.env.DEV || import.meta.env.VITE_GOVERNANCE_US
 
 export const mockGovernancePlugins = governanceMock.plugins;
 export const mockGovernanceProposals = governanceMock.proposals;
+export const mockGovernanceTenants = governanceMock.tenants;
 
 export function shouldUseGovernanceMocks() {
   return devMockEnabled;
@@ -35,4 +36,8 @@ export function getMockGovernanceProposalActions(proposalId) {
 
 export function getMockGovernancePlugins() {
   return shouldUseGovernanceMocks() ? mockGovernancePlugins : [];
+}
+
+export function getMockGovernanceTenants() {
+  return shouldUseGovernanceMocks() ? mockGovernanceTenants : [];
 }

@@ -144,6 +144,7 @@ Responsible for:
 Responsible for:
 
 - selected DAO
+- selected DAO tenant account
 - DAO permissions
 - DAO treasury context
 - DAO modules enabled
@@ -168,6 +169,22 @@ Local autonomy is allowed, but all local governance must remain constitutionally
 Do not represent governance restrictions as opaque exclusion lists.
 
 Represent restrictions as Constitutional Guardrails with transparent reason codes.
+
+The Governance Console must present the selected DAO as an operational tenant account, not only as a governance metadata record.
+
+Each tenant should expose:
+
+- tenant profile
+- constitutional standing
+- local governance model
+- treasury status
+- enabled products/modules
+- assigned agents
+- active proposals and pending operations
+- execution receipts
+- governance reason codes
+
+The frontend renders tenant state only. It must not infer constitutional validity, sanctions, treasury restrictions, or execution authority.
 
 ---
 
@@ -297,6 +314,125 @@ Service clients should support:
 
 ---
 
+## Marketplace Nucleus Architecture
+
+The Marketplace nucleus is a governance-aware NFT marketplace and commerce layer, not a generic product catalog.
+
+Current implementation state:
+
+- mock-first
+- tenant-aware
+- governance-aware
+- production-shaped
+- settlement-deferred
+- prepared for NFT assets, licenses, subscriptions, publisher workflows, and DAO-owned products
+
+Marketplace products must remain attached to ecosystem context:
+
+- seller or publisher identity
+- optional DAO or tenant ownership
+- constitutional standing
+- governance validation state
+- seller standing and reputation
+- product maturity and visibility
+- license and access model
+- supported chains
+- NFT-bound status
+- royalty configuration
+- delivery method
+- billing and subscription mode
+- lifecycle timestamps
+
+The Marketplace mock layer should model the continuous operational flow:
+
+Publisher Console -> Asset/Product creation preview -> Governance validation -> License model -> Listing preview -> Purchase preview -> Issued license preview.
+
+The frontend may expose production-shaped boundaries for future integrations, but all current implementations must remain explicit previews:
+
+- `MarketplaceContractAdapter`
+- `AuctionAdapter`
+- `RoyaltyAdapter`
+- `GreenfieldAccessAdapter`
+- `ReownWalletAdapter`
+- `LayerZeroBridgeAdapter`
+- `TreasurySettlementAdapter`
+- `BillingProviderAdapter`
+
+These boundaries must not execute wallet transactions, contract writes, minting, payment provider calls, treasury movement, Greenfield production delivery, LayerZero messaging, auction settlement, bid placement, royalty settlement, or fiat checkout until explicitly approved in a later sprint.
+
+Marketplace UI labels must distinguish:
+
+- Mock validation
+- Preview only
+- No settlement
+- No wallet transaction
+- No treasury execution
+- No contract write
+- Simulated license issuance
+
+Sprint 01 runtime persistence boundaries:
+
+- API contracts live under `src/modules/marketplace/contracts`.
+- Zod validation schemas live under `src/modules/marketplace/schemas`.
+- Repository abstractions live under `src/modules/marketplace/repositories`.
+- API module scaffolding lives under `apps/api/modules/marketplace`.
+- Entitlement read models are aggregated through `buildMarketplaceEntitlementReadModel`.
+- Frontend mock consumption should prefer repository-normalized runtime snapshots instead of raw static constants where practical.
+- Runtime entities must carry stable `runtimeId` UUIDs and deterministic `entityRef` references.
+
+Repositories are intentionally adapter-shaped:
+
+- mock adapters are implemented now
+- future database adapters may replace them
+- future indexer adapters may replace them
+- production database writes are not implemented
+- production settlement is not implemented
+
+Sprint 02 wallet, ownership, listing, and royalty runtime boundaries:
+
+- Wallet runtime lives in `src/modules/marketplace/services/walletRuntime.ts`.
+- NFT ownership readiness lives in `src/modules/marketplace/services/nftOwnershipRuntime.ts`.
+- Listing and bid lifecycle previews live in `src/modules/marketplace/services/listingRuntime.ts`.
+- Royalty accounting previews live in `src/modules/marketplace/services/royaltyRuntime.ts`.
+- Product detail UI exposes wallet runtime, ownership readiness, listing runtime, and royalty runtime panels.
+- Reown/AppKit and EVM provider boundaries are modeled as mock-only adapters.
+- Wallet actions are permission-aware and chain-aware, but signatures, wallet transactions, and chain writes remain disabled.
+- ERC721, ERC1155, license-bound NFTs, access NFTs, and governance NFTs are modeled for readiness only.
+- Fixed listings, English auctions, Dutch auctions, reserve listings, and bid lifecycle states are prepared without settlement.
+- EIP-2981 royalty reads and accounting splits are previewed without contract reads, accounting writes, treasury execution, or royalty settlement.
+
+Sprint 03 governance, ACS, and tenant federation boundaries:
+
+- Governance runtime read models live in `src/modules/marketplace/services/governanceRuntime.ts`.
+- Tenant federation read models live in `src/modules/marketplace/services/tenantFederation.ts`.
+- ACS Marketplace visibility lives in `src/modules/marketplace/services/acsMarketplaceLayer.ts`.
+- Marketplace products and sellers expose constitutional standing, restriction state, warnings, sanctions, federation tier, governance authority, DAO ownership, and operational approval state as first-class runtime data.
+- Tenants are treated as DAO commerce boundaries with isolation references, storefront readiness, seller relationships, product scopes, treasury destinations, and governance authorities.
+- ACS package visibility covers MCP services, orchestration packages, AI agents, compute access, and ACS runtime packages as provisioning previews only.
+- Federation dashboard UI exposes tenant metrics, governance metrics, ACS operational metrics, seller standing metrics, and constitutional alerts.
+- DAO storefront execution, ACS provisioning, agent deployment, compute allocation, governance execution, contract writes, and settlement remain disabled.
+
+---
+
 ## Long-Term Architecture Goal
 
 AxodusAPP should become a modular ecosystem shell where new Axodus nuclei can be added as first-class modules without rewriting the application core.
+
+---
+
+## Portfolio Business Consumer Contract Architecture
+
+AXAPP-REQ-07 formalizes the Business-to-AxodusAPP portfolio intelligence boundary.
+
+Business is the portfolio intelligence producer. AxodusAPP is the read-only consumer.
+
+Contract artifacts live under `src/features/portfolio/contracts` and reuse the existing AXAPP-REQ-01 portfolio registry types instead of introducing parallel data models.
+
+Architecture rules:
+
+- contract read models must map to existing portfolio registry types;
+- validation must remain pure and local;
+- refresh policy must remain manual snapshot refresh;
+- future API readiness is documentation-only until a separate approved request;
+- no polling, synchronization, backend integration, production credentials or mutation behavior may be introduced by the contract layer;
+- no wallet, governance execution, treasury movement, trading, settlement, payout, ACS provisioning, contract deployment or on-chain writes are enabled.

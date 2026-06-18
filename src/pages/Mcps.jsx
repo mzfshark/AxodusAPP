@@ -8,7 +8,7 @@ const Mcps = () => {
         
 {/*  Page Header  */}
 <div className="flex items-end gap-3 mb-6">
-  <h1 className="text-3xl font-bold tracking-tight text-on-surface">MCP Servers</h1>
+  <h1 className="text-3xl font-bold tracking-tight text-on-surface">ACS</h1>
   <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">Monitoring</span>
   <span className="text-sm font-label text-outline pb-1 uppercase tracking-widest">{mcpsMock.summary.activeMcpServices}/{mcpsMock.summary.totalMcpServices} active</span>
 </div>

@@ -1,5 +1,6 @@
 import CapabilityPill from './CapabilityPill';
 import ChainRoleBadge from './ChainRoleBadge';
+import ConstitutionalLayerPanel from './ConstitutionalLayerPanel';
 import { GovernanceStandingSummary, GovernanceStatusBadge } from './GovernanceStanding';
 
 function shortAddress(address) {
@@ -116,6 +117,12 @@ function DaoExplorerRow({ dao, chain, selected, onSelect, selectedDao, plugins, 
           </span>
         </div>
       </div>
+
+      {selected ? (
+        <div className="mt-3">
+          <ConstitutionalLayerPanel chain={chain} compact />
+        </div>
+      ) : null}
     </article>
   );
 }
