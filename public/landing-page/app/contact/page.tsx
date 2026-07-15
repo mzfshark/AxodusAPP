@@ -19,12 +19,12 @@ const inquiries = [
   {
     type: "Partnership inquiry",
     desc: "Exploratory conversations about research or strategic alignment.",
-    email: "partnerships@axodus.country",
+    email: "partners@axodus.country",
   },
   {
     type: "Investor orientation",
     desc: "Institutional context for those following the project’s development.",
-    email: "orientation@axodus.country",
+    email: "ir@axodus.country",
   },
 ];
 export default function Contact() {
