@@ -1242,7 +1242,7 @@ footer {
 .meter i {
     display: block;
     height: 100%;
-    background: var(--paper);
+    background: var(--orange);
 }
 
 .status-contrast {
