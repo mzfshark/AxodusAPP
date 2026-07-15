@@ -1589,9 +1589,3 @@ footer {
 :root[data-theme="dark"] .footer-brand .brand-subline {
     color: #8ea5a3 !important
 }
-
-@media(max-width:900px) {
-    .theme-toggle {
-        display: none
-    }
-}
