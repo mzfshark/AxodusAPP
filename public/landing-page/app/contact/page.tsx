@@ -9,22 +9,22 @@ const inquiries = [
   {
     type: "Institutional discussion",
     desc: "Questions about Axodus, its positioning and public direction.",
-    email: "institutional@axodus.country",
+    email: "Channel in preparation",
   },
   {
     type: "Publication inquiry",
     desc: "Questions about public papers, references and research materials.",
-    email: "press@axodus.country",
+    email: "Channel in preparation",
   },
   {
     type: "Partnership inquiry",
     desc: "Exploratory conversations about research or strategic alignment.",
-    email: "partners@axodus.country",
+    email: "Channel in preparation",
   },
   {
     type: "Investor orientation",
     desc: "Institutional context for those following the project’s development.",
-    email: "ir@axodus.country",
+    email: "Channel in preparation",
   },
 ];
 export default function Contact() {
@@ -38,7 +38,7 @@ export default function Contact() {
           </>
         }
         dek="Axodus welcomes focused inquiries from readers, researchers, potential partners and people following the project’s long-term development."
-        aside={<StatusBadge>Email inquiries only</StatusBadge>}
+        aside={<StatusBadge>Contact routing in progress</StatusBadge>}
       />
       <section className="section shell">
         <div className="contact-grid">
@@ -46,17 +46,18 @@ export default function Contact() {
             <article key={x.type}>
               <Eyebrow>{x.type}</Eyebrow>
               <p>{x.desc}</p>
-              <a href={`mailto:${x.email}`}>
+              <span className="contact-channel">
                 {x.email}
                 <span>↗</span>
-              </a>
+              </span>
             </article>
           ))}
         </div>
         <p className="contact-note">
-          These addresses are proposal placeholders and should be replaced with
-          verified Axodus contact details before public launch. Messages do not
-          create an investment relationship, commitment or offer.
+          Contact channels are being prepared for public routing. Until
+          verified public addresses are enabled, this page should be treated as
+          an inquiry index only. Messages do not create an investment
+          relationship, commitment or offer.
         </p>
       </section>
       <div className="shell">

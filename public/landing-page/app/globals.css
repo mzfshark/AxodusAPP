@@ -655,6 +655,10 @@ nav a:hover {
     font: 600 10px var(--mono)
 }
 
+.pub-link.muted {
+    opacity: .72
+}
+
 .partner-block {
     background: var(--ink);
     color: var(--white)
@@ -1366,7 +1370,8 @@ footer {
     min-height: 50px
 }
 
-.contact-grid article>a {
+.contact-grid article>a,
+.contact-channel {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid;

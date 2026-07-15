@@ -25,7 +25,7 @@ export default function Home() {
               <div><dt>Foundation</dt><dd>Research + governance</dd></div>
               <div><dt>Current state</dt><dd>Early prototype</dd></div>
             </dl>
-            <a className="prototype-link" href="https://dev.axodus.country/" target="_blank" rel="noreferrer"><span>Inspect development prototype</span><b>READ-ONLY ↗</b></a>
+            <div className="prototype-link"><span>Public prototype access is under review.</span><b>INTERNAL REVIEW</b></div>
           </aside>
         </section>
 
@@ -69,9 +69,9 @@ export default function Home() {
         <section className="section publications shell">
           <SectionIntro index="04" label="Publications" title="The public record of the project." />
           <div className="publication-grid">
-            <PublicationCard title="Axodus: Project Thesis" type="Research paper" status="Public Draft" audience="General / Research" date="2026" summary="The foundational thesis, problem space and proposed direction for the Axodus ecosystem." />
-            <PublicationCard title="Governance Foundation" type="Institutional note" status="Prototype Reference" audience="Partners / Technical" date="2026" summary="Early principles for decision-making, documentation discipline and accountable project evolution." />
-            <PublicationCard title="Staged Execution Framework" type="Working paper" status="Forthcoming" audience="Investors / Partners" date="—" summary="A framework for moving from concept to validated components through bounded development phases." />
+            <PublicationCard title="Axodus: Project Thesis" type="Research paper" status="Planned public release" audience="General / Research" date="2026" summary="The foundational thesis, problem space and proposed direction for the Axodus ecosystem." />
+            <PublicationCard title="Governance Foundation" type="Institutional note" status="Planned public release" audience="Partners / Technical" date="2026" summary="Early principles for decision-making, documentation discipline and accountable project evolution." />
+            <PublicationCard title="Staged Execution Framework" type="Working paper" status="Planned" audience="Investors / Partners" date="—" summary="A framework for moving from concept to validated components through bounded development phases." />
           </div>
           <Link className="text-link" href="/publications">Browse all public materials <span>→</span></Link>
         </section>
