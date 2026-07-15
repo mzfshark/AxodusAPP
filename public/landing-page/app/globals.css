@@ -1137,16 +1137,34 @@ footer {
     line-height: 1.6
 }
 
+.phase-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 1.5rem;
+}
+
 .phase-mark {
-    text-align: right
+    text-align: right;
+    color: var(--muted);
+    line-height: 1;
 }
-.phase-mark:active{
-    color: var(--paper)
+
+.phase-mark.checked {
+    color: var(--acid);
 }
-.phase-mark:checked {
-    color: var(--acid)
+
+.phase-mark.active {
+    color: var(--paper);
 }
-.direction-note,
+
+.phase-mark.pending {
+    color: var(--muted);
+}
+
+.phase-item.active {
+    /* estilo opcional para destacar a fase atual */
+}.direction-note,
 .meter-note,
 .contact-note {
     font: 10px/1.7 var(--mono);
