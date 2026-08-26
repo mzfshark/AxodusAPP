@@ -1,30 +1,43 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["DOM", "DOM.Iterable", "ES2023"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "checkJs": false,
-    "noEmit": true,
-    "isolatedModules": true,
     "skipLibCheck": true,
-    "strict": false,
-    "baseUrl": ".",
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"],
-      "@pages/*": ["src/pages/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@utils/*": ["src/utils/*"],
-      "@styles/*": ["src/styles/*"],
-      "@config": ["src/appkit.config.js"],
-      "@axodus/business-runtime": ["src/modules/business/runtime/index.ts"]
-    },
-    "types": ["node", "vitest/globals"]
+      "@/*": ["./*"]
+    }
   },
-  "include": ["src", "tests", "vite.config.js"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "next.config.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "db",
+    "drizzle",
+    "examples",
+    "worker",
+    "vite.config.ts",
+    "drizzle.config.ts"
+  ]
 }
