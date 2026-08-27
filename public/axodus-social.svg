@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Axodus institutional social preview">
+  <rect width="1200" height="630" fill="#eef3f3"/>
+  <rect x="64" y="64" width="1072" height="502" fill="none" stroke="#102125" stroke-width="2"/>
+  <text x="96" y="168" fill="#102125" font-family="Helvetica Neue, Arial, sans-serif" font-size="72" font-weight="600">Axodus</text>
+  <text x="96" y="228" fill="#607074" font-family="IBM Plex Mono, Consolas, monospace" font-size="20" letter-spacing="2">RESEARCH-DRIVEN AI-NATIVE ORGANIZATIONAL PLATFORMS</text>
+  <text x="96" y="314" fill="#102125" font-family="Helvetica Neue, Arial, sans-serif" font-size="34" font-weight="400">Governed knowledge</text>
+  <text x="96" y="360" fill="#102125" font-family="Helvetica Neue, Arial, sans-serif" font-size="34" font-weight="400">Institutional workflows</text>
+  <text x="96" y="406" fill="#102125" font-family="Helvetica Neue, Arial, sans-serif" font-size="34" font-weight="400">Interoperable platforms</text>
+  <line x1="96" y1="468" x2="360" y2="468" stroke="#d18454" stroke-width="4"/>
+  <text x="96" y="512" fill="#607074" font-family="IBM Plex Mono, Consolas, monospace" font-size="18">Conceptual, prototype-stage model</text>
+</svg>

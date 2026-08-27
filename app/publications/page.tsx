@@ -1,3 +1,83 @@
-import type { Metadata } from "next";import { Disclaimer, PageHero, PublicationCard, StatusBadge } from "../ui";
-export const metadata:Metadata={title:"Publications",description:"Public research, institutional documents and prototype references from Axodus."};
-export default function Publications(){return <main><PageHero eyebrow="03 · Publications" title={<>The project’s <em>public record.</em></>} dek="Research papers, working notes and approved institutional materials that make the direction, assumptions and current evidence reviewable." aside={<><StatusBadge>Publication review in progress</StatusBadge><p className="aside-note">No private governance, financial or operational records appear here.</p></>}/><section className="section shell"><div className="library-head"><div><span>Publication pipeline</span><strong>03 planned materials</strong></div><div><span>Last reviewed</span><strong>July 2026</strong></div></div><div className="publication-grid large"><PublicationCard title="Axodus: Project Thesis" type="Research paper" status="Planned public release" audience="General / Research" date="2026" summary="The foundational thesis, problem space and proposed direction for the Axodus ecosystem."/><PublicationCard title="Governance Foundation" type="Institutional note" status="Planned public release" audience="Partners / Technical" date="2026" summary="Early principles for decision-making, documentation discipline and accountable evolution."/><PublicationCard title="Staged Execution Framework" type="Working paper" status="Planned" audience="Investors / Partners" date="—" summary="A proposed framework for moving from concept to validated components through bounded development phases."/></div><aside className="publication-note"><StatusBadge>Editorial policy</StatusBadge><p>Public listings reflect publication intent only until a reviewed canonical document is released. Items move to public release only after an accessible destination is available.</p></aside></section><div className="shell"><Disclaimer/></div></main>}
+import { createPageMetadata } from "../site";
+import { Disclaimer, Eyebrow, PublicationCard, SectionIntro, StatusBadge } from "../ui";
+
+const description =
+  "Publications collect the reviewed institutional record for Axodus.";
+
+export const metadata = createPageMetadata({
+  title: "Publications",
+  description,
+  pathname: "/publications/",
+});
+
+export default function Publications() {
+  return (
+    <main>
+      <section className="page-hero shell">
+        <div>
+          <Eyebrow>Publications</Eyebrow>
+          <h1>The public record.</h1>
+          <p>{description}</p>
+        </div>
+        <aside>
+          <StatusBadge>Reviewed materials</StatusBadge>
+          <p className="aside-note">
+            Public listings should stay separate from draft or preview content.
+          </p>
+        </aside>
+      </section>
+
+      <section className="section shell">
+        <SectionIntro
+          index="01"
+          label="Current listings"
+          title="Approved public materials and planned references."
+        />
+        <div className="publication-grid large">
+          <PublicationCard
+            title="Axodus: Project Thesis"
+            type="Research paper"
+            status="Planned public release"
+            audience="General / Research"
+            date="2026"
+            summary="The foundational thesis, problem space, and proposed direction for Axodus."
+          />
+          <PublicationCard
+            title="Governance Foundation"
+            type="Institutional note"
+            status="Planned public release"
+            audience="Research / Institutional"
+            date="2026"
+            summary="The decision model, review practices, and bounded governance language."
+          />
+          <PublicationCard
+            title="Staged Execution Framework"
+            type="Working paper"
+            status="Planned"
+            audience="Research / Technical"
+            date="—"
+            summary="A framework for moving from concept to validated components through bounded stages."
+          />
+        </div>
+      </section>
+
+      <section className="section shell">
+        <SectionIntro
+          index="02"
+          label="Editorial rule"
+          title="Only approved public destinations belong here."
+        />
+        <div className="prose-large">
+          <p>
+            Listings move into this page only after the material is public and
+            its status is clear.
+          </p>
+        </div>
+      </section>
+
+      <div className="shell">
+        <Disclaimer />
+      </div>
+    </main>
+  );
+}

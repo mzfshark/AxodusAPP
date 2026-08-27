@@ -1,3 +1,47 @@
-import type { Metadata } from "next";import Link from "next/link";import { Disclaimer, Eyebrow, PageHero, SectionIntro, StatusBadge } from "../ui";
-export const metadata:Metadata={title:"Investor Orientation",description:"A concise institutional orientation for potential investors and strategic partners following Axodus."};
-export default function Investor(){return <main><PageHero eyebrow="05 · Investor orientation" title={<>A disciplined thesis—<em>not a promise.</em></>} dek="For investors and partners evaluating why Axodus may matter, what differentiates its approach and how early the initiative still is." aside={<><StatusBadge>Informational only</StatusBadge><p className="aside-note">No investment offer.<br/>No returns promised.</p></>}/><section className="section shell split-section"><SectionIntro index="01" label="Why the problem matters" title="Complex ecosystems can become difficult to govern before they become useful."/><div className="prose-large"><p>Axodus explores whether stronger governance, transparency, documentation and staged execution can create a more credible foundation for long-term ecosystem development.</p><p>The opportunity is not presented as certain. The relevance lies in the method: reducing the gap between ambitious vision and accountable execution.</p></div></section><section className="section dark-panel"><div className="shell"><SectionIntro index="02" label="The Axodus difference" title="Restraint is part of the strategy." light/><div className="principle-list"><div><span>01</span><strong>Governance</strong><p>before scale</p></div><div><span>02</span><strong>Documentation</strong><p>before claims</p></div><div><span>03</span><strong>Research</strong><p>before promotion</p></div><div><span>04</span><strong>Controlled development</strong><p>before production</p></div><div><span>05</span><strong>Evidence</strong><p>separate from vision</p></div></div></div></section><section className="section shell"><SectionIntro index="03" label="Orientation" title="What can be evaluated now—and what cannot."/><div className="investor-table"><div className="table-head"><span>Available today</span><span>Remains to be built</span></div><div><span>Project concept and thesis</span><span>Operational products</span></div><div><span>Research and public materials</span><span>Validated ecosystem components</span></div><div><span>Documentation framework</span><span>Mature deployment</span></div><div><span>Governance foundation</span><span>Market validation</span></div><div><span>Prototype-stage development</span><span>Production infrastructure</span></div></div></section><section className="section investor-quote"><div className="shell"><Eyebrow>Why follow Axodus</Eyebrow><blockquote>Not because returns are promised. Because disciplined, research-based and governable foundations are worth observing <em>before scale.</em></blockquote><div className="actions"><Link className="button light" href="/publications">Read the evidence</Link><Link className="button light-outline" href="/contact">Institutional inquiry</Link></div></div></section><div className="section shell"><Disclaimer/></div></main>}
+import Link from "next/link";
+import { createPageMetadata } from "../site";
+import { Disclaimer, Eyebrow, SectionIntro, StatusBadge } from "../ui";
+
+export const metadata = createPageMetadata({
+  title: "Institutional archive",
+  description: "Archived institutional orientation material for Axodus.",
+  pathname: "/investor-orientation/",
+  index: false,
+});
+
+export default function InvestorOrientation() {
+  return (
+    <main>
+      <section className="page-hero shell">
+        <div>
+          <Eyebrow>Archive</Eyebrow>
+          <h1>Institutional orientation now lives in the canonical pages.</h1>
+          <p>
+            Use <Link href="/what-is-axodus">What is Axodus?</Link> and{" "}
+            <Link href="/publications">Publications</Link> for the current
+            public record.
+          </p>
+        </div>
+        <aside>
+          <StatusBadge>Noindex</StatusBadge>
+          <p className="aside-note">This route is retained only for reference.</p>
+        </aside>
+      </section>
+
+      <section className="section shell">
+        <SectionIntro
+          index="01"
+          label="Canonical path"
+          title="The site no longer uses commercial-led positioning."
+        />
+        <div className="prose-large">
+          <p>Use the governance, research, and publications pages instead.</p>
+        </div>
+      </section>
+
+      <div className="shell">
+        <Disclaimer />
+      </div>
+    </main>
+  );
+}
