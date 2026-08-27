@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Disclaimer,
   Eyebrow,
@@ -22,17 +23,25 @@ export default function Home() {
     <main>
       {structuredData("Axodus", "/")}
       <section className="hero shell">
+        <Image
+          className="hero-art"
+          src="/ui-pack/hero-network.svg"
+          alt=""
+          width="900"
+          height="720"
+          priority
+        />
         <div className="hero-copy">
-          <Eyebrow>01 · What is Axodus?</Eyebrow>
-          <h1>Axodus is a research-driven initiative.</h1>
+          <Eyebrow>Research-driven initiative</Eyebrow>
+          <h1>Governed knowledge for institutional work.</h1>
           <p className="hero-deck">{SITE_DESCRIPTION}</p>
           <div className="actions">
             <Link className="button primary" href="/what-is-axodus">
-              Read the public explanation <span>↗</span>
+              What is Axodus?
             </Link>
-            <a className="button secondary" href="https://docs.axodus.country/">
-              Documentation
-            </a>
+            <Link className="button secondary" href="/platforms">
+              Explore proposed platforms
+            </Link>
           </div>
         </div>
         <aside className="hero-status" aria-label="Project status">
@@ -80,25 +89,34 @@ export default function Home() {
         <div className="shell">
           <SectionIntro
             index="03"
-            label="Current boundaries"
-            title="What is included, and what is not."
+            label="Institutional model"
+            title="A governed ecosystem with explicit boundaries."
             light
           />
           <div className="three-grid">
             <article>
               <span>01</span>
-              <h3>Included</h3>
-              <p>Governed knowledge, institutional workflows, and interoperable platforms.</p>
+              <h3>Governed knowledge</h3>
+              <p>
+                Institutional records and knowledge remain subject to defined
+                authority, provenance, and review boundaries.
+              </p>
             </article>
             <article>
               <span>02</span>
-              <h3>Governance</h3>
-              <p>Constitutional governance with bounded local domains and human oversight.</p>
+              <h3>Bounded governance</h3>
+              <p>
+                Constitutional governance defines bounded local domains while
+                preserving human oversight and accountable decisions.
+              </p>
             </article>
             <article>
               <span>03</span>
-              <h3>Not asserted</h3>
-              <p>No adoption, revenue, security, production readiness, or external recognition claims.</p>
+              <h3>Interoperable platforms</h3>
+              <p>
+                Proposed organizational platforms connect institutional
+                workflows and digital services without asserting deployment.
+              </p>
             </article>
           </div>
         </div>
@@ -142,17 +160,17 @@ export default function Home() {
           <article>
             <h3>What is Axodus?</h3>
             <p>Primary public explanation of the project.</p>
-            <Link href="/what-is-axodus">Open page →</Link>
+            <Link href="/what-is-axodus">Open public explanation</Link>
           </article>
           <article>
-            <h3>Governance</h3>
-            <p>Constitutional governance, bounded domains, and oversight.</p>
-            <Link href="/governance">Open page →</Link>
+            <h3>Platforms</h3>
+            <p>Proposed nuclei and conceptual domains with controlled status.</p>
+            <Link href="/platforms">Review proposed platforms</Link>
           </article>
           <article>
             <h3>Research and publications</h3>
             <p>Evidence, records, and public materials.</p>
-            <Link href="/research">Open page →</Link>
+            <Link href="/research">Review research context</Link>
           </article>
         </div>
       </section>
@@ -164,8 +182,21 @@ export default function Home() {
           <Link className="button primary" href="/publications">
             Read publications
           </Link>
-          <a className="button secondary" href="https://docs.axodus.country/">
+          <a
+            className="button secondary"
+            href="https://docs.axodus.country/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Open documentation
+          </a>
+          <a
+            className="button secondary"
+            href="https://github.com/Axodus/Institutional"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Institutional repository
           </a>
         </div>
       </section>

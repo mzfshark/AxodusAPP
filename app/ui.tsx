@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ThemeToggle } from "./theme-toggle";
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="eyebrow">
+    <p className="eyebrow ax-eyebrow">
       <span />
       {children}
     </p>
@@ -14,7 +13,7 @@ export function Eyebrow({ children }: { children: ReactNode }) {
 
 export function StatusBadge({ children }: { children: ReactNode }) {
   return (
-    <span className="status-badge">
+    <span className="status-badge ax-badge">
       <i />
       {children}
     </span>
@@ -33,7 +32,7 @@ export function SectionIntro({
   light?: boolean;
 }) {
   return (
-    <div className={"section-intro" + (light ? " light" : "")}>
+    <div className={"section-intro ax-section-header" + (light ? " light" : "")}>
       <p>
         <span>{index}</span>
         {label}
@@ -61,7 +60,7 @@ export function PublicationCard({
   href?: string;
 }) {
   return (
-    <article className="publication-card">
+    <article className="publication-card ax-card">
       <div className="pub-meta">
         <span>{type}</span>
         <StatusBadge>{status}</StatusBadge>
@@ -79,8 +78,13 @@ export function PublicationCard({
         </div>
       </dl>
       {href ? (
-        <a className="pub-link" href={href}>
-          Document overview <b>↗</b>
+        <a
+          className="pub-link"
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open document
         </a>
       ) : (
         <span className="pub-link muted">Publication in preparation</span>
@@ -133,7 +137,7 @@ function Brand({ footer = false }: { footer?: boolean }) {
 export function Header() {
   return (
     <header className="site-header">
-      <div className="shell nav-wrap">
+      <div className="shell ax-container nav-wrap ax-nav">
         <Brand />
         <div className="nav-actions">
           <nav aria-label="Primary navigation">
@@ -142,11 +146,15 @@ export function Header() {
                 {name}
               </Link>
             ))}
-            <a className="nav-contact" href="https://docs.axodus.country/">
-              Documentation ↗
+            <a
+              className="nav-contact ax-button ax-button--secondary"
+              href="https://docs.axodus.country/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Documentation
             </a>
           </nav>
-          <ThemeToggle />
           <details className="mobile-nav">
             <summary aria-label="Open navigation">
               <span />
@@ -158,7 +166,13 @@ export function Header() {
                   {name}
                 </Link>
               ))}
-              <a href="https://docs.axodus.country/">Documentation ↗</a>
+              <a
+                href="https://docs.axodus.country/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Documentation
+              </a>
             </div>
           </details>
         </div>
@@ -169,7 +183,7 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer>
+    <footer className="ax-footer">
       <div className="shell footer-main">
         <div>
           <Brand footer />
@@ -190,7 +204,20 @@ export function Footer() {
               {name}
             </Link>
           ))}
-          <a href="https://docs.axodus.country/">Documentation</a>
+          <a
+            href="https://docs.axodus.country/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Documentation
+          </a>
+          <a
+            href="https://github.com/Axodus/Institutional"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Institutional repository
+          </a>
         </div>
       </div>
       <div className="shell footer-disclaimer">

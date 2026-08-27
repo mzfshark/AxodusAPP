@@ -108,7 +108,12 @@ export default function WhatIsAxodus() {
           <Link className="button secondary" href="/research">
             Research
           </Link>
-          <a className="button secondary" href="https://docs.axodus.country/">
+          <a
+            className="button secondary"
+            href="https://docs.axodus.country/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Documentation
           </a>
         </div>
