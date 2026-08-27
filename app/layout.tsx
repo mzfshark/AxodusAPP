@@ -32,12 +32,10 @@ export const metadata: Metadata = {
   other: { "codex-preview": "development" },
   icons: { icon: "/favicon.svg" },
 };
-const themeBootScript = `try{var t=localStorage.getItem("axodus-theme");document.documentElement.dataset.theme=t==="dark"?"dark":"light";}catch(e){document.documentElement.dataset.theme="light";}`;
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <a className="skip-link" href="#main">
           Skip to content
         </a>
