@@ -6,7 +6,7 @@ import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL, SITE_SOCIAL_IMAGE } from "./sit
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: SITE_TITLE, template: "%s — Axodus" },
+  title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   openGraph: {
     title: SITE_TITLE,

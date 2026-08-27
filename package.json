@@ -7,6 +7,7 @@
   },
   "scripts": {
     "install:ci": "bash scripts/install-ci.sh",
+    "postinstall": "node scripts/patch-cloudflare-vite-plugin.mjs",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
     "dev:vercel": "node node_modules/next/dist/bin/next dev",
     "build": "bash scripts/build-verified.sh",

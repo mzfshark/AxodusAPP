@@ -59,7 +59,7 @@ export default function WhatIsAxodus() {
             <article>
               <span>02</span>
               <h3>Bounded domains</h3>
-              <p>Governance is local, scoped, and tied to specific institutional domains.</p>
+              <p>Bounded local governance domains keep decision-making scoped to specific institutional domains.</p>
             </article>
             <article>
               <span>03</span>

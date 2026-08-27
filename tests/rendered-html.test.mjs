@@ -39,10 +39,10 @@ test("homepage renders canonical metadata and visible answer", async () => {
     html,
     /<title>Axodus — Research-driven AI-native organizational platforms<\/title>/,
   );
-  assert.match(html, /<link rel="canonical" href="https://axodus.country/">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/axodus\.country\/"\/>/);
   assert.match(html, /What is Axodus?/);
   assert.match(html, new RegExp(canonicalDescription));
-  assert.match(html, /application/ld+json/);
+  assert.match(html, /application\/ld\+json/);
 });
 
 test("what-is page renders the public explanation", async () => {
