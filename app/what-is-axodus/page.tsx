@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { createPageMetadata, structuredData, SITE_DESCRIPTION } from "../site";
 import { Disclaimer, Eyebrow, SectionIntro, StatusBadge } from "../ui";
@@ -17,27 +18,45 @@ export default function WhatIsAxodus() {
           <Eyebrow>Axodus</Eyebrow>
           <h1>What is Axodus?</h1>
           <p>{SITE_DESCRIPTION}</p>
+          <p className="article-byline">Mauricio ZF — CEO and author</p>
         </div>
         <aside>
           <StatusBadge>Conceptual, prototype-stage model</StatusBadge>
           <p className="aside-note">
-            Public explanation only. No claim of production readiness,
-            adoption, or external validation.
+            Axodus is a research and design proposal for governed knowledge,
+            institutional workflows, and digital services.
           </p>
         </aside>
+      </section>
+
+      <section className="section shell">
+        <figure className="article-hero-image">
+          <Image
+            src="images/what-is-axodus-hero.jpg"
+            alt="Conceptual diagram of an axis connecting identity, architecture, governance, knowledge, and digital services."
+            width={1024}
+            height={1024}
+            priority
+          />
+        </figure>
       </section>
 
       <section className="section shell split-section">
         <SectionIntro
           index="01"
-          label="Public definition"
-          title="The canonical statement used across the site."
+          label="The problem space"
+          title="Institutional work needs clearer connections between knowledge, decisions, and responsibility."
         />
         <div className="prose-large">
-          <p>{SITE_DESCRIPTION}</p>
           <p>
-            Axodus should be read as a research program and institutional
-            concept, not as a finished operating system or commercial platform.
+            In complex organizations, it can be difficult to understand why a
+            decision was made, who is responsible for it, or what evidence
+            informed it. Technology, people, and rules can become disconnected.
+          </p>
+          <p>
+            Axodus explores institutional design: how governed knowledge,
+            traceable decisions, defined responsibility, and digital services
+            might relate within clear boundaries.
           </p>
         </div>
       </section>
@@ -46,25 +65,34 @@ export default function WhatIsAxodus() {
         <div className="shell">
           <SectionIntro
             index="02"
-            label="Current status"
-            title="What the site says clearly."
+            label="What the proposed ecosystem explores"
+            title="Design and research themes for interoperable institutional capabilities."
             light
           />
           <div className="three-grid">
             <article>
               <span>01</span>
-              <h3>Human oversight</h3>
-              <p>Decision-making remains bounded and reviewable.</p>
+              <h3>Governance and knowledge</h3>
+              <p>
+                Constitutional constraints, bounded local governance domains,
+                provenance, review, and accountability.
+              </p>
             </article>
             <article>
               <span>02</span>
-              <h3>Bounded domains</h3>
-              <p>Bounded local governance domains keep decision-making scoped to specific institutional domains.</p>
+              <h3>Institutional workflows</h3>
+              <p>
+                Workflows that connect people, documents, evidence, and
+                decisions through defined responsibilities.
+              </p>
             </article>
             <article>
               <span>03</span>
-              <h3>Prototype stage</h3>
-              <p>The model is conceptual and not presented as production-ready.</p>
+              <h3>AI assistance</h3>
+              <p>
+                AI assistance for bounded analytical and documentation tasks,
+                with human oversight of consequential decisions.
+              </p>
             </article>
           </div>
         </div>
@@ -73,34 +101,90 @@ export default function WhatIsAxodus() {
       <section className="section shell">
         <SectionIntro
           index="03"
-          label="What is being explored"
-          title="The ecosystem concepts that sit inside the proposal."
+          label="Concepts and platform relationships"
+          title="A modular ecosystem of proposed foundations and service nuclei."
         />
         <div className="evidence-grid">
-          <div className="evidence-card exists">
-            <span className="mini-label">Included</span>
-            <h3>Core concepts</h3>
+          <article className="evidence-card exists">
+            <span className="mini-label">Foundation concepts</span>
+            <h3>Shared institutional foundations</h3>
             <ul>
-              <li>Governed knowledge</li>
-              <li>Institutional workflows</li>
-              <li>Interoperable organizational platforms</li>
+              <li>Governed knowledge and institutional records</li>
+              <li>Human oversight and bounded local governance</li>
+              <li>Interoperable protocols and modular service selection</li>
             </ul>
-          </div>
-          <div className="evidence-card future">
-            <span className="mini-label">Not asserted</span>
-            <h3>External outcomes</h3>
+          </article>
+          <article className="evidence-card future">
+            <span className="mini-label">Proposed nuclei</span>
+            <h3>Independent areas of study</h3>
             <ul>
-              <li>Adoption or user counts</li>
-              <li>Security or performance guarantees</li>
-              <li>Market or revenue claims tied to external relationships</li>
+              <li>Academy, Marketplace, and Business concepts</li>
+              <li>Governed AI-assisted and publication-oriented capabilities</li>
+              <li>Conceptual relationships subject to research and design</li>
             </ul>
+          </article>
+        </div>
+      </section>
+
+      <section className="section shell split-section">
+        <SectionIntro
+          index="04"
+          label="Current stage"
+          title="A conceptual, prototype-stage model."
+        />
+        <div className="prose-large">
+          <p>
+            Axodus documents proposed architectures, design objectives, and
+            research questions. Its taxonomy organizes concepts, roles, and
+            relationships for further study.
+          </p>
+          <p>
+            It is not presented as ready-to-use software, a certified platform,
+            or an implementation ready for production.
+          </p>
+        </div>
+      </section>
+
+      <section className="section dark-panel">
+        <div className="shell">
+          <SectionIntro
+            index="05"
+            label="What Axodus is not"
+            title="Clear boundaries for the current public identity."
+            light
+          />
+          <div className="three-grid">
+            <article>
+              <span>01</span>
+              <h3>Not an investment product</h3>
+              <p>
+                Axodus is not an ETF, investment product, financial service, or
+                return-generating scheme.
+              </p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Not a final platform</h3>
+              <p>
+                It is not a finished enterprise software suite, certified
+                system, or production-ready deployment.
+              </p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Not a performance promise</h3>
+              <p>
+                The project does not claim financial returns, commercial
+                superiority, security guarantees, or operational outcomes.
+              </p>
+            </article>
           </div>
         </div>
       </section>
 
       <section className="section shell final-cta">
-        <Eyebrow>Next steps</Eyebrow>
-        <h2>Read the governance and research pages for the supporting record.</h2>
+        <Eyebrow>Institutional links</Eyebrow>
+        <h2>Explore the public record and related institutional context.</h2>
         <div className="actions">
           <Link className="button primary" href="/governance">
             Governance
@@ -115,6 +199,14 @@ export default function WhatIsAxodus() {
             rel="noopener noreferrer"
           >
             Documentation
+          </a>
+          <a
+            className="button secondary"
+            href="https://github.com/Axodus/Institutional"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Institutional repository
           </a>
         </div>
       </section>

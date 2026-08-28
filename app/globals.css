@@ -479,6 +479,29 @@ nav a:focus-visible {
   line-height: 1.6;
 }
 
+.article-byline {
+  margin: var(--ax-space-5) 0 0;
+  color: var(--ax-muted);
+  font: 600 12px/1.5 var(--ax-font-mono);
+  letter-spacing: .04em;
+}
+
+.article-hero-image {
+  max-width: 920px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid var(--ax-line);
+  border-radius: var(--ax-radius-md);
+  background: var(--ax-card);
+  box-shadow: var(--ax-shadow-lg);
+}
+
+.article-hero-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .platform-grid {
   margin-top: var(--ax-space-7);
 }

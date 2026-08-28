@@ -64,10 +64,32 @@ test("homepage renders canonical metadata and visible answer", async () => {
 test("what-is page renders the public explanation", async () => {
   const html = await render("/what-is-axodus/");
 
+  assert.match(html, /<title>What is Axodus\?<\/title>/);
+  assert.match(
+    html,
+    /<link rel="canonical" href="https:\/\/axodus\.country\/what-is-axodus\/"\/>/,
+  );
+  assert.match(html, /property="og:title" content="What is Axodus\?"/);
   assert.match(html, /What is Axodus?/);
   assert.match(html, new RegExp(canonicalDescription));
+  assert.match(html, /Mauricio ZF — CEO and author/);
+  assert.match(html, /what-is-axodus-hero\.jpeg/);
+  assert.match(
+    html,
+    /alt="Conceptual diagram of an axis connecting identity, architecture, governance, knowledge, and digital services\."/,
+  );
   assert.match(html, /bounded local governance domains/i);
-  assert.match(html, /Documentation/);
+  assert.match(html, /href="\/governance"/);
+  assert.match(html, /href="\/research"/);
+  assert.match(html, /href="https:\/\/docs\.axodus\.country\/"/);
+  assert.match(html, /href="https:\/\/github\.com\/Axodus\/Institutional"/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /rel="noopener noreferrer"/);
+  assert.match(html, /application\/ld\+json/);
+  assert.doesNotMatch(
+    html,
+    /draft status|editorial version|claims review|publication readiness|human approval|channel authorization|channel ownership|blockers?|worksheets?|directives?/i,
+  );
 });
 
 test("platforms page distinguishes external platforms from unlinked concepts", async () => {
