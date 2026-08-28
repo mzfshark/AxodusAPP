@@ -18,8 +18,9 @@ export default function WhatIsAxodus() {
           <Eyebrow>Axodus</Eyebrow>
           <h1>What is Axodus?</h1>
           <p>{SITE_DESCRIPTION}</p>
-          <p className="article-byline">Mauricio ZF — CEO and author</p>
+         
         </div>
+
         <aside>
           <StatusBadge>Conceptual, prototype-stage model</StatusBadge>
           <p className="aside-note">
@@ -27,26 +28,28 @@ export default function WhatIsAxodus() {
             institutional workflows, and digital services.
           </p>
         </aside>
+
       </section>
 
-      <section className="section shell">
-        <figure className="article-hero-image">
-          <Image
-            src="/images/what-is-axodus-hero.png"
-            alt="Conceptual diagram of an axis connecting identity, architecture, governance, knowledge, and digital services."
-            width={1024}
-            height={1024}
-            priority
-          />
-        </figure>
-      </section>
 
-      <section className="section shell split-section">
+
+      <section className="page-hero shell split-section">
         <SectionIntro
           index="01"
           label="The problem space"
           title="Institutional work needs clearer connections between knowledge, decisions, and responsibility."
         />
+        <aside>
+          <figure className="article-hero-image">
+            <Image
+              src="/images/what-is-axodus-hero.png"
+              alt="Conceptual diagram of an axis connecting identity, architecture, governance, knowledge, and digital services."
+              width={1024}
+              height={1024}
+              priority
+            />
+          </figure>
+        </aside>
         <div className="prose-large">
           <p>
             In complex organizations, it can be difficult to understand why a
