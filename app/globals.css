@@ -153,6 +153,7 @@ nav a:focus-visible {
 .status-badge {
   width: fit-content;
   text-decoration: none;
+  background: var(--ax-card);
 }
 
 .status-badge i {
@@ -187,6 +188,7 @@ nav a:focus-visible {
 }
 
 .hero h1,
+.section-hero h1,
 .page-hero h1 {
   margin: var(--ax-space-4) 0 var(--ax-space-5);
   font: 800 clamp(42px, 6vw, 80px)/.98 var(--ax-font-display);
@@ -195,6 +197,7 @@ nav a:focus-visible {
 }
 
 .hero-deck,
+.section-hero > div > p:last-child,
 .page-hero > div > p:last-child {
   max-width: 670px;
   margin: 0;
@@ -350,6 +353,12 @@ nav a:focus-visible {
 
 .dark-panel {
   background: var(--ax-surface);
+  color: var(--ax-text);
+}
+
+.light-panel {
+  background: var(--ax-bg-alt);
+  color: var(--ax-text-alt);
 }
 
 .three-grid,
@@ -454,8 +463,8 @@ nav a:focus-visible {
 .page-hero::after {
   position: absolute;
   z-index: -1;
-  top: -20%;
-  right: -12%;
+  top: -15%;
+  right: 15%;
   width: min(660px, 55vw);
   aspect-ratio: 5 / 4;
   background: url("/ui-pack/hero-orbit.svg") center / contain no-repeat;
@@ -467,9 +476,29 @@ nav a:focus-visible {
 .page-hero aside {
   align-self: end;
   padding: var(--ax-space-5);
-  border: 1px solid var(--ax-line);
   border-radius: var(--ax-radius-md);
-  background: var(--ax-card);
+}
+
+.section-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--ax-space-9);
+  border-bottom: 1px solid var(--ax-line);
+}
+
+
+.section-hero aside {
+  align-self: end;
+  padding: var(--ax-space-5);
+  border-radius: var(--ax-radius-md);
+
+}
+
+.inner-hero {
+  display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ax-space-5);
 }
 
 .aside-note {
@@ -837,6 +866,7 @@ footer {
 
   .hero,
   .page-hero,
+  .section-hero,
   .split-section,
   .platform-boundary-note,
   .disclaimer {
@@ -854,11 +884,13 @@ footer {
     opacity: .38;
   }
 
-  .page-hero {
+  .page-hero,
+  .section-hero {
     gap: var(--ax-space-6);
   }
 
-  .page-hero aside {
+  .page-hero aside,
+  .section-hero aside {
     max-width: 520px;
   }
 
@@ -890,7 +922,8 @@ footer {
     padding-block: var(--ax-space-9) var(--ax-space-8);
   }
 
-  .page-hero {
+  .page-hero,
+  .section-hero {
     padding-block: var(--ax-space-8);
   }
 

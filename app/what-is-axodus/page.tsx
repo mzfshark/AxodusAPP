@@ -33,34 +33,37 @@ export default function WhatIsAxodus() {
 
 
 
-      <section className="page-hero shell split-section">
-        <SectionIntro
-          index="01"
-          label="The problem space"
-          title="Institutional work needs clearer connections between knowledge, decisions, and responsibility."
-        />
-        <aside>
-          <figure className="article-hero-image">
-            <Image
-              src="/images/what-is-axodus-hero.png"
-              alt="Conceptual diagram of an axis connecting identity, architecture, governance, knowledge, and digital services."
-              width={1024}
-              height={1024}
-              priority
+      <section className="section-hero light-panel">
+        <div className="inner-hero shell">
+          <div> 
+            <SectionIntro
+              index="01"
+              label="The problem space"
+              title="Institutional work needs clearer connections between knowledge, decisions, and responsibility."
             />
-          </figure>
-        </aside>
-        <div className="prose-large">
-          <p>
-            In complex organizations, it can be difficult to understand why a
-            decision was made, who is responsible for it, or what evidence
-            informed it. Technology, people, and rules can become disconnected.
-          </p>
-          <p>
-            Axodus explores institutional design: how governed knowledge,
-            traceable decisions, defined responsibility, and digital services
-            might relate within clear boundaries.
-          </p>
+
+            <div className="prose-large">
+              <p>
+                In complex organizations, it can be difficult to understand why a
+                decision was made, who is responsible for it, or what evidence
+                informed it. Technology, people, and rules can become disconnected.
+              </p>
+              <p>
+                Axodus explores institutional design: how governed knowledge,
+                traceable decisions, defined responsibility, and digital services
+                might relate within clear boundaries.
+              </p>
+            </div>
+          </div>
+          <aside>
+            <Image
+              src="/ui-pack/hero-wia.svg"
+              alt="Orbiting shapes"
+              width={660}
+              height={528}
+            />
+
+          </aside>
         </div>
       </section>
 
