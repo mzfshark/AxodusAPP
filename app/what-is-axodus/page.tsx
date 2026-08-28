@@ -32,7 +32,7 @@ export default function WhatIsAxodus() {
       <section className="section shell">
         <figure className="article-hero-image">
           <Image
-            src="images/what-is-axodus-hero.jpg"
+            src="/images/what-is-axodus-hero.png"
             alt="Conceptual diagram of an axis connecting identity, architecture, governance, knowledge, and digital services."
             width={1024}
             height={1024}
