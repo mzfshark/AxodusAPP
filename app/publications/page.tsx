@@ -37,7 +37,7 @@ export default function Publications() {
           <PublicationCard
             title="Axodus: Project Thesis"
             type="Research paper"
-            status="Planned public release"
+            status="Preview release"
             audience="General / Research"
             date="2026"
             summary="The foundational thesis, problem space, and proposed direction for Axodus."
@@ -45,7 +45,7 @@ export default function Publications() {
           <PublicationCard
             title="Governance Foundation"
             type="Institutional note"
-            status="Planned public release"
+            status="Planned release"
             audience="Research / Institutional"
             date="2026"
             summary="The decision model, review practices, and bounded governance language."
