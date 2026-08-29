@@ -489,7 +489,7 @@ nav a:focus-visible {
 
 
 .section-hero aside {
-  align-self: end;
+  align-self: center;
   padding: var(--ax-space-5);
   border-radius: var(--ax-radius-md);
 
@@ -867,6 +867,7 @@ footer {
   .hero,
   .page-hero,
   .section-hero,
+  .inner-hero,
   .split-section,
   .platform-boundary-note,
   .disclaimer {
