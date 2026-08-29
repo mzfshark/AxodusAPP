@@ -61,6 +61,17 @@ test("homepage renders canonical metadata and visible answer", async () => {
   assert.match(html, /application\/ld\+json/);
 });
 
+test("root layout includes the approved Google Tag", async () => {
+  const layout = await readFile(
+    new URL("../app/layout.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(layout, /G-RBW9804TC6/);
+  assert.match(layout, /googletagmanager\.com\/gtag\/js\?id=/);
+  assert.match(layout, /gtag\('config', '\$\{GOOGLE_TAG_ID\}'\)/);
+});
+
 test("what-is page renders the public explanation", async () => {
   const html = await render("/what-is-axodus/");
 
