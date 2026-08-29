@@ -30,7 +30,7 @@ export default function Concept() {
 
       <section className="section shell">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Canonical path"
           title="The live public explanation lives elsewhere."
         />

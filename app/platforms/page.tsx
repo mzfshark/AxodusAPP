@@ -97,7 +97,7 @@ export default function Platforms() {
 
       <section className="section shell split-section">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Intended nuclei"
           title="Modules stay conceptual until the public record says otherwise."
         />
@@ -114,7 +114,7 @@ export default function Platforms() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="02"
+            index=">_"
             label="External destinations"
             title="Proposed platforms with separate public destinations."
             light
@@ -162,7 +162,7 @@ export default function Platforms() {
 
       <section className="section shell">
         <SectionIntro
-          index="03"
+          index=">_"
           label="No external destination"
           title="Conceptual domains remain unlinked and explicitly bounded."
         />

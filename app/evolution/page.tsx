@@ -30,7 +30,7 @@ export default function Evolution() {
 
       <section className="section shell">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Canonical path"
           title="The current site structure is now centered on public explanation."
         />

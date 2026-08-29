@@ -31,7 +31,7 @@ export default function Governance() {
 
       <section className="section shell split-section">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Governance model"
           title="Decision-making is scoped to specific institutional domains."
         />
@@ -51,24 +51,24 @@ export default function Governance() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="02"
+            index=">_"
             label="Oversight"
             title="Human review remains the governing constraint."
             light
           />
           <div className="three-grid">
             <article>
-              <span>01</span>
+              
               <h3>Bounded scope</h3>
               <p>Each domain should stay narrow enough to audit.</p>
             </article>
             <article>
-              <span>02</span>
+              
               <h3>Human oversight</h3>
               <p>Review stays visible rather than implied.</p>
             </article>
             <article>
-              <span>03</span>
+              
               <h3>Claims discipline</h3>
               <p>The site avoids unsupported statements about readiness or adoption.</p>
             </article>
@@ -78,7 +78,7 @@ export default function Governance() {
 
       <section className="section shell">
         <SectionIntro
-          index="03"
+          index=">_"
           label="Reference material"
           title="The governance pages should be read with the public record."
         />

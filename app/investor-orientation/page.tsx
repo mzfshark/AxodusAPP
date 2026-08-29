@@ -30,7 +30,7 @@ export default function InvestorOrientation() {
 
       <section className="section shell">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Canonical path"
           title="The site no longer uses commercial-led positioning."
         />

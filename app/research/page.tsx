@@ -31,7 +31,7 @@ export default function Research() {
 
       <section className="section shell split-section">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Inquiry areas"
           title="The project is framed as a research program."
         />
@@ -51,24 +51,24 @@ export default function Research() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="02"
+            index=">_"
             label="Evidence boundary"
             title="Observations are not guarantees."
             light
           />
           <div className="three-grid">
             <article>
-              <span>01</span>
+              
               <h3>Documented</h3>
               <p>Public notes, route copy, and technical descriptions.</p>
             </article>
             <article>
-              <span>02</span>
+              
               <h3>Proposed</h3>
               <p>Architectural concepts and institutional patterns.</p>
             </article>
             <article>
-              <span>03</span>
+              
               <h3>Not claimed</h3>
               <p>Adoption, user growth, external relationship claims, or performance gains.</p>
             </article>
@@ -78,7 +78,7 @@ export default function Research() {
 
       <section className="section shell">
         <SectionIntro
-          index="03"
+          index=">_"
           label="Further reading"
           title="Use publications and governance together."
         />

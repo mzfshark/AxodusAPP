@@ -28,7 +28,7 @@ export default function Contact() {
 
       <section className="section shell">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Canonical path"
           title="The current site does not present contact routing as a primary surface."
         />

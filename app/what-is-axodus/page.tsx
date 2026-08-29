@@ -37,7 +37,7 @@ export default function WhatIsAxodus() {
         <div className="inner-hero shell">
           <div> 
             <SectionIntro
-              index="01"
+              index=">_"
               label="The problem space"
               title="Institutional work needs clearer connections between knowledge, decisions, and responsibility."
             />
@@ -70,14 +70,14 @@ export default function WhatIsAxodus() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="02"
+            index=">_"
             label="What the proposed ecosystem explores"
             title="Design and research themes for interoperable institutional capabilities."
             light
           />
           <div className="three-grid">
             <article>
-              <span>01</span>
+              
               <h3>Governance and knowledge</h3>
               <p>
                 Constitutional constraints, bounded local governance domains,
@@ -85,7 +85,7 @@ export default function WhatIsAxodus() {
               </p>
             </article>
             <article>
-              <span>02</span>
+              
               <h3>Institutional workflows</h3>
               <p>
                 Workflows that connect people, documents, evidence, and
@@ -93,7 +93,7 @@ export default function WhatIsAxodus() {
               </p>
             </article>
             <article>
-              <span>03</span>
+              
               <h3>AI assistance</h3>
               <p>
                 AI assistance for bounded analytical and documentation tasks,
@@ -106,7 +106,7 @@ export default function WhatIsAxodus() {
 
       <section className="section shell">
         <SectionIntro
-          index="03"
+          index=">_"
           label="Concepts and platform relationships"
           title="A modular ecosystem of proposed foundations and service nuclei."
         />
@@ -134,7 +134,7 @@ export default function WhatIsAxodus() {
 
       <section className="section shell split-section">
         <SectionIntro
-          index="04"
+          index=">_"
           label="Current stage"
           title="A conceptual, prototype-stage model."
         />
@@ -154,14 +154,14 @@ export default function WhatIsAxodus() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="05"
+            index=">_"
             label="What Axodus is not"
             title="Clear boundaries for the current public identity."
             light
           />
           <div className="three-grid">
             <article>
-              <span>01</span>
+              
               <h3>Not an investment product</h3>
               <p>
                 Axodus is not an ETF, investment product, financial service, or
@@ -169,7 +169,7 @@ export default function WhatIsAxodus() {
               </p>
             </article>
             <article>
-              <span>02</span>
+              
               <h3>Not a final platform</h3>
               <p>
                 It is not a finished enterprise software suite, certified
@@ -177,7 +177,7 @@ export default function WhatIsAxodus() {
               </p>
             </article>
             <article>
-              <span>03</span>
+              
               <h3>Not a performance promise</h3>
               <p>
                 The project does not claim financial returns, commercial

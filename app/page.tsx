@@ -72,7 +72,7 @@ export default function Home() {
 
       <section className="section shell split-section">
         <SectionIntro
-          index="02"
+          index=">_"
           label="Canonical description"
           title="A concise public statement for visitors and systems."
         />
@@ -88,14 +88,14 @@ export default function Home() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="03"
+            index=">_"
             label="Institutional model"
             title="A governed ecosystem with explicit boundaries."
             light
           />
           <div className="three-grid">
             <article>
-              <span>01</span>
+              
               <h3>Governed knowledge</h3>
               <p>
                 Institutional records and knowledge remain subject to defined
@@ -103,7 +103,7 @@ export default function Home() {
               </p>
             </article>
             <article>
-              <span>02</span>
+              
               <h3>Bounded governance</h3>
               <p>
                 Constitutional governance defines bounded local domains while
@@ -111,7 +111,7 @@ export default function Home() {
               </p>
             </article>
             <article>
-              <span>03</span>
+              
               <h3>Interoperable platforms</h3>
               <p>
                 Proposed organizational platforms connect institutional
@@ -124,7 +124,7 @@ export default function Home() {
 
       <section className="section shell">
         <SectionIntro
-          index="04"
+          index=">_"
           label="What it is not"
           title="Terms and claims the site should not use."
         />
@@ -152,7 +152,7 @@ export default function Home() {
 
       <section className="section shell">
         <SectionIntro
-          index="05"
+          index=">_"
           label="Public routes"
           title="Where readers should go next."
         />

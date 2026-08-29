@@ -29,7 +29,7 @@ export default function Publications() {
 
       <section className="section shell">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Current listings"
           title="Approved public materials and planned references."
         />
@@ -63,7 +63,7 @@ export default function Publications() {
 
       <section className="section shell">
         <SectionIntro
-          index="02"
+          index=">_"
           label="Editorial rule"
           title="Only approved public destinations belong here."
         />

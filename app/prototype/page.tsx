@@ -29,7 +29,7 @@ export default function Prototype() {
 
       <section className="section shell">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Canonical path"
           title="The public explanation now carries the status statement."
         />

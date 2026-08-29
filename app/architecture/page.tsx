@@ -30,7 +30,7 @@ export default function Architecture() {
 
       <section className="section shell split-section">
         <SectionIntro
-          index="01"
+          index=">_"
           label="Proposed layers"
           title="A simple map for the public record."
         />
@@ -49,24 +49,24 @@ export default function Architecture() {
       <section className="section dark-panel">
         <div className="shell">
           <SectionIntro
-            index="02"
+            index=">_"
             label="Public surfaces"
             title="Each surface has a narrow role."
             light
           />
           <div className="three-grid">
             <article>
-              <span>01</span>
+              
               <h3>Identity</h3>
               <p>Defines the canonical public statement.</p>
             </article>
             <article>
-              <span>02</span>
+              
               <h3>Governance</h3>
               <p>Explains the bounded decision model.</p>
             </article>
             <article>
-              <span>03</span>
+              
               <h3>Platforms</h3>
               <p>Names proposed nuclei without claiming deployment.</p>
             </article>
@@ -76,7 +76,7 @@ export default function Architecture() {
 
       <section className="section shell">
         <SectionIntro
-          index="03"
+          index=">_"
           label="Cross-links"
           title="The site should connect the structure visibly."
         />
