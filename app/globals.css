@@ -469,7 +469,6 @@ nav a:focus-visible {
   aspect-ratio: 5 / 4;
   background: url("/ui-pack/hero-orbit.svg") center / contain no-repeat;
   content: "";
-  opacity: .42;
   pointer-events: none;
 }
 
@@ -926,6 +925,10 @@ footer {
   .page-hero,
   .section-hero {
     padding-block: var(--ax-space-8);
+  }
+
+  .page-hero::after{
+    top: 0;
   }
 
   .three-grid,
