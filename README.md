@@ -1,296 +1,108 @@
+# vinext-starter
 
-# Axodus Dashboard
+A clean full-stack starter running on
+[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
+Drizzle support.
 
-Axodus is a comprehensive cryptocurrency trading platform that integrates with Hummingbot API for automated trading strategies. The platform provides portfolio management, real-time market data, trading operations, backtesting, and controller management in a unified interface.
+## Prerequisites
 
-## Features
+- Node.js `>=22.13.0`
+- Linux with `flock`, `curl`, and GNU `timeout`
 
-### Core Features
-- **Wallet Integration**: Connect MetaMask or WalletConnect to view crypto assets and portfolio
-- **Hummingbot Integration**: Complete API integration for bot management and trading
-- **Real-Time Updates**: MQTT/WebSocket integration for live data streaming
-- **Portfolio Management**: Multi-exchange portfolio tracking and analysis
-- **Market Data**: Real-time prices, order books, and market depth
-- **Trading Operations**: Spot trading, market making, and token swaps
+## Sites Lifecycle
 
-### Advanced Features (Phase 4)
-- **Backtesting System**: Test trading strategies with historical data
-  - Comprehensive metrics (Sharpe ratio, drawdown, win rate, profit factor)
-  - Capital curve visualization
-  - Trade analysis and performance reports
-- **Controller Management**: CRUD interface for trading controllers
-  - Pre-configured templates (PMM, Grid, DCA, Directional, Arbitrage)
-  - Parameter validation and configuration
-  - Real-time status monitoring
-- **Strategy Development**: Complete workflow from creation to deployment
+The Sites lifecycle CLI runs the locked dependency install before returning this checkout. Edit the source under `app/`, then checkpoint when a coherent milestone is ready to inspect or share. The remote Sites builder runs `npm run build` against the pushed commit. Do not repeat install or build as a normal pre-checkpoint step.
 
-### Additional Capabilities
-- **Multi-Device Support**: Fully responsive design for all devices
-- **Interactive Dashboard**: Real-time charts, tooltips, and dynamic visualizations
-- **Transaction History**: Detailed transaction tracking across exchanges
+This starter does not use `wrangler.jsonc`.
 
-## Installation
+`install:ci` is intentionally a single, non-retrying `npm ci`. It refuses a concurrent install for the same project, consumes a matching image-seeded npm cache with `--prefer-offline` while retaining registry fallback for a missing cache object, otherwise downloads and verifies the complete vinext tarball recorded in `package-lock.json`, limits npm to one socket, and terminates a stalled install. `build` applies a short timeout and then validates the Sites artifact. These helpers target Linux and use GNU `timeout`; they are not native macOS scripts.
 
-Follow these steps to run the Axodus app locally:
+Scripts that need writable project-scoped home, npm, XDG, and temporary paths use `scripts/sites-env.sh`. The `dev` and `start` scripts honor the caller's runtime environment and keep Wrangler logs inside the checkout. The generated `.sites-runtime/` directory is disposable and ignored by Git.
 
-### 1. Clone the Repository
+## Included Shape
 
-```bash
-git clone https://github.com/mzfshark/axodus.git
-cd axodus
+- edit site code under `app/`
+- `app/chatgpt-auth.ts` provides optional dispatch-owned ChatGPT sign-in helpers
+- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
+- `vite.config.ts` simulates declared bindings for local development
+- `db/index.ts` reads the D1 binding from the Cloudflare Worker environment
+- `db/schema.ts` starts intentionally empty
+- `examples/d1/` contains an optional D1 example surface
+- `drizzle.config.ts` supports local migration generation when needed
+
+## Workspace Auth Headers
+
+OpenAI workspace sites can read the current user's email from
+`oai-authenticated-user-email`.
+
+SIWC-authenticated workspace sites may also receive
+`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
+`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
+`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
+
+Treat the full name as optional and fall back to email when it is absent:
+
+```tsx
+import { headers } from "next/headers";
+
+export default async function Home() {
+  const requestHeaders = await headers();
+  const email = requestHeaders.get("oai-authenticated-user-email");
+  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
+  const fullName =
+    encodedFullName &&
+    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
+      "percent-encoded-utf-8"
+      ? decodeURIComponent(encodedFullName)
+      : null;
+
+  const displayName = fullName ?? email;
+  // ...
+}
 ```
 
-### 2. Install Dependencies
+## Optional Dispatch-Owned ChatGPT Sign-In
 
-Ensure you have **Node.js** and **npm** installed. Then, run the following command to install project dependencies:
+Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
+optional or required ChatGPT sign-in:
 
-```bash
-npm install
-```
+- Use `getChatGPTUser()` for optional signed-in UI.
+- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
+  anonymous visitors through Sign in with ChatGPT.
+- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
+  browser links or actions.
+- Pass a same-origin relative `returnTo` path for the destination after sign-in
+  or sign-out. The helper validates and safely encodes it.
+- Mark protected pages with `export const dynamic = "force-dynamic"` because
+  they depend on per-request identity headers.
 
-### 3. Start the Development Server
+Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
+OAuth cookies, and identity header injection. Do not implement app routes for
+those reserved paths. Routes that do not import and call the helper remain
+anonymous-compatible.
 
-Start the development server to see the app in action:
+SIWC establishes identity only; it does not prove workspace membership. Use the
+Sites hosting platform's access policy controls for workspace-wide restrictions,
+or enforce explicit server-side membership or allowlist checks.
 
-```bash
-npm start
-```
+Use SIWC for account pages, user-specific dashboards, saved records, and write
+actions tied to the current ChatGPT user. Leave public content anonymous.
 
-By default, the app should be available at `http://localhost:3000`.
+## Diagnostic Commands
 
-## Technologies Used
+- `npm run install:ci`: perform the one bounded lockfile install
+- `npm run dev`: start the Vite/Vinext development server
+- `npm run build`: build and validate the deployable Sites artifact
+- `npm run start`: start the built Vinext application
+- `npm test`: build, validate, and verify the rendered development-preview metadata
+- `npm run validate:artifact`: recheck an existing artifact's manifest and ESM `default.fetch` export
+- `npm run db:generate`: generate Drizzle migrations after schema changes
 
-### Frontend
-- **React 19.1.0**: Modern JavaScript library for building user interfaces
-- **Vite 6.2.0**: Next-generation frontend build tool
-- **Recharts 2.15.3**: Composable charting library for data visualization
-- **Axios 1.8.4**: Promise-based HTTP client for API requests
-- **MQTT.js**: WebSocket client for real-time data streaming
+Use build and validation commands for targeted diagnosis after a remote failure, not as part of the normal checkpoint path.
 
-### Wallet Integration
-- **MetaMask**: Browser extension for Ethereum-based assets
-- **WalletConnect**: Protocol for mobile wallet connections
-- **ethers.js / web3.js**: Blockchain interaction libraries
+The timeout defaults can be overridden for a controlled canary with `SITES_INSTALL_TIMEOUT`, `SITES_INSTALL_KILL_AFTER`, `SITES_BUILD_TIMEOUT`, and `SITES_BUILD_KILL_AFTER`. A timeout fails the command; the helpers never retry an unchanged install or build.
 
-### State Management
-- **React Context API**: Global state management
-- **Custom Hooks**: Reusable logic for bots, trading, and real-time updates
+## Learn More
 
-### Real-Time System
-- **EMQX Broker**: MQTT message broker (WebSocket port 8083)
-- **MQTTClient**: Singleton client with pub/sub pattern
-- **RealtimeContext**: React context for real-time data distribution
-
-### Backend Integration
-- **Hummingbot API**: FastAPI-based trading bot management
-- **PostgreSQL 16**: Relational database for bot configurations
-- **MongoDB**: Document database for market data
-- **Gateway**: Node.js gateway for DEX trading
-
-## Available Routes
-
-### Main Routes
-- `/` - Landing page
-- `/connect` - Wallet connection
-- `/dashboard` - Main dashboard
-- `/portfolio` - Portfolio overview
-- `/settings` - User settings
-- `/transactions` - Transaction history
-
-### Trading Operations
-- `/trading/bots` - Bot management
-- `/trading/portfolio` - Trading portfolio view
-- `/trading/trade` - Spot trading panel
-- `/trading/market` - Market data and order books
-- `/trading/swap` - Token swap interface
-
-### Advanced Features (Phase 4)
-- `/backtesting` - Strategy backtesting interface
-- `/controllers` - Controller management
-
-### Mining Nucleus Integration
-
-AxodusAPP exposes Mining as the official unified frontend surface while the standalone Mining workspace remains the mock-first domain/API service.
-
-Development flow:
-
-Run both services together from AxodusAPP:
-
-```bash
-cd /mnt/d/Rede/Github/Axodus/AxodusAPP
-pnpm dev:mining-stack
-```
-
-Or run each service separately:
-
-```bash
-cd /mnt/d/Rede/Github/Axodus/Mining
-pnpm dev:api
-```
-
-The Mining API should be available at `http://localhost:8787`.
-
-```bash
-cd /mnt/d/Rede/Github/Axodus/AxodusAPP
-pnpm dev
-```
-
-AxodusAPP runs on `http://localhost:5174` by default and reads `VITE_MINING_API_URL=http://localhost:8787`.
-
-Required env:
-
-```bash
-VITE_MINING_API_URL=http://localhost:8787
-VITE_MINING_USE_MOCKS=false
-```
-
-Contract:
-- Mining API responses use the v1 envelope: `{ data, meta, errors }`.
-- `meta.source` is `mining-api`, `meta.version` is `v1`, `meta.mock` is `true`, and `meta.generatedAt` is an ISO timestamp.
-- AxodusAPP reads Mining through `src/modules/mining/services/miningServiceAdapter.js`; pages should not depend on raw API envelopes.
-- Provider adapter contracts are available at `GET /api/mining/provider-adapters` and must remain mock/read-only with execution, wallet, minting, staking, treasury movement, and smart contract actions blocked.
-- Observability endpoints are available for provider telemetry, treasury policy evaluation, accounting, and reconciliation:
-  - `GET /api/mining/provider-telemetry`
-  - `GET /api/mining/treasury-policies`
-  - `GET /api/mining/treasury-policy-evaluation`
-  - `GET /api/mining/accounting`
-  - `GET /api/mining/reconciliation`
-- Governance readiness endpoints are available for action candidates and proposal intent previews:
-  - `GET /api/mining/governance-actions`
-  - `GET /api/mining/proposal-intents`
-- The local fallback is intentionally minimal and only supports safe offline visibility.
-
-Verification:
-- Open `/mining` to confirm the unified Mining overview loads from the Mining API.
-- Open `/mining/providers/luxor` to confirm provider detail data resolves through the backend.
-- Open `/mining/telemetry`, `/mining/accounting`, and `/mining/reconciliation` to confirm observability views render inside AxodusAPP.
-- Open `/mining/governance` or `/mining/actions` to confirm governance action candidates and proposal intent previews render as non-executable decision surfaces.
-- Stop the Mining backend, or set `VITE_MINING_USE_MOCKS=true`, to verify the explicit fallback banner: `Using local mock fallback — Mining API unavailable.`
-- Keep Mining read-only in this phase: no wallet claims, minting, staking, treasury movement, provider execution, or smart contract execution.
-
-Troubleshooting:
-- Healthcheck: `curl http://localhost:8787/health`
-- Summary contract: `curl http://localhost:8787/api/mining/summary`
-- CORS must allow AxodusAPP local origin `http://localhost:5174`; add extra origins in Mining with `MINING_CORS_ORIGINS` when needed.
-- If the UI shows fallback, confirm the Mining backend is running before debugging frontend routes.
-
-### ACS Operational Intelligence Integration
-
-AxodusAPP exposes ACS as the governance-aware operational visibility interface while the ACS workspace remains the authoritative inspection backend.
-
-Development flow:
-
-```bash
-cd /mnt/d/Rede/Github/Axodus/ACS
-npm run http
-```
-
-The ACS inspection API should be available at `http://localhost:8788/acs`.
-
-```bash
-cd /mnt/d/Rede/Github/Axodus/AxodusAPP
-pnpm dev
-```
-
-AxodusAPP reads `VITE_ACS_API_URL=http://localhost:8788`.
-
-Initial routes:
-- `/acs`
-- `/acs/capabilities`
-- `/acs/services`
-- `/acs/products`
-- `/acs/policy`
-- `/acs/status`
-- `/acs/readiness`
-
-Verification:
-- Open `/acs/capabilities` to confirm Core, Service, and Product capabilities render from ACS.
-- Open `/acs/products` to confirm `product.trading-ignition` appears as one ACS Product Capability.
-- Stop the ACS backend, or set `VITE_ACS_USE_MOCKS=true`, to verify the explicit fallback banner: `Using ACS mock fallback`.
-- Keep ACS read-only in this phase: no automation, trading execution, CEX calls, API secrets, tenant state mutation, or license mutation.
-
-## Wallet Integration
-
-### MetaMask
-Browser extension for managing Ethereum-based assets and interacting with decentralized applications.
-
-### WalletConnect
-Open-source protocol connecting decentralized applications to mobile wallets for secure authentication.
-
-## Project Structure
-
-```
-/src
-  /components                  # React components
-    /common                    # Shared components (MetricCard, ConnectionStatus)
-    /backtesting               # Backtesting UI components
-    /controllers               # Controller management components
-    /bots                      # Bot management components
-    /trading                   # Trading operation components
-    /realtime                  # Real-time data components
-  /pages                       # Page components
-    /backtesting               # Backtesting interface
-    /controllers               # Controller management
-    /trading                   # Trading operations
-      /bots                    # Bot management page
-      /portfolio               # Portfolio overview
-      /trade                   # Trading panel
-      /market                  # Market data
-      /swap                    # Token swap
-  /services                    # API and service layer
-    /api                       # API clients
-      hummingbotClient.js      # Main API client
-      backtestingService.js    # Backtesting operations
-      controllerService.js     # Controller management
-    /websocket                 # WebSocket services
-      mqttClient.js            # MQTT singleton client
-  /context                     # React Context providers
-    BotContext.jsx             # Bot state management
-    RealtimeContext.jsx        # Real-time data distribution
-  /hooks                       # Custom React hooks
-  /utils                       # Utility functions
-  /assets                      # Static assets
-  /styles                      # Global CSS
-  App.jsx                      # Main app component
-  routes.jsx                   # Route definitions
-  main.jsx                     # Entry point
-```
-
-## Contributing
-
-We welcome contributions to improve Axodus! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request.
-
-### Steps to Contribute:
-
-1. Fork the repository
-2. Create a new branch for your feature or fix
-3. Commit your changes
-4. Push your changes to your fork
-5. Open a pull request
-
-Please ensure your code follows the project's code style and that all tests pass.
-
-## Documentation
-
-### Phase Documentation
-- **[Phase 3: Real-Time Updates](./PHASE3_DOCUMENTATION.md)** - MQTT integration and WebSocket system
-- **[Phase 4: Advanced Features](./PHASE4_DOCUMENTATION.md)** - Backtesting and controller management
-
-### Related Projects
-- **[Hummingbot API](../hummingbot-api/README.md)** - Backend API documentation
-- **[Gateway](../gateway/README.md)** - DEX trading gateway
-- **[MCP Hummingbot](../mcp-hummingbot/README.md)** - Model Context Protocol server
-
-### External Resources
-- [Hummingbot Official Docs](https://docs.hummingbot.org)
-- [EMQX Documentation](https://www.emqx.io/docs)
-- [React Documentation](https://react.dev)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-**Axodus** - Empowering investors with data-driven decisions.  
-For more information, visit [Axodus Finance](https://docs.axodus.finance/).
+- [vinext Documentation](https://github.com/cloudflare/vinext)
+- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
